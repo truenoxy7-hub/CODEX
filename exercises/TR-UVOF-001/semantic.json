@@ -1,0 +1,468 @@
+{
+  "meta": {
+    "format": "TRACA_exercici_semantic",
+    "versio_llenguatge": "1.0.0",
+    "versio_instancia": "1.0.0",
+    "estat": "pendent_validacio_entrenador",
+    "objectiu": "Descriure el significat tàctic complet de l'exercici abans de generar-ne la geometria o el gràfic.",
+    "separacio_capes": {
+      "semantica_tactica": "inclosa",
+      "sequencia_temporal": "inclosa",
+      "relacions_espacials": "incloses",
+      "geometria_resolta": "no_inclosa",
+      "renderitzat": "no_generat"
+    }
+  },
+  "identificacio": {
+    "id": "TR-UVOF-001",
+    "nom": "1x1 cap al centre amb continuïtat 2x1 amb pivot i extrem",
+    "familia": "MITJANS_1V1_OFENSIUS",
+    "categoria": "1x1_ofensiu_amb_continuitat",
+    "estat_corpus": "en_revisio"
+  },
+  "origen": {
+    "tipus": "banc_exercicis_original",
+    "referencia": "FITXA ORIGINAL / BATERÍA D'ACTIVITATS / MITJANS 1V1 OFENSIUS / fila 4",
+    "formula_original": "=INDEX(UVUOF;1)",
+    "text_original": "El treball consisteix en un treball a dues bandes, on en la primera acció amb 1v1 sobre el banc cap al centre juguem un 2v1 amb PV, i recuperem per rebre del extrem donant importància a la trajectòria per jugar un 2v1 amb extrems",
+    "grafic_original": {
+      "nom_fitxer": "TR-UVOF-001_ORIGINAL.png",
+      "drive_file_id": "1dtH03gz9naCdrIAVSuBQ1GUZOYRWXAoI"
+    }
+  },
+  "definicions_reutilitzables": {
+    "continguts_tactics": {
+      "1x1_finta": {
+        "id": "CT-1X1-FINTA",
+        "nom": "1x1 / finta",
+        "categoria": "contingut_tactic_individual",
+        "definicio": "Acció ofensiva individual en què el jugador rep en carrera dins un interval o espai inicial, canvia de direcció per atacar l'interval o espai contigu i resol la situació que apareix a continuació.",
+        "context_habitual": {
+          "tipus_referencia": "defensor_real",
+          "descripcio": "Normalment el 1x1 es produeix contra un defensor real que actua com a referència oposicional directa."
+        },
+        "referencies_oposicionals_admeses": [
+          {
+            "tipus": "defensor_real",
+            "equivalencia_tactica": "oposicio_directa",
+            "es_context_habitual": true
+          },
+          {
+            "tipus": "banc",
+            "equivalencia_tactica": "substitut_de_defensor",
+            "es_context_habitual": false
+          },
+          {
+            "tipus": "con",
+            "equivalencia_tactica": "referencia_fixa_de_defensor",
+            "es_context_habitual": false
+          },
+          {
+            "tipus": "cilindre",
+            "equivalencia_tactica": "substitut_de_defensor",
+            "es_context_habitual": false
+          },
+          {
+            "tipus": "altre_objecte",
+            "equivalencia_tactica": "referencia_oposicional",
+            "es_context_habitual": false
+          }
+        ],
+        "sequencia_canonica": [
+          {
+            "ordre": 1,
+            "id": "REBRE_EN_CARRERA",
+            "accio": "recepcio_en_carrera",
+            "objectiu": "Arribar i rebre en moviment dins un interval o espai inicial.",
+            "condicions": [
+              "el jugador no espera la pilota aturat",
+              "la passada i la cursa se sincronitzen",
+              "la recepció queda orientada cap a la continuïtat"
+            ]
+          },
+          {
+            "ordre": 2,
+            "id": "CANVIAR_DIRECCIO_U",
+            "accio": "finta_canvi_direccio",
+            "objectiu": "Amenaçar l'interval inicial i canviar de direcció per atacar l'interval o espai contigu.",
+            "forma_funcional": "U",
+            "condicions": [
+              "la recepció i la superació no són al mateix interval",
+              "el canvi de direcció ha de ser explícit",
+              "la sortida es produeix per l'altre costat de la referència",
+              "el canvi de direcció s'acompanya de canvi de ritme"
+            ]
+          },
+          {
+            "ordre": 3,
+            "id": "RESOLDRE_CONTINUITAT",
+            "accio": "resolucio_posterior",
+            "objectiu": "Resoldre la situació tàctica que apareix després de superar o desequilibrar la referència.",
+            "possibles_resolucions": [
+              "llancament",
+              "passada",
+              "2x1",
+              "continuacio_amb_pilota",
+              "continuacio_sense_pilota",
+              "nova_situacio_decisional"
+            ]
+          }
+        ],
+        "invariants": [
+          "l'ordre de les tres fases no canvia",
+          "sempre hi ha un interval o espai inicial",
+          "sempre hi ha un interval o espai contigu",
+          "la finta implica un canvi de direcció real",
+          "la resolució posterior no es predetermina si és decisional",
+          "l'objecte utilitzat no modifica el contingut tàctic: només substitueix la referència oposicional"
+        ],
+        "errors_de_modelatge_a_evitar": [
+          "dibuixar una corba suau sense canvi de direcció",
+          "confondre recepció i resolució",
+          "atacar el mateix interval després de la finta",
+          "tractar banc, con o cilindre com a material decoratiu",
+          "predeterminar una única solució en una situació decisional"
+        ]
+      }
+    }
+  },
+  "model_exercici": {
+    "direccio_atac": "cap_a_porteria",
+    "organitzacio": {
+      "nombre_bandes": 2,
+      "execucio": "paralela",
+      "simetria": "mirall",
+      "plantilla_base": "banda_esquerra"
+    },
+    "participants_plantilla": [
+      {
+        "id": "CE",
+        "rol": "central_passador",
+        "equip": "atac",
+        "funcio": "donar_la_primera_passada"
+      },
+      {
+        "id": "L",
+        "rol": "lateral_executor",
+        "equip": "atac",
+        "funcio": "executar el 1x1, recuperar sense pilota i participar en les dues superioritats",
+        "identitat_persistent": true
+      },
+      {
+        "id": "PV",
+        "rol": "pivot",
+        "equip": "atac",
+        "funcio": "crear_la_primera_relacio_2x1"
+      },
+      {
+        "id": "EXT",
+        "rol": "extrem",
+        "equip": "atac",
+        "funcio": "mantenir amplitud, donar la segona passada i crear la segona relacio 2x1"
+      },
+      {
+        "id": "D_Z1",
+        "rol": "defensor_primera_subaccio",
+        "equip": "defensa",
+        "funcio": "defensar el 2x1 lateral_pivot"
+      },
+      {
+        "id": "D_Z2",
+        "rol": "defensor_segona_subaccio",
+        "equip": "defensa",
+        "funcio": "defensar el 2x1 lateral_extrem"
+      }
+    ],
+    "referencies_oposicionals": [
+      {
+        "id": "REF_1X1",
+        "tipus_real": "defensor_directe",
+        "tipus_utilitzat_exercici": "banc",
+        "equivalencia": "substitut_de_defensor_directe",
+        "funcio_tactica": "separar l'interval inicial de l'interval contigu i obligar a executar la finta en U",
+        "posicionament_semantic": {
+          "referencia_longitudinal": "entorn_linia_9m",
+          "orientacio": "extrem_exterior_mes_proxim_a_porteria_i_extrem_interior_mes_allunyat"
+        }
+      }
+    ],
+    "materials": [
+      {
+        "id": "BANC",
+        "tipus": "banc",
+        "funcio": "REF_1X1"
+      },
+      {
+        "id": "C1",
+        "tipus": "con",
+        "funcio": "limit_interior_Z1"
+      },
+      {
+        "id": "C2",
+        "tipus": "con",
+        "funcio": "limit_exterior_Z1"
+      },
+      {
+        "id": "C3",
+        "tipus": "con",
+        "funcio": "limit_interior_Z2"
+      }
+    ],
+    "espais_i_intervals": [
+      {
+        "id": "INT_1",
+        "tipus": "interval_recepcio",
+        "relacio": "exterior_de_REF_1X1",
+        "funcio": "espai inicial on el lateral arriba i rep en carrera"
+      },
+      {
+        "id": "INT_2",
+        "tipus": "interval_contigu",
+        "relacio": "interior_de_REF_1X1",
+        "funcio": "espai contigu atacat després del canvi de direcció"
+      },
+      {
+        "id": "Z1",
+        "tipus": "zona_resolucio",
+        "limits": [
+          "C1",
+          "C2"
+        ],
+        "funcio": "resoldre el 2x1 lateral_pivot"
+      },
+      {
+        "id": "CORREDOR_RECUPERACIO",
+        "tipus": "corredor_sense_pilota",
+        "relacio": "darrere_de_REF_1X1",
+        "funcio": "permetre que el lateral recuperi sense pilota cap a una nova posicio util"
+      },
+      {
+        "id": "INT_3",
+        "tipus": "interval_recepcio",
+        "relacio": "proper_a_EXT_i_orientat_a_porteria",
+        "funcio": "rebre en carrera una passada curta de l'extrem sense bot"
+      },
+      {
+        "id": "INT_4",
+        "tipus": "interval_contigu",
+        "relacio": "entre_D_Z2_i_C3",
+        "funcio": "espai atacat pel lateral després de la segona recepció"
+      },
+      {
+        "id": "Z2",
+        "tipus": "zona_resolucio",
+        "limits": [
+          "C3",
+          "final_exterior_area"
+        ],
+        "funcio": "resoldre el 2x1 lateral_extrem"
+      }
+    ],
+    "subaccions": [
+      {
+        "id": "SA1",
+        "nom": "1x1 amb finta i continuïtat 2x1 amb pivot",
+        "contingut_base": "CT-1X1-FINTA",
+        "executor": "L",
+        "passador": "CE",
+        "referencia_oposicional": "REF_1X1",
+        "interval_inicial": "INT_1",
+        "interval_contigu": "INT_2",
+        "sequencia_obligatoria": [
+          {
+            "ordre": 1,
+            "accio": "rebre_en_carrera",
+            "destinacio": "INT_1",
+            "sincronitzada_amb": "passada_CE_a_L"
+          },
+          {
+            "ordre": 2,
+            "accio": "finta_canvi_direccio",
+            "forma_funcional": "U",
+            "des_de": "INT_1",
+            "cap_a": "INT_2",
+            "referencia": "REF_1X1"
+          },
+          {
+            "ordre": 3,
+            "accio": "resoldre",
+            "situacio": "2x1_amb_pivot",
+            "zona": "Z1"
+          }
+        ],
+        "situacio_decisional": {
+          "tipus": "2x1",
+          "atacants": [
+            "L",
+            "PV"
+          ],
+          "defensor": "D_Z1",
+          "solucions_no_predeterminades": [
+            "finalitzacio_L",
+            "passada_PV",
+            "continuacio_si_defensa_neutralitza"
+          ]
+        }
+      },
+      {
+        "id": "SA2",
+        "nom": "recuperació sense pilota i continuïtat 2x1 amb extrem",
+        "executor": "L",
+        "recuperacio": {
+          "amb_pilota": false,
+          "via": "CORREDOR_RECUPERACIO",
+          "criteris": [
+            "passar darrere de REF_1X1",
+            "arribar a una recepció curta",
+            "orientar el tram final cap a porteria"
+          ]
+        },
+        "passador": "EXT",
+        "interval_recepcio": "INT_3",
+        "interval_atac": "INT_4",
+        "sequencia_obligatoria": [
+          {
+            "ordre": 1,
+            "accio": "recuperar_sense_pilota",
+            "destinacio": "INT_3"
+          },
+          {
+            "ordre": 2,
+            "accio": "rebre_en_carrera",
+            "origen_passada": "EXT",
+            "destinacio": "INT_3",
+            "condicions": [
+              "passada_curta",
+              "sense_bot",
+              "orientat_a_porteria",
+              "predisposicio_de_llancament"
+            ]
+          },
+          {
+            "ordre": 3,
+            "accio": "atacar_interval_contigu",
+            "des_de": "INT_3",
+            "cap_a": "INT_4"
+          },
+          {
+            "ordre": 4,
+            "accio": "resoldre",
+            "situacio": "2x1_amb_extrem",
+            "zona": "Z2"
+          }
+        ],
+        "situacio_decisional": {
+          "tipus": "2x1",
+          "atacants": [
+            "L",
+            "EXT"
+          ],
+          "defensor": "D_Z2",
+          "solucions_no_predeterminades": [
+            "finalitzacio_L",
+            "passada_EXT",
+            "continuacio_si_defensa_neutralitza"
+          ]
+        }
+      }
+    ],
+    "flux_pilota": [
+      {
+        "id": "B1",
+        "origen": "CE",
+        "transferencia": "CE_a_L",
+        "moment": "recepcio_INT_1",
+        "continuitat": "SA1"
+      },
+      {
+        "id": "B2",
+        "origen": "EXT",
+        "transferencia": "EXT_a_L",
+        "moment": "recepcio_INT_3",
+        "continuitat": "SA2"
+      }
+    ],
+    "ordre_global": [
+      "organitzacio_inicial",
+      "SA1.rebre_en_carrera_INT_1",
+      "SA1.finta_U_INT_1_a_INT_2",
+      "SA1.resoldre_2x1_pivot_Z1",
+      "SA2.recuperar_sense_pilota",
+      "SA2.rebre_en_carrera_INT_3",
+      "SA2.atacar_INT_4",
+      "SA2.resoldre_2x1_extrem_Z2"
+    ],
+    "restriccions_i_condicions": {
+      "bot": "evitar",
+      "segona_passada": "curta_i_funcional",
+      "recepcions": "sempre_en_carrera",
+      "orientacio_recepcio": "cap_a_porteria",
+      "resolucions": "decisionals_no_predeterminades"
+    }
+  },
+  "contracte_futur_renderer": {
+    "estat": "no_executable_encara",
+    "principi": "El renderer haurà de generar la geometria a partir de les relacions semàntiques i no només d'una llista manual de punts.",
+    "regles_obligatories": [
+      "REF_1X1 s'ubica prenent 9 m com a referència",
+      "INT_1 i INT_2 han de quedar a costats contigus de REF_1X1",
+      "la trajectòria de finta ha de mostrar una U funcional entre INT_1 i INT_2",
+      "la U ha d'incloure amenaça, canvi de direcció i acceleració de sortida",
+      "la recuperació de SA2 és sense pilota",
+      "la passada EXT_a_L ha de ser curta",
+      "INT_4 ha de quedar entre D_Z2 i C3",
+      "les solucions de 2x1 no es dibuixen com a obligatòries"
+    ]
+  },
+  "validacions_semantiques": [
+    {
+      "id": "VAL-1X1-01",
+      "regla": "SA1 ha de començar amb recepció en carrera a INT_1"
+    },
+    {
+      "id": "VAL-1X1-02",
+      "regla": "la finta ha d'anar de INT_1 a INT_2"
+    },
+    {
+      "id": "VAL-1X1-03",
+      "regla": "INT_2 ha de ser contigu a INT_1"
+    },
+    {
+      "id": "VAL-1X1-04",
+      "regla": "la forma funcional de la finta ha de ser U"
+    },
+    {
+      "id": "VAL-1X1-05",
+      "regla": "SA1 ha de finalitzar amb una resolució posterior"
+    },
+    {
+      "id": "VAL-1X1-06",
+      "regla": "BANC actua com a substitut semàntic del defensor directe"
+    },
+    {
+      "id": "VAL-SA2-01",
+      "regla": "la recuperació del lateral ha de ser sense pilota"
+    },
+    {
+      "id": "VAL-SA2-02",
+      "regla": "la passada de l'extrem ha de ser curta i sense bot"
+    },
+    {
+      "id": "VAL-SA2-03",
+      "regla": "INT_4 ha de quedar entre D_Z2 i C3"
+    }
+  ],
+  "governanca": {
+    "semantica_tactica": {
+      "estat": "pendent_validacio_entrenador",
+      "autoritat_validacio": "entrenador"
+    },
+    "geometria": {
+      "estat": "no_definida",
+      "motiu": "La geometria no es generarà fins que la semàntica d'aquest JSON estigui validada."
+    },
+    "render": {
+      "estat": "no_generat"
+    }
+  }
+}
