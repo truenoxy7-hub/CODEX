@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "reference_types": [
+    {
+      "id": "defensor_real",
+      "kind": "real_opposition"
+    },
+    {
+      "id": "banc",
+      "kind": "defender_substitute"
+    },
+    {
+      "id": "con",
+      "kind": "fixed_reference"
+    },
+    {
+      "id": "cilindre",
+      "kind": "defender_substitute"
+    },
+    {
+      "id": "altre_objecte",
+      "kind": "generic_opposition_reference"
+    }
+  ]
+}
