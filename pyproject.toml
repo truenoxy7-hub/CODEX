@@ -1,0 +1,9 @@
+[project]
+name = "traca"
+version = "0.1.0"
+description = "Llenguatge canònic i base de coneixement d'exercicis d'handbol"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
