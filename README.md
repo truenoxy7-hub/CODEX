@@ -12,6 +12,7 @@ La geometria i el renderer anteriors es consideren prototips descartables. No s'
 - `schema/traca.semantic.schema.v1.0.json`
 - `docs/DOMAIN_MODEL.md`
 - `docs/DECISIONS.md`
+- `docs/OPEN_QUESTIONS.md`
 
 ## Principi de treball
 
@@ -32,9 +33,19 @@ No es genera geometria ni gràfic abans de validar la semàntica.
 
 ```bash
 python -m pip install -r requirements.txt
+make check
+```
+
+Equivalentment:
+
+```bash
 python scripts/validate_semantic.py
 python -m pytest -q
 ```
+
+## Com començar amb Codex
+
+Obre aquest repositori a Codex i utilitza el contingut de `CODEX_START_PROMPT.md`. La primera tasca ja està registrada a la issue #1.
 
 ## Documents per començar
 
@@ -43,4 +54,6 @@ python -m pytest -q
 3. `docs/DOMAIN_MODEL.md`
 4. `docs/DECISIONS.md`
 5. `docs/CURRENT_STATE.md`
-6. `docs/CODEX_FIRST_TASK.md`
+6. `docs/OPEN_QUESTIONS.md`
+7. `docs/CODEX_FIRST_TASK.md`
+8. `CODEX_START_PROMPT.md`
