@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0",
+  "contents": {
+    "CT-1X1-FINTA": {
+      "name": "1x1 / finta",
+      "canonical_order": [
+        "recepcio_en_carrera_interval_inicial",
+        "canvi_direccio_interval_contigu",
+        "resolucio_posterior"
+      ],
+      "functional_shape": "U",
+      "usual_opposition_reference": "defensor_real",
+      "allowed_substitutes": [
+        "banc",
+        "con",
+        "cilindre",
+        "altre_objecte"
+      ]
+    }
+  }
+}
