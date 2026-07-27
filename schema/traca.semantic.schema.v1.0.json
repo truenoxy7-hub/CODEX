@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://traca.local/schema/traca.semantic.v1.0.json",
+  "title": "TRAÇA — esquema semàntic v1.0",
+  "type": "object",
+  "required": [
+    "meta",
+    "identificacio",
+    "origen",
+    "definicions_reutilitzables",
+    "model_exercici",
+    "contracte_futur_renderer",
+    "validacions_semantiques",
+    "governanca"
+  ],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": [
+        "format",
+        "versio_llenguatge",
+        "versio_instancia",
+        "separacio_capes"
+      ],
+      "properties": {
+        "format": {
+          "const": "TRACA_exercici_semantic"
+        },
+        "versio_llenguatge": {
+          "const": "1.0.0"
+        },
+        "versio_instancia": {
+          "const": "1.0.0"
+        },
+        "separacio_capes": {
+          "type": "object",
+          "required": [
+            "semantica_tactica",
+            "sequencia_temporal",
+            "relacions_espacials",
+            "geometria_resolta",
+            "renderitzat"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "identificacio": {
+      "type": "object",
+      "required": [
+        "id",
+        "nom",
+        "familia",
+        "categoria"
+      ],
+      "properties": {
+        "id": {
+          "const": "TR-UVOF-001"
+        }
+      },
+      "additionalProperties": true
+    },
+    "definicions_reutilitzables": {
+      "type": "object",
+      "required": [
+        "continguts_tactics"
+      ],
+      "properties": {
+        "continguts_tactics": {
+          "type": "object",
+          "required": [
+            "1x1_finta"
+          ],
+          "properties": {
+            "1x1_finta": {
+              "type": "object",
+              "required": [
+                "id",
+                "definicio",
+                "context_habitual",
+                "referencies_oposicionals_admeses",
+                "sequencia_canonica",
+                "invariants"
+              ],
+              "properties": {
+                "id": {
+                  "const": "CT-1X1-FINTA"
+                },
+                "referencies_oposicionals_admeses": {
+                  "type": "array",
+                  "minItems": 4
+                },
+                "sequencia_canonica": {
+                  "type": "array",
+                  "minItems": 3,
+                  "maxItems": 3
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "model_exercici": {
+      "type": "object",
+      "required": [
+        "organitzacio",
+        "participants_plantilla",
+        "referencies_oposicionals",
+        "espais_i_intervals",
+        "subaccions",
+        "ordre_global"
+      ],
+      "properties": {
+        "subaccions": {
+          "type": "array",
+          "minItems": 2
+        },
+        "ordre_global": {
+          "type": "array",
+          "minItems": 8
+        }
+      },
+      "additionalProperties": true
+    },
+    "contracte_futur_renderer": {
+      "type": "object",
+      "required": [
+        "estat",
+        "principi",
+        "regles_obligatories"
+      ],
+      "properties": {
+        "estat": {
+          "const": "no_executable_encara"
+        }
+      },
+      "additionalProperties": true
+    },
+    "validacions_semantiques": {
+      "type": "array",
+      "minItems": 9
+    },
+    "governanca": {
+      "type": "object",
+      "required": [
+        "semantica_tactica",
+        "geometria",
+        "render"
+      ]
+    }
+  },
+  "additionalProperties": true
+}
