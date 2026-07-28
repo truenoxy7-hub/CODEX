@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "reference_types": [
     {
       "id": "defensor_real",
@@ -20,6 +20,24 @@
     {
       "id": "altre_objecte",
       "kind": "generic_opposition_reference"
+    },
+    {
+      "id": "xirimbolo",
+      "kind": "defensive_handicap_material",
+      "usage": "El defensor real el sosté; el material limita la seva acció però no el substitueix."
+    },
+    {
+      "id": "con_handicap",
+      "kind": "movement_handicap",
+      "usage": "Obliga el defensor a fer un recorregut addicional i no representa cap interval ni defensor."
     }
+  ],
+  "functional_classes": [
+    "real_opposition",
+    "active_defender_substitute",
+    "passive_positional_reference",
+    "spatial_limit",
+    "defensive_handicap_material",
+    "movement_handicap"
   ]
 }

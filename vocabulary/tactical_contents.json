@@ -1,12 +1,18 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "authority": "entrenador",
   "contents": {
     "CT-1X1-FINTA": {
       "name": "1x1 / finta",
+      "knowledge_level": "invariant",
       "canonical_order": [
-        "recepcio_en_carrera_interval_inicial",
-        "canvi_direccio_interval_contigu",
-        "resolucio_posterior"
+        "atacar_espai_inicial",
+        "comprometre_defensor",
+        "canviar_direccio",
+        "canviar_ritme",
+        "atacar_espai_contigu",
+        "superar_linia_defensiva",
+        "resoldre"
       ],
       "functional_shape": "U",
       "usual_opposition_reference": "defensor_real",
@@ -16,6 +22,95 @@
         "cilindre",
         "altre_objecte"
       ]
+    },
+    "CT-2X1": {
+      "name": "Superioritat local 2x1",
+      "knowledge_level": "invariant",
+      "definition": "Dos atacants relacionats contra un defensor dins un sector concret.",
+      "origins": [
+        "generada_per_accio_anterior",
+        "preparada_per_condicio_de_tasca"
+      ],
+      "decision_rule": {
+        "defensor_no_tanca": "continuar_o_finalitzar",
+        "defensor_tanca_i_queda_compromes": "passar_al_company"
+      }
+    },
+    "CT-ENCREUAMENT": {
+      "name": "Encreuament",
+      "knowledge_level": "invariant",
+      "definition": "Intercanvi coordinat de trajectòries en què el receptor ataca després de rebre.",
+      "invariants": [
+        "despres_dencreuar_es_busca_superar",
+        "no_es_una_circulacio_neutra_de_pilota",
+        "la_identitat_dels_jugadors_es_mante"
+      ],
+      "if_no_local_advantage": {
+        "preferred_option": "valorar_canvi_de_banda",
+        "mandatory": false
+      }
+    },
+    "CT-PERMUTA": {
+      "name": "Permuta",
+      "knowledge_level": "invariant",
+      "notation": "primer_jugador-segon_jugador",
+      "rules": [
+        "el_primer_jugador_canvia_cap_a_la_posicio_del_segon",
+        "el_segon_jugador_ocupa_lespai_deixat_pel_primer",
+        "el_primer_jugador_rep_la_pilota_despres_de_la_permuta"
+      ],
+      "examples": {
+        "central-lateral": {
+          "first_player": "central",
+          "second_player": "lateral",
+          "receiver_after": "central"
+        },
+        "lateral-central": {
+          "first_player": "lateral",
+          "second_player": "central",
+          "receiver_after": "lateral"
+        }
+      }
+    },
+    "CT-BLOQUEIG-ESTATIC": {
+      "name": "Bloqueig estàtic del pivot",
+      "knowledge_level": "invariant",
+      "action": "ocupar_i_mantenir_posicio_davant_del_defensor",
+      "tactical_intentions": [
+        "guanyar_posicio",
+        "impedir_ajuda_o_intercepcio",
+        "crear_linia_de_passada"
+      ]
+    },
+    "CT-LLISCAMENT-PIVOT": {
+      "name": "Lliscament del pivot",
+      "knowledge_level": "invariant",
+      "definition": "Adaptació del pivot cap a l'espai lliure quan un defensor interior puja a l'ajuda.",
+      "trigger": "defensor_interior_puja_o_contacta_portador",
+      "purpose": "mantenir_linia_de_passada_i_opcio_de_finalitzacio"
+    },
+    "CT-SITUACIO-PARTIT": {
+      "name": "Situació de partit",
+      "knowledge_level": "invariant",
+      "definition": "Exercici de joc global o reduït amb oposició real, rols complets i decisions obertes, limitat per condicions pedagògiques explícites.",
+      "invariants": [
+        "les_condicions_inicials_no_tanquen_tota_la_resolucio",
+        "els_jugadors_conserven_criteri_tactic",
+        "la_relacio_numerica_i_el_sistema_defensiu_es_declaren"
+      ]
+    },
+    "CT-PUNT-FORT-FEBLE": {
+      "name": "Punt fort i punt feble del 1x1",
+      "knowledge_level": "invariant",
+      "conceptual": {
+        "strong": "cap_al_centre",
+        "weak": "cap_a_lexterior"
+      },
+      "individual": {
+        "right_handed_strong_exit": "cap_a_la_dreta",
+        "left_handed_strong_exit": "cap_a_lesquerra"
+      },
+      "modeling_rule": "La direcció conceptual i el costat fort individual es representen per separat perquè poden no coincidir."
     }
   }
 }

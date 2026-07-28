@@ -12,6 +12,9 @@ ROOT = Path(__file__).resolve().parents[1]
 EXERCISE = ROOT / "exercises" / "TR-UVOF-001" / "semantic.json"
 SCHEMA = ROOT / "schema" / "traca.semantic.schema.v1.0.json"
 OUTPUT = ROOT / "exercises" / "TR-UVOF-001" / "validation.json"
+CORPUS = ROOT / "corpus" / "uvof.semantic.json"
+CORPUS_SCHEMA = ROOT / "schema" / "traca.exercise-corpus.schema.v1.1.json"
+CORPUS_OUTPUT = ROOT / "corpus" / "uvof.validation.json"
 
 Document = dict[str, Any]
 Check = Callable[[Document], bool]
@@ -298,10 +301,259 @@ def validate(
     return report
 
 
+def _corpus_exercise(document: Document, exercise_id: str) -> Document:
+    exercises = document.get("exercicis", [])
+    return next(
+        (exercise for exercise in exercises if exercise.get("id") == exercise_id),
+        {},
+    )
+
+
+def _corpus_actions(exercise: Document) -> list[Document]:
+    return [
+        action
+        for phase in exercise.get("fases", [])
+        for action in phase.get("accions", [])
+    ]
+
+
+def _corpus_decisions(exercise: Document) -> list[Document]:
+    return [
+        decision
+        for phase in exercise.get("fases", [])
+        for decision in phase.get("decisions", [])
+    ]
+
+
+def _corpus_ball_flows(exercise: Document) -> list[Document]:
+    return [
+        flow
+        for phase in exercise.get("fases", [])
+        for flow in phase.get("fluxos_pilota", [])
+    ]
+
+
+def _contains_forbidden_geometry(value: Any) -> bool:
+    forbidden_keys = {
+        "coordinates",
+        "coordenades",
+        "geometry",
+        "geometria",
+        "geometria_resolta",
+        "svg",
+        "path_d",
+    }
+    if isinstance(value, dict):
+        if forbidden_keys.intersection(value):
+            return True
+        return any(_contains_forbidden_geometry(item) for item in value.values())
+    if isinstance(value, list):
+        return any(_contains_forbidden_geometry(item) for item in value)
+    return False
+
+
+def _corpus_custom_errors(document: Document) -> list[Document]:
+    errors: list[Document] = []
+    exercises = document.get("exercicis", [])
+    expected_ids = [f"TR-UVOF-{index:03d}" for index in range(1, 16)]
+    actual_ids = [exercise.get("id") for exercise in exercises]
+
+    if actual_ids != expected_ids:
+        errors.append(
+            {
+                "code": "CORPUS_IDS",
+                "path": "exercicis",
+                "message": "El corpus ha de contenir TR-UVOF-001..015, en ordre i sense duplicats.",
+            }
+        )
+
+    for exercise_index, exercise in enumerate(exercises):
+        exercise_id = exercise.get("id", f"index_{exercise_index}")
+        if _contains_forbidden_geometry(exercise):
+            errors.append(
+                {
+                    "code": "CORPUS_NO_GEOMETRY",
+                    "path": f"exercicis/{exercise_index}",
+                    "message": f"{exercise_id} no pot contenir geometria ni render.",
+                }
+            )
+
+        for action_index, action in enumerate(_corpus_actions(exercise)):
+            if action.get("accio") != "permuta":
+                continue
+            if action.get("receptor_despres_permuta") != action.get(
+                "primer_jugador"
+            ):
+                errors.append(
+                    {
+                        "code": "CORPUS_PERMUTA_RECEIVER",
+                        "path": (
+                            f"exercicis/{exercise_index}/accions/{action_index}"
+                        ),
+                        "message": (
+                            f"{exercise_id}: el primer jugador ha de rebre "
+                            "després de la permuta."
+                        ),
+                    }
+                )
+
+        declared_balls = {
+            ball.get("id"): ball.get("posseidor_inicial")
+            for ball in exercise.get("pilotes", [])
+        }
+        for flow_index, flow in enumerate(_corpus_ball_flows(exercise)):
+            ball_id = flow.get("pilota_id")
+            if ball_id not in declared_balls:
+                errors.append(
+                    {
+                        "code": "CORPUS_BALL_UNDECLARED",
+                        "path": (
+                            f"exercicis/{exercise_index}/fluxos_pilota/{flow_index}"
+                        ),
+                        "message": f"{exercise_id}: la pilota {ball_id} no està declarada.",
+                    }
+                )
+            elif flow.get("posseidor_inicial") != declared_balls[ball_id]:
+                errors.append(
+                    {
+                        "code": "CORPUS_BALL_INITIAL_HOLDER",
+                        "path": (
+                            f"exercicis/{exercise_index}/fluxos_pilota/{flow_index}"
+                        ),
+                        "message": (
+                            f"{exercise_id}: el posseïdor inicial de {ball_id} "
+                            "no coincideix amb la declaració."
+                        ),
+                    }
+                )
+
+    uvof_006 = _corpus_exercise(document, "TR-UVOF-006")
+    switch_decision = next(
+        (
+            decision
+            for decision in _corpus_decisions(uvof_006)
+            if decision.get("id") == "D_CANVI_BANDA"
+        ),
+        {},
+    )
+    if switch_decision.get("caracter") != "preferent":
+        errors.append(
+            {
+                "code": "UVOF006_SWITCH_PREFERRED",
+                "path": "TR-UVOF-006/D_CANVI_BANDA",
+                "message": "El canvi de banda ha de ser preferent i no obligatori.",
+            }
+        )
+
+    uvof_009 = _corpus_exercise(document, "TR-UVOF-009")
+    balls_009 = {
+        ball.get("id"): ball.get("posseidor_inicial")
+        for ball in uvof_009.get("pilotes", [])
+    }
+    if balls_009 != {"B1": "PV", "B2": "EXT_2"}:
+        errors.append(
+            {
+                "code": "UVOF009_TWO_BALLS",
+                "path": "TR-UVOF-009/pilotes",
+                "message": "TR-UVOF-009 ha de declarar B1 amb PV i B2 amb EXT_2.",
+            }
+        )
+
+    uvof_010 = _corpus_exercise(document, "TR-UVOF-010")
+    closed_decision = next(
+        (
+            decision
+            for decision in _corpus_decisions(uvof_010)
+            if decision.get("id") == "D_2X1_TANCAT"
+        ),
+        {},
+    )
+    expected_options_010 = {
+        "llancament_exterior_si_defensor_pla_a_6m",
+        "passada_pivot_si_defensor_puja",
+    }
+    if (
+        closed_decision.get("caracter") != "obligatori"
+        or set(closed_decision.get("opcions", [])) != expected_options_010
+    ):
+        errors.append(
+            {
+                "code": "UVOF010_CLOSED_OPTIONS",
+                "path": "TR-UVOF-010/D_2X1_TANCAT",
+                "message": "TR-UVOF-010 només admet les dues opcions tancades validades.",
+            }
+        )
+
+    for exercise_id in ("TR-UVOF-012", "TR-UVOF-013", "TR-UVOF-014"):
+        exercise = _corpus_exercise(document, exercise_id)
+        if "lateral-central" not in exercise.get("organitzacio", {}).values():
+            errors.append(
+                {
+                    "code": "UVOF_PERMUTA_CORRECTED",
+                    "path": f"{exercise_id}/organitzacio",
+                    "message": f"{exercise_id} ha d'utilitzar la permuta lateral-central.",
+                }
+            )
+
+    return errors
+
+
+def validate_corpus_document(document: Document, schema: Document) -> Document:
+    validator = Draft202012Validator(schema)
+    structural = sorted(
+        validator.iter_errors(document), key=lambda error: list(error.absolute_path)
+    )
+    errors = [
+        {
+            "code": "SCHEMA_ERROR",
+            "path": "/".join(str(part) for part in error.absolute_path),
+            "message": error.message,
+        }
+        for error in structural
+    ]
+    if not structural:
+        errors.extend(_corpus_custom_errors(document))
+
+    return {
+        "corpus": document.get("familia", {}).get("id"),
+        "schema": schema.get("$id"),
+        "valid": not errors,
+        "errors": errors,
+        "warnings": [],
+        "summary": {
+            "exercise_count": len(document.get("exercicis", [])),
+            "error_count": len(errors),
+            "structural_error_count": len(structural),
+            "semantic_error_count": len(errors) - len(structural),
+        },
+        "geometry_generated": False,
+        "render_generated": False,
+    }
+
+
+def validate_corpus(
+    corpus_path: Path = CORPUS,
+    schema_path: Path = CORPUS_SCHEMA,
+    output_path: Path = CORPUS_OUTPUT,
+) -> Document:
+    document = json.loads(corpus_path.read_text(encoding="utf-8"))
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+    report = validate_corpus_document(document, schema)
+    output_path.write_text(
+        json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    return report
+
+
 def main() -> int:
-    report = validate()
-    print(json.dumps(report, ensure_ascii=False, indent=2))
-    return 0 if report["valid"] else 1
+    exercise_report = validate()
+    corpus_report = validate_corpus()
+    combined = {
+        "valid": exercise_report["valid"] and corpus_report["valid"],
+        "reports": [exercise_report, corpus_report],
+    }
+    print(json.dumps(combined, ensure_ascii=False, indent=2))
+    return 0 if combined["valid"] else 1
 
 
 if __name__ == "__main__":

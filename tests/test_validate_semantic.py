@@ -6,7 +6,11 @@ from pathlib import Path
 
 import pytest
 
-from scripts.validate_semantic import SEMANTIC_RULES, validate_document
+from scripts.validate_semantic import (
+    SEMANTIC_RULES,
+    validate_corpus_document,
+    validate_document,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -219,3 +223,99 @@ def test_repository_document_passes_schema_and_semantic_rules():
     assert report["valid"] is True
     assert report["errors"] == []
     assert report["summary"]["semantic_checks_run"] == 13
+
+
+@pytest.fixture
+def valid_corpus() -> dict:
+    return json.loads(
+        (ROOT / "corpus" / "uvof.semantic.json").read_text(encoding="utf-8")
+    )
+
+
+@pytest.fixture
+def corpus_schema() -> dict:
+    return json.loads(
+        (
+            ROOT / "schema" / "traca.exercise-corpus.schema.v1.1.json"
+        ).read_text(encoding="utf-8")
+    )
+
+
+def _corpus_exercise(corpus: dict, exercise_id: str) -> dict:
+    return next(
+        exercise
+        for exercise in corpus["exercicis"]
+        if exercise["id"] == exercise_id
+    )
+
+
+def _corpus_decision(exercise: dict, decision_id: str) -> dict:
+    return next(
+        decision
+        for phase in exercise["fases"]
+        for decision in phase["decisions"]
+        if decision["id"] == decision_id
+    )
+
+
+def test_repository_corpus_passes_schema_and_semantic_rules(
+    valid_corpus, corpus_schema
+):
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert report["valid"] is True
+    assert report["errors"] == []
+    assert report["summary"]["exercise_count"] == 15
+
+
+def test_corpus_rejects_mandatory_switch_side(valid_corpus, corpus_schema):
+    decision = _corpus_decision(
+        _corpus_exercise(valid_corpus, "TR-UVOF-006"),
+        "D_CANVI_BANDA",
+    )
+    decision["caracter"] = "obligatori"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF006_SWITCH_PREFERRED" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_wrong_permutation_receiver(valid_corpus, corpus_schema):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-009")
+    permutation = next(
+        action
+        for phase in exercise["fases"]
+        for action in phase["accions"]
+        if action["accio"] == "permuta"
+    )
+    permutation["receptor_despres_permuta"] = "L"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "CORPUS_PERMUTA_RECEIVER" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_undeclared_ball_flow(valid_corpus, corpus_schema):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-009")
+    exercise["fases"][0]["fluxos_pilota"][0]["pilota_id"] = "B9"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "CORPUS_BALL_UNDECLARED" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_geometry(valid_corpus, corpus_schema):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-015")
+    exercise["coordenades"] = [{"x": 1, "y": 2}]
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "CORPUS_NO_GEOMETRY" in [
+        error["code"] for error in report["errors"]
+    ]

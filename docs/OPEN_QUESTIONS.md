@@ -18,12 +18,14 @@ Aquest document evita que Codex resolgui per inferència decisions tàctiques en
 
 1. Completar amb exemples les defenses `4:2`, `3:3`, mixtes i les seves
    transformacions.
-2. Definir altres continguts tàctics: bloqueig, creuament, passada i va i
-   canvis de posició.
+2. Definir altres continguts tàctics encara absents, especialment passada i va
+   i canvis de posició que no siguin permutes.
 3. Precisar el model temporal general de passos i bot sense convertir
    preferències tècniques en invariants.
-4. Validar el vocabulari contra més exercicis abans de congelar una nova versió
-   del llenguatge.
+4. Precisar els posseïdors inicials i passadors dels fluxos que el corpus UVOF
+   conserva explícitament com a no especificats.
+5. Validar el vocabulari contra altres famílies abans de congelar una nova
+   versió del llenguatge.
 
 ## Regla de treball
 

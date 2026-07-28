@@ -1,0 +1,376 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://traca.local/schema/traca.exercise-corpus.v1.1.json",
+  "title": "TRAÇA — corpus semàntic d'exercicis v1.1",
+  "type": "object",
+  "required": [
+    "meta",
+    "familia",
+    "referencies_vocabulari",
+    "exercicis",
+    "governanca"
+  ],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": [
+        "format",
+        "versio_llenguatge",
+        "versio_corpus",
+        "separacio_capes"
+      ],
+      "properties": {
+        "format": {
+          "const": "TRACA_corpus_semantic"
+        },
+        "versio_llenguatge": {
+          "const": "1.1.0"
+        },
+        "versio_corpus": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "separacio_capes": {
+          "type": "object",
+          "required": [
+            "semantica_tactica",
+            "sequencia_temporal",
+            "flux_pilota",
+            "relacions_espacials",
+            "geometria_resolta",
+            "renderitzat"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "familia": {
+      "type": "object",
+      "required": [
+        "id",
+        "nom",
+        "nombre_exercicis"
+      ],
+      "properties": {
+        "id": {
+          "const": "MITJANS_1V1_OFENSIUS"
+        },
+        "nombre_exercicis": {
+          "const": 15
+        }
+      },
+      "additionalProperties": true
+    },
+    "referencies_vocabulari": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "exercicis": {
+      "type": "array",
+      "minItems": 15,
+      "maxItems": 15,
+      "items": {
+        "$ref": "#/$defs/exercici"
+      }
+    },
+    "governanca": {
+      "type": "object",
+      "required": [
+        "autoritat_semantica",
+        "estat",
+        "geometria",
+        "render"
+      ]
+    }
+  },
+  "$defs": {
+    "exercici": {
+      "type": "object",
+      "required": [
+        "id",
+        "nom",
+        "estat",
+        "tipus_exercici",
+        "origen",
+        "organitzacio",
+        "participants",
+        "fases",
+        "invariants",
+        "validacions_entrenador"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^TR-UVOF-[0-9]{3}$"
+        },
+        "estat": {
+          "enum": [
+            "validat_entrenador",
+            "validat_amb_punts_oberts",
+            "provisional"
+          ]
+        },
+        "tipus_exercici": {
+          "enum": [
+            "analitic",
+            "superioritat_reduida",
+            "situacio_partit",
+            "situacio_partit_reduida",
+            "duels_per_zones"
+          ]
+        },
+        "origen": {
+          "type": "object",
+          "required": [
+            "full",
+            "fila",
+            "formula",
+            "text_original"
+          ],
+          "properties": {
+            "fila": {
+              "type": "integer",
+              "minimum": 4,
+              "maximum": 18
+            }
+          },
+          "additionalProperties": true
+        },
+        "organitzacio": {
+          "type": "object"
+        },
+        "participants": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "rol_inicial",
+              "equip"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "rol_inicial": {
+                "type": "string"
+              },
+              "equip": {
+                "enum": [
+                  "atac",
+                  "defensa"
+                ]
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "materials": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "tipus",
+              "funcio"
+            ],
+            "additionalProperties": true
+          }
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "rol",
+              "ordre_activacio"
+            ],
+            "additionalProperties": true
+          }
+        },
+        "pilotes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "posseidor_inicial"
+            ],
+            "additionalProperties": true
+          }
+        },
+        "fases": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/fase"
+          }
+        },
+        "invariants": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "principis_preferents": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "condicions_tasca": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "validacions_entrenador": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "punts_oberts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "fase": {
+      "type": "object",
+      "required": [
+        "id",
+        "objectiu",
+        "accions",
+        "fluxos_pilota",
+        "decisions"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "objectiu": {
+          "type": "string"
+        },
+        "accions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/accio"
+          }
+        },
+        "fluxos_pilota": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/flux_pilota"
+          }
+        },
+        "decisions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/decisio"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "accio": {
+      "type": "object",
+      "required": [
+        "ordre",
+        "actor",
+        "accio"
+      ],
+      "properties": {
+        "ordre": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "actor": {
+          "type": "string"
+        },
+        "accio": {
+          "type": "string"
+        },
+        "estat_coneixement": {
+          "enum": [
+            "validat",
+            "condicio_tasca",
+            "principi_preferent",
+            "no_especificat"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "flux_pilota": {
+      "type": "object",
+      "required": [
+        "pilota_id",
+        "posseidor_inicial",
+        "accio",
+        "posseidor_final"
+      ],
+      "properties": {
+        "pilota_id": {
+          "type": "string"
+        },
+        "posseidor_inicial": {
+          "type": "string"
+        },
+        "accio": {
+          "type": "string"
+        },
+        "posseidor_final": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "decisio": {
+      "type": "object",
+      "required": [
+        "id",
+        "condicio",
+        "caracter",
+        "opcions"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "condicio": {
+          "type": "string"
+        },
+        "caracter": {
+          "enum": [
+            "obligatori",
+            "preferent",
+            "disponible"
+          ]
+        },
+        "opcions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
