@@ -30,7 +30,10 @@
           "const": "1.0.0"
         },
         "versio_instancia": {
-          "const": "1.0.0"
+          "enum": [
+            "1.0.0",
+            "1.1.0"
+          ]
         },
         "separacio_capes": {
           "type": "object",
@@ -93,7 +96,7 @@
                 "sequencia_canonica": {
                   "type": "array",
                   "minItems": 3,
-                  "maxItems": 3
+                  "maxItems": 6
                 }
               },
               "additionalProperties": true
