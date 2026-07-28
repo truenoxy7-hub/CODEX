@@ -7,12 +7,13 @@
 - Model semàntic inicial de `TR-UVOF-001`.
 - Esquema JSON v1.0.
 - Validador estructural local.
+- Validador semàntic executable dels 9 invariants declarats.
+- Tests positius i negatius del validador semàntic.
 - CI bàsica.
 
 ## No completat
 
-- Validador semàntic executable dels 9 invariants declarats.
-- Vocabulari separat en fitxers reutilitzables.
+- Vocabulari complet per a totes les famílies d'exercicis.
 - Motor de resolució d'intervals.
 - JSON geomètric.
 - Renderer SVG nou.
@@ -21,6 +22,13 @@
 
 Tornar a introduir coordenades abans d'haver estabilitzat el model tàctic.
 
+## En curs
+
+- Primera versió viva del coneixement canònic d'handbol.
+- Enriquiment semàntic de `TR-UVOF-001` amb rols defensius, intervals
+  canònics, origen dels 2x1 i funcions diferenciades dels materials.
+
 ## Pròxima fita recomanada
 
-Convertir les `validacions_semantiques` declaratives de `TR-UVOF-001` en comprovacions executables, sense crear cap geometria.
+Estabilitzar el vocabulari reutilitzable i preparar un contracte de resolució
+espacial basat en relacions, sense introduir coordenades.
