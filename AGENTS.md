@@ -34,11 +34,20 @@ No converteixis una proposta geomètrica o una inferència en coneixement tàcti
 
 L'ordre funcional és sempre:
 
-1. Rebre en carrera a un interval o espai inicial.
-2. Canviar de direcció per atacar l'interval o espai contigu. La forma funcional és una U: amenaça, ruptura direccional i acceleració de sortida.
-3. Resoldre la situació que apareix a continuació.
+1. Atacar un espai o interval inicial.
+2. Comprometre el defensor.
+3. Canviar de direcció i de ritme per atacar l'espai contigu.
+4. Superar la línia defensiva marcada pel defensor.
+5. Resoldre la situació que apareix a continuació.
 
-Normalment l'oposició és un defensor real. Pot ser substituït per un banc, un con, un cilindre o un altre objecte. El substitut no canvia el contingut tàctic: només canvia la referència oposicional usada en la tasca.
+La forma funcional és una U: amenaça, compromís defensiu, ruptura direccional
+i acceleració de sortida. La recepció en carrera és preferent, però només és
+obligatòria quan la tasca ho declara.
+
+Normalment l'oposició és un defensor real. Un material pot substituir-lo
+activament, representar passivament la posició d'un defensor absent o limitar
+un espai. La funció s'ha de declarar per instància i no es dedueix del tipus de
+material.
 
 Una corba suau sense canvi de direcció no és una finta.
 
@@ -46,10 +55,18 @@ Una corba suau sense canvi de direcció no és una finta.
 
 El primer exercici validat parcialment té dues bandes simètriques i dues subaccions:
 
-- `SA1`: central passa al lateral; lateral rep en carrera a l'exterior de la referència, executa una finta en U cap a l'interval contigu i resol un 2x1 amb pivot.
-- `SA2`: el mateix lateral recupera sense pilota per darrere de la referència, rep una passada curta de l'extrem orientat a porteria, ataca l'interval entre defensor exterior i con i resol un 2x1 amb extrem.
+- `SA1`: central passa al lateral; lateral rep en carrera a l'interval `1–2`,
+  supera el segon defensor simulat pel banc mitjançant una finta cap a `2–3`
+  i genera un 2x1 amb pivot contra el tercer defensor.
+- `SA2`: el mateix lateral recupera sense pilota per darrere de la referència,
+  rep una passada curta de l'extrem, orientat a porteria i sense bot, i ataca
+  directament el carril `1–2`. El 2x1 amb l'extrem està preparat per la tasca;
+  `SA2` no és una finta.
 
-El banc representa el defensor directe i s'ubica semànticament entorn de 9 m. Els cons delimiten espais funcionals de finalització, no són decoratius.
+El banc representa activament el segon defensor i s'ubica semànticament entorn
+de 9 m. `C1` i `C2` delimiten l'espai de `SA1`; `C3` representa passivament el
+segon defensor absent de `SA2`. L'extrem manté amplitud al seu espai de
+finalització.
 
 ## Flux de treball obligatori
 
