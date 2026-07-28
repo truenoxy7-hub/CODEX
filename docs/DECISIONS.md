@@ -12,7 +12,9 @@
 
 ## D-003 — Definició de 1x1/finta
 
-**Decisió:** l'ordre és sempre recepció en carrera → canvi de direcció cap a l'interval contigu → resolució posterior.
+**Decisió:** l'ordre funcional és atac d'un espai → compromís del defensor →
+canvi de direcció i ritme → atac de l'espai contigu → superació → resolució.
+La recepció en carrera és preferent, però no és invariant general.
 
 ## D-004 — Referència oposicional substituïble
 
@@ -32,12 +34,40 @@
 
 ## D-008 — Segona recepció funcional
 
-**Decisió:** la passada de l'extrem ha de ser curta, la recepció ha de ser en carrera i orientada a porteria, evitant el bot.
+**Decisió:** la passada de l'extrem ha de ser curta i la recepció ha de ser en
+carrera i orientada a porteria. `SA2` es resol sense bot per condició explícita
+de la tasca.
 
-## D-009 — Cons com a límits tàctics
+## D-009 — La funció dels materials es declara per instància
 
-**Decisió:** els cons delimiten espais de finalització. No són elements ornamentals.
+**Decisió:** un material pot substituir activament un defensor, representar
+passivament la posició d'un defensor absent o delimitar un espai. No es pot
+deduir la funció només del tipus de material.
 
 ## D-010 — No reprendre prototips geomètrics
 
 **Decisió:** les versions geomètriques v0.x es conserven només com a historial d'errors i no són base d'implementació.
+
+## D-011 — Vocabulari viu i nivells d'autoritat
+
+**Decisió:** el coneixement es classifica com a invariant, principi preferent,
+condició de tasca o provisional. El vocabulari continuarà ampliant-se amb
+validacions de l'entrenador.
+
+## D-012 — Nomenclatura defensiva relacional
+
+**Decisió:** els rols es numeren de l'exterior al centre. `1r` i `exterior` són
+sinònims; `3r` i `central defensiu` també. Els intervals `1–2`, `2–3` i `3–3`
+es deriven de les posicions dels defensors. Carril és el nom específic de
+l'interval `1–2`.
+
+## D-013 — Superioritat preparada o generada
+
+**Decisió:** un 2x1 local pot ser generat per una acció anterior o preparat
+artificialment per una tasca. El model ha d'indicar-ne l'origen i no inventar
+una causalitat.
+
+## D-014 — Amplitud i finalització exterior
+
+**Decisió:** l'extrem manté l'amplitud. En finalitzar des d'una zona exterior,
+l'última passa i el salt busquen sempre guanyar angle cap al centre.

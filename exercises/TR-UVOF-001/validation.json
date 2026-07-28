@@ -2,9 +2,14 @@
   "exercise": "TR-UVOF-001",
   "schema": "https://traca.local/schema/traca.semantic.v1.0.json",
   "valid": true,
-  "structural_errors": [],
+  "errors": [],
+  "warnings": [],
   "summary": {
-    "structural_error_count": 0
+    "error_count": 0,
+    "warning_count": 0,
+    "structural_error_count": 0,
+    "semantic_error_count": 0,
+    "semantic_checks_run": 13
   },
   "geometry_generated": false,
   "render_generated": false

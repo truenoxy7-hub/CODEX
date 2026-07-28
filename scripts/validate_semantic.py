@@ -105,8 +105,59 @@ def _int_4_is_between_defender_and_cone(document: Document) -> bool:
     intervals = document.get("model_exercici", {}).get("espais_i_intervals", [])
     interval = _item(intervals, "INT_4")
     return (
-        interval.get("tipus") == "interval_contigu"
+        interval.get("tipus") == "interval_atac_directe"
         and interval.get("relacio") == "entre_D_Z2_i_C3"
+    )
+
+
+def _sa1_uses_canonical_intervals(document: Document) -> bool:
+    model = document.get("model_exercici", {})
+    intervals = model.get("espais_i_intervals", [])
+    reference = _item(model.get("referencies_oposicionals", []), "REF_1X1")
+    return (
+        reference.get("rol_defensiu_simulat") == "segon_defensor"
+        and _item(intervals, "INT_1").get("nom_canonic") == "interval_1-2"
+        and _item(intervals, "INT_2").get("nom_canonic") == "interval_2-3"
+        and _item(intervals, "INT_2").get("defensor_compartit") == "REF_1X1"
+    )
+
+
+def _sa2_is_direct_attack_not_feint(document: Document) -> bool:
+    subactions = document.get("model_exercici", {}).get("subaccions", [])
+    sa2 = _item(subactions, "SA2")
+    attack_step = _step(document, "SA2", 2)
+    return (
+        "finta" in sa2.get("contingut_exclos", [])
+        and sa2.get("lectura_tactica", {}).get("superioritat")
+        == "preparada_per_la_tasca"
+        and attack_step.get("accio") == "atacar_carril_1-2"
+        and attack_step.get("es_finta") is False
+    )
+
+
+def _materials_have_distinct_functions(document: Document) -> bool:
+    materials = document.get("model_exercici", {}).get("materials", [])
+    return (
+        _item(materials, "C1").get("classe_funcional") == "limit_espacial"
+        and _item(materials, "C2").get("classe_funcional") == "limit_espacial"
+        and _item(materials, "C3").get("classe_funcional")
+        == "referencia_posicional_passiva"
+        and _item(materials, "C3").get("rol_defensiu_representat")
+        == "segon_defensor"
+        and _item(materials, "C3").get("participa_com_a_defensor") is False
+    )
+
+
+def _wing_preserves_width(document: Document) -> bool:
+    intervals = document.get("model_exercici", {}).get("espais_i_intervals", [])
+    space = _item(intervals, "ESPAI_EXTREM_Z2")
+    principles = space.get("principis", [])
+    return (
+        space.get("tipus") == "espai_finalitzacio_extrem"
+        and space.get("relacio") == "entre_linia_de_fons_i_D_Z2"
+        and space.get("ocupant") == "EXT"
+        and "mantenir_amplitud" in principles
+        and "saltar_cap_al_centre" in principles
     )
 
 
@@ -164,6 +215,30 @@ SEMANTIC_RULES: tuple[tuple[str, str, str, Check], ...] = (
         "model_exercici/espais_i_intervals/INT_4/relacio",
         "INT_4 ha de quedar entre D_Z2 i C3",
         _int_4_is_between_defender_and_cone,
+    ),
+    (
+        "VAL-KNOW-01",
+        "model_exercici/espais_i_intervals",
+        "SA1 ha de representar una finta d'1–2 a 2–3 contra el segon defensor",
+        _sa1_uses_canonical_intervals,
+    ),
+    (
+        "VAL-KNOW-02",
+        "model_exercici/subaccions/SA2",
+        "SA2 ha de ser un atac directe del carril 1–2 i no una finta",
+        _sa2_is_direct_attack_not_feint,
+    ),
+    (
+        "VAL-KNOW-03",
+        "model_exercici/materials",
+        "C1 i C2 han de ser límits; C3 ha de representar passivament el segon defensor absent",
+        _materials_have_distinct_functions,
+    ),
+    (
+        "VAL-KNOW-04",
+        "model_exercici/espais_i_intervals/ESPAI_EXTREM_Z2",
+        "L'extrem ha de mantenir amplitud dins el seu espai de finalització",
+        _wing_preserves_width,
     ),
 )
 

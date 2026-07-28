@@ -1,10 +1,14 @@
 from __future__ import annotations
 
+import json
 from copy import deepcopy
+from pathlib import Path
 
 import pytest
 
 from scripts.validate_semantic import SEMANTIC_RULES, validate_document
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 @pytest.fixture
@@ -42,20 +46,41 @@ def valid_document() -> dict:
                 {
                     "id": "REF_1X1",
                     "tipus_real": "defensor_directe",
+                    "rol_defensiu_simulat": "segon_defensor",
                     "tipus_utilitzat_exercici": "banc",
                     "equivalencia": "substitut_de_defensor_directe",
                 }
             ],
+            "materials": [
+                {"id": "C1", "classe_funcional": "limit_espacial"},
+                {"id": "C2", "classe_funcional": "limit_espacial"},
+                {
+                    "id": "C3",
+                    "classe_funcional": "referencia_posicional_passiva",
+                    "rol_defensiu_representat": "segon_defensor",
+                    "participa_com_a_defensor": False,
+                },
+            ],
             "espais_i_intervals": [
+                {"id": "INT_1", "nom_canonic": "interval_1-2"},
                 {
                     "id": "INT_2",
                     "tipus": "interval_contigu",
                     "relacio": "interior_de_REF_1X1",
+                    "nom_canonic": "interval_2-3",
+                    "defensor_compartit": "REF_1X1",
                 },
                 {
                     "id": "INT_4",
-                    "tipus": "interval_contigu",
+                    "tipus": "interval_atac_directe",
                     "relacio": "entre_D_Z2_i_C3",
+                },
+                {
+                    "id": "ESPAI_EXTREM_Z2",
+                    "tipus": "espai_finalitzacio_extrem",
+                    "relacio": "entre_linia_de_fons_i_D_Z2",
+                    "ocupant": "EXT",
+                    "principis": ["mantenir_amplitud", "saltar_cap_al_centre"],
                 },
             ],
             "subaccions": [
@@ -83,6 +108,8 @@ def valid_document() -> dict:
                     "id": "SA2",
                     "passador": "EXT",
                     "recuperacio": {"amb_pilota": False},
+                    "contingut_exclos": ["finta"],
+                    "lectura_tactica": {"superioritat": "preparada_per_la_tasca"},
                     "sequencia_obligatoria": [
                         {"ordre": 1, "accio": "recuperar_sense_pilota"},
                         {
@@ -90,6 +117,11 @@ def valid_document() -> dict:
                             "accio": "rebre_en_carrera",
                             "origen_passada": "EXT",
                             "condicions": ["passada_curta", "sense_bot"],
+                        },
+                        {
+                            "ordre": 3,
+                            "accio": "atacar_carril_1-2",
+                            "es_finta": False,
                         },
                     ],
                 },
@@ -125,19 +157,23 @@ def test_valid_document_passes_all_semantic_rules(valid_document, schema):
     assert report["valid"] is True
     assert report["errors"] == []
     assert report["warnings"] == []
-    assert report["summary"]["semantic_checks_run"] == 9
+    assert report["summary"]["semantic_checks_run"] == 13
 
 
 MUTATIONS = (
     ("VAL-1X1-01", lambda doc: doc["model_exercici"]["subaccions"][0]["sequencia_obligatoria"][0].update(destinacio="INT_X")),
     ("VAL-1X1-02", lambda doc: doc["model_exercici"]["subaccions"][0]["sequencia_obligatoria"][1].update(des_de="INT_X")),
-    ("VAL-1X1-03", lambda doc: doc["model_exercici"]["espais_i_intervals"][0].update(tipus="interval_recepcio")),
+    ("VAL-1X1-03", lambda doc: doc["model_exercici"]["espais_i_intervals"][1].update(tipus="interval_recepcio")),
     ("VAL-1X1-04", lambda doc: doc["model_exercici"]["subaccions"][0]["sequencia_obligatoria"][1].update(forma_funcional="corba")),
     ("VAL-1X1-05", lambda doc: doc["model_exercici"]["subaccions"][0]["sequencia_obligatoria"][-1].update(accio="passar")),
     ("VAL-1X1-06", lambda doc: doc["model_exercici"]["referencies_oposicionals"][0].update(equivalencia="decoratiu")),
     ("VAL-SA2-01", lambda doc: doc["model_exercici"]["subaccions"][1]["recuperacio"].update(amb_pilota=True)),
     ("VAL-SA2-02", lambda doc: doc["model_exercici"]["subaccions"][1]["sequencia_obligatoria"][1].update(condicions=["passada_curta"])),
-    ("VAL-SA2-03", lambda doc: doc["model_exercici"]["espais_i_intervals"][1].update(relacio="davant_D_Z2")),
+    ("VAL-SA2-03", lambda doc: doc["model_exercici"]["espais_i_intervals"][2].update(relacio="davant_D_Z2")),
+    ("VAL-KNOW-01", lambda doc: doc["model_exercici"]["espais_i_intervals"][0].update(nom_canonic="espai_generic")),
+    ("VAL-KNOW-02", lambda doc: doc["model_exercici"]["subaccions"][1]["sequencia_obligatoria"][2].update(es_finta=True)),
+    ("VAL-KNOW-03", lambda doc: doc["model_exercici"]["materials"][2].update(participa_com_a_defensor=True)),
+    ("VAL-KNOW-04", lambda doc: doc["model_exercici"]["espais_i_intervals"][3].update(principis=[])),
 )
 
 
@@ -163,4 +199,23 @@ def test_structural_errors_prevent_semantic_checks(valid_document, schema):
     assert report["valid"] is False
     assert report["errors"][0]["code"] == "SCHEMA_ERROR"
     assert report["summary"]["semantic_checks_run"] == 0
-    assert len(SEMANTIC_RULES) == 9
+    assert len(SEMANTIC_RULES) == 13
+
+
+def test_repository_document_passes_schema_and_semantic_rules():
+    document = json.loads(
+        (ROOT / "exercises" / "TR-UVOF-001" / "semantic.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    schema = json.loads(
+        (ROOT / "schema" / "traca.semantic.schema.v1.0.json").read_text(
+            encoding="utf-8"
+        )
+    )
+
+    report = validate_document(document, schema)
+
+    assert report["valid"] is True
+    assert report["errors"] == []
+    assert report["summary"]["semantic_checks_run"] == 13
