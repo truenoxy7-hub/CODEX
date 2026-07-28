@@ -2,8 +2,8 @@
   "meta": {
     "format": "TRACA_exercici_semantic",
     "versio_llenguatge": "1.0.0",
-    "versio_instancia": "1.0.0",
-    "estat": "pendent_validacio_entrenador",
+    "versio_instancia": "1.1.0",
+    "estat": "validada_parcialment_i_viva",
     "objectiu": "Descriure el significat tàctic complet de l'exercici abans de generar-ne la geometria o el gràfic.",
     "separacio_capes": {
       "semantica_tactica": "inclosa",
@@ -36,7 +36,12 @@
         "id": "CT-1X1-FINTA",
         "nom": "1x1 / finta",
         "categoria": "contingut_tactic_individual",
-        "definicio": "Acció ofensiva individual en què el jugador rep en carrera dins un interval o espai inicial, canvia de direcció per atacar l'interval o espai contigu i resol la situació que apareix a continuació.",
+        "definicio": "Acció ofensiva individual en què el jugador ataca un espai, compromet el defensor, canvia de direcció i de ritme per atacar l'espai contigu, supera la línia defensiva marcada pel defensor i resol la situació posterior.",
+        "nivell_autoritat": "invariant_confirmat_entrenador",
+        "recepcio_en_carrera": {
+          "nivell": "principi_preferent",
+          "descripcio": "Permet atacar immediatament, conservar el bot i mantenir més opcions; només és obligatòria quan la tasca ho declara."
+        },
         "context_habitual": {
           "tipus_referencia": "defensor_real",
           "descripcio": "Normalment el 1x1 es produeix contra un defensor real que actua com a referència oposicional directa."
@@ -71,30 +76,42 @@
         "sequencia_canonica": [
           {
             "ordre": 1,
-            "id": "REBRE_EN_CARRERA",
-            "accio": "recepcio_en_carrera",
-            "objectiu": "Arribar i rebre en moviment dins un interval o espai inicial.",
-            "condicions": [
-              "el jugador no espera la pilota aturat",
-              "la passada i la cursa se sincronitzen",
-              "la recepció queda orientada cap a la continuïtat"
-            ]
+            "id": "ATACAR_ESPAI_INICIAL",
+            "accio": "atacar_espai",
+            "objectiu": "Amenaçar un espai o interval inicial."
           },
           {
             "ordre": 2,
-            "id": "CANVIAR_DIRECCIO_U",
-            "accio": "finta_canvi_direccio",
-            "objectiu": "Amenaçar l'interval inicial i canviar de direcció per atacar l'interval o espai contigu.",
+            "id": "COMPROMETRE_DEFENSOR",
+            "accio": "comprometre_defensor",
+            "objectiu": "Provocar una resposta que comprometi el defensor."
+          },
+          {
+            "ordre": 3,
+            "id": "CANVIAR_DIRECCIO_I_RITME",
+            "accio": "finta_canvi_direccio_i_ritme",
+            "objectiu": "Canviar de direcció i de ritme respecte de l'amenaça inicial.",
             "forma_funcional": "U",
             "condicions": [
-              "la recepció i la superació no són al mateix interval",
               "el canvi de direcció ha de ser explícit",
               "la sortida es produeix per l'altre costat de la referència",
               "el canvi de direcció s'acompanya de canvi de ritme"
             ]
           },
           {
-            "ordre": 3,
+            "ordre": 4,
+            "id": "ATACAR_ESPAI_CONTIGU",
+            "accio": "atacar_espai_contigu",
+            "objectiu": "Atacar l'interval contigu que comparteix el defensor de referència."
+          },
+          {
+            "ordre": 5,
+            "id": "SUPERAR_DEFENSOR",
+            "accio": "superar_defensor",
+            "objectiu": "Travessar la línia defensiva marcada pel defensor i progressar cap a porteria."
+          },
+          {
+            "ordre": 6,
             "id": "RESOLDRE_CONTINUITAT",
             "accio": "resolucio_posterior",
             "objectiu": "Resoldre la situació tàctica que apareix després de superar o desequilibrar la referència.",
@@ -109,19 +126,78 @@
           }
         ],
         "invariants": [
-          "l'ordre de les tres fases no canvia",
+          "l'ordre funcional de les sis fases no canvia",
           "sempre hi ha un interval o espai inicial",
           "sempre hi ha un interval o espai contigu",
-          "la finta implica un canvi de direcció real",
+          "el defensor queda compromès abans del canvi",
+          "la finta implica canvi de direcció i de ritme",
+          "la finta busca superar la línia defensiva marcada pel defensor",
           "la resolució posterior no es predetermina si és decisional",
           "l'objecte utilitzat no modifica el contingut tàctic: només substitueix la referència oposicional"
         ],
         "errors_de_modelatge_a_evitar": [
-          "dibuixar una corba suau sense canvi de direcció",
+          "dibuixar una corba suau sense compromís defensiu",
           "confondre recepció i resolució",
           "atacar el mateix interval després de la finta",
-          "tractar banc, con o cilindre com a material decoratiu",
+          "deduir la funció tàctica d'un material només pel seu tipus",
           "predeterminar una única solució en una situació decisional"
+        ]
+      }
+    },
+    "vocabulari_handbol": {
+      "font": "docs/HANDBALL_KNOWLEDGE.md",
+      "estat": "viu_confirmat_parcialment",
+      "autoritat": "entrenador",
+      "nivells_coneixement": [
+        "invariant",
+        "principi_preferent",
+        "condicio_tasca",
+        "provisional"
+      ],
+      "rols_defensius": [
+        {
+          "id": "DEF_1",
+          "nom": "primer_defensor",
+          "alies": [
+            "defensor_exterior"
+          ]
+        },
+        {
+          "id": "DEF_2",
+          "nom": "segon_defensor"
+        },
+        {
+          "id": "DEF_3",
+          "nom": "tercer_defensor",
+          "alies": [
+            "central_defensiu"
+          ]
+        },
+        {
+          "id": "DEF_AV",
+          "nom": "avancat"
+        }
+      ],
+      "intervals": {
+        "definicio": "Espai dinàmic entre dos defensors, derivat dels seus rols i posicions actuals.",
+        "nomenclatura": [
+          "1-2",
+          "2-3",
+          "3-3"
+        ],
+        "carril": {
+          "equivalent_a": "interval_1-2",
+          "us_restringit": true
+        },
+        "contiguitat": "Dos intervals són contigus quan comparteixen un defensor."
+      },
+      "espai_finalitzacio_extrem": {
+        "alies_tecnic": "0-1",
+        "definicio": "Tram exterior de l'àrea de 6 m entre la línia de fons i el primer defensor.",
+        "principis": [
+          "mantenir_amplitud",
+          "ultima_passa_prepara_salt_cap_al_centre",
+          "saltar_cap_a_dins_per_guanyar_angle"
         ]
       }
     }
@@ -162,13 +238,15 @@
       },
       {
         "id": "D_Z1",
-        "rol": "defensor_primera_subaccio",
+        "rol": "tercer_defensor",
+        "alies_rol": "central_defensiu",
         "equip": "defensa",
         "funcio": "defensar el 2x1 lateral_pivot"
       },
       {
         "id": "D_Z2",
-        "rol": "defensor_segona_subaccio",
+        "rol": "primer_defensor",
+        "alies_rol": "defensor_exterior",
         "equip": "defensa",
         "funcio": "defensar el 2x1 lateral_extrem"
       }
@@ -177,8 +255,10 @@
       {
         "id": "REF_1X1",
         "tipus_real": "defensor_directe",
+        "rol_defensiu_simulat": "segon_defensor",
         "tipus_utilitzat_exercici": "banc",
         "equivalencia": "substitut_de_defensor_directe",
+        "classe_funcional_material": "substitut_oposicional_actiu",
         "funcio_tactica": "separar l'interval inicial de l'interval contigu i obligar a executar la finta en U",
         "posicionament_semantic": {
           "referencia_longitudinal": "entorn_linia_9m",
@@ -190,22 +270,31 @@
       {
         "id": "BANC",
         "tipus": "banc",
-        "funcio": "REF_1X1"
+        "funcio": "REF_1X1",
+        "classe_funcional": "substitut_oposicional_actiu",
+        "rol_defensiu_representat": "segon_defensor"
       },
       {
         "id": "C1",
         "tipus": "con",
-        "funcio": "limit_interior_Z1"
+        "funcio": "limit_interior_Z1",
+        "classe_funcional": "limit_espacial",
+        "representa_defensor": false
       },
       {
         "id": "C2",
         "tipus": "con",
-        "funcio": "limit_exterior_Z1"
+        "funcio": "limit_exterior_Z1",
+        "classe_funcional": "limit_espacial",
+        "representa_defensor": false
       },
       {
         "id": "C3",
         "tipus": "con",
-        "funcio": "limit_interior_Z2"
+        "funcio": "referencia_posicional_segon_defensor_absent",
+        "classe_funcional": "referencia_posicional_passiva",
+        "rol_defensiu_representat": "segon_defensor",
+        "participa_com_a_defensor": false
       }
     ],
     "espais_i_intervals": [
@@ -213,12 +302,25 @@
         "id": "INT_1",
         "tipus": "interval_recepcio",
         "relacio": "exterior_de_REF_1X1",
+        "nom_canonic": "interval_1-2",
+        "alies": "carril",
+        "delimitadors_semantics": [
+          "primer_defensor_no_representat_SA1",
+          "REF_1X1_com_a_segon_defensor"
+        ],
         "funcio": "espai inicial on el lateral arriba i rep en carrera"
       },
       {
         "id": "INT_2",
         "tipus": "interval_contigu",
         "relacio": "interior_de_REF_1X1",
+        "nom_canonic": "interval_2-3",
+        "delimitadors_semantics": [
+          "REF_1X1_com_a_segon_defensor",
+          "D_Z1_com_a_tercer_defensor"
+        ],
+        "contigu_a": "INT_1",
+        "defensor_compartit": "REF_1X1",
         "funcio": "espai contigu atacat després del canvi de direcció"
       },
       {
@@ -240,13 +342,34 @@
         "id": "INT_3",
         "tipus": "interval_recepcio",
         "relacio": "proper_a_EXT_i_orientat_a_porteria",
+        "nom_canonic": "espai_recepcio_orientada_SA2",
         "funcio": "rebre en carrera una passada curta de l'extrem sense bot"
       },
       {
         "id": "INT_4",
-        "tipus": "interval_contigu",
+        "tipus": "interval_atac_directe",
         "relacio": "entre_D_Z2_i_C3",
+        "nom_canonic": "interval_1-2",
+        "alies": "carril",
+        "delimitadors_semantics": [
+          "D_Z2_com_a_primer_defensor_actiu",
+          "C3_com_a_segon_defensor_absent"
+        ],
+        "es_finta": false,
         "funcio": "espai atacat pel lateral després de la segona recepció"
+      },
+      {
+        "id": "ESPAI_EXTREM_Z2",
+        "tipus": "espai_finalitzacio_extrem",
+        "alies_tecnic": "0-1",
+        "relacio": "entre_linia_de_fons_i_D_Z2",
+        "ocupant": "EXT",
+        "principis": [
+          "mantenir_amplitud",
+          "anticipar_passada_amb_criteri",
+          "agafar_carrera_per_finalitzar",
+          "saltar_cap_al_centre"
+        ]
       },
       {
         "id": "Z2",
@@ -268,6 +391,14 @@
         "referencia_oposicional": "REF_1X1",
         "interval_inicial": "INT_1",
         "interval_contigu": "INT_2",
+        "lectura_tactica": {
+          "recepcio": "interval_1-2",
+          "defensor_superat": "segon_defensor_simulat_per_REF_1X1",
+          "interval_superacio": "interval_2-3",
+          "accio_generadora_2x1": "superacio_del_segon_defensor",
+          "defensor_2x1": "D_Z1_com_a_tercer_defensor",
+          "coordinacio_pivot": "ocupar_interval_complementari_al_que_ataca_L"
+        },
         "sequencia_obligatoria": [
           {
             "ordre": 1,
@@ -279,6 +410,15 @@
             "ordre": 2,
             "accio": "finta_canvi_direccio",
             "forma_funcional": "U",
+            "objectiu": "superar_REF_1X1",
+            "components": [
+              "atacar_INT_1",
+              "comprometre_REF_1X1",
+              "canviar_direccio",
+              "canviar_ritme",
+              "atacar_INT_2",
+              "superar_linia_defensiva_REF_1X1"
+            ],
             "des_de": "INT_1",
             "cap_a": "INT_2",
             "referencia": "REF_1X1"
@@ -297,6 +437,7 @@
             "PV"
           ],
           "defensor": "D_Z1",
+          "origen_superioritat": "generada_per_superacio_REF_1X1",
           "solucions_no_predeterminades": [
             "finalitzacio_L",
             "passada_PV",
@@ -320,6 +461,17 @@
         "passador": "EXT",
         "interval_recepcio": "INT_3",
         "interval_atac": "INT_4",
+        "contingut_exclos": [
+          "finta",
+          "superacio_previa_generadora_2x1"
+        ],
+        "lectura_tactica": {
+          "objectiu_principal": "recuperar_i_adaptar_trajectoria_per_atacar_carril_1-2",
+          "superioritat": "preparada_per_la_tasca",
+          "primer_defensor_actiu": "D_Z2",
+          "segon_defensor_absent_simulat": "C3",
+          "espai_extrem": "ESPAI_EXTREM_Z2"
+        },
         "sequencia_obligatoria": [
           {
             "ordre": 1,
@@ -340,9 +492,10 @@
           },
           {
             "ordre": 3,
-            "accio": "atacar_interval_contigu",
+            "accio": "atacar_carril_1-2",
             "des_de": "INT_3",
-            "cap_a": "INT_4"
+            "cap_a": "INT_4",
+            "es_finta": false
           },
           {
             "ordre": 4,
@@ -358,6 +511,11 @@
             "EXT"
           ],
           "defensor": "D_Z2",
+          "origen_superioritat": "preparada_per_la_tasca",
+          "criteri_resolucio": {
+            "si_D_Z2_no_tanca": "finalitzacio_L",
+            "si_D_Z2_tanca_i_queda_compromes": "passada_EXT"
+          },
           "solucions_no_predeterminades": [
             "finalitzacio_L",
             "passada_EXT",
@@ -393,7 +551,10 @@
       "SA2.resoldre_2x1_extrem_Z2"
     ],
     "restriccions_i_condicions": {
-      "bot": "evitar",
+      "bot": {
+        "principi_general": "evitar_si_no_es_necessari",
+        "SA2": "prohibit_per_condicio_de_tasca"
+      },
       "segona_passada": "curta_i_funcional",
       "recepcions": "sempre_en_carrera",
       "orientacio_recepcio": "cap_a_porteria",
@@ -411,6 +572,10 @@
       "la recuperació de SA2 és sense pilota",
       "la passada EXT_a_L ha de ser curta",
       "INT_4 ha de quedar entre D_Z2 i C3",
+      "C3 representa passivament el segon defensor absent i no participa com a defensor",
+      "ESPAI_EXTREM_Z2 queda entre la línia de fons i D_Z2",
+      "EXT manté amplitud i finalitza amb salt cap al centre",
+      "SA2 no es representa com una finta",
       "les solucions de 2x1 no es dibuixen com a obligatòries"
     ]
   },
@@ -450,12 +615,34 @@
     {
       "id": "VAL-SA2-03",
       "regla": "INT_4 ha de quedar entre D_Z2 i C3"
+    },
+    {
+      "id": "VAL-KNOW-01",
+      "estat": "executable",
+      "regla": "SA1 representa una finta de 1-2 a 2-3 contra el segon defensor"
+    },
+    {
+      "id": "VAL-KNOW-02",
+      "estat": "executable",
+      "regla": "SA2 és un atac directe del carril 1-2 i no una finta"
+    },
+    {
+      "id": "VAL-KNOW-03",
+      "estat": "executable",
+      "regla": "C1 i C2 són límits espacials; C3 representa passivament el segon defensor absent"
+    },
+    {
+      "id": "VAL-KNOW-04",
+      "estat": "executable",
+      "regla": "L'extrem manté amplitud dins l'espai de finalització exterior"
     }
   ],
   "governanca": {
     "semantica_tactica": {
-      "estat": "pendent_validacio_entrenador",
-      "autoritat_validacio": "entrenador"
+      "estat": "validada_parcialment_i_viva",
+      "autoritat_validacio": "entrenador",
+      "coneixement_confirmat": "docs/HANDBALL_KNOWLEDGE.md",
+      "nota": "El coneixement confirmat pot ampliar-se amb nous exercicis sense convertir preferències contextuals en invariants."
     },
     "geometria": {
       "estat": "no_definida",
