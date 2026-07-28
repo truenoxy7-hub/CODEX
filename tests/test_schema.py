@@ -26,3 +26,25 @@ def test_no_geometry_or_render_is_present() -> None:
     separation = document["meta"]["separacio_capes"]
     assert separation["geometria_resolta"] == "no_inclosa"
     assert separation["renderitzat"] == "no_generat"
+
+
+def test_uvof_corpus_matches_v1_1_schema() -> None:
+    document = json.loads(
+        (ROOT / "corpus" / "uvof.semantic.json").read_text(encoding="utf-8")
+    )
+    schema = json.loads(
+        (
+            ROOT / "schema" / "traca.exercise-corpus.schema.v1.1.json"
+        ).read_text(encoding="utf-8")
+    )
+    errors = list(Draft202012Validator(schema).iter_errors(document))
+    assert errors == []
+
+
+def test_uvof_corpus_contains_the_complete_ordered_family() -> None:
+    document = json.loads(
+        (ROOT / "corpus" / "uvof.semantic.json").read_text(encoding="utf-8")
+    )
+    assert [exercise["id"] for exercise in document["exercicis"]] == [
+        f"TR-UVOF-{index:03d}" for index in range(1, 16)
+    ]

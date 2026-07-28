@@ -108,3 +108,37 @@ La geometria serà derivada de:
 - invariants tàctics.
 
 Les coordenades no pertanyen al JSON semàntic.
+
+## 8. Corpus d'exercicis
+
+El corpus semàntic agrupa exercicis validats que comparteixen una família. Cada
+entrada declara:
+
+- identificació, origen i estat de coneixement;
+- tipus d'exercici;
+- organització, participants, materials, files i pilotes;
+- fases amb accions ordenades;
+- fluxos de pilota explícits quan han estat validats;
+- decisions obligatòries, preferents o simplement disponibles;
+- invariants i condicions de tasca.
+
+Una absència d'informació no s'omple per inferència. En particular, un flux de
+pilota buit significa que la font i l'entrenador encara no n'han fixat el
+posseïdor o la transferència.
+
+## 9. Permuta
+
+La permuta utilitza la notació `primer_jugador-segon_jugador`. El primer canvia
+cap a la posició del segon i rep després de la permuta; el segon ocupa l'espai
+deixat. La identitat del participant i la posició temporal no són equivalents.
+
+## 10. Caràcter de les decisions
+
+Cada decisió ha d'indicar-ne el caràcter:
+
+- `obligatori`: la tasca tanca la resposta;
+- `preferent`: és la resposta recomanada, però admet criteri contextual;
+- `disponible`: és una opció legítima dins una situació oberta.
+
+El canvi de banda després d'una acció sense avantatge és habitualment
+`preferent`, no `obligatori`.

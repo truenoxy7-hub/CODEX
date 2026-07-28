@@ -4,12 +4,16 @@ TRAÇA és un projecte per construir un llenguatge canònic i una base de coneix
 
 ## Estat actual
 
-El projecte es troba en la fase de **modelatge semàntic**. El primer exercici de referència és `TR-UVOF-001`, de la família `MITJANS 1V1 OFENSIUS`.
+El projecte es troba en la fase de **modelatge semàntic**. La primera família
+completa és `MITJANS 1V1 OFENSIUS`, amb `TR-UVOF-001` a `TR-UVOF-015`
+interpretats i validats amb l'entrenador.
 
 La geometria i el renderer anteriors es consideren prototips descartables. No s'han de reprendre com a font de veritat. La font actual és:
 
 - `exercises/TR-UVOF-001/semantic.json`
+- `corpus/uvof.semantic.json`
 - `schema/traca.semantic.schema.v1.0.json`
+- `schema/traca.exercise-corpus.schema.v1.1.json`
 - `docs/DOMAIN_MODEL.md`
 - `docs/DECISIONS.md`
 - `docs/OPEN_QUESTIONS.md`

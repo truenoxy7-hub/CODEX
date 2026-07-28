@@ -1,0 +1,890 @@
+{
+  "$schema": "https://traca.local/schema/traca.exercise-corpus.v1.1.json",
+  "meta": {
+    "format": "TRACA_corpus_semantic",
+    "versio_llenguatge": "1.1.0",
+    "versio_corpus": "1.0.0",
+    "estat": "validat_i_viu",
+    "separacio_capes": {
+      "semantica_tactica": "inclosa",
+      "sequencia_temporal": "inclosa",
+      "flux_pilota": "inclos_quan_ha_estat_validat",
+      "relacions_espacials": "incloses",
+      "geometria_resolta": "no_inclosa",
+      "renderitzat": "no_generat"
+    }
+  },
+  "familia": {
+    "id": "MITJANS_1V1_OFENSIUS",
+    "nom": "Mitjans 1x1 ofensius",
+    "prefix": "TR-UVOF",
+    "nombre_exercicis": 15
+  },
+  "referencies_vocabulari": [
+    "CT-1X1-FINTA",
+    "CT-2X1",
+    "CT-ENCREUAMENT",
+    "CT-PERMUTA",
+    "CT-BLOQUEIG-ESTATIC",
+    "CT-LLISCAMENT-PIVOT",
+    "CT-SITUACIO-PARTIT",
+    "CT-PUNT-FORT-FEBLE"
+  ],
+  "exercicis": [
+    {
+      "id": "TR-UVOF-001",
+      "nom": "Finta 1–2 a 2–3 i recuperació per al 2x1 exterior",
+      "estat": "validat_entrenador",
+      "tipus_exercici": "analitic",
+      "origen": {
+        "full": "FITXA ORIGINAL / BATERÍA D'ACTIVITATS",
+        "fila": 4,
+        "formula": "=INDEX(UVUOF;1)",
+        "text_original": "El treball consisteix en un treball a dues bandes, on en la primera acció amb 1v1 sobre el banc cap al centre juguem un 2v1 amb PV, i recuperem per rebre del extrem donant importància a la trajectòria per jugar un 2v1 amb extrems"
+      },
+      "organitzacio": {
+        "bandes": 2,
+        "execucio": "parallela_i_simetrica"
+      },
+      "participants": [
+        {"id": "CE", "rol_inicial": "central", "equip": "atac"},
+        {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
+        {"id": "PV", "rol_inicial": "pivot", "equip": "atac"},
+        {"id": "EXT", "rol_inicial": "extrem", "equip": "atac"},
+        {"id": "D1", "rol_inicial": "primer_defensor", "equip": "defensa"},
+        {"id": "D3", "rol_inicial": "tercer_defensor", "equip": "defensa"}
+      ],
+      "materials": [
+        {"id": "BANC", "tipus": "banc", "funcio": "substitut_oposicional_actiu_del_segon_defensor"},
+        {"id": "C1_C2", "tipus": "cons", "funcio": "limits_espacials"},
+        {"id": "C3", "tipus": "con", "funcio": "referencia_posicional_passiva_del_segon_defensor"}
+      ],
+      "pilotes": [
+        {"id": "B1", "posseidor_inicial": "CE"},
+        {"id": "B2", "posseidor_inicial": "EXT"}
+      ],
+      "fases": [
+        {
+          "id": "SA1",
+          "objectiu": "Superar el segon defensor simulat i generar un 2x1 amb el pivot.",
+          "accions": [
+            {"ordre": 1, "actor": "L", "accio": "rebre_en_carrera_a_interval_1-2", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "L", "accio": "finta_en_U_de_1-2_a_2-3", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "L", "accio": "superar_segon_defensor_simulat", "estat_coneixement": "validat"}
+          ],
+          "fluxos_pilota": [
+            {"pilota_id": "B1", "posseidor_inicial": "CE", "accio": "passada", "posseidor_final": "L"}
+          ],
+          "decisions": [
+            {"id": "D_SA1", "condicio": "tercer_defensor_compromes", "caracter": "disponible", "opcions": ["finalitzacio_lateral", "passada_pivot"]}
+          ]
+        },
+        {
+          "id": "SA2",
+          "objectiu": "Recuperar sense pilota i atacar directament el carril 1–2.",
+          "accions": [
+            {"ordre": 1, "actor": "L", "accio": "recuperar_sense_pilota_per_darrere_del_banc", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "L", "accio": "rebre_orientat_sense_bot", "estat_coneixement": "condicio_tasca"},
+            {"ordre": 3, "actor": "L", "accio": "atacar_directament_interval_1-2", "estat_coneixement": "validat"}
+          ],
+          "fluxos_pilota": [
+            {"pilota_id": "B2", "posseidor_inicial": "EXT", "accio": "passada_curta", "posseidor_final": "L"}
+          ],
+          "decisions": [
+            {"id": "D_SA2", "condicio": "primer_defensor_compromes", "caracter": "disponible", "opcions": ["finalitzacio_lateral", "passada_extrem"]}
+          ]
+        }
+      ],
+      "invariants": [
+        "SA1 és una finta i SA2 és un atac directe, no una finta",
+        "el mateix lateral manté la identitat entre les dues subaccions",
+        "l'extrem manté amplitud"
+      ],
+      "condicions_tasca": ["SA2_sense_bot"],
+      "validacions_entrenador": [
+        "banc_com_a_segon_defensor",
+        "finta_1-2_a_2-3",
+        "2x1_amb_pivot_i_2x1_amb_extrem"
+      ]
+    },
+    {
+      "id": "TR-UVOF-002",
+      "nom": "1x1 amb hàndicap i continuïtat o encreuament",
+      "estat": "validat_entrenador",
+      "tipus_exercici": "analitic",
+      "origen": {
+        "full": "FITXA ORIGINAL / BATERÍA D'ACTIVITATS",
+        "fila": 5,
+        "formula": "=INDEX(UVUOF;2)",
+        "text_original": "Treball de 1v1 contra defensor amb handicap, que defensa amb chirimbolo agafat. Sempre hem d'anar a intentar superar i fer gol, pero en cas de no poder hem de ser capaços de seguir arrosegant per generar un encreuament per aconseguir una ventatge i seguir atacant l'acció."
+      },
+      "organitzacio": {
+        "defensor_directe": "segon_defensor",
+        "simetria": "dues_bandes"
+      },
+      "participants": [
+        {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
+        {"id": "CE", "rol_inicial": "central", "equip": "atac"},
+        {"id": "EXT", "rol_inicial": "extrem", "equip": "atac"},
+        {"id": "D2", "rol_inicial": "segon_defensor", "equip": "defensa"}
+      ],
+      "materials": [
+        {"id": "XIRIMBOLO", "tipus": "xirimbolo", "funcio": "handicap_defensiu_sostingut_pel_segon_defensor"}
+      ],
+      "fases": [
+        {
+          "id": "F1",
+          "objectiu": "Superar el segon defensor i finalitzar; si no és possible, continuar atacant mitjançant un encreuament.",
+          "accions": [
+            {"ordre": 1, "actor": "L", "accio": "iniciar_1x1_contra_segon_defensor", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "L", "accio": "fintar_entre_intervals_contigus", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "L", "accio": "arrossegar_defensor_si_no_supera", "estat_coneixement": "validat"}
+          ],
+          "fluxos_pilota": [],
+          "decisions": [
+            {"id": "D_12_23_SUPERA", "condicio": "finta_1-2_a_2-3_i_superacio", "caracter": "disponible", "opcions": ["continuïtat_central_cap_a_3-3"]},
+            {"id": "D_12_23_NO_SUPERA", "condicio": "finta_1-2_a_2-3_sense_superacio", "caracter": "disponible", "opcions": ["encreuament_central_per_atacar_1-2"]},
+            {"id": "D_23_12_SUPERA", "condicio": "finta_2-3_a_1-2_i_superacio", "caracter": "disponible", "opcions": ["continuïtat_extrem_per_finalitzar_espai_exterior"]},
+            {"id": "D_23_12_NO_SUPERA", "condicio": "finta_2-3_a_1-2_sense_superacio", "caracter": "disponible", "opcions": ["encreuament_extrem_per_atacar_2-3"]}
+          ]
+        }
+      ],
+      "invariants": [
+        "la primera intenció és superar i finalitzar",
+        "l'encreuament apareix quan no hi ha superació",
+        "la resposta depèn de l'interval final atacat pel lateral"
+      ],
+      "validacions_entrenador": [
+        "defensor_com_a_segon_defensiu",
+        "continuïtats_i_encreuaments_condicionats_per_la_direccio_de_la_finta"
+      ]
+    },
+    {
+      "id": "TR-UVOF-003",
+      "nom": "1x1 real amb bloqueig estàtic del pivot i canvi de focus",
+      "estat": "validat_entrenador",
+      "tipus_exercici": "analitic",
+      "origen": {
+        "full": "FITXA ORIGINAL / BATERÍA D'ACTIVITATS",
+        "fila": 6,
+        "formula": "=INDEX(UVUOF;3)",
+        "text_original": "El treball consisteix en iniciar amb un 1v1 ofensiu, amb pivot al mig guanyant la posició i defensa al 100%, on no sempre aconseguirem acabar finalitzant. En aquests casos, hem d'aconseguir treure encreuament, o si no trobem res moure-la ràpid a banda contraria on s'haurà generat una situació amb més espai, amb defensors desplaçant-se per tornar a intentar-ho."
+      },
+      "organitzacio": {
+        "oposicio": "defensa_al_100_percent",
+        "iniciador_obligatori": "lateral"
+      },
+      "participants": [
+        {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
+        {"id": "PV", "rol_inicial": "pivot", "equip": "atac"},
+        {"id": "CE", "rol_inicial": "central", "equip": "atac"},
+        {"id": "D2", "rol_inicial": "segon_defensor", "equip": "defensa"},
+        {"id": "D3_AJUDA", "rol_inicial": "tercer_defensor", "equip": "defensa"},
+        {"id": "D3_NO_AJUDA", "rol_inicial": "tercer_defensor", "equip": "defensa"}
+      ],
+      "fases": [
+        {
+          "id": "F1",
+          "objectiu": "Superar el segon defensor i explotar l'ajuda interior.",
+          "accions": [
+            {"ordre": 1, "actor": "L", "accio": "iniciar_1x1_contra_segon_defensor", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "PV", "accio": "guanyar_posicio_davant_del_tercer_que_no_ajuda", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "PV", "accio": "mantenir_bloqueig_estatic", "estat_coneixement": "validat"}
+          ],
+          "fluxos_pilota": [],
+          "decisions": [
+            {"id": "D_SUPERA", "condicio": "lateral_supera_i_un_tercer_ajuda", "caracter": "disponible", "opcions": ["finalitzacio_lateral", "passada_pivot_davant_del_tercer_que_no_ajuda"]},
+            {"id": "D_NO_SUPERA", "condicio": "sense_superacio_ni_finalitzacio", "caracter": "disponible", "opcions": ["encreuament", "circulacio_rapida_banda_contraria"]}
+          ]
+        }
+      ],
+      "invariants": [
+        "el lateral inicia sempre",
+        "el pivot queda per davant del tercer que no participa en l'ajuda",
+        "guanyar posició és la intenció i el bloqueig estàtic és el mitjà"
+      ],
+      "validacions_entrenador": [
+        "bloqueig_estatic_del_pivot",
+        "posicio_davant_del_tercer_que_no_ajuda"
+      ]
+    },
+    {
+      "id": "TR-UVOF-004",
+      "nom": "Recepció en carrera amb hàndicap del segon defensor",
+      "estat": "validat_entrenador",
+      "tipus_exercici": "analitic",
+      "origen": {
+        "full": "FITXA ORIGINAL / BATERÍA D'ACTIVITATS",
+        "fila": 7,
+        "formula": "=INDEX(UVUOF;4)",
+        "text_original": "El treball consisteix en un 1v1 anant a l'espai amb un desequilibri del defensor. El lateral en cuestió la passa a extrem o central, els quals els hi tornarà la pilota al rebre en carrera. El defensor ha de fer una volta al con contrari del que l'atacant dona el pase, per tant el lateral sempre atacarà a l'espai on la passa i en cas d'arribar el defensor faria l'1v1. Després d'aquest, es juga la continuitat amb un 2v1 amb central/extrem."
+      },
+      "organitzacio": {
+        "defensor_directe": "segon_defensor",
+        "recepcio": "en_carrera"
+      },
+      "participants": [
+        {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
+        {"id": "CE", "rol_inicial": "central", "equip": "atac"},
+        {"id": "EXT", "rol_inicial": "extrem", "equip": "atac"},
+        {"id": "D2", "rol_inicial": "segon_defensor", "equip": "defensa"},
+        {"id": "D1", "rol_inicial": "primer_defensor", "equip": "defensa"},
+        {"id": "D3", "rol_inicial": "tercer_defensor", "equip": "defensa"}
+      ],
+      "materials": [
+        {"id": "CONS_HANDICAP", "tipus": "cons", "funcio": "handicap_de_recorregut_del_segon_defensor"}
+      ],
+      "pilotes": [
+        {"id": "B1", "posseidor_inicial": "L"}
+      ],
+      "fases": [
+        {
+          "id": "F1",
+          "objectiu": "Rebre en carrera i atacar el mateix costat de la passada.",
+          "accions": [
+            {"ordre": 1, "actor": "L", "accio": "passar_a_central_o_extrem", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "D2", "accio": "voltar_el_con_del_costat_contrari", "estat_coneixement": "condicio_tasca"},
+            {"ordre": 3, "actor": "L", "accio": "rebre_devolucio_en_carrera", "estat_coneixement": "validat"},
+            {"ordre": 4, "actor": "L", "accio": "atacar_el_costat_de_la_passada", "estat_coneixement": "validat"}
+          ],
+          "fluxos_pilota": [
+            {"pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_i_devolucio", "posseidor_final": "L"}
+          ],
+          "decisions": [
+            {"id": "D_PASSADA_EXTREM", "condicio": "passada_inicial_a_extrem", "caracter": "disponible", "opcions": ["atacar_1-2", "2x1_lateral_extrem_contra_primer_defensor"]},
+            {"id": "D_PASSADA_CENTRAL", "condicio": "passada_inicial_a_central", "caracter": "disponible", "opcions": ["atacar_2-3", "2x1_lateral_central_contra_tercer_defensor"]},
+            {"id": "D_RECUPERACIO", "condicio": "segon_defensor_recupera", "caracter": "disponible", "opcions": ["resoldre_1x1"]},
+            {"id": "D_NO_RECUPERACIO", "condicio": "segon_defensor_no_recupera", "caracter": "disponible", "opcions": ["finalitzacio_directa"]}
+          ]
+        }
+      ],
+      "invariants": [
+        "els cons només creen l'hàndicap i no representen intervals ni defensors",
+        "el lateral ataca el costat on ha passat"
+      ],
+      "validacions_entrenador": [
+        "segon_defensor_com_a_oponent",
+        "cons_com_a_handicap_de_recorregut"
+      ]
+    },
+    {
+      "id": "TR-UVOF-005",
+      "nom": "Situació de partit 6x6 contra 5:1 amb finalització de 6 m",
+      "estat": "validat_entrenador",
+      "tipus_exercici": "situacio_partit",
+      "origen": {
+        "full": "FITXA ORIGINAL / BATERÍA D'ACTIVITATS",
+        "fila": 8,
+        "formula": "=INDEX(UVUOF;5)",
+        "text_original": "La tasca consisteix en una situació de partit, on hem de situar pivot a una banda, obrir espai per treballar un 1v1 inical i a partir d'aqui donar continuitat al joc, fent obligatòria la finalització de 6m. Cada 3 perdues hi ha canvi atac/defensa, premiant no tant la efectivitat ofensiva sino la prevenció del error."
+      },
+      "organitzacio": {
+        "relacio": "6x6",
+        "defensa": "5:1",
+        "iniciador": "lateral_contrari_al_pivot"
+      },
+      "participants": [
+        {"id": "ATAC_6", "rol_inicial": "sis_rols_ofensius", "equip": "atac"},
+        {"id": "DEF_5_1", "rol_inicial": "defensa_5:1_completa", "equip": "defensa"}
+      ],
+      "fases": [
+        {
+          "id": "F1",
+          "objectiu": "Alliberar un sector per al 1x1 del lateral contrari al pivot i donar continuïtat.",
+          "accions": [
+            {"ordre": 1, "actor": "PV", "accio": "situar_se_en_una_banda", "estat_coneixement": "condicio_tasca"},
+            {"ordre": 2, "actor": "L_CONTRARI", "accio": "iniciar_1x1_a_lespai_alliberat", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "ATAC_6", "accio": "donar_continuitat_amb_criteri", "estat_coneixement": "validat"}
+          ],
+          "fluxos_pilota": [],
+          "decisions": [
+            {"id": "D_CONTINUITAT", "condicio": "resposta_defensiva_5:1", "caracter": "disponible", "opcions": ["superar", "passar_pivot", "continuar_extrem", "nova_accio"]}
+          ]
+        }
+      ],
+      "invariants": [
+        "és un 6x6 i no una superioritat numèrica",
+        "la defensa 5:1 inclou un avançat",
+        "situació de partit és un tipus recurrent d'exercici amb rols complets i condicions pedagògiques"
+      ],
+      "condicions_tasca": [
+        "finalitzacio_obligatoria_des_de_6_metres",
+        "canvi_atac_defensa_cada_tres_perdues"
+      ],
+      "validacions_entrenador": [
+        "6x6_contra_5:1",
+        "lateral_contrari_al_pivot_inicia_el_1x1"
+      ]
+    },
+    {
+      "id": "TR-UVOF-006",
+      "nom": "1x1 amb segon i canvi de focus després d'encreuaments",
+      "estat": "validat_entrenador",
+      "tipus_exercici": "analitic",
+      "origen": {
+        "full": "FITXA ORIGINAL / BATERÍA D'ACTIVITATS",
+        "fila": 9,
+        "formula": "=INDEX(UVUOF;6)",
+        "text_original": "La tasca consta d'un 1v1* amb segon amb handicap, amb continuitat amb pivot o extrem en cas de superar i en cas de no èxit pilota ràpida a banda contrària per continuar a l'altre banda amb espai."
+      },
+      "organitzacio": {
+        "defensor_directe": "segon_defensor",
+        "canvi_banda": "recomanable_no_obligatori"
+      },
+      "participants": [
+        {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
+        {"id": "CE", "rol_inicial": "central", "equip": "atac"},
+        {"id": "EXT", "rol_inicial": "extrem", "equip": "atac"},
+        {"id": "PV", "rol_inicial": "pivot", "equip": "atac"},
+        {"id": "D2", "rol_inicial": "segon_defensor", "equip": "defensa"}
+      ],
+      "fases": [
+        {
+          "id": "F1",
+          "objectiu": "Buscar superacions successives i, si no apareix avantatge local, valorar el canvi de banda.",
+          "accions": [
+            {"ordre": 1, "actor": "L", "accio": "iniciar_1x1_contra_segon_amb_handicap", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "RECEPTOR_ENCREUAMENT", "accio": "atacar_per_superar_despres_de_cada_encreuament", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "JUGADOR_QUE_OCUPA_CENTRAL", "accio": "facilitar_canvi_de_banda_si_es_convenient", "estat_coneixement": "principi_preferent"}
+          ],
+          "fluxos_pilota": [],
+          "decisions": [
+            {"id": "D_SUPERA_12", "condicio": "superacio_cap_a_1-2", "caracter": "disponible", "opcions": ["continuïtat_extrem"]},
+            {"id": "D_SUPERA_23", "condicio": "superacio_cap_a_2-3", "caracter": "disponible", "opcions": ["continuïtat_pivot"]},
+            {"id": "D_NO_SUPERA_23", "condicio": "1x1_cap_a_2-3_sense_avantatge", "caracter": "disponible", "opcions": ["encreuament_central_per_atacar_1-2"]},
+            {"id": "D_SEGON_ENCREUAMENT", "condicio": "central_tampoc_supera_a_1-2", "caracter": "disponible", "opcions": ["encreuament_amb_extrem_i_nova_intencio_de_superar"]},
+            {"id": "D_NO_SUPERA_12", "condicio": "1x1_cap_a_1-2_sense_avantatge", "caracter": "disponible", "opcions": ["encreuament_directe_amb_extrem_i_nova_intencio_de_superar"]},
+            {"id": "D_CANVI_BANDA", "condicio": "sense_avantatge_local_despres_dels_encreuaments", "caracter": "preferent", "opcions": ["passar_al_jugador_que_ocupa_central_i_canviar_de_banda", "continuar_al_mateix_sector_si_hi_ha_opcio_favorable"]}
+          ]
+        }
+      ],
+      "invariants": [
+        "després de cada encreuament es busca superar",
+        "central descriu la posició ocupada i no necessàriament el rol inicial",
+        "el canvi de banda és preferent quan no hi ha avantatge local, però no obligatori"
+      ],
+      "principis_preferents": [
+        "canviar_de_banda_si_no_hi_ha_avantatge_local"
+      ],
+      "validacions_entrenador": [
+        "cadena_dencreuaments_amb_intencio_real_de_superar",
+        "canvi_de_banda_no_obligatori"
+      ]
+    },
+    {
+      "id": "TR-UVOF-007",
+      "nom": "Situació de partit amb dos extrems activats en seqüència",
+      "estat": "validat_entrenador",
+      "tipus_exercici": "situacio_partit_reduida",
+      "origen": {
+        "full": "FITXA ORIGINAL / BATERÍA D'ACTIVITATS",
+        "fila": 10,
+        "formula": "=INDEX(UVUOF;7)",
+        "text_original": "La tasca consisteix en un encreuament lateral-extrem + 2v1 amb central i un 2v1 amb lateral extrem de darrera."
+      },
+      "organitzacio": {
+        "tipus": "situacio_de_partit",
+        "activacions": 2
+      },
+      "participants": [
+        {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
+        {"id": "CE", "rol_inicial": "central", "equip": "atac"},
+        {"id": "EXT_1", "rol_inicial": "extrem", "equip": "atac"},
+        {"id": "EXT_2", "rol_inicial": "extrem", "equip": "atac"},
+        {"id": "DEF", "rol_inicial": "defensors_de_sector", "equip": "defensa"}
+      ],
+      "files": [
+        {"id": "FILA_EXTREMS", "rol": "extrem", "ordre_activacio": ["EXT_1", "EXT_2"]}
+      ],
+      "fases": [
+        {
+          "id": "F1",
+          "objectiu": "Activar el primer extrem mitjançant encreuament i resoldre amb el central.",
+          "accions": [
+            {"ordre": 1, "actor": "EXT_1", "accio": "encreuament_amb_lateral", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "EXT_1", "accio": "jugar_2x1_amb_central", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "L", "accio": "recuperar_despres_dencreuament", "estat_coneixement": "validat"}
+          ],
+          "fluxos_pilota": [],
+          "decisions": [
+            {"id": "D_2X1_CE", "condicio": "ajuda_defensiva_sobre_EXT_1", "caracter": "disponible", "opcions": ["finalitzacio_EXT_1", "passada_CE"]}
+          ]
+        },
+        {
+          "id": "F2",
+          "objectiu": "Activar el segon extrem amb el lateral que recupera.",
+          "accions": [
+            {"ordre": 1, "actor": "EXT_2", "accio": "sortir_de_la_fila", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "EXT_2", "accio": "jugar_2x1_amb_lateral_que_recupera", "estat_coneixement": "validat"}
+          ],
+          "fluxos_pilota": [],
+          "decisions": [
+            {"id": "D_2X1_L", "condicio": "ajuda_defensiva_sobre_EXT_2_o_L", "caracter": "disponible", "opcions": ["finalitzacio_EXT_2", "finalitzacio_o_continuïtat_L"]}
+          ]
+        }
+      ],
+      "invariants": [
+        "hi ha dos extrems diferents a la fila",
+        "EXT_1 juga amb el central i EXT_2 amb el lateral que recupera",
+        "l'ordre d'activació forma part de la semàntica"
+      ],
+      "validacions_entrenador": [
+        "dos_extrems_amb_responsabilitats_diferents",
+        "situacio_de_partit"
+      ]
+    },
+    {
+      "id": "TR-UVOF-008",
+      "nom": "Situació de partit contra 5:1 amb concentració defensiva",
+      "estat": "validat_entrenador",
+      "tipus_exercici": "situacio_partit",
+      "origen": {
+        "full": "FITXA ORIGINAL / BATERÍA D'ACTIVITATS",
+        "fila": 11,
+        "formula": "=INDEX(UVUOF;8)",
+        "text_original": "Treball de situació de partit, amb defensa 5-1 en contra. Important, que avançat coloqui pivot i obri per iniciar la acció. A partir d'aqui valorar cotinuitats/encreuaments."
+      },
+      "organitzacio": {
+        "relacio": "6x6",
+        "defensa": "5:1"
+      },
+      "participants": [
+        {"id": "CE", "rol_inicial": "central", "equip": "atac"},
+        {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
+        {"id": "PV", "rol_inicial": "pivot", "equip": "atac"},
+        {"id": "DAV", "rol_inicial": "avancat", "equip": "defensa"},
+        {"id": "DEF_5", "rol_inicial": "primera_linia_5:1", "equip": "defensa"}
+      ],
+      "fases": [
+        {
+          "id": "F1",
+          "objectiu": "Concentrar pivot i avançat en una zona per afavorir el 1x1 del lateral.",
+          "accions": [
+            {"ordre": 1, "actor": "CE", "accio": "colocar_pivot", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "CE", "accio": "mobilitzar_avancat_cap_a_la_mateixa_zona_del_pivot", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "L", "accio": "iniciar_1x1_a_lespai_afavorit", "estat_coneixement": "validat"}
+          ],
+          "fluxos_pilota": [],
+          "decisions": [
+            {"id": "D_POST_1X1", "condicio": "resposta_defensiva", "caracter": "disponible", "opcions": ["finalitzar", "continuïtat", "encreuament"]}
+          ]
+        }
+      ],
+      "invariants": [
+        "l'avançat no intervé sobre el pivot",
+        "el central mobilitza l'avançat sobre la mateixa zona del pivot",
+        "la concentració defensiva afavoreix l'espai del lateral"
+      ],
+      "validacions_entrenador": [
+        "central_com_a_organitzador_de_la_concentracio_defensiva",
+        "avancat_no_contacta_pivot"
+      ]
+    },
+    {
+      "id": "TR-UVOF-009",
+      "nom": "Permuta central–lateral, banc i dues pilotes",
+      "estat": "validat_entrenador",
+      "tipus_exercici": "superioritat_reduida",
+      "origen": {
+        "full": "FITXA ORIGINAL / BATERÍA D'ACTIVITATS",
+        "fila": 12,
+        "formula": "=INDEX(UVUOF;9)",
+        "text_original": "1v1 vs banc després de permuta central-lateral + 2v1 amb extrem i exterior. Lateral que s'ha obert llença de fora trepitjant banc a pase de pivot i pivot llisca per rebre del extrem i llençar tancat."
+      },
+      "organitzacio": {
+        "permuta": "central-lateral",
+        "accions_amb_pilota": 2
+      },
+      "participants": [
+        {"id": "CE", "rol_inicial": "central", "equip": "atac"},
+        {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
+        {"id": "PV", "rol_inicial": "pivot", "equip": "atac"},
+        {"id": "EXT_1", "rol_inicial": "extrem", "equip": "atac"},
+        {"id": "EXT_2", "rol_inicial": "extrem", "equip": "atac"},
+        {"id": "D_EXT", "rol_inicial": "primer_defensor", "equip": "defensa"}
+      ],
+      "materials": [
+        {"id": "BANC", "tipus": "banc", "funcio": "handicap_i_condicionant_del_gest_de_llancament"}
+      ],
+      "files": [
+        {"id": "FILA_EXTREMS", "rol": "extrem", "ordre_activacio": ["EXT_1", "EXT_2"]}
+      ],
+      "pilotes": [
+        {"id": "B1", "posseidor_inicial": "PV"},
+        {"id": "B2", "posseidor_inicial": "EXT_2"}
+      ],
+      "fases": [
+        {
+          "id": "F1",
+          "objectiu": "Executar la permuta, el duel condicionat pel banc i el 2x1 amb el primer extrem.",
+          "accions": [
+            {"ordre": 1, "actor": "CE", "accio": "permuta", "primer_jugador": "CE", "segon_jugador": "L", "receptor_despres_permuta": "CE", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "CE", "accio": "ocupar_posicio_lateral_i_rebre_de_pivot", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "CE", "accio": "1x1_condicionat_pel_banc", "estat_coneixement": "validat"},
+            {"ordre": 4, "actor": "CE", "accio": "jugar_2x1_amb_EXT_1", "estat_coneixement": "validat"}
+          ],
+          "fluxos_pilota": [
+            {"pilota_id": "B1", "posseidor_inicial": "PV", "accio": "passada_post_permuta", "posseidor_final": "CE"}
+          ],
+          "decisions": [
+            {"id": "D_2X1_EXT", "condicio": "defensor_exterior_compromes", "caracter": "disponible", "opcions": ["finalitzacio_jugador_obert", "passada_EXT_1"]}
+          ]
+        },
+        {
+          "id": "F2",
+          "objectiu": "Activar el lliscament i la finalització tancada del pivot amb la segona pilota.",
+          "accions": [
+            {"ordre": 1, "actor": "PV", "accio": "lliscar", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "EXT_2", "accio": "passar_al_pivot", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "PV", "accio": "rebre_i_finalitzar_tancat", "estat_coneixement": "validat"}
+          ],
+          "fluxos_pilota": [
+            {"pilota_id": "B2", "posseidor_inicial": "EXT_2", "accio": "passada", "posseidor_final": "PV"}
+          ],
+          "decisions": []
+        }
+      ],
+      "invariants": [
+        "el central és el primer jugador de la permuta i rep després de canviar a lateral",
+        "hi ha dues pilotes amb posseïdors inicials diferents",
+        "el pivot rep del següent extrem de la fila"
+      ],
+      "validacions_entrenador": [
+        "ordre_i_receptor_de_la_permuta",
+        "fluxos_de_les_dues_pilotes",
+        "2x1_amb_extrem_despres_del_banc"
+      ]
+    },
+    {
+      "id": "TR-UVOF-010",
+      "nom": "Permuta lateral–central amb 2x1 de dues opcions tancades",
+      "estat": "validat_entrenador",
+      "tipus_exercici": "superioritat_reduida",
+      "origen": {
+        "full": "FITXA ORIGINAL / BATERÍA D'ACTIVITATS",
+        "fila": 13,
+        "formula": "=INDEX(UVUOF;10)",
+        "text_original": "1v1* després de permuta lat-ct per després donar continuitats o encreuaments. En cas de que lateral reconvertit a central no participi, rep de pivot i salta del banc per jugar 2v1, xut exterior o pivot."
+      },
+      "organitzacio": {
+        "permuta": "lateral-central",
+        "branca_tancada": true
+      },
+      "participants": [
+        {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
+        {"id": "CE", "rol_inicial": "central", "equip": "atac"},
+        {"id": "PV", "rol_inicial": "pivot", "equip": "atac"},
+        {"id": "D", "rol_inicial": "defensor_directe", "equip": "defensa"}
+      ],
+      "materials": [
+        {"id": "BANC", "tipus": "banc", "funcio": "condicionant_del_llancament_o_passada"}
+      ],
+      "pilotes": [
+        {"id": "B1", "posseidor_inicial": "PV"}
+      ],
+      "fases": [
+        {
+          "id": "F1",
+          "objectiu": "Donar continuïtat al lateral que no ha participat mitjançant dues opcions tancades.",
+          "accions": [
+            {"ordre": 1, "actor": "L", "accio": "permuta", "primer_jugador": "L", "segon_jugador": "CE", "receptor_despres_permuta": "L", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "L", "accio": "rebre_de_pivot_i_saltar_el_banc", "estat_coneixement": "validat"}
+          ],
+          "fluxos_pilota": [
+            {"pilota_id": "B1", "posseidor_inicial": "PV", "accio": "passada", "posseidor_final": "L"}
+          ],
+          "decisions": [
+            {"id": "D_2X1_TANCAT", "condicio": "posicio_del_defensor", "caracter": "obligatori", "opcions": ["llancament_exterior_si_defensor_pla_a_6m", "passada_pivot_si_defensor_puja"]}
+          ]
+        }
+      ],
+      "invariants": [
+        "és un 2x1 conceptual amb només dues opcions tancades",
+        "si el defensor queda pla es llança de fora",
+        "si el defensor puja es passa al pivot"
+      ],
+      "validacions_entrenador": [
+        "permuta_lateral-central",
+        "dues_opcions_tancades_del_2x1"
+      ]
+    },
+    {
+      "id": "TR-UVOF-011",
+      "nom": "Situació de partit reduïda 4x4 després de permuta",
+      "estat": "validat_entrenador",
+      "tipus_exercici": "situacio_partit_reduida",
+      "origen": {
+        "full": "FITXA ORIGINAL / BATERÍA D'ACTIVITATS",
+        "fila": 14,
+        "formula": "=INDEX(UVUOF;11)",
+        "text_original": "4v4 a partir de permuta lateral-central i 1v1."
+      },
+      "organitzacio": {
+        "relacio": "4x4",
+        "permuta": "lateral-central"
+      },
+      "participants": [
+        {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
+        {"id": "CE", "rol_inicial": "central", "equip": "atac"},
+        {"id": "ATAC_4", "rol_inicial": "unitat_de_quatre_atacants", "equip": "atac"},
+        {"id": "DEF_4", "rol_inicial": "quatre_defensors", "equip": "defensa"}
+      ],
+      "fases": [
+        {
+          "id": "F1",
+          "objectiu": "Iniciar el joc 4x4 mitjançant una permuta i un 1x1 real.",
+          "accions": [
+            {"ordre": 1, "actor": "L", "accio": "permuta", "primer_jugador": "L", "segon_jugador": "CE", "receptor_despres_permuta": "L", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "L", "accio": "iniciar_1x1", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "ATAC_4", "accio": "donar_continuitat_amb_criteri", "estat_coneixement": "validat"}
+          ],
+          "fluxos_pilota": [],
+          "decisions": [
+            {"id": "D_4X4", "condicio": "resposta_defensiva", "caracter": "disponible", "opcions": ["finalitzar", "continuïtat", "encreuament"]}
+          ]
+        }
+      ],
+      "invariants": [
+        "la permuta és lateral-central",
+        "el lateral és el primer jugador i rep després de la permuta"
+      ],
+      "validacions_entrenador": [
+        "situacio_de_partit_reduida_4x4",
+        "regla_general_de_la_permuta"
+      ]
+    },
+    {
+      "id": "TR-UVOF-012",
+      "nom": "Dues superioritats reduïdes després de permuta lateral–central",
+      "estat": "validat_entrenador",
+      "tipus_exercici": "superioritat_reduida",
+      "origen": {
+        "full": "FITXA ORIGINAL / BATERÍA D'ACTIVITATS",
+        "fila": 15,
+        "formula": "=INDEX(UVUOF;12)",
+        "text_original": "La tasca consta de dos accions en superioritat reduida. S'inicia amb una permuta Central-Lateral, on lateral vindrà al centre i saltarà el banc per llençar o pasar a pivot que OBLIGATÒRIAMENT ha de lliscar en cas de que defensor pugi a contactar. Acte seguit, central que s'ha obert juga 2v1 amb extrem a partir de pase d'aquest.",
+        "correccio_entrenador": "La permuta correcta és lateral-central."
+      },
+      "organitzacio": {
+        "permuta": "lateral-central",
+        "accions": 2
+      },
+      "participants": [
+        {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
+        {"id": "CE", "rol_inicial": "central", "equip": "atac"},
+        {"id": "PV", "rol_inicial": "pivot", "equip": "atac"},
+        {"id": "EXT", "rol_inicial": "extrem", "equip": "atac"},
+        {"id": "DEF", "rol_inicial": "defensors_de_sector", "equip": "defensa"}
+      ],
+      "materials": [
+        {"id": "BANC", "tipus": "banc", "funcio": "condicionant_de_la_primera_accio"}
+      ],
+      "pilotes": [
+        {"id": "B2", "posseidor_inicial": "EXT"}
+      ],
+      "fases": [
+        {
+          "id": "F1",
+          "objectiu": "Resoldre l'acció interior del lateral amb llançament o pivot.",
+          "accions": [
+            {"ordre": 1, "actor": "L", "accio": "permuta", "primer_jugador": "L", "segon_jugador": "CE", "receptor_despres_permuta": "L", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "L", "accio": "anar_al_centre_i_saltar_el_banc", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "PV", "accio": "lliscar_si_el_defensor_puja", "estat_coneixement": "condicio_tasca"}
+          ],
+          "fluxos_pilota": [],
+          "decisions": [
+            {"id": "D_F1", "condicio": "conducta_del_defensor", "caracter": "obligatori", "opcions": ["llancament_si_no_puja", "passada_pivot_si_puja"]}
+          ]
+        },
+        {
+          "id": "F2",
+          "objectiu": "Jugar el segon 2x1 entre el central obert i l'extrem.",
+          "accions": [
+            {"ordre": 1, "actor": "EXT", "accio": "passar_al_central_obert", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "CE", "accio": "jugar_2x1_amb_extrem", "estat_coneixement": "validat"}
+          ],
+          "fluxos_pilota": [
+            {"pilota_id": "B2", "posseidor_inicial": "EXT", "accio": "passada", "posseidor_final": "CE"}
+          ],
+          "decisions": [
+            {"id": "D_F2", "condicio": "defensor_compromes", "caracter": "disponible", "opcions": ["finalitzacio_CE", "passada_EXT"]}
+          ]
+        }
+      ],
+      "invariants": [
+        "la permuta correcta és lateral-central",
+        "el pivot ha de lliscar obligatòriament si el defensor puja",
+        "la segona acció comença amb passada de l'extrem al central obert"
+      ],
+      "validacions_entrenador": [
+        "correccio_de_la_permuta",
+        "lliscament_obligatori_del_pivot"
+      ]
+    },
+    {
+      "id": "TR-UVOF-013",
+      "nom": "4x4 amb permuta lateral–central, primer pal i lliscament",
+      "estat": "validat_entrenador",
+      "tipus_exercici": "situacio_partit_reduida",
+      "origen": {
+        "full": "FITXA ORIGINAL / BATERÍA D'ACTIVITATS",
+        "fila": 16,
+        "formula": "=INDEX(UVUOF;13)",
+        "text_original": "Treball de 4v4 a partir de permuta Central-Lateral. Lateral sempre ataca sobre primer pal i en cas de que 3r pugi pivot ha de lliscar sempre.",
+        "correccio_entrenador": "La permuta correcta és lateral-central."
+      },
+      "organitzacio": {
+        "relacio": "4x4",
+        "permuta": "lateral-central"
+      },
+      "participants": [
+        {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
+        {"id": "CE", "rol_inicial": "central", "equip": "atac"},
+        {"id": "PV", "rol_inicial": "pivot", "equip": "atac"},
+        {"id": "EXT", "rol_inicial": "extrem", "equip": "atac"},
+        {"id": "D3", "rol_inicial": "tercer_defensor", "equip": "defensa"},
+        {"id": "DEF_RESTANTS", "rol_inicial": "tres_defensors", "equip": "defensa"}
+      ],
+      "fases": [
+        {
+          "id": "F1",
+          "objectiu": "Atacar primer pal i coordinar el lliscament del pivot amb l'ajuda del tercer.",
+          "accions": [
+            {"ordre": 1, "actor": "L", "accio": "permuta", "primer_jugador": "L", "segon_jugador": "CE", "receptor_despres_permuta": "L", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "L", "accio": "atacar_primer_pal", "estat_coneixement": "condicio_tasca"},
+            {"ordre": 3, "actor": "PV", "accio": "lliscar_si_D3_puja", "estat_coneixement": "condicio_tasca"}
+          ],
+          "fluxos_pilota": [],
+          "decisions": [
+            {"id": "D_PRIMER_PAL", "condicio": "D3_puja_a_lajuda", "caracter": "obligatori", "opcions": ["passada_pivot_que_llisca"]},
+            {"id": "D_NO_AJUDA", "condicio": "D3_no_puja", "caracter": "disponible", "opcions": ["continuar_i_finalitzar_lateral"]}
+          ]
+        }
+      ],
+      "invariants": [
+        "la permuta correcta és lateral-central",
+        "el lateral ataca primer pal",
+        "si el tercer puja el pivot llisca sempre"
+      ],
+      "validacions_entrenador": [
+        "correccio_de_la_permuta",
+        "relacio_entre_ajuda_del_tercer_i_lliscament_del_pivot"
+      ]
+    },
+    {
+      "id": "TR-UVOF-014",
+      "nom": "Situació de partit 6x6 iniciada amb permuta lateral–central",
+      "estat": "validat_entrenador",
+      "tipus_exercici": "situacio_partit",
+      "origen": {
+        "full": "FITXA ORIGINAL / BATERÍA D'ACTIVITATS",
+        "fila": 17,
+        "formula": "=INDEX(UVUOF;14)",
+        "text_original": "Treball de 6v6 on obligatòriament l'atac ha de començar amb permuta central-lateral.",
+        "correccio_entrenador": "La permuta correcta és lateral-central."
+      },
+      "organitzacio": {
+        "relacio": "6x6",
+        "permuta_inicial": "lateral-central"
+      },
+      "participants": [
+        {"id": "ATAC_6", "rol_inicial": "sis_rols_ofensius", "equip": "atac"},
+        {"id": "DEF_6", "rol_inicial": "sis_defensors", "equip": "defensa"}
+      ],
+      "fases": [
+        {
+          "id": "F1",
+          "objectiu": "Iniciar obligatòriament amb permuta i continuar segons l'avantatge.",
+          "accions": [
+            {"ordre": 1, "actor": "L", "accio": "permuta", "primer_jugador": "L", "segon_jugador": "CE", "receptor_despres_permuta": "L", "estat_coneixement": "condicio_tasca"},
+            {"ordre": 2, "actor": "ATAC_6", "accio": "continuar_amb_criteri", "estat_coneixement": "validat"}
+          ],
+          "fluxos_pilota": [],
+          "decisions": [
+            {"id": "D_JOC", "condicio": "avantatge_despres_permuta", "caracter": "disponible", "opcions": ["superar", "continuïtat", "encreuament", "pivot", "extrem", "canvi_de_banda_si_conve"]}
+          ]
+        }
+      ],
+      "invariants": [
+        "la permuta inicial correcta és lateral-central",
+        "després de la condició inicial la situació de partit conserva decisions obertes"
+      ],
+      "condicions_tasca": [
+        "atac_comenca_obligatoriament_amb_permuta_lateral-central"
+      ],
+      "validacions_entrenador": [
+        "correccio_de_la_permuta",
+        "situacio_de_partit_6x6"
+      ]
+    },
+    {
+      "id": "TR-UVOF-015",
+      "nom": "Tres 1x1 per zones sense bot",
+      "estat": "validat_entrenador",
+      "tipus_exercici": "duels_per_zones",
+      "origen": {
+        "full": "FITXA ORIGINAL / BATERÍA D'ACTIVITATS",
+        "fila": 18,
+        "formula": "=INDEX(UVUOF;15)",
+        "text_original": "Tres zones on es juguen 1vs1 atacans no tenen bot"
+      },
+      "organitzacio": {
+        "zones": 3,
+        "duels": "1x1"
+      },
+      "participants": [
+        {"id": "A_ESQ", "rol_inicial": "atacant_zona_esquerra", "equip": "atac"},
+        {"id": "A_CE", "rol_inicial": "atacant_zona_central", "equip": "atac"},
+        {"id": "A_DRE", "rol_inicial": "atacant_zona_dreta", "equip": "atac"},
+        {"id": "D_ESQ", "rol_inicial": "defensor_zona_esquerra", "equip": "defensa"},
+        {"id": "D_CE", "rol_inicial": "defensor_zona_central", "equip": "defensa"},
+        {"id": "D_DRE", "rol_inicial": "defensor_zona_dreta", "equip": "defensa"}
+      ],
+      "pilotes": [
+        {"id": "B_ESQ", "posseidor_inicial": "A_ESQ"},
+        {"id": "B_CE", "posseidor_inicial": "A_CE"},
+        {"id": "B_DRE", "posseidor_inicial": "A_DRE"}
+      ],
+      "fases": [
+        {
+          "id": "F1",
+          "objectiu": "Resoldre el 1x1 dins cada zona sense utilitzar el bot.",
+          "accions": [
+            {"ordre": 1, "actor": "ATACANT_DE_ZONA", "accio": "rebre_o_iniciar_orientat", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "ATACANT_DE_ZONA", "accio": "atacar_espai_i_comprometre_defensor", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "ATACANT_DE_ZONA", "accio": "canviar_direccio_i_ritme_per_superar", "estat_coneixement": "validat"}
+          ],
+          "fluxos_pilota": [
+            {"pilota_id": "B_ESQ", "posseidor_inicial": "A_ESQ", "accio": "conduccio_sense_bot", "posseidor_final": "A_ESQ"},
+            {"pilota_id": "B_CE", "posseidor_inicial": "A_CE", "accio": "conduccio_sense_bot", "posseidor_final": "A_CE"},
+            {"pilota_id": "B_DRE", "posseidor_inicial": "A_DRE", "accio": "conduccio_sense_bot", "posseidor_final": "A_DRE"}
+          ],
+          "decisions": [
+            {"id": "D_1X1", "condicio": "resposta_del_defensor_de_zona", "caracter": "disponible", "opcions": ["superacio_cap_a_un_costat", "superacio_cap_a_laltre_costat"]}
+          ]
+        }
+      ],
+      "invariants": [
+        "les tres zones no exigeixen intervals defensius fixos",
+        "cada duel conserva oposició real",
+        "no es permet el bot"
+      ],
+      "condicions_tasca": [
+        "bot_prohibit"
+      ],
+      "validacions_entrenador": [
+        "tres_sectors_esquerre_central_dret",
+        "sense_intervals_fixos",
+        "sense_bot"
+      ]
+    }
+  ],
+  "governanca": {
+    "autoritat_semantica": "entrenador",
+    "estat": "validat_i_viu",
+    "font_vocabulari": "docs/HANDBALL_KNOWLEDGE.md",
+    "geometria": "no_definida",
+    "render": "no_generat",
+    "nota": "Les decisions preferents no es converteixen en obligacions i els fluxos de pilota no especificats no s'infereixen."
+  }
+}

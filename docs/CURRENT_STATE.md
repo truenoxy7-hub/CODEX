@@ -10,6 +10,11 @@
 - Validador semàntic executable dels 9 invariants declarats.
 - Tests positius i negatius del validador semàntic.
 - CI bàsica.
+- Corpus semàntic complet de `TR-UVOF-001` a `TR-UVOF-015`.
+- Esquema genèric de corpus v1.1.
+- Model explícit de fases, decisions, permutes, files i múltiples pilotes.
+- Vocabulari validat d'encreuament, permuta, bloqueig estàtic, lliscament,
+  situació de partit i punt fort/feble.
 
 ## No completat
 
@@ -25,10 +30,9 @@ Tornar a introduir coordenades abans d'haver estabilitzat el model tàctic.
 ## En curs
 
 - Primera versió viva del coneixement canònic d'handbol.
-- Enriquiment semàntic de `TR-UVOF-001` amb rols defensius, intervals
-  canònics, origen dels 2x1 i funcions diferenciades dels materials.
+- Consolidació del corpus UVOF com a font de proves per al futur motor espacial.
 
 ## Pròxima fita recomanada
 
-Estabilitzar el vocabulari reutilitzable i preparar un contracte de resolució
-espacial basat en relacions, sense introduir coordenades.
+Utilitzar el corpus UVOF validat per preparar un contracte de resolució espacial
+basat en relacions, sense introduir coordenades.

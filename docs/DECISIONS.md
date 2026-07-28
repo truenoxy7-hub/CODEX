@@ -71,3 +71,36 @@ una causalitat.
 
 **Decisió:** l'extrem manté l'amplitud. En finalitzar des d'una zona exterior,
 l'última passa i el salt busquen sempre guanyar angle cap al centre.
+
+## D-015 — Encreuament amb amenaça real
+
+**Decisió:** després de cada encreuament el receptor busca superar. Si no hi ha
+avantatge local, el canvi de banda és una opció preferent i no obligatòria.
+
+## D-016 — Regla ordenada de la permuta
+
+**Decisió:** a la notació `primer-segon`, el primer jugador canvia cap a la
+posició del segon i és qui rep després de la permuta.
+
+## D-017 — Fort conceptual i fort individual
+
+**Decisió:** el punt fort conceptual és cap al centre i el feble cap a
+l'exterior. La sortida forta individual depèn de la mà dominant i es representa
+separadament.
+
+## D-018 — Bloqueig estàtic i lliscament del pivot
+
+**Decisió:** guanyar posició és la intenció; el bloqueig estàtic n'és un mitjà.
+El lliscament respon a l'ajuda interior i pot ser obligatori quan la tasca ho
+declara.
+
+## D-019 — Situació de partit com a tipus d'exercici
+
+**Decisió:** una situació de partit conserva oposició real, rols complets i
+decisions obertes encara que tingui una condició inicial o de finalització.
+
+## D-020 — Corpus v1.1 i fluxos de pilota
+
+**Decisió:** la família UVOF es representa en un corpus genèric v1.1. Les files,
+l'ordre d'activació i les múltiples pilotes són estructures explícites. No
+s'infereix un flux de pilota que no hagi estat validat.

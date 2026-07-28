@@ -46,7 +46,10 @@ Cada capa ha de poder validar-se independentment.
 
 La font és un full de càlcul amb 14 categories i triplets ENLLAÇ / EXPLICACIÓ / GRÀFIC. La categoria actual és `MITJANS 1V1 OFENSIUS`, amb 15 exercicis `TR-UVOF-001` a `TR-UVOF-015`.
 
-El primer exercici s'ha seleccionat perquè ja ha estat analitzat extensament i permet construir les primeres definicions canòniques.
+El primer exercici s'ha seleccionat perquè ja ha estat analitzat extensament i
+permet construir les primeres definicions canòniques. Posteriorment,
+`TR-UVOF-002` a `TR-UVOF-015` s'han interpretat i validat amb l'entrenador i
+formen el primer corpus complet de la família.
 
 ## Text original de TR-UVOF-001
 
@@ -67,4 +70,6 @@ El primer exercici s'ha seleccionat perquè ja ha estat analitzat extensament i 
 
 ## Estat actual
 
-S'ha creat un JSON purament semàntic. No conté coordenades ni render. Aquest és el punt de partida vàlid.
+S'ha creat un JSON detallat de `TR-UVOF-001` i un corpus semàntic v1.1 amb els
+quinze exercicis UVOF. Cap dels dos conté coordenades ni render. Aquests són els
+punts de partida vàlids per al vocabulari i el futur motor de resolució.

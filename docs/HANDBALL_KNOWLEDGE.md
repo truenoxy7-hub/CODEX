@@ -184,12 +184,102 @@ Els materials poden tenir funcions semàntiques diferents:
 La funció s'ha de declarar per cada material. No es pot deduir només del fet que
 sigui un banc o un con.
 
+Un material també pot actuar com a hàndicap sense representar cap defensor:
+
+- un defensor real pot sostenir un xirimbolo que en limita la intervenció;
+- un con pot obligar el defensor a fer un recorregut addicional;
+- en tots dos casos el defensor continua sent la referència oposicional real.
+
+## Punt fort i punt feble del 1x1
+
+Cal separar el significat conceptual de la relació biomecànica individual.
+
+Conceptualment:
+
+- `punt fort` significa sortir cap a dins, en direcció al centre;
+- `punt feble` significa sortir cap a fora, en direcció a l'exterior.
+
+Individualment:
+
+- per a un jugador dretà, la sortida forta és cap a la dreta perquè conserva el
+  braç de llançament lliure;
+- per a un jugador esquerrà, la sortida forta és cap a l'esquerra.
+
+El punt fort conceptual i el costat fort individual poden no coincidir. El
+model ha de conservar separadament la direcció tàctica, la mà dominant i el
+costat individual de sortida.
+
+## Encreuament i canvi de banda
+
+Després d'un encreuament sempre es busca una superació real. L'encreuament no
+és una circulació neutra ni una preparació mecànica per passar la pilota.
+
+Si l'acció posterior a l'encreuament tampoc genera avantatge local, és
+recomanable valorar el canvi de banda per atacar una defensa desplaçada. Aquesta
+és una opció preferent, no una obligació: el portador pot continuar al mateix
+sector si hi identifica una opció favorable.
+
+La posició ocupada en cada moment determina les relacions. Quan es diu que el
+jugador que queda de central connecta amb la banda contrària, `central` descriu
+la posició temporal i no necessàriament el rol inicial del participant.
+
+## Permuta
+
+La nomenclatura de la permuta és ordenada:
+
+1. el primer jugador és qui canvia cap a la posició del segon;
+2. el segon jugador ocupa l'espai deixat pel primer;
+3. el primer jugador és qui rep la pilota després de la permuta.
+
+Per tant:
+
+- `central–lateral`: el central canvia cap a lateral, el lateral va al centre i
+  el central original rep;
+- `lateral–central`: el lateral canvia cap al centre, el central s'obre i el
+  lateral original rep.
+
+La identitat inicial, la posició temporal i la funció actual s'han de conservar
+com a propietats separades.
+
+## Pivot: guanyar posició, bloqueig estàtic i lliscament
+
+Guanyar posició és la intenció tàctica del pivot. En un bloqueig estàtic, el
+pivot ocupa i manté una posició per davant del defensor per impedir-ne l'ajuda
+o la intercepció i conservar una línia de passada.
+
+Quan un defensor interior puja a contactar o ajudar, el pivot pot lliscar cap a
+l'espai lliure. Quan una tasca declara el lliscament com a resposta obligatòria,
+no s'ha de modelar com una simple opció.
+
+## Situació de partit
+
+`Situació de partit` és un tipus recurrent d'exercici. Pot ser global o reduït i
+inclou:
+
+- oposició real;
+- relació numèrica i sistema defensiu declarats;
+- rols ofensius i defensius actius;
+- una o més condicions pedagògiques d'inici o finalització;
+- continuïtats obertes segons el criteri dels jugadors.
+
+Una permuta obligatòria, una finalització des de 6 m o un recompte de pèrdues
+poden ser condicions de la tasca sense convertir tota la situació en una jugada
+tancada.
+
+## Files, ordre d'activació i múltiples pilotes
+
+Una fila pot contenir diversos participants amb el mateix rol. Cada participant
+manté una identitat pròpia i pot tenir un ordre d'activació diferent.
+
+Quan una tasca utilitza més d'una pilota, cada pilota ha de declarar el seu
+posseïdor inicial i el seu flux. No es pot heretar automàticament la possessió
+d'una acció anterior ni inferir el passador quan la font no l'especifica.
+
 ## Coneixement encara obert
 
 El vocabulari continuarà creixent amb nous exercicis. Encara cal aprofundir en:
 
 - altres sistemes defensius i les seves transformacions;
-- accions col·lectives més enllà del 2x1;
-- relacions amb bloquejos, creuaments i canvis de posició;
+- accions col·lectives més enllà del 2x1 i l'encreuament;
 - criteris espacials específics per a altres famílies d'exercicis;
 - model temporal complet del bot, els passos, la passada i la finalització.
