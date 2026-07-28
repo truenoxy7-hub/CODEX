@@ -1,32 +1,40 @@
 # Model de domini tàctic
 
+Aquest model es complementa amb el vocabulari viu validat a
+[`HANDBALL_KNOWLEDGE.md`](HANDBALL_KNOWLEDGE.md).
+
 ## 1. Contingut tàctic
 
 Un contingut tàctic és una definició reutilitzable independent de l'exercici concret. Exemples futurs: 1x1/finta, fixació, passada i va, creuament, bloqueig, 2x1.
 
 ### 1x1 / finta
 
-Seqüència invariant:
+Seqüència funcional invariant:
 
-1. `recepcio_en_carrera` a l'interval inicial.
-2. `finta_canvi_direccio` cap a l'interval contigu.
-3. `resolucio_posterior`.
+1. `atacar_espai_inicial`.
+2. `comprometre_defensor`.
+3. `finta_canvi_direccio_i_ritme`.
+4. `atacar_espai_contigu`.
+5. `superar_defensor`.
+6. `resolucio_posterior`.
 
-La fase 2 ha de contenir:
+La recepció en carrera és preferent, però només és invariant quan la tasca la
+declara com a condició. La finta ha de contenir:
 
 - amenaça del primer interval;
+- compromís del defensor compartit;
 - canvi explícit de direcció;
 - canvi de ritme;
 - sortida pel costat contigu de la referència oposicional.
+- superació de la línia defensiva marcada pel defensor.
 
 ## 2. Referència oposicional
 
-La referència habitual és un defensor real. Els substituts admesos inclouen:
+La referència habitual és un defensor real. Un material pot actuar com a:
 
-- banc;
-- con;
-- cilindre;
-- altre objecte fix.
+- substitut oposicional actiu;
+- referència posicional passiva d'un defensor absent;
+- límit espacial sense equivalència defensiva.
 
 Camps mínims:
 
@@ -36,18 +44,22 @@ Camps mínims:
 - `funcio_tactica`;
 - `posicionament_semantic`.
 
-No s'ha de confondre la referència oposicional amb un material decoratiu.
+La funció s'ha de declarar per instància. No s'ha de deduir del tipus de
+material.
 
 ## 3. Espais i intervals
 
-Un interval és una relació entre referències, no una coordenada.
+Un interval és una relació dinàmica entre dos defensors, no una coordenada.
 
 Exemples:
 
-- exterior d'un defensor o banc;
-- interior de la mateixa referència;
-- entre defensor exterior i con;
-- proper a l'extrem i orientat a porteria.
+- `1–2`, entre primer i segon defensor, també anomenat carril;
+- `2–3`, entre segon i tercer defensor;
+- `3–3`, entre els dos tercers o centrals defensius.
+
+Dos intervals són contigus quan comparteixen un defensor. L'espai de
+finalització de l'extrem és un espai funcional diferent: el tram de l'àrea de
+6 m entre la línia de fons i el primer defensor.
 
 Cada interval ha de declarar:
 
