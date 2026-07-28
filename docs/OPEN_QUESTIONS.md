@@ -2,14 +2,28 @@
 
 Aquest document evita que Codex resolgui per inferència decisions tàctiques encara no aprovades.
 
-## TR-UVOF-001
+## Qüestions resoltes de TR-UVOF-001
 
-1. Confirmar si `SA2` conté també un 1x1/finta complet —recepció a un interval, canvi de direcció cap al contigu i resolució— o si només és una recepció orientada seguida de l'atac directe de l'interval `D_Z2–C3`.
-2. Confirmar la definició canònica exacta d'“interval” i “espai” i quan s'han de modelar com a conceptes diferents.
-3. Confirmar si l'orientació del banc —extrem exterior més pròxim a porteria— és una regla tàctica estable o només una decisió geomètrica d'aquest exercici.
-4. Confirmar la funció exacta de `C1` i `C2` dins `Z1`: límits de l'espai de resolució, referències per al pivot o ambdues coses.
-5. Confirmar si la recepció inicial del lateral s'ha de descriure sempre com a exterior de la referència o com a interval de banda específic.
-6. Confirmar quina terminologia canònica s'ha d'utilitzar entre `cap al centre`, `interior`, `interval contigu` i `espai relacional`.
+- `SA1` rep a `1–2`, supera el segon defensor simulat pel banc mitjançant una
+  finta cap a `2–3` i genera el 2x1 amb el pivot contra el tercer.
+- `SA2` no conté una finta. Entrena recuperació, recepció orientada sense bot,
+  atac directe del carril `1–2` i explotació d'un 2x1 preparat amb l'extrem.
+- El con de `SA2` representa passivament el segon defensor absent.
+- El defensor actiu de `SA2` és el primer defensor.
+- `C1` i `C2` només delimiten l'espai de resolució de `SA1`.
+- El pivot ocupa l'interval complementari al que ataca el lateral.
+- L'extrem manté l'amplitud i anticipa la possible passada amb criteri tàctic.
+
+## Coneixement encara obert
+
+1. Completar amb exemples les defenses `4:2`, `3:3`, mixtes i les seves
+   transformacions.
+2. Definir altres continguts tàctics: bloqueig, creuament, passada i va i
+   canvis de posició.
+3. Precisar el model temporal general de passos i bot sense convertir
+   preferències tècniques en invariants.
+4. Validar el vocabulari contra més exercicis abans de congelar una nova versió
+   del llenguatge.
 
 ## Regla de treball
 
