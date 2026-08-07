@@ -3,7 +3,7 @@
   "meta": {
     "format": "TRACA_corpus_semantic",
     "versio_llenguatge": "1.1.0",
-    "versio_corpus": "1.0.0",
+    "versio_corpus": "1.1.0",
     "estat": "validat_i_viu",
     "separacio_capes": {
       "semantica_tactica": "inclosa",
@@ -120,31 +120,52 @@
       },
       "organitzacio": {
         "defensor_directe": "segon_defensor",
-        "simetria": "dues_bandes"
+        "simetria": "dues_bandes",
+        "defensors_actius": ["D1", "D2", "D3_LOCAL", "D3_OPOSAT"],
+        "handicap_exclusiu": "D2_soste_el_xirimbolo"
       },
       "participants": [
         {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
         {"id": "CE", "rol_inicial": "central", "equip": "atac"},
         {"id": "EXT", "rol_inicial": "extrem", "equip": "atac"},
-        {"id": "D2", "rol_inicial": "segon_defensor", "equip": "defensa"}
+        {"id": "D1", "rol_inicial": "primer_defensor", "equip": "defensa"},
+        {"id": "D2", "rol_inicial": "segon_defensor", "equip": "defensa"},
+        {"id": "D3_LOCAL", "rol_inicial": "tercer_defensor", "equip": "defensa"},
+        {"id": "D3_OPOSAT", "rol_inicial": "tercer_defensor", "equip": "defensa"}
       ],
       "materials": [
         {"id": "XIRIMBOLO", "tipus": "xirimbolo", "funcio": "handicap_defensiu_sostingut_pel_segon_defensor"}
+      ],
+      "pilotes": [
+        {"id": "B1", "posseidor_inicial": "L"}
       ],
       "fases": [
         {
           "id": "F1",
           "objectiu": "Superar el segon defensor i finalitzar; si no és possible, continuar atacant mitjançant un encreuament.",
           "accions": [
-            {"ordre": 1, "actor": "L", "accio": "iniciar_1x1_contra_segon_defensor", "estat_coneixement": "validat"},
-            {"ordre": 2, "actor": "L", "accio": "fintar_entre_intervals_contigus", "estat_coneixement": "validat"},
-            {"ordre": 3, "actor": "L", "accio": "arrossegar_defensor_si_no_supera", "estat_coneixement": "validat"}
+            {"ordre": 1, "actor": "L", "accio": "passar_al_company_del_costat_de_l_interval_inicial", "mapatge": {"1-2": "EXT", "2-3": "CE"}, "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "L", "accio": "iniciar_cursa_sense_pilota_cap_a_l_interval_inicial", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "L", "accio": "rebre_devolucio_en_iniciar_el_canvi_de_direccio", "estat_coneixement": "validat"},
+            {"ordre": 4, "actor": "L", "accio": "fintar_entre_intervals_contigus", "estat_coneixement": "validat"},
+            {"ordre": 5, "actor": "L", "accio": "arrossegar_defensor_si_no_supera", "estat_coneixement": "validat"},
+            {"ordre": 6, "actor": "CE", "accio": "esperar_darrere_del_lateral_per_rebre_de_cara", "condicio": "finta_1-2_a_2-3_i_superacio_amb_ajuda_del_tercer", "estat_coneixement": "validat"},
+            {"ordre": 7, "actor": "CE", "accio": "encreuar_per_darrere_del_lateral_i_atacar_1-2", "condicio": "finta_1-2_a_2-3_sense_superacio", "estat_coneixement": "validat"},
+            {"ordre": 8, "actor": "EXT", "accio": "encreuar_per_darrere_del_lateral_i_atacar_2-3", "condicio": "finta_2-3_a_1-2_sense_superacio", "estat_coneixement": "validat"},
+            {"ordre": 9, "actor": "EXT", "accio": "mantenir_amplitud_i_anticipar_passada_per_finalitzar_a_espai_exterior", "condicio": "finta_2-3_a_1-2_i_superacio_amb_ajuda_del_primer", "estat_coneixement": "validat"}
           ],
-          "fluxos_pilota": [],
+          "fluxos_pilota": [
+            {"trajectoria_id": "FINTA_12_23", "ordre": 1, "pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_inicial", "posseidor_final": "EXT"},
+            {"trajectoria_id": "FINTA_12_23", "ordre": 2, "pilota_id": "B1", "posseidor_inicial": "EXT", "accio": "devolucio_a_inici_canvi_direccio", "posseidor_final": "L"},
+            {"trajectoria_id": "FINTA_12_23", "ordre": 3, "pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_continuitat_o_encreuament", "posseidor_final": "CE", "condicio": "D3_tanca_el_lateral_o_el_lateral_no_supera"},
+            {"trajectoria_id": "FINTA_23_12", "ordre": 1, "pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_inicial", "posseidor_final": "CE"},
+            {"trajectoria_id": "FINTA_23_12", "ordre": 2, "pilota_id": "B1", "posseidor_inicial": "CE", "accio": "devolucio_a_inici_canvi_direccio", "posseidor_final": "L"},
+            {"trajectoria_id": "FINTA_23_12", "ordre": 3, "pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_continuitat_o_encreuament", "posseidor_final": "EXT", "condicio": "D1_tanca_el_lateral_o_el_lateral_no_supera"}
+          ],
           "decisions": [
-            {"id": "D_12_23_SUPERA", "condicio": "finta_1-2_a_2-3_i_superacio", "caracter": "disponible", "opcions": ["continuïtat_central_cap_a_3-3"]},
+            {"id": "D_12_23_SUPERA", "condicio": "finta_1-2_a_2-3_i_superacio", "caracter": "disponible", "opcions": ["finalitzacio_lateral_si_D3_no_tanca", "passada_central_que_rep_de_cara_i_ataca_3-3_si_D3_tanca"]},
             {"id": "D_12_23_NO_SUPERA", "condicio": "finta_1-2_a_2-3_sense_superacio", "caracter": "disponible", "opcions": ["encreuament_central_per_atacar_1-2"]},
-            {"id": "D_23_12_SUPERA", "condicio": "finta_2-3_a_1-2_i_superacio", "caracter": "disponible", "opcions": ["continuïtat_extrem_per_finalitzar_espai_exterior"]},
+            {"id": "D_23_12_SUPERA", "condicio": "finta_2-3_a_1-2_i_superacio", "caracter": "disponible", "opcions": ["finalitzacio_lateral_si_D1_no_tanca", "passada_extrem_si_D1_tanca_per_finalitzar_espai_exterior"]},
             {"id": "D_23_12_NO_SUPERA", "condicio": "finta_2-3_a_1-2_sense_superacio", "caracter": "disponible", "opcions": ["encreuament_extrem_per_atacar_2-3"]}
           ]
         }
@@ -152,11 +173,21 @@
       "invariants": [
         "la primera intenció és superar i finalitzar",
         "l'encreuament apareix quan no hi ha superació",
-        "la resposta depèn de l'interval final atacat pel lateral"
+        "la resposta depèn de l'interval final atacat pel lateral",
+        "la pilota comença al lateral i la passada inicial va al company del costat de l'interval inicial",
+        "el lateral rep la devolució just quan inicia el canvi de direcció",
+        "el primer, el segon i els dos tercers són defensors reals i actius",
+        "el xirimbolo és un handicap del segon defensor i no substitueix cap defensor",
+        "en la continuïtat 1-2 a 2-3 el central espera per darrere del lateral i rep de cara",
+        "l'extrem manté amplitud i en la finalització exterior salta cap al centre per guanyar angle"
       ],
       "validacions_entrenador": [
         "defensor_com_a_segon_defensiu",
-        "continuïtats_i_encreuaments_condicionats_per_la_direccio_de_la_finta"
+        "primer_i_tercers_com_a_defensors_actius",
+        "passada_inicial_i_devolucio_sincronitzada_amb_canvi_de_direccio",
+        "continuïtats_i_encreuaments_condicionats_per_la_direccio_de_la_finta",
+        "central_darrere_del_lateral_per_rebre_de_cara",
+        "extrem_amb_amplitud_i_salt_cap_al_centre"
       ]
     },
     {

@@ -70,6 +70,24 @@ de 9 m. `C1` i `C2` delimiten l'espai de `SA1`; `C3` representa passivament el
 segon defensor absent de `SA2`. L'extrem manté amplitud al seu espai de
 finalització.
 
+## TR-UVOF-002
+
+El lateral comença amb pilota. Per iniciar la finta `1–2 → 2–3`, passa a
+l'extrem, inicia la cursa sense pilota i rep la devolució just quan comença el
+canvi de direcció. Per iniciar `2–3 → 1–2`, fa la mateixa seqüència amb el
+central.
+
+`D1`, `D2` i els dos `D3` són defensors reals i actius. El xirimbolo és només
+un handicap sostingut per `D2`. Si el lateral supera, finalitza quan no hi ha
+ajuda; si l'ajuda tanca, dona continuïtat al central a `3–3` o a l'extrem dins
+el seu espai exterior. El central espera darrere del lateral per rebre de cara.
+Si no hi ha superació, el lateral continua arrossegant `D2` i el central o
+l'extrem encreuen per darrere per atacar l'interval oposat.
+
+El contracte espacial vigent és la v0.2. La pilota té un flux independent i
+les alternatives utilitzen trajectòries identificades; no s'han d'encadenar
+branques incompatibles com si fossin una sola seqüència.
+
 ## Flux de treball obligatori
 
 Abans de tocar codi:

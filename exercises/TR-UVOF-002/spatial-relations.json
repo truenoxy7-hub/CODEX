@@ -1,0 +1,1112 @@
+{
+  "meta": {
+    "format": "TRACA_relacions_espacials",
+    "versio_contracte": "0.2.0",
+    "versio_instancia": "0.1.0",
+    "estat": "derivat_semantica_validada",
+    "separacio_capes": {
+      "semantica_tactica": "referenciada_no_duplicada",
+      "relacions_espacials": "incloses",
+      "geometria_resolta": "no_inclosa",
+      "renderitzat": "no_generat"
+    }
+  },
+  "font_semantica": {
+    "exercici_id": "TR-UVOF-002",
+    "fitxers": [
+      "corpus/uvof.semantic.json"
+    ],
+    "plantilla": "banda_esquerra",
+    "simetria": "dues_bandes_paraleles"
+  },
+  "nodes": [
+    {
+      "id": "L",
+      "classe": "participant",
+      "referencia_semantica": "participants/L",
+      "rol": "lateral_executor",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "CE",
+      "classe": "participant",
+      "referencia_semantica": "participants/CE",
+      "rol": "central",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "EXT",
+      "classe": "participant",
+      "referencia_semantica": "participants/EXT",
+      "rol": "extrem",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "D1",
+      "classe": "participant",
+      "referencia_semantica": "participants/D1",
+      "rol": "primer_defensor_actiu",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "D2",
+      "classe": "participant",
+      "referencia_semantica": "participants/D2",
+      "rol": "segon_defensor_actiu_amb_handicap",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "D3_LOCAL",
+      "classe": "participant",
+      "referencia_semantica": "participants/D3_LOCAL",
+      "rol": "tercer_defensor_actiu_del_costat",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "D3_OPOSAT",
+      "classe": "participant",
+      "referencia_semantica": "participants/D3_OPOSAT",
+      "rol": "tercer_defensor_actiu_oposat",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "XIRIMBOLO",
+      "classe": "material",
+      "referencia_semantica": "materials/XIRIMBOLO",
+      "funcio": "handicap_defensiu_sostingut_per_D2",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "B1",
+      "classe": "pilota",
+      "referencia_semantica": "pilotes/B1",
+      "funcio": "pilota_de_l_exercici",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "LINIA_FONS",
+      "classe": "referencia_reglamentaria",
+      "referencia_semantica": "linia_de_fons",
+      "funcio": "limit_exterior_de_l_espai_de_finalitzacio",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "AREA_6M",
+      "classe": "referencia_reglamentaria",
+      "referencia_semantica": "area_de_6_metres",
+      "funcio": "marc_de_l_espai_de_finalitzacio",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "PORTERIA_ADVERSARIA",
+      "classe": "referencia_reglamentaria",
+      "referencia_semantica": "porteria_adversaria",
+      "funcio": "orientacio_general_de_l_atac",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "EIX_CENTRAL",
+      "classe": "referencia_funcional",
+      "referencia_semantica": "centre_de_la_pista",
+      "funcio": "referencia_per_guanyar_angle",
+      "estat_coneixement": "validat"
+    }
+  ],
+  "espais": [
+    {
+      "id": "INT_12",
+      "classe": "interval",
+      "nom_canonic": "interval_1-2",
+      "alies": [
+        "carril"
+      ],
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "D1",
+          "D2"
+        ]
+      },
+      "contiguitats": [
+        {
+          "espai": "ESPAI_EXTREM",
+          "referent_compartit": "D1"
+        },
+        {
+          "espai": "INT_23",
+          "referent_compartit": "D2"
+        }
+      ],
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "INT_23",
+      "classe": "interval",
+      "nom_canonic": "interval_2-3",
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "D2",
+          "D3_LOCAL"
+        ]
+      },
+      "contiguitats": [
+        {
+          "espai": "INT_12",
+          "referent_compartit": "D2"
+        },
+        {
+          "espai": "INT_33",
+          "referent_compartit": "D3_LOCAL"
+        }
+      ],
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "INT_33",
+      "classe": "interval",
+      "nom_canonic": "interval_3-3",
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "D3_LOCAL",
+          "D3_OPOSAT"
+        ]
+      },
+      "contiguitats": [
+        {
+          "espai": "INT_23",
+          "referent_compartit": "D3_LOCAL"
+        }
+      ],
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "ESPAI_EXTREM",
+      "classe": "espai_finalitzacio_extrem",
+      "nom_canonic": "espai_finalitzacio_extrem",
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "LINIA_FONS",
+          "D1"
+        ]
+      },
+      "restriccions": [
+        {
+          "operador": "interior_de",
+          "arguments": [
+            "AREA_6M"
+          ]
+        }
+      ],
+      "contiguitats": [
+        {
+          "espai": "INT_12",
+          "referent_compartit": "D1"
+        }
+      ],
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "POS_DARRERE_L",
+      "classe": "posicio_funcional",
+      "nom_canonic": "posicio_darrere_del_lateral",
+      "definicio": {
+        "operador": "darrere_de",
+        "arguments": [
+          "L"
+        ]
+      },
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "SORTIDA_INTERIOR_L",
+      "classe": "posicio_funcional",
+      "nom_canonic": "continuacio_interior_per_arrossegar_D2",
+      "definicio": {
+        "operador": "interior_de",
+        "arguments": [
+          "D2"
+        ]
+      },
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "SORTIDA_EXTERIOR_L",
+      "classe": "posicio_funcional",
+      "nom_canonic": "continuacio_exterior_per_arrossegar_D2",
+      "definicio": {
+        "operador": "exterior_de",
+        "arguments": [
+          "D2"
+        ]
+      },
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    }
+  ],
+  "estats": [
+    {
+      "id": "E_INICI",
+      "fase_ref": "F1",
+      "moment": "inici",
+      "relacions": [
+        {
+          "subjecte": "XIRIMBOLO",
+          "predicat": "sostingut_per",
+          "objectes": [
+            "D2"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "EXT",
+          "predicat": "mante_amplitud_a",
+          "objectes": [
+            "ESPAI_EXTREM"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "L",
+          "predicat": "orientat_cap_a",
+          "objectes": [
+            "PORTERIA_ADVERSARIA"
+          ],
+          "caracter": "preferent",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "E_RECEPCIO_12",
+      "fase_ref": "F1",
+      "moment": "canvi_direccio",
+      "relacions": [
+        {
+          "subjecte": "L",
+          "predicat": "ataca",
+          "objectes": [
+            "INT_12"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "L",
+          "predicat": "orientat_cap_a",
+          "objectes": [
+            "PORTERIA_ADVERSARIA"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "E_SUPERACIO_12_23",
+      "fase_ref": "F1",
+      "moment": "superacio",
+      "relacions": [
+        {
+          "subjecte": "L",
+          "predicat": "travessa_linia_defensiva_de",
+          "objectes": [
+            "D2"
+          ],
+          "caracter": "disponible",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "CE",
+          "predicat": "darrere_de",
+          "objectes": [
+            "L"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "CE",
+          "predicat": "orientat_cap_a",
+          "objectes": [
+            "PORTERIA_ADVERSARIA"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "E_ENCREUAMENT_CE",
+      "fase_ref": "F1",
+      "moment": "encreuament",
+      "relacions": [
+        {
+          "subjecte": "L",
+          "predicat": "ataca",
+          "objectes": [
+            "SORTIDA_INTERIOR_L"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "CE",
+          "predicat": "darrere_de",
+          "objectes": [
+            "L"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "CE",
+          "predicat": "ataca",
+          "objectes": [
+            "INT_12"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "E_RECEPCIO_23",
+      "fase_ref": "F1",
+      "moment": "canvi_direccio",
+      "relacions": [
+        {
+          "subjecte": "L",
+          "predicat": "ataca",
+          "objectes": [
+            "INT_23"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "L",
+          "predicat": "orientat_cap_a",
+          "objectes": [
+            "PORTERIA_ADVERSARIA"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "E_SUPERACIO_23_12",
+      "fase_ref": "F1",
+      "moment": "superacio",
+      "relacions": [
+        {
+          "subjecte": "L",
+          "predicat": "travessa_linia_defensiva_de",
+          "objectes": [
+            "D2"
+          ],
+          "caracter": "disponible",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "EXT",
+          "predicat": "mante_amplitud_a",
+          "objectes": [
+            "ESPAI_EXTREM"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "EXT",
+          "predicat": "disponible_per_rebre_a",
+          "objectes": [
+            "ESPAI_EXTREM"
+          ],
+          "caracter": "disponible",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "E_ENCREUAMENT_EXT",
+      "fase_ref": "F1",
+      "moment": "encreuament",
+      "relacions": [
+        {
+          "subjecte": "L",
+          "predicat": "ataca",
+          "objectes": [
+            "SORTIDA_EXTERIOR_L"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "EXT",
+          "predicat": "darrere_de",
+          "objectes": [
+            "L"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "EXT",
+          "predicat": "ataca",
+          "objectes": [
+            "INT_23"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "E_FINAL_EXTREM",
+      "fase_ref": "F1",
+      "moment": "resolucio",
+      "relacions": [
+        {
+          "subjecte": "EXT",
+          "predicat": "mante_amplitud_a",
+          "objectes": [
+            "ESPAI_EXTREM"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "EXT",
+          "predicat": "salta_cap_a",
+          "objectes": [
+            "EIX_CENTRAL"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        }
+      ]
+    }
+  ],
+  "transicions": [
+    {
+      "id": "T_12_23_APROXIMACIO",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_L_12_23",
+      "ordre": 1,
+      "actor": "L",
+      "tipus": "atac_espai",
+      "cap_a": "INT_12",
+      "referencia_oposicional": "D2",
+      "qualificadors": [
+        "sense_pilota",
+        "en_carrera"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_12_23_RECEPCIO",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_L_12_23",
+      "ordre": 2,
+      "actor": "L",
+      "tipus": "recepcio",
+      "des_de": "INT_12",
+      "cap_a": "INT_12",
+      "qualificadors": [
+        "just_en_iniciar_canvi_de_direccio",
+        "orientat_a_porteria"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_12_23_FINTA",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_L_12_23",
+      "ordre": 3,
+      "actor": "L",
+      "tipus": "finta",
+      "des_de": "INT_12",
+      "cap_a": "INT_23",
+      "referencia_oposicional": "D2",
+      "qualificadors": [
+        "canvi_de_direccio",
+        "canvi_de_ritme",
+        "forma_funcional_U"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_12_23_ARROSSEGAMENT",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_L_12_23_NO_SUPERA",
+      "ordre": 1,
+      "actor": "L",
+      "tipus": "continuitat",
+      "des_de": "INT_23",
+      "cap_a": "SORTIDA_INTERIOR_L",
+      "referencia_oposicional": "D2",
+      "condicio": "sense_superacio",
+      "qualificadors": [
+        "arrossega_D2"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_CE_ENCREUAMENT_12",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_CE_ENCREUAMENT_12",
+      "ordre": 1,
+      "actor": "CE",
+      "tipus": "encreuament",
+      "via": [
+        "POS_DARRERE_L"
+      ],
+      "cap_a": "INT_12",
+      "condicio": "L_no_supera_per_INT_23",
+      "qualificadors": [
+        "rep_de_L",
+        "ataca_per_superar"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_CE_CONTINUITAT_33",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_CE_CONTINUITAT_33",
+      "ordre": 1,
+      "actor": "CE",
+      "tipus": "continuitat",
+      "via": [
+        "POS_DARRERE_L"
+      ],
+      "cap_a": "INT_33",
+      "condicio": "L_supera_per_INT_23_i_D3_LOCAL_tanca",
+      "qualificadors": [
+        "espera_darrere_de_L",
+        "rep_de_cara"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_23_12_APROXIMACIO",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_L_23_12",
+      "ordre": 1,
+      "actor": "L",
+      "tipus": "atac_espai",
+      "cap_a": "INT_23",
+      "referencia_oposicional": "D2",
+      "qualificadors": [
+        "sense_pilota",
+        "en_carrera"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_23_12_RECEPCIO",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_L_23_12",
+      "ordre": 2,
+      "actor": "L",
+      "tipus": "recepcio",
+      "des_de": "INT_23",
+      "cap_a": "INT_23",
+      "qualificadors": [
+        "just_en_iniciar_canvi_de_direccio",
+        "orientat_a_porteria"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_23_12_FINTA",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_L_23_12",
+      "ordre": 3,
+      "actor": "L",
+      "tipus": "finta",
+      "des_de": "INT_23",
+      "cap_a": "INT_12",
+      "referencia_oposicional": "D2",
+      "qualificadors": [
+        "canvi_de_direccio",
+        "canvi_de_ritme",
+        "forma_funcional_U"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_23_12_ARROSSEGAMENT",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_L_23_12_NO_SUPERA",
+      "ordre": 1,
+      "actor": "L",
+      "tipus": "continuitat",
+      "des_de": "INT_12",
+      "cap_a": "SORTIDA_EXTERIOR_L",
+      "referencia_oposicional": "D2",
+      "condicio": "sense_superacio",
+      "qualificadors": [
+        "arrossega_D2"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_EXT_ENCREUAMENT_23",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_EXT_ENCREUAMENT_23",
+      "ordre": 1,
+      "actor": "EXT",
+      "tipus": "encreuament",
+      "via": [
+        "POS_DARRERE_L"
+      ],
+      "cap_a": "INT_23",
+      "condicio": "L_no_supera_per_INT_12",
+      "qualificadors": [
+        "rep_de_L",
+        "ataca_per_superar"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_EXT_ANTICIPA_PASSADA",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_EXT_FINALITZACIO",
+      "ordre": 1,
+      "actor": "EXT",
+      "tipus": "ajust_sense_pilota",
+      "cap_a": "ESPAI_EXTREM",
+      "condicio": "L_supera_per_INT_12",
+      "qualificadors": [
+        "mante_amplitud",
+        "anticipa_passada"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_EXT_FINALITZA",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_EXT_FINALITZACIO",
+      "ordre": 2,
+      "actor": "EXT",
+      "tipus": "resolucio",
+      "des_de": "ESPAI_EXTREM",
+      "cap_a": "ESPAI_EXTREM",
+      "condicio": "D1_tanca_L_i_EXT_rep",
+      "qualificadors": [
+        "ultima_passa_per_guanyar_angle",
+        "salt_cap_al_centre"
+      ],
+      "estat_coneixement": "validat"
+    }
+  ],
+  "fluxos_pilota": [
+    {
+      "id": "FP_12_23_PASSADA_INICIAL",
+      "fase_ref": "F1",
+      "trajectoria_id": "FP_12_23_INICI",
+      "ordre": 1,
+      "pilota_id": "B1",
+      "posseidor_inicial": "L",
+      "accio": "passada_inicial",
+      "posseidor_final": "EXT",
+      "qualificadors": [
+        "company_del_costat_de_INT_12"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "FP_12_23_DEVOLUCIO",
+      "fase_ref": "F1",
+      "trajectoria_id": "FP_12_23_INICI",
+      "ordre": 2,
+      "pilota_id": "B1",
+      "posseidor_inicial": "EXT",
+      "accio": "devolucio",
+      "posseidor_final": "L",
+      "qualificadors": [
+        "just_en_iniciar_canvi_de_direccio"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "FP_12_23_CONTINUITAT_CE",
+      "fase_ref": "F1",
+      "trajectoria_id": "FP_12_23_AJUDA",
+      "ordre": 1,
+      "pilota_id": "B1",
+      "posseidor_inicial": "L",
+      "accio": "passada_continuitat",
+      "posseidor_final": "CE",
+      "condicio": "D3_LOCAL_tanca_L",
+      "qualificadors": [
+        "CE_rep_de_cara"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "FP_12_23_ENCREUAMENT_CE",
+      "fase_ref": "F1",
+      "trajectoria_id": "FP_12_23_NO_SUPERA",
+      "ordre": 1,
+      "pilota_id": "B1",
+      "posseidor_inicial": "L",
+      "accio": "passada_encreuament",
+      "posseidor_final": "CE",
+      "condicio": "L_no_supera_per_INT_23",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "FP_23_12_PASSADA_INICIAL",
+      "fase_ref": "F1",
+      "trajectoria_id": "FP_23_12_INICI",
+      "ordre": 1,
+      "pilota_id": "B1",
+      "posseidor_inicial": "L",
+      "accio": "passada_inicial",
+      "posseidor_final": "CE",
+      "qualificadors": [
+        "company_del_costat_de_INT_23"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "FP_23_12_DEVOLUCIO",
+      "fase_ref": "F1",
+      "trajectoria_id": "FP_23_12_INICI",
+      "ordre": 2,
+      "pilota_id": "B1",
+      "posseidor_inicial": "CE",
+      "accio": "devolucio",
+      "posseidor_final": "L",
+      "qualificadors": [
+        "just_en_iniciar_canvi_de_direccio"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "FP_23_12_CONTINUITAT_EXT",
+      "fase_ref": "F1",
+      "trajectoria_id": "FP_23_12_AJUDA",
+      "ordre": 1,
+      "pilota_id": "B1",
+      "posseidor_inicial": "L",
+      "accio": "passada_continuitat",
+      "posseidor_final": "EXT",
+      "condicio": "D1_tanca_L",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "FP_23_12_ENCREUAMENT_EXT",
+      "fase_ref": "F1",
+      "trajectoria_id": "FP_23_12_NO_SUPERA",
+      "ordre": 1,
+      "pilota_id": "B1",
+      "posseidor_inicial": "L",
+      "accio": "passada_encreuament",
+      "posseidor_final": "EXT",
+      "condicio": "L_no_supera_per_INT_12",
+      "estat_coneixement": "validat"
+    }
+  ],
+  "branques_decisionals": [
+    {
+      "id": "BR_12_23",
+      "fase_ref": "F1",
+      "decisions_semantiques_ref": [
+        "fases/F1/decisions/D_12_23_SUPERA",
+        "fases/F1/decisions/D_12_23_NO_SUPERA"
+      ],
+      "caracter": "disponible",
+      "resolucio": "no_predeterminada",
+      "alternatives": [
+        {
+          "id": "A_12_23_SUPERA_SENSE_AJUDA",
+          "condicio": "L supera D2 per INT_23 i D3_LOCAL no tanca",
+          "efectes_espacials": [
+            {
+              "subjecte": "L",
+              "predicat": "ataca",
+              "objectes": [
+                "INT_23"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "A_12_23_SUPERA_AMB_AJUDA",
+          "condicio": "L supera D2 per INT_23 i D3_LOCAL tanca",
+          "efectes_espacials": [
+            {
+              "subjecte": "D3_LOCAL",
+              "predicat": "proper_a",
+              "objectes": [
+                "L"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "CE",
+              "predicat": "darrere_de",
+              "objectes": [
+                "L"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "CE",
+              "predicat": "ataca",
+              "objectes": [
+                "INT_33"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "A_12_23_NO_SUPERA",
+          "condicio": "L no supera D2 per INT_23",
+          "efectes_espacials": [
+            {
+              "subjecte": "L",
+              "predicat": "ataca",
+              "objectes": [
+                "SORTIDA_INTERIOR_L"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "CE",
+              "predicat": "darrere_de",
+              "objectes": [
+                "L"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "CE",
+              "predicat": "ataca",
+              "objectes": [
+                "INT_12"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "BR_23_12",
+      "fase_ref": "F1",
+      "decisions_semantiques_ref": [
+        "fases/F1/decisions/D_23_12_SUPERA",
+        "fases/F1/decisions/D_23_12_NO_SUPERA"
+      ],
+      "caracter": "disponible",
+      "resolucio": "no_predeterminada",
+      "alternatives": [
+        {
+          "id": "A_23_12_SUPERA_SENSE_AJUDA",
+          "condicio": "L supera D2 per INT_12 i D1 no tanca",
+          "efectes_espacials": [
+            {
+              "subjecte": "L",
+              "predicat": "ataca",
+              "objectes": [
+                "INT_12"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "A_23_12_SUPERA_AMB_AJUDA",
+          "condicio": "L supera D2 per INT_12 i D1 tanca",
+          "efectes_espacials": [
+            {
+              "subjecte": "D1",
+              "predicat": "proper_a",
+              "objectes": [
+                "L"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "EXT",
+              "predicat": "ataca",
+              "objectes": [
+                "ESPAI_EXTREM"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "EXT",
+              "predicat": "salta_cap_a",
+              "objectes": [
+                "EIX_CENTRAL"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "A_23_12_NO_SUPERA",
+          "condicio": "L no supera D2 per INT_12",
+          "efectes_espacials": [
+            {
+              "subjecte": "L",
+              "predicat": "ataca",
+              "objectes": [
+                "SORTIDA_EXTERIOR_L"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "EXT",
+              "predicat": "darrere_de",
+              "objectes": [
+                "L"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "EXT",
+              "predicat": "ataca",
+              "objectes": [
+                "INT_23"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "invariants": [
+    {
+      "code": "SP-NO-COORD-002",
+      "operador": "sense_coordenades",
+      "subjectes": [
+        "TR-UVOF-002"
+      ],
+      "ambit": "document_complet",
+      "missatge": "La instància només conté relacions qualitatives."
+    },
+    {
+      "code": "SP-IDENTITAT-002",
+      "operador": "identitat_persistent",
+      "subjectes": [
+        "L",
+        "CE",
+        "EXT"
+      ],
+      "ambit": "F1",
+      "missatge": "Cada participant conserva la identitat a totes les branques."
+    },
+    {
+      "code": "SP-DECISIO-002",
+      "operador": "decisio_no_predeterminada",
+      "subjectes": [
+        "BR_12_23",
+        "BR_23_12"
+      ],
+      "ambit": "F1",
+      "missatge": "La finalització o la continuïtat depenen de la superació i de l'ajuda defensiva."
+    },
+    {
+      "code": "SP-CONTIGUITAT-002",
+      "operador": "contiguitat_amb_referent_compartit",
+      "subjectes": [
+        "INT_12",
+        "INT_23"
+      ],
+      "ambit": "F1",
+      "missatge": "Els intervals 1-2 i 2-3 són contigus perquè comparteixen D2."
+    },
+    {
+      "code": "SP-FLUX-PILOTA-002",
+      "operador": "flux_pilota_coherent",
+      "subjectes": [
+        "B1"
+      ],
+      "ambit": "F1",
+      "missatge": "Cada passada comença amb el posseïdor resultant del pas anterior dins la mateixa trajectòria."
+    },
+    {
+      "code": "SP-RECEPCIO-CANVI-002",
+      "operador": "recepcio_inici_canvi_direccio",
+      "subjectes": [
+        "L"
+      ],
+      "ambit": "F1",
+      "missatge": "L rep la devolució just quan inicia el canvi de direcció."
+    },
+    {
+      "code": "SP-ENCREUAMENT-002",
+      "operador": "encreuament_per_darrere",
+      "subjectes": [
+        "CE",
+        "EXT",
+        "L"
+      ],
+      "ambit": "branques_sense_superacio",
+      "missatge": "CE o EXT encreuen per darrere de L i ataquen l'interval oposat."
+    },
+    {
+      "code": "SP-AMPLITUD-002",
+      "operador": "mantenir_amplitud",
+      "subjectes": [
+        "EXT",
+        "ESPAI_EXTREM"
+      ],
+      "ambit": "F1",
+      "missatge": "EXT conserva amplitud i salta cap al centre quan finalitza."
+    }
+  ],
+  "governanca": {
+    "autoritat": "semantica_validada_per_entrenador",
+    "politica_inferencia": "tota_inferencia_no_validada_es_provisional",
+    "sortida_permesa": "graf_relacional_sense_coordenades"
+  }
+}

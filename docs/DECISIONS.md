@@ -114,6 +114,21 @@ seus delimitadors i les contigüitats pel defensor compartit.
 **Motiu:** permet preparar un motor espacial sense convertir la semàntica en
 coordenades ni tancar decisions que depenen de la lectura del jugador.
 
-**Abast actual:** contracte v0.1 i primera instància executable de
-`TR-UVOF-001`. La reflexió entre bandes i la geometria de sortida continuen
-pendents.
+**Abast actual:** la decisió continua vigent i el contracte ha evolucionat a
+v0.2 amb `TR-UVOF-001` i `TR-UVOF-002`. La geometria de sortida continua
+pendent.
+
+## D-022 — Flux de pilota i trajectòries alternatives al contracte espacial
+
+**Decisió:** la pilota es representa amb un flux propi per trajectòria. Les
+passades no s'infereixen del moviment dels jugadors i cada transferència ha de
+conservar el posseïdor resultant del pas anterior.
+
+**Decisió:** un encreuament és una transició explícita del receptor per darrere
+del portador cap a un interval que s'ataca amb intenció de superar. Les
+trajectòries alternatives s'identifiquen separadament perquè el validador no
+les encadeni com si fossin una única solució.
+
+**Motiu:** `TR-UVOF-002` conté dues direccions de finta i desenllaços diferents
+segons la superació i l'ajuda defensiva. Barrejar-los en un sol recorregut faria
+perdre la lògica tàctica validada.

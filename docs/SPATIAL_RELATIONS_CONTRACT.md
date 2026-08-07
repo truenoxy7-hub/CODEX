@@ -1,4 +1,4 @@
-# Contracte de relacions espacials v0.1
+# Contracte de relacions espacials v0.2
 
 ## Propòsit
 
@@ -6,9 +6,10 @@ El contracte converteix la semàntica tàctica validada en un graf qualitatiu qu
 un futur motor espacial podrà resoldre. Defineix **què ha de quedar relacionat**
 sense decidir encara **a quines coordenades** s'ha de dibuixar.
 
-La primera instància executable és
-`exercises/TR-UVOF-001/spatial-relations.json` i compleix
-`schema/traca.spatial-relations.schema.v0.1.json`.
+Les instàncies executables actuals són
+`exercises/TR-UVOF-001/spatial-relations.json` i
+`exercises/TR-UVOF-002/spatial-relations.json`; totes dues compleixen
+`schema/traca.spatial-relations.schema.v0.2.json`.
 
 ## Límits de la capa
 
@@ -38,6 +39,7 @@ Un node és una entitat que pot definir o ocupar una relació espacial:
 
 - `participant`;
 - `material`;
+- `pilota`;
 - `defensor_implicit`;
 - `referencia_reglamentaria`;
 - `referencia_funcional`.
@@ -95,16 +97,32 @@ actor + origen opcional + via opcional + destinació
 ```
 
 El tipus funcional pot ser recepció, finta, atac d'espai, recuperació sense
-pilota, ajust sense pilota o resolució. Els qualificadors expliquen la intenció
-tàctica; no descriuen una corba.
+pilota, ajust sense pilota, continuïtat, encreuament o resolució. Els
+qualificadors expliquen la intenció tàctica; no descriuen una corba.
 
-Els trams consecutius d'un mateix actor han de ser connectats: la destinació
-d'un tram és l'origen del següent quan aquest origen està declarat.
+Els trams consecutius d'un mateix actor i `trajectoria_id` han de ser
+connectats: la destinació d'un tram és l'origen del següent quan aquest origen
+està declarat. Això permet conservar alternatives incompatibles sense
+encadenar-les artificialment.
+
+### 4.1. Flux de pilota
+
+La pilota té una seqüència pròpia separada del moviment dels participants. Cada
+transferència declara pilota, trajectòria, ordre, posseïdor inicial, acció i
+posseïdor final. Dins la mateixa trajectòria, el posseïdor inicial d'una passada
+ha de coincidir amb el posseïdor final de l'anterior.
+
+Aquesta separació permet expressar que el lateral passa, inicia la cursa sense
+pilota i rep la devolució just quan comença el canvi de direcció.
 
 ### 5. Branques decisionals
 
 Una branca referencia una decisió semàntica i conserva almenys dues
 alternatives. La resolució és sempre `no_predeterminada`.
+
+Quan una lectura espacial agrupa diverses decisions semàntiques relacionades,
+la branca pot utilitzar `decisions_semantiques_ref` per conservar-ne tota la
+traçabilitat.
 
 En el 2x1 de `SA2`, per exemple:
 
@@ -129,7 +147,23 @@ La primera instància representa:
 - les dues resolucions 2x1 com a branques obertes.
 
 Les dues bandes es descriuen a partir d'una plantilla i una declaració de
-simetria. La versió 0.1 encara no executa la reflexió.
+simetria. La versió 0.2 encara no executa la reflexió geomètrica.
+
+## Instància TR-UVOF-002
+
+La segona instància representa:
+
+- `D1`, `D2` i els dos `D3` com a defensors reals i actius;
+- el xirimbolo com a handicap sostingut per `D2`, mai com a substitut;
+- `1–2`, `2–3`, `3–3` i l'espai exterior delimitats pels defensors reals;
+- passada inicial a extrem per iniciar `1–2 → 2–3`, o a central per iniciar
+  `2–3 → 1–2`;
+- devolució al lateral just a l'inici del canvi de direcció;
+- continuïtat del central esperant darrere del lateral i rebent de cara;
+- encreuament de central o extrem per darrere del lateral quan no hi ha
+  superació;
+- amplitud de l'extrem i salt cap al centre en la finalització exterior;
+- alternatives obertes segons la superació i l'ajuda de `D1` o `D3`.
 
 ## Validacions executables
 
@@ -143,6 +177,8 @@ El validador comprova:
 - contigüitats simètriques amb un referent realment compartit;
 - relacions i transicions sense referències penjants;
 - continuïtat de les transicions d'un mateix actor;
+- continuïtat del posseïdor dins cada flux de pilota;
+- correspondència de pilotes i decisions amb la font semàntica;
 - presència dels invariants de no-coordenades, identitat persistent i decisió
   no predeterminada.
 
@@ -164,12 +200,12 @@ Sortida futura:
 3. alternatives separades quan la decisió no és única;
 4. cap canvi del significat tàctic per satisfer el dibuix.
 
-## Abast i pendents de v0.1
+## Abast i pendents de v0.2
 
-La versió 0.1 valida l'arquitectura amb `TR-UVOF-001`; encara no és un motor.
-Abans de congelar-ne el vocabulari cal:
+La versió 0.2 valida l'arquitectura amb `TR-UVOF-001` i `TR-UVOF-002`; encara
+no és un motor. Abans de congelar-ne el vocabulari cal:
 
-- provar-lo amb exercicis d'encreuament, permuta, bloqueig i situació de partit;
+- provar-lo amb exercicis de permuta, bloqueig i situació de partit;
 - definir com canvien els intervals quan els defensors es desplacen entre
   estats;
 - especificar la normalització de costat i la reflexió de les dues bandes;

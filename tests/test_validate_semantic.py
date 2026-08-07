@@ -310,6 +310,43 @@ def test_corpus_rejects_undeclared_ball_flow(valid_corpus, corpus_schema):
     ]
 
 
+def test_corpus_rejects_missing_active_defender_in_uvof002(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-002")
+    exercise["participants"] = [
+        participant
+        for participant in exercise["participants"]
+        if participant["id"] != "D1"
+    ]
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF002_ACTIVE_DEFENDERS" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_disconnected_pass_return_in_uvof002(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-002")
+    return_flow = next(
+        flow
+        for phase in exercise["fases"]
+        for flow in phase["fluxos_pilota"]
+        if flow.get("trajectoria_id") == "FINTA_12_23"
+        and flow.get("ordre") == 2
+    )
+    return_flow["posseidor_inicial"] = "CE"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "CORPUS_BALL_FLOW_DISCONNECTED" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
 def test_corpus_rejects_geometry(valid_corpus, corpus_schema):
     exercise = _corpus_exercise(valid_corpus, "TR-UVOF-015")
     exercise["coordenades"] = [{"x": 1, "y": 2}]

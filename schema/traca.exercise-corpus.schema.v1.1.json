@@ -334,6 +334,16 @@
         },
         "posseidor_final": {
           "type": "string"
+        },
+        "trajectoria_id": {
+          "type": "string"
+        },
+        "ordre": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "condicio": {
+          "type": "string"
         }
       },
       "additionalProperties": true

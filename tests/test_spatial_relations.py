@@ -30,7 +30,7 @@ def spatial_schema() -> dict:
         (
             ROOT
             / "schema"
-            / "traca.spatial-relations.schema.v0.1.json"
+            / "traca.spatial-relations.schema.v0.2.json"
         ).read_text(encoding="utf-8")
     )
 
@@ -72,6 +72,7 @@ def test_repository_spatial_contract_passes(
         "space_count": 9,
         "state_count": 7,
         "transition_count": 6,
+        "ball_flow_count": 0,
         "branch_count": 2,
         "error_count": 0,
         "structural_error_count": 0,
@@ -247,3 +248,111 @@ def test_spatial_contract_requires_open_decisions(
     )
 
     assert "SCHEMA_ERROR" in _error_codes(report)
+
+
+@pytest.fixture
+def spatial_document_002() -> dict:
+    return json.loads(
+        (
+            ROOT
+            / "exercises"
+            / "TR-UVOF-002"
+            / "spatial-relations.json"
+        ).read_text(encoding="utf-8")
+    )
+
+
+@pytest.fixture
+def semantic_document_002() -> dict:
+    corpus = json.loads(
+        (ROOT / "corpus" / "uvof.semantic.json").read_text(encoding="utf-8")
+    )
+    return next(
+        exercise
+        for exercise in corpus["exercicis"]
+        if exercise["id"] == "TR-UVOF-002"
+    )
+
+
+def test_uvof002_spatial_contract_represents_validated_topology_and_flows(
+    spatial_document_002,
+    spatial_schema,
+    semantic_document_002,
+) -> None:
+    report = validate_spatial_relations_document(
+        spatial_document_002,
+        spatial_schema,
+        semantic_document_002,
+    )
+
+    assert report["valid"] is True
+    assert report["summary"] == {
+        "node_count": 13,
+        "space_count": 7,
+        "state_count": 8,
+        "transition_count": 13,
+        "ball_flow_count": 8,
+        "branch_count": 2,
+        "error_count": 0,
+        "structural_error_count": 0,
+        "relational_error_count": 0,
+    }
+    nodes = {node["id"]: node for node in spatial_document_002["nodes"]}
+    assert all(
+        nodes[defender_id]["classe"] == "participant"
+        for defender_id in ("D1", "D2", "D3_LOCAL", "D3_OPOSAT")
+    )
+    interval_33 = next(
+        space for space in spatial_document_002["espais"]
+        if space["id"] == "INT_33"
+    )
+    assert interval_33["definicio"]["arguments"] == [
+        "D3_LOCAL",
+        "D3_OPOSAT",
+    ]
+    central_cross = next(
+        transition for transition in spatial_document_002["transicions"]
+        if transition["id"] == "T_CE_ENCREUAMENT_12"
+    )
+    assert central_cross["tipus"] == "encreuament"
+    assert central_cross["via"] == ["POS_DARRERE_L"]
+
+
+def test_uvof002_rejects_disconnected_ball_flow(
+    spatial_document_002,
+    spatial_schema,
+    semantic_document_002,
+) -> None:
+    document = deepcopy(spatial_document_002)
+    return_flow = next(
+        flow for flow in document["fluxos_pilota"]
+        if flow["id"] == "FP_12_23_DEVOLUCIO"
+    )
+    return_flow["posseidor_inicial"] = "CE"
+
+    report = validate_spatial_relations_document(
+        document,
+        spatial_schema,
+        semantic_document_002,
+    )
+
+    assert "SPATIAL_BALL_FLOW_DISCONNECTED" in _error_codes(report)
+
+
+def test_uvof002_rejects_unknown_semantic_decision(
+    spatial_document_002,
+    spatial_schema,
+    semantic_document_002,
+) -> None:
+    document = deepcopy(spatial_document_002)
+    document["branques_decisionals"][0]["decisions_semantiques_ref"][0] = (
+        "fases/F1/decisions/D_INEXISTENT"
+    )
+
+    report = validate_spatial_relations_document(
+        document,
+        spatial_schema,
+        semantic_document_002,
+    )
+
+    assert "SPATIAL_UNKNOWN_DECISION" in _error_codes(report)

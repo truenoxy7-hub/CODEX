@@ -15,8 +15,9 @@
 - Model explícit de fases, decisions, permutes, files i múltiples pilotes.
 - Vocabulari validat d'encreuament, permuta, bloqueig estàtic, lliscament,
   situació de partit i punt fort/feble.
-- Contracte de relacions espacials v0.1 sense coordenades.
-- Primera instància relacional executable de `TR-UVOF-001`.
+- Contracte de relacions espacials v0.2 sense coordenades.
+- Instàncies relacionals executables de `TR-UVOF-001` i `TR-UVOF-002`.
+- Flux de pilota per trajectòria i encreuament explícit per darrere del portador.
 - Validacions de referències, contigüitats, continuïtat i decisions obertes.
 
 ## No completat
@@ -38,5 +39,5 @@ Tornar a introduir coordenades abans d'haver estabilitzat el model tàctic.
 
 ## Pròxima fita recomanada
 
-Aplicar el contracte relacional a exercicis d'encreuament, permuta i bloqueig
-abans de definir el resolutor geomètric.
+Aplicar el contracte relacional v0.2 a un exercici de bloqueig i a un de
+permuta abans de definir el resolutor geomètric.
