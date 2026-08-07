@@ -104,3 +104,16 @@ decisions obertes encara que tingui una condició inicial o de finalització.
 **Decisió:** la família UVOF es representa en un corpus genèric v1.1. Les files,
 l'ordre d'activació i les múltiples pilotes són estructures explícites. No
 s'infereix un flux de pilota que no hagi estat validat.
+
+## D-021 — Contracte espacial com a graf qualitatiu
+
+**Decisió:** la capa anterior a la geometria és un graf de nodes, espais
+relacionals, estats, transicions i branques. Els intervals es defineixen pels
+seus delimitadors i les contigüitats pel defensor compartit.
+
+**Motiu:** permet preparar un motor espacial sense convertir la semàntica en
+coordenades ni tancar decisions que depenen de la lectura del jugador.
+
+**Abast actual:** contracte v0.1 i primera instància executable de
+`TR-UVOF-001`. La reflexió entre bandes i la geometria de sortida continuen
+pendents.

@@ -142,3 +142,23 @@ Cada decisió ha d'indicar-ne el caràcter:
 
 El canvi de banda després d'una acció sense avantatge és habitualment
 `preferent`, no `obligatori`.
+
+## 11. Relacions espacials derivades
+
+La capa de relacions espacials és un graf qualitatiu situat entre el model
+semàntic i la geometria. Conté:
+
+- nodes persistents per a participants, materials i referències;
+- espais definits per relacions com `entre`, `darrere_de` o `delimitat_per`;
+- estats simultanis per fase;
+- transicions connectades del mateix participant;
+- branques que conserven les alternatives d'una decisió.
+
+Un interval es torna a derivar dels seus delimitadors en cada estat rellevant;
+no hereta una posició fixa. Les contigüitats indiquen explícitament el defensor
+compartit. Les decisions continuen obertes fins que la lectura de joc en
+selecciona una alternativa.
+
+El contracte v0.1 es documenta a
+[`SPATIAL_RELATIONS_CONTRACT.md`](SPATIAL_RELATIONS_CONTRACT.md). Encara no
+genera geometria.

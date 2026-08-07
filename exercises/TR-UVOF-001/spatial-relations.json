@@ -1,0 +1,832 @@
+{
+  "meta": {
+    "format": "TRACA_relacions_espacials",
+    "versio_contracte": "0.1.0",
+    "versio_instancia": "0.1.0",
+    "estat": "derivat_semantica_validada",
+    "separacio_capes": {
+      "semantica_tactica": "referenciada_no_duplicada",
+      "relacions_espacials": "incloses",
+      "geometria_resolta": "no_inclosa",
+      "renderitzat": "no_generat"
+    }
+  },
+  "font_semantica": {
+    "exercici_id": "TR-UVOF-001",
+    "fitxers": [
+      "exercises/TR-UVOF-001/semantic.json",
+      "corpus/uvof.semantic.json"
+    ],
+    "plantilla": "banda_esquerra",
+    "simetria": "dues_bandes_paraleles"
+  },
+  "nodes": [
+    {
+      "id": "CE",
+      "classe": "participant",
+      "referencia_semantica": "model_exercici/participants_plantilla/CE",
+      "rol": "central_passador",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "L",
+      "classe": "participant",
+      "referencia_semantica": "model_exercici/participants_plantilla/L",
+      "rol": "lateral_executor",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "PV",
+      "classe": "participant",
+      "referencia_semantica": "model_exercici/participants_plantilla/PV",
+      "rol": "pivot",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "EXT",
+      "classe": "participant",
+      "referencia_semantica": "model_exercici/participants_plantilla/EXT",
+      "rol": "extrem",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "D_Z1",
+      "classe": "participant",
+      "referencia_semantica": "model_exercici/participants_plantilla/D_Z1",
+      "rol": "tercer_defensor",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "D_Z2",
+      "classe": "participant",
+      "referencia_semantica": "model_exercici/participants_plantilla/D_Z2",
+      "rol": "primer_defensor",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "BANC",
+      "classe": "material",
+      "referencia_semantica": "model_exercici/materials/BANC",
+      "rol": "segon_defensor_simulat",
+      "funcio": "substitut_oposicional_actiu",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "C1",
+      "classe": "material",
+      "referencia_semantica": "model_exercici/materials/C1",
+      "funcio": "limit_espacial",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "C2",
+      "classe": "material",
+      "referencia_semantica": "model_exercici/materials/C2",
+      "funcio": "limit_espacial",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "C3",
+      "classe": "material",
+      "referencia_semantica": "model_exercici/materials/C3",
+      "rol": "segon_defensor_absent",
+      "funcio": "referencia_posicional_passiva",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "D1_SA1_IMPLICIT",
+      "classe": "defensor_implicit",
+      "rol": "primer_defensor_no_representat",
+      "funcio": "delimitar_interval_1-2_de_SA1",
+      "estat_coneixement": "derivat"
+    },
+    {
+      "id": "D3_INTERIOR_SA1_IMPLICIT",
+      "classe": "defensor_implicit",
+      "rol": "tercer_defensor_interior_no_representat",
+      "funcio": "delimitar_interval_complementari_del_pivot",
+      "estat_coneixement": "derivat"
+    },
+    {
+      "id": "LINIA_FONS",
+      "classe": "referencia_reglamentaria",
+      "referencia_semantica": "linia_de_fons",
+      "funcio": "limit_exterior_de_lespai_de_finalitzacio",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "AREA_6M",
+      "classe": "referencia_reglamentaria",
+      "referencia_semantica": "area_de_6_metres",
+      "funcio": "marc_de_lespai_de_finalitzacio",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "PORTERIA_ADVERSARIA",
+      "classe": "referencia_reglamentaria",
+      "referencia_semantica": "porteria_adversaria",
+      "funcio": "orientacio_general_de_latac",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "EIX_CENTRAL",
+      "classe": "referencia_funcional",
+      "referencia_semantica": "centre_de_la_pista",
+      "funcio": "referencia_per_guanyar_angle",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "FINAL_EXTERIOR_AREA",
+      "classe": "referencia_funcional",
+      "referencia_semantica": "final_exterior_area",
+      "funcio": "limit_exterior_de_Z2",
+      "estat_coneixement": "derivat"
+    }
+  ],
+  "espais": [
+    {
+      "id": "INT_1",
+      "classe": "interval",
+      "referencia_semantica": "model_exercici/espais_i_intervals/INT_1",
+      "nom_canonic": "interval_1-2",
+      "alies": [
+        "carril"
+      ],
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "D1_SA1_IMPLICIT",
+          "BANC"
+        ]
+      },
+      "contiguitats": [
+        {
+          "espai": "INT_2",
+          "referent_compartit": "BANC"
+        }
+      ],
+      "fases_actives": [
+        "SA1"
+      ],
+      "estat_coneixement": "derivat"
+    },
+    {
+      "id": "INT_2",
+      "classe": "interval",
+      "referencia_semantica": "model_exercici/espais_i_intervals/INT_2",
+      "nom_canonic": "interval_2-3",
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "BANC",
+          "D_Z1"
+        ]
+      },
+      "contiguitats": [
+        {
+          "espai": "INT_1",
+          "referent_compartit": "BANC"
+        },
+        {
+          "espai": "INT_PV_SA1",
+          "referent_compartit": "D_Z1"
+        }
+      ],
+      "fases_actives": [
+        "SA1"
+      ],
+      "estat_coneixement": "derivat"
+    },
+    {
+      "id": "INT_PV_SA1",
+      "classe": "interval",
+      "nom_canonic": "interval_3-3",
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "D_Z1",
+          "D3_INTERIOR_SA1_IMPLICIT"
+        ]
+      },
+      "contiguitats": [
+        {
+          "espai": "INT_2",
+          "referent_compartit": "D_Z1"
+        }
+      ],
+      "fases_actives": [
+        "SA1"
+      ],
+      "estat_coneixement": "derivat"
+    },
+    {
+      "id": "Z1",
+      "classe": "zona_resolucio",
+      "referencia_semantica": "model_exercici/espais_i_intervals/Z1",
+      "definicio": {
+        "operador": "delimitat_per",
+        "arguments": [
+          "C1",
+          "C2"
+        ]
+      },
+      "fases_actives": [
+        "SA1"
+      ],
+      "estat_coneixement": "derivat"
+    },
+    {
+      "id": "CORREDOR_RECUPERACIO",
+      "classe": "corredor",
+      "referencia_semantica": "model_exercici/espais_i_intervals/CORREDOR_RECUPERACIO",
+      "definicio": {
+        "operador": "darrere_de",
+        "arguments": [
+          "BANC"
+        ]
+      },
+      "fases_actives": [
+        "SA2"
+      ],
+      "estat_coneixement": "derivat"
+    },
+    {
+      "id": "INT_3",
+      "classe": "posicio_funcional",
+      "referencia_semantica": "model_exercici/espais_i_intervals/INT_3",
+      "nom_canonic": "espai_recepcio_orientada_SA2",
+      "definicio": {
+        "operador": "proper_a",
+        "arguments": [
+          "EXT"
+        ]
+      },
+      "fases_actives": [
+        "SA2"
+      ],
+      "estat_coneixement": "derivat"
+    },
+    {
+      "id": "INT_4",
+      "classe": "interval",
+      "referencia_semantica": "model_exercici/espais_i_intervals/INT_4",
+      "nom_canonic": "interval_1-2",
+      "alies": [
+        "carril"
+      ],
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "D_Z2",
+          "C3"
+        ]
+      },
+      "fases_actives": [
+        "SA2"
+      ],
+      "estat_coneixement": "derivat"
+    },
+    {
+      "id": "ESPAI_EXTREM_Z2",
+      "classe": "espai_finalitzacio_extrem",
+      "referencia_semantica": "model_exercici/espais_i_intervals/ESPAI_EXTREM_Z2",
+      "nom_canonic": "espai_finalitzacio_extrem",
+      "alies": [
+        "0-1"
+      ],
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "LINIA_FONS",
+          "D_Z2"
+        ]
+      },
+      "restriccions": [
+        {
+          "operador": "interior_de",
+          "arguments": [
+            "AREA_6M"
+          ]
+        }
+      ],
+      "fases_actives": [
+        "SA1",
+        "SA2"
+      ],
+      "estat_coneixement": "derivat"
+    },
+    {
+      "id": "Z2",
+      "classe": "zona_resolucio",
+      "referencia_semantica": "model_exercici/espais_i_intervals/Z2",
+      "definicio": {
+        "operador": "delimitat_per",
+        "arguments": [
+          "C3",
+          "FINAL_EXTERIOR_AREA"
+        ]
+      },
+      "fases_actives": [
+        "SA2"
+      ],
+      "estat_coneixement": "derivat"
+    }
+  ],
+  "estats": [
+    {
+      "id": "SA1_RECEPCIO",
+      "fase_ref": "SA1",
+      "moment": "recepcio",
+      "relacions": [
+        {
+          "subjecte": "L",
+          "predicat": "ocupa",
+          "objectes": [
+            "INT_1"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "PV",
+          "predicat": "ocupa",
+          "objectes": [
+            "INT_PV_SA1"
+          ],
+          "caracter": "preferent",
+          "estat_coneixement": "derivat"
+        },
+        {
+          "subjecte": "EXT",
+          "predicat": "mante_amplitud_a",
+          "objectes": [
+            "ESPAI_EXTREM_Z2"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "SA1_SUPERACIO",
+      "fase_ref": "SA1",
+      "moment": "superacio",
+      "relacions": [
+        {
+          "subjecte": "L",
+          "predicat": "ataca",
+          "objectes": [
+            "INT_2"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "L",
+          "predicat": "travessa_linia_defensiva_de",
+          "objectes": [
+            "BANC"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "PV",
+          "predicat": "evita_superposicio_amb",
+          "objectes": [
+            "L"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "PV",
+          "predicat": "adapta_posicio_respecte_a",
+          "objectes": [
+            "L"
+          ],
+          "caracter": "preferent",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "SA1_RESOLUCIO",
+      "fase_ref": "SA1",
+      "moment": "resolucio",
+      "relacions": [
+        {
+          "subjecte": "L",
+          "predicat": "ataca",
+          "objectes": [
+            "Z1"
+          ],
+          "caracter": "disponible",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "L",
+          "predicat": "relacionat_en_2x1_amb",
+          "objectes": [
+            "PV",
+            "D_Z1"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "PV",
+          "predicat": "disponible_per_rebre_a",
+          "objectes": [
+            "INT_PV_SA1"
+          ],
+          "caracter": "disponible",
+          "estat_coneixement": "derivat"
+        }
+      ]
+    },
+    {
+      "id": "SA2_RECUPERACIO",
+      "fase_ref": "SA2",
+      "moment": "desenvolupament",
+      "relacions": [
+        {
+          "subjecte": "L",
+          "predicat": "darrere_de",
+          "objectes": [
+            "BANC"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "EXT",
+          "predicat": "mante_amplitud_a",
+          "objectes": [
+            "ESPAI_EXTREM_Z2"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "SA2_RECEPCIO",
+      "fase_ref": "SA2",
+      "moment": "recepcio",
+      "relacions": [
+        {
+          "subjecte": "L",
+          "predicat": "ocupa",
+          "objectes": [
+            "INT_3"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "L",
+          "predicat": "orientat_cap_a",
+          "objectes": [
+            "PORTERIA_ADVERSARIA"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "EXT",
+          "predicat": "mante_amplitud_a",
+          "objectes": [
+            "ESPAI_EXTREM_Z2"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "SA2_ATAC",
+      "fase_ref": "SA2",
+      "moment": "desenvolupament",
+      "relacions": [
+        {
+          "subjecte": "L",
+          "predicat": "ataca",
+          "objectes": [
+            "INT_4"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "EXT",
+          "predicat": "mante_amplitud_a",
+          "objectes": [
+            "ESPAI_EXTREM_Z2"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "EXT",
+          "predicat": "adapta_posicio_respecte_a",
+          "objectes": [
+            "L"
+          ],
+          "caracter": "preferent",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "SA2_RESOLUCIO",
+      "fase_ref": "SA2",
+      "moment": "resolucio",
+      "relacions": [
+        {
+          "subjecte": "L",
+          "predicat": "relacionat_en_2x1_amb",
+          "objectes": [
+            "EXT",
+            "D_Z2"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "L",
+          "predicat": "ataca",
+          "objectes": [
+            "Z2"
+          ],
+          "caracter": "disponible",
+          "estat_coneixement": "validat"
+        }
+      ]
+    }
+  ],
+  "transicions": [
+    {
+      "id": "T_SA1_RECEPCIO",
+      "fase_ref": "SA1",
+      "ordre": 1,
+      "actor": "L",
+      "tipus": "recepcio",
+      "cap_a": "INT_1",
+      "accio_semantica_ref": "SA1.sequencia_obligatoria.0",
+      "qualificadors": [
+        "en_carrera"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_SA1_FINTA",
+      "fase_ref": "SA1",
+      "ordre": 2,
+      "actor": "L",
+      "tipus": "finta",
+      "des_de": "INT_1",
+      "cap_a": "INT_2",
+      "referencia_oposicional": "BANC",
+      "accio_semantica_ref": "SA1.sequencia_obligatoria.1",
+      "qualificadors": [
+        "forma_funcional_U",
+        "comprometre_defensor",
+        "canvi_direccio",
+        "canvi_ritme",
+        "superar_linia_defensiva"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_SA1_RESOLUCIO",
+      "fase_ref": "SA1",
+      "ordre": 3,
+      "actor": "L",
+      "tipus": "resolucio",
+      "des_de": "INT_2",
+      "cap_a": "Z1",
+      "accio_semantica_ref": "SA1.sequencia_obligatoria.2",
+      "qualificadors": [
+        "2x1_amb_pivot",
+        "solucio_no_predeterminada"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_SA2_RECUPERACIO",
+      "fase_ref": "SA2",
+      "ordre": 1,
+      "actor": "L",
+      "tipus": "recuperacio_sense_pilota",
+      "des_de": "Z1",
+      "via": [
+        "CORREDOR_RECUPERACIO"
+      ],
+      "cap_a": "INT_3",
+      "referencia_oposicional": "BANC",
+      "accio_semantica_ref": "SA2.sequencia_obligatoria.0",
+      "qualificadors": [
+        "sense_pilota",
+        "per_darrere_del_banc"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_SA2_ATAC",
+      "fase_ref": "SA2",
+      "ordre": 2,
+      "actor": "L",
+      "tipus": "atac_espai",
+      "des_de": "INT_3",
+      "cap_a": "INT_4",
+      "accio_semantica_ref": "SA2.sequencia_obligatoria.2",
+      "qualificadors": [
+        "recepcio_orientada",
+        "sense_bot",
+        "atac_directe_no_finta"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_SA2_RESOLUCIO",
+      "fase_ref": "SA2",
+      "ordre": 3,
+      "actor": "L",
+      "tipus": "resolucio",
+      "des_de": "INT_4",
+      "cap_a": "Z2",
+      "accio_semantica_ref": "SA2.sequencia_obligatoria.3",
+      "qualificadors": [
+        "2x1_amb_extrem",
+        "solucio_no_predeterminada"
+      ],
+      "estat_coneixement": "validat"
+    }
+  ],
+  "branques_decisionals": [
+    {
+      "id": "BRANCA_SA1_2X1_PIVOT",
+      "fase_ref": "SA1",
+      "decisio_semantica_ref": "SA1.situacio_decisional",
+      "caracter": "disponible",
+      "resolucio": "no_predeterminada",
+      "alternatives": [
+        {
+          "id": "SA1_FINALITZA_L",
+          "condicio": "L_conserva_avantatge_de_finalitzacio",
+          "efectes_espacials": [
+            {
+              "subjecte": "L",
+              "predicat": "ataca",
+              "objectes": [
+                "Z1"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "SA1_PASSADA_PV",
+          "condicio": "D_Z1_tanca_L_i_queda_compromes",
+          "efectes_espacials": [
+            {
+              "subjecte": "PV",
+              "predicat": "disponible_per_rebre_a",
+              "objectes": [
+                "INT_PV_SA1"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "derivat"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "BRANCA_SA2_2X1_EXTREM",
+      "fase_ref": "SA2",
+      "decisio_semantica_ref": "SA2.situacio_decisional",
+      "caracter": "disponible",
+      "resolucio": "no_predeterminada",
+      "alternatives": [
+        {
+          "id": "SA2_FINALITZA_L",
+          "condicio": "D_Z2_no_tanca",
+          "efectes_espacials": [
+            {
+              "subjecte": "L",
+              "predicat": "ataca",
+              "objectes": [
+                "Z2"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "SA2_PASSADA_EXT",
+          "condicio": "D_Z2_tanca_i_queda_compromes",
+          "efectes_espacials": [
+            {
+              "subjecte": "EXT",
+              "predicat": "ataca",
+              "objectes": [
+                "Z2"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "EXT",
+              "predicat": "orientat_cap_a",
+              "objectes": [
+                "EIX_CENTRAL"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "invariants": [
+    {
+      "code": "SP-NO-COORDS",
+      "operador": "sense_coordenades",
+      "subjectes": [
+        "L"
+      ],
+      "ambit": "document_complet",
+      "missatge": "La capa relacional no pot contenir coordenades ni geometria resolta."
+    },
+    {
+      "code": "SP-L-IDENTITY",
+      "operador": "identitat_persistent",
+      "subjectes": [
+        "L"
+      ],
+      "ambit": "SA1_i_SA2",
+      "missatge": "L és el mateix participant a totes dues subaccions."
+    },
+    {
+      "code": "SP-FEINT-ADJACENCY",
+      "operador": "contiguitat_amb_referent_compartit",
+      "subjectes": [
+        "INT_1",
+        "INT_2",
+        "BANC"
+      ],
+      "ambit": "SA1",
+      "missatge": "La finta connecta intervals contigus que comparteixen el segon defensor simulat."
+    },
+    {
+      "code": "SP-PIVOT-NO-OVERLAP",
+      "operador": "no_superposicio",
+      "subjectes": [
+        "L",
+        "PV"
+      ],
+      "ambit": "SA1",
+      "missatge": "Lateral i pivot no poden acabar ocupant el mateix interval."
+    },
+    {
+      "code": "SP-EXT-WIDTH",
+      "operador": "mantenir_amplitud",
+      "subjectes": [
+        "EXT",
+        "ESPAI_EXTREM_Z2"
+      ],
+      "ambit": "SA1_i_SA2",
+      "missatge": "L'extrem conserva amplitud per poder anticipar la passada i finalitzar."
+    },
+    {
+      "code": "SP-L-PATH",
+      "operador": "transicio_connectada",
+      "subjectes": [
+        "L"
+      ],
+      "ambit": "SA1_i_SA2",
+      "missatge": "La destinació de cada tram és compatible amb l'origen del tram següent."
+    },
+    {
+      "code": "SP-OPEN-DECISIONS",
+      "operador": "decisio_no_predeterminada",
+      "subjectes": [
+        "L",
+        "PV",
+        "EXT"
+      ],
+      "ambit": "resolucions_2x1",
+      "missatge": "El contracte conserva alternatives i no imposa una única resolució."
+    }
+  ],
+  "governanca": {
+    "autoritat": "semantica_validada_per_entrenador",
+    "politica_inferencia": "tota_inferencia_no_validada_es_provisional",
+    "sortida_permesa": "graf_relacional_sense_coordenades"
+  }
+}
