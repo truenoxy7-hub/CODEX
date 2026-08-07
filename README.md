@@ -14,7 +14,10 @@ La geometria i el renderer anteriors es consideren prototips descartables. No s'
 - `corpus/uvof.semantic.json`
 - `schema/traca.semantic.schema.v1.0.json`
 - `schema/traca.exercise-corpus.schema.v1.1.json`
+- `exercises/TR-UVOF-001/spatial-relations.json`
+- `schema/traca.spatial-relations.schema.v0.1.json`
 - `docs/DOMAIN_MODEL.md`
+- `docs/SPATIAL_RELATIONS_CONTRACT.md`
 - `docs/DECISIONS.md`
 - `docs/OPEN_QUESTIONS.md`
 
@@ -49,7 +52,9 @@ python -m pytest -q
 
 ## Com començar amb Codex
 
-Obre aquest repositori a Codex i utilitza el contingut de `CODEX_START_PROMPT.md`. La primera tasca ja està registrada a la issue #1.
+Obre aquest repositori a Codex i utilitza el contingut de
+`CODEX_START_PROMPT.md`. El treball viu de coneixement i relacions espacials es
+manté a la issue #3.
 
 ## Documents per començar
 

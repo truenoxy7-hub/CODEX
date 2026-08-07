@@ -1,0 +1,642 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://traca.local/schema/traca.spatial-relations.v0.1.json",
+  "title": "TRAÇA — contracte de relacions espacials v0.1",
+  "description": "Capa qualitativa derivada de la semàntica validada. No admet coordenades ni geometria resolta.",
+  "type": "object",
+  "required": [
+    "meta",
+    "font_semantica",
+    "nodes",
+    "espais",
+    "estats",
+    "transicions",
+    "branques_decisionals",
+    "invariants",
+    "governanca"
+  ],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": [
+        "format",
+        "versio_contracte",
+        "versio_instancia",
+        "estat",
+        "separacio_capes"
+      ],
+      "properties": {
+        "format": {
+          "const": "TRACA_relacions_espacials"
+        },
+        "versio_contracte": {
+          "const": "0.1.0"
+        },
+        "versio_instancia": {
+          "$ref": "#/$defs/semver"
+        },
+        "estat": {
+          "enum": [
+            "derivat_semantica_validada",
+            "derivat_amb_punts_oberts",
+            "provisional"
+          ]
+        },
+        "separacio_capes": {
+          "type": "object",
+          "required": [
+            "semantica_tactica",
+            "relacions_espacials",
+            "geometria_resolta",
+            "renderitzat"
+          ],
+          "properties": {
+            "semantica_tactica": {
+              "const": "referenciada_no_duplicada"
+            },
+            "relacions_espacials": {
+              "const": "incloses"
+            },
+            "geometria_resolta": {
+              "const": "no_inclosa"
+            },
+            "renderitzat": {
+              "const": "no_generat"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "font_semantica": {
+      "type": "object",
+      "required": [
+        "exercici_id",
+        "fitxers",
+        "plantilla",
+        "simetria"
+      ],
+      "properties": {
+        "exercici_id": {
+          "type": "string",
+          "pattern": "^TR-[A-Z0-9-]+-[0-9]{3}$"
+        },
+        "fitxers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "plantilla": {
+          "type": "string",
+          "minLength": 1
+        },
+        "simetria": {
+          "enum": [
+            "sense_simetria",
+            "reflectible",
+            "dues_bandes_paraleles"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/node"
+      }
+    },
+    "espais": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/espai"
+      }
+    },
+    "estats": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/estat"
+      }
+    },
+    "transicions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/transicio"
+      }
+    },
+    "branques_decisionals": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/branca"
+      }
+    },
+    "invariants": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/invariant"
+      }
+    },
+    "governanca": {
+      "type": "object",
+      "required": [
+        "autoritat",
+        "politica_inferencia",
+        "sortida_permesa"
+      ],
+      "properties": {
+        "autoritat": {
+          "const": "semantica_validada_per_entrenador"
+        },
+        "politica_inferencia": {
+          "const": "tota_inferencia_no_validada_es_provisional"
+        },
+        "sortida_permesa": {
+          "const": "graf_relacional_sense_coordenades"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "semver": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "estatConeixement": {
+      "enum": [
+        "validat",
+        "condicio_tasca",
+        "principi_preferent",
+        "derivat",
+        "provisional"
+      ]
+    },
+    "caracter": {
+      "enum": [
+        "obligatori",
+        "preferent",
+        "disponible"
+      ]
+    },
+    "node": {
+      "type": "object",
+      "required": [
+        "id",
+        "classe",
+        "estat_coneixement"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "classe": {
+          "enum": [
+            "participant",
+            "material",
+            "defensor_implicit",
+            "referencia_reglamentaria",
+            "referencia_funcional"
+          ]
+        },
+        "referencia_semantica": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rol": {
+          "type": "string",
+          "minLength": 1
+        },
+        "funcio": {
+          "type": "string",
+          "minLength": 1
+        },
+        "estat_coneixement": {
+          "$ref": "#/$defs/estatConeixement"
+        }
+      },
+      "additionalProperties": false
+    },
+    "definicioEspai": {
+      "type": "object",
+      "required": [
+        "operador",
+        "arguments"
+      ],
+      "properties": {
+        "operador": {
+          "enum": [
+            "entre",
+            "exterior_de",
+            "interior_de",
+            "darrere_de",
+            "proper_a",
+            "delimitat_per"
+          ]
+        },
+        "arguments": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "operador": {
+                "const": "entre"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "arguments": {
+                "minItems": 2,
+                "maxItems": 2
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operador": {
+                "enum": [
+                  "exterior_de",
+                  "interior_de",
+                  "darrere_de",
+                  "proper_a"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "arguments": {
+                "minItems": 1,
+                "maxItems": 1
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "espai": {
+      "type": "object",
+      "required": [
+        "id",
+        "classe",
+        "definicio",
+        "estat_coneixement"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "classe": {
+          "enum": [
+            "interval",
+            "espai_finalitzacio_extrem",
+            "zona_resolucio",
+            "corredor",
+            "posicio_funcional"
+          ]
+        },
+        "referencia_semantica": {
+          "type": "string",
+          "minLength": 1
+        },
+        "nom_canonic": {
+          "type": "string",
+          "minLength": 1
+        },
+        "alies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "definicio": {
+          "$ref": "#/$defs/definicioEspai"
+        },
+        "restriccions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/definicioEspai"
+          }
+        },
+        "contiguitats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "espai",
+              "referent_compartit"
+            ],
+            "properties": {
+              "espai": {
+                "type": "string"
+              },
+              "referent_compartit": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "fases_actives": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "estat_coneixement": {
+          "$ref": "#/$defs/estatConeixement"
+        }
+      },
+      "additionalProperties": false
+    },
+    "relacio": {
+      "type": "object",
+      "required": [
+        "subjecte",
+        "predicat",
+        "objectes",
+        "caracter",
+        "estat_coneixement"
+      ],
+      "properties": {
+        "subjecte": {
+          "type": "string"
+        },
+        "predicat": {
+          "enum": [
+            "ocupa",
+            "ataca",
+            "mante_amplitud_a",
+            "orientat_cap_a",
+            "per_davant_de",
+            "darrere_de",
+            "proper_a",
+            "travessa_linia_defensiva_de",
+            "evita_superposicio_amb",
+            "relacionat_en_2x1_amb",
+            "disponible_per_rebre_a",
+            "adapta_posicio_respecte_a"
+          ]
+        },
+        "objectes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "caracter": {
+          "$ref": "#/$defs/caracter"
+        },
+        "estat_coneixement": {
+          "$ref": "#/$defs/estatConeixement"
+        }
+      },
+      "additionalProperties": false
+    },
+    "estat": {
+      "type": "object",
+      "required": [
+        "id",
+        "fase_ref",
+        "moment",
+        "relacions"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "fase_ref": {
+          "type": "string"
+        },
+        "moment": {
+          "enum": [
+            "inici",
+            "recepcio",
+            "desenvolupament",
+            "superacio",
+            "resolucio",
+            "final"
+          ]
+        },
+        "relacions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/relacio"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "transicio": {
+      "type": "object",
+      "required": [
+        "id",
+        "fase_ref",
+        "ordre",
+        "actor",
+        "tipus",
+        "cap_a",
+        "estat_coneixement"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "fase_ref": {
+          "type": "string"
+        },
+        "ordre": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "actor": {
+          "type": "string"
+        },
+        "tipus": {
+          "enum": [
+            "recepcio",
+            "finta",
+            "atac_espai",
+            "recuperacio_sense_pilota",
+            "ajust_sense_pilota",
+            "resolucio"
+          ]
+        },
+        "des_de": {
+          "type": "string"
+        },
+        "via": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "cap_a": {
+          "type": "string"
+        },
+        "referencia_oposicional": {
+          "type": "string"
+        },
+        "accio_semantica_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "qualificadors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "condicio": {
+          "type": "string"
+        },
+        "estat_coneixement": {
+          "$ref": "#/$defs/estatConeixement"
+        }
+      },
+      "additionalProperties": false
+    },
+    "alternativa": {
+      "type": "object",
+      "required": [
+        "id",
+        "condicio",
+        "efectes_espacials"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "condicio": {
+          "type": "string",
+          "minLength": 1
+        },
+        "efectes_espacials": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/relacio"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "branca": {
+      "type": "object",
+      "required": [
+        "id",
+        "fase_ref",
+        "decisio_semantica_ref",
+        "caracter",
+        "resolucio",
+        "alternatives"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "fase_ref": {
+          "type": "string"
+        },
+        "decisio_semantica_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "caracter": {
+          "$ref": "#/$defs/caracter"
+        },
+        "resolucio": {
+          "const": "no_predeterminada"
+        },
+        "alternatives": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/alternativa"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "invariant": {
+      "type": "object",
+      "required": [
+        "code",
+        "operador",
+        "subjectes",
+        "ambit",
+        "missatge"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^SP-[A-Z0-9-]+$"
+        },
+        "operador": {
+          "enum": [
+            "sense_coordenades",
+            "identitat_persistent",
+            "contiguitat_amb_referent_compartit",
+            "no_superposicio",
+            "mantenir_amplitud",
+            "transicio_connectada",
+            "decisio_no_predeterminada"
+          ]
+        },
+        "subjectes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "ambit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "missatge": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -15,6 +15,9 @@
 - Model explícit de fases, decisions, permutes, files i múltiples pilotes.
 - Vocabulari validat d'encreuament, permuta, bloqueig estàtic, lliscament,
   situació de partit i punt fort/feble.
+- Contracte de relacions espacials v0.1 sense coordenades.
+- Primera instància relacional executable de `TR-UVOF-001`.
+- Validacions de referències, contigüitats, continuïtat i decisions obertes.
 
 ## No completat
 
@@ -31,8 +34,9 @@ Tornar a introduir coordenades abans d'haver estabilitzat el model tàctic.
 
 - Primera versió viva del coneixement canònic d'handbol.
 - Consolidació del corpus UVOF com a font de proves per al futur motor espacial.
+- Contrast del contracte relacional amb exercicis més enllà de `TR-UVOF-001`.
 
 ## Pròxima fita recomanada
 
-Utilitzar el corpus UVOF validat per preparar un contracte de resolució espacial
-basat en relacions, sense introduir coordenades.
+Aplicar el contracte relacional a exercicis d'encreuament, permuta i bloqueig
+abans de definir el resolutor geomètric.

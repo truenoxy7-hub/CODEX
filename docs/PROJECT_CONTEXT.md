@@ -23,6 +23,8 @@ Validació de l'entrenador
   ↓
 JSON semàntic aprovat
   ↓
+Contracte de relacions espacials
+  ↓
 Motor de resolució espacial
   ↓
 JSON geomètric derivat
@@ -70,6 +72,7 @@ formen el primer corpus complet de la família.
 
 ## Estat actual
 
-S'ha creat un JSON detallat de `TR-UVOF-001` i un corpus semàntic v1.1 amb els
-quinze exercicis UVOF. Cap dels dos conté coordenades ni render. Aquests són els
-punts de partida vàlids per al vocabulari i el futur motor de resolució.
+S'ha creat un JSON detallat de `TR-UVOF-001`, un corpus semàntic v1.1 amb els
+quinze exercicis UVOF i un primer contracte de relacions espacials v0.1 aplicat
+a `TR-UVOF-001`. Cap d'aquestes capes conté coordenades ni render. Són els punts
+de partida vàlids per al vocabulari i el futur motor de resolució.

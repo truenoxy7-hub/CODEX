@@ -25,6 +25,8 @@ No converteixis una proposta geomètrica o una inferència en coneixement tàcti
 - No recuperis les coordenades dels prototips v0.x com a font de veritat.
 - No tractis el JSON com un SVG indirecte o una llista de punts.
 - Separa sempre: semàntica tàctica, relacions espacials, geometria resolta i render.
+- El contracte espacial és un graf qualitatiu; no hi afegeixis coordenades,
+  distàncies gràfiques ni una resolució única de decisions obertes.
 - El mateix jugador manté una identitat persistent al llarg de les fases.
 - Les situacions decisionals descriuen opcions, no una solució gràfica obligatòria.
 - Qualsevol dada inferida ha de portar estat `provisional` o equivalent.
@@ -77,6 +79,8 @@ Abans de tocar codi:
 3. Llegeix `docs/DECISIONS.md`.
 4. Llegeix `docs/CURRENT_STATE.md`.
 5. Inspecciona l'exercici i l'esquema afectats.
+6. Si la tasca afecta la capa espacial, llegeix
+   `docs/SPATIAL_RELATIONS_CONTRACT.md`.
 
 Durant la implementació:
 

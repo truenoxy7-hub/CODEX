@@ -15,6 +15,15 @@ OUTPUT = ROOT / "exercises" / "TR-UVOF-001" / "validation.json"
 CORPUS = ROOT / "corpus" / "uvof.semantic.json"
 CORPUS_SCHEMA = ROOT / "schema" / "traca.exercise-corpus.schema.v1.1.json"
 CORPUS_OUTPUT = ROOT / "corpus" / "uvof.validation.json"
+SPATIAL_RELATIONS = (
+    ROOT / "exercises" / "TR-UVOF-001" / "spatial-relations.json"
+)
+SPATIAL_RELATIONS_SCHEMA = (
+    ROOT / "schema" / "traca.spatial-relations.schema.v0.1.json"
+)
+SPATIAL_RELATIONS_OUTPUT = (
+    ROOT / "exercises" / "TR-UVOF-001" / "spatial-relations.validation.json"
+)
 
 Document = dict[str, Any]
 Check = Callable[[Document], bool]
@@ -335,6 +344,16 @@ def _corpus_ball_flows(exercise: Document) -> list[Document]:
 
 def _contains_forbidden_geometry(value: Any) -> bool:
     forbidden_keys = {
+        "x",
+        "y",
+        "x1",
+        "x2",
+        "y1",
+        "y2",
+        "cx",
+        "cy",
+        "points",
+        "vertices",
         "coordinates",
         "coordenades",
         "geometry",
@@ -545,12 +564,431 @@ def validate_corpus(
     return report
 
 
+def _duplicate_ids(items: list[Document]) -> set[str]:
+    seen: set[str] = set()
+    duplicates: set[str] = set()
+    for item in items:
+        item_id = item.get("id")
+        if not isinstance(item_id, str):
+            continue
+        if item_id in seen:
+            duplicates.add(item_id)
+        seen.add(item_id)
+    return duplicates
+
+
+def _spatial_relations(document: Document) -> list[Document]:
+    relations = [
+        relation
+        for state in document.get("estats", [])
+        for relation in state.get("relacions", [])
+    ]
+    relations.extend(
+        relation
+        for branch in document.get("branques_decisionals", [])
+        for alternative in branch.get("alternatives", [])
+        for relation in alternative.get("efectes_espacials", [])
+    )
+    return relations
+
+
+def _spatial_custom_errors(
+    document: Document,
+    semantic_document: Document,
+) -> list[Document]:
+    errors: list[Document] = []
+
+    relational_content = {
+        key: value for key, value in document.items() if key != "meta"
+    }
+    if _contains_forbidden_geometry(relational_content):
+        errors.append(
+            {
+                "code": "SPATIAL_NO_GEOMETRY",
+                "path": "",
+                "message": (
+                    "El contracte relacional no pot contenir coordenades, "
+                    "geometria resolta ni instruccions SVG."
+                ),
+            }
+        )
+
+    exercise_id = semantic_document.get("identificacio", {}).get("id")
+    if document.get("font_semantica", {}).get("exercici_id") != exercise_id:
+        errors.append(
+            {
+                "code": "SPATIAL_SOURCE_EXERCISE",
+                "path": "font_semantica/exercici_id",
+                "message": "L'exercici font no coincideix amb el document semàntic.",
+            }
+        )
+
+    collections = {
+        "nodes": document.get("nodes", []),
+        "espais": document.get("espais", []),
+        "estats": document.get("estats", []),
+        "transicions": document.get("transicions", []),
+        "branques_decisionals": document.get("branques_decisionals", []),
+    }
+    for path, items in collections.items():
+        for duplicate_id in sorted(_duplicate_ids(items)):
+            errors.append(
+                {
+                    "code": "SPATIAL_DUPLICATE_ID",
+                    "path": path,
+                    "message": f"L'identificador {duplicate_id} està duplicat.",
+                }
+            )
+
+    nodes = document.get("nodes", [])
+    spaces = document.get("espais", [])
+    node_ids = {node.get("id") for node in nodes}
+    space_ids = {space.get("id") for space in spaces}
+    all_reference_ids = node_ids | space_ids
+
+    semantic_model = semantic_document.get("model_exercici", {})
+    semantic_participant_ids = {
+        participant.get("id")
+        for participant in semantic_model.get("participants_plantilla", [])
+    }
+    semantic_material_ids = {
+        material.get("id") for material in semantic_model.get("materials", [])
+    }
+    semantic_space_ids = {
+        space.get("id")
+        for space in semantic_model.get("espais_i_intervals", [])
+    }
+    semantic_phase_ids = {
+        phase.get("id") for phase in semantic_model.get("subaccions", [])
+    }
+
+    for index, node in enumerate(nodes):
+        node_id = node.get("id")
+        if (
+            node.get("classe") == "participant"
+            and node_id not in semantic_participant_ids
+        ):
+            errors.append(
+                {
+                    "code": "SPATIAL_UNKNOWN_PARTICIPANT",
+                    "path": f"nodes/{index}/id",
+                    "message": f"El participant {node_id} no existeix a la font.",
+                }
+            )
+        if (
+            node.get("classe") == "material"
+            and node_id not in semantic_material_ids
+        ):
+            errors.append(
+                {
+                    "code": "SPATIAL_UNKNOWN_MATERIAL",
+                    "path": f"nodes/{index}/id",
+                    "message": f"El material {node_id} no existeix a la font.",
+                }
+            )
+
+    spaces_by_id = {space.get("id"): space for space in spaces}
+    for index, space in enumerate(spaces):
+        definitions = [space.get("definicio", {})] + space.get(
+            "restriccions", []
+        )
+        for definition_index, definition in enumerate(definitions):
+            definition_path = (
+                "definicio"
+                if definition_index == 0
+                else f"restriccions/{definition_index - 1}"
+            )
+            for argument in definition.get("arguments", []):
+                if argument not in node_ids:
+                    errors.append(
+                        {
+                            "code": "SPATIAL_UNKNOWN_BOUNDARY",
+                            "path": (
+                                f"espais/{index}/{definition_path}/arguments"
+                            ),
+                            "message": (
+                                f"El referent {argument} que defineix "
+                                f"{space.get('id')} no existeix."
+                            ),
+                        }
+                    )
+
+        semantic_reference = space.get("referencia_semantica")
+        if semantic_reference:
+            referenced_id = semantic_reference.rsplit("/", 1)[-1]
+            if referenced_id not in semantic_space_ids:
+                errors.append(
+                    {
+                        "code": "SPATIAL_UNKNOWN_SEMANTIC_SPACE",
+                        "path": f"espais/{index}/referencia_semantica",
+                        "message": (
+                            f"L'espai semàntic {referenced_id} no existeix "
+                            "a la font."
+                        ),
+                    }
+                )
+
+        current_arguments = set(
+            space.get("definicio", {}).get("arguments", [])
+        )
+        for adjacency_index, adjacency in enumerate(
+            space.get("contiguitats", [])
+        ):
+            adjacent_id = adjacency.get("espai")
+            shared_id = adjacency.get("referent_compartit")
+            adjacent = spaces_by_id.get(adjacent_id)
+            if adjacent is None:
+                errors.append(
+                    {
+                        "code": "SPATIAL_UNKNOWN_ADJACENT_SPACE",
+                        "path": (
+                            f"espais/{index}/contiguitats/{adjacency_index}/espai"
+                        ),
+                        "message": f"L'espai contigu {adjacent_id} no existeix.",
+                    }
+                )
+                continue
+
+            reverse = {
+                (
+                    item.get("espai"),
+                    item.get("referent_compartit"),
+                )
+                for item in adjacent.get("contiguitats", [])
+            }
+            if (space.get("id"), shared_id) not in reverse:
+                errors.append(
+                    {
+                        "code": "SPATIAL_ASYMMETRIC_ADJACENCY",
+                        "path": f"espais/{index}/contiguitats/{adjacency_index}",
+                        "message": (
+                            f"La contigüitat {space.get('id')}–{adjacent_id} "
+                            "ha de declarar-se als dos espais."
+                        ),
+                    }
+                )
+
+            adjacent_arguments = set(
+                adjacent.get("definicio", {}).get("arguments", [])
+            )
+            if (
+                shared_id not in node_ids
+                or shared_id not in current_arguments
+                or shared_id not in adjacent_arguments
+            ):
+                errors.append(
+                    {
+                        "code": "SPATIAL_INVALID_SHARED_REFERENCE",
+                        "path": (
+                            f"espais/{index}/contiguitats/"
+                            f"{adjacency_index}/referent_compartit"
+                        ),
+                        "message": (
+                            f"{shared_id} ha de definir tots dos espais "
+                            "contigus."
+                        ),
+                    }
+                )
+
+        for phase_id in space.get("fases_actives", []):
+            if phase_id not in semantic_phase_ids:
+                errors.append(
+                    {
+                        "code": "SPATIAL_UNKNOWN_PHASE",
+                        "path": f"espais/{index}/fases_actives",
+                        "message": f"La fase {phase_id} no existeix a la font.",
+                    }
+                )
+
+    for collection_name in ("estats", "transicions", "branques_decisionals"):
+        for index, item in enumerate(document.get(collection_name, [])):
+            phase_id = item.get("fase_ref")
+            if phase_id not in semantic_phase_ids:
+                errors.append(
+                    {
+                        "code": "SPATIAL_UNKNOWN_PHASE",
+                        "path": f"{collection_name}/{index}/fase_ref",
+                        "message": f"La fase {phase_id} no existeix a la font.",
+                    }
+                )
+
+    for index, relation in enumerate(_spatial_relations(document)):
+        subject = relation.get("subjecte")
+        if subject not in node_ids:
+            errors.append(
+                {
+                    "code": "SPATIAL_UNKNOWN_RELATION_SUBJECT",
+                    "path": f"relacions/{index}/subjecte",
+                    "message": f"El subjecte relacional {subject} no existeix.",
+                }
+            )
+        for object_id in relation.get("objectes", []):
+            if object_id not in all_reference_ids:
+                errors.append(
+                    {
+                        "code": "SPATIAL_UNKNOWN_RELATION_OBJECT",
+                        "path": f"relacions/{index}/objectes",
+                        "message": f"L'objecte relacional {object_id} no existeix.",
+                    }
+                )
+
+    transitions = document.get("transicions", [])
+    for index, transition in enumerate(transitions):
+        actor = transition.get("actor")
+        if actor not in node_ids:
+            errors.append(
+                {
+                    "code": "SPATIAL_UNKNOWN_TRANSITION_ACTOR",
+                    "path": f"transicions/{index}/actor",
+                    "message": f"L'actor {actor} no existeix.",
+                }
+            )
+        for field in ("des_de", "cap_a"):
+            space_id = transition.get(field)
+            if space_id is not None and space_id not in space_ids:
+                errors.append(
+                    {
+                        "code": "SPATIAL_UNKNOWN_TRANSITION_SPACE",
+                        "path": f"transicions/{index}/{field}",
+                        "message": f"L'espai {space_id} no existeix.",
+                    }
+                )
+        for space_id in transition.get("via", []):
+            if space_id not in space_ids:
+                errors.append(
+                    {
+                        "code": "SPATIAL_UNKNOWN_TRANSITION_SPACE",
+                        "path": f"transicions/{index}/via",
+                        "message": f"L'espai de pas {space_id} no existeix.",
+                    }
+                )
+        reference = transition.get("referencia_oposicional")
+        if reference is not None and reference not in node_ids:
+            errors.append(
+                {
+                    "code": "SPATIAL_UNKNOWN_OPPOSITION_REFERENCE",
+                    "path": f"transicions/{index}/referencia_oposicional",
+                    "message": f"La referència {reference} no existeix.",
+                }
+            )
+
+    previous_by_actor: dict[str, Document] = {}
+    for index, transition in enumerate(transitions):
+        actor = transition.get("actor")
+        previous = previous_by_actor.get(actor)
+        if (
+            previous
+            and transition.get("des_de") is not None
+            and previous.get("cap_a") != transition.get("des_de")
+        ):
+            errors.append(
+                {
+                    "code": "SPATIAL_DISCONNECTED_TRANSITION",
+                    "path": f"transicions/{index}/des_de",
+                    "message": (
+                        f"La transició de {actor} comença a "
+                        f"{transition.get('des_de')}, però el tram anterior "
+                        f"acabava a {previous.get('cap_a')}."
+                    ),
+                }
+            )
+        previous_by_actor[actor] = transition
+
+    invariant_operators = {
+        invariant.get("operador") for invariant in document.get("invariants", [])
+    }
+    for required_operator in (
+        "sense_coordenades",
+        "identitat_persistent",
+        "decisio_no_predeterminada",
+    ):
+        if required_operator not in invariant_operators:
+            errors.append(
+                {
+                    "code": "SPATIAL_REQUIRED_INVARIANT",
+                    "path": "invariants",
+                    "message": (
+                        f"Falta l'invariant relacional {required_operator}."
+                    ),
+                }
+            )
+
+    return errors
+
+
+def validate_spatial_relations_document(
+    document: Document,
+    schema: Document,
+    semantic_document: Document,
+) -> Document:
+    validator = Draft202012Validator(schema)
+    structural = sorted(
+        validator.iter_errors(document), key=lambda error: list(error.absolute_path)
+    )
+    errors = [
+        {
+            "code": "SCHEMA_ERROR",
+            "path": "/".join(str(part) for part in error.absolute_path),
+            "message": error.message,
+        }
+        for error in structural
+    ]
+    if not structural:
+        errors.extend(_spatial_custom_errors(document, semantic_document))
+
+    return {
+        "exercise": document.get("font_semantica", {}).get("exercici_id"),
+        "schema": schema.get("$id"),
+        "valid": not errors,
+        "errors": errors,
+        "warnings": [],
+        "summary": {
+            "node_count": len(document.get("nodes", [])),
+            "space_count": len(document.get("espais", [])),
+            "state_count": len(document.get("estats", [])),
+            "transition_count": len(document.get("transicions", [])),
+            "branch_count": len(document.get("branques_decisionals", [])),
+            "error_count": len(errors),
+            "structural_error_count": len(structural),
+            "relational_error_count": len(errors) - len(structural),
+        },
+        "geometry_generated": False,
+        "render_generated": False,
+    }
+
+
+def validate_spatial_relations(
+    spatial_path: Path = SPATIAL_RELATIONS,
+    schema_path: Path = SPATIAL_RELATIONS_SCHEMA,
+    semantic_path: Path = EXERCISE,
+    output_path: Path = SPATIAL_RELATIONS_OUTPUT,
+) -> Document:
+    document = json.loads(spatial_path.read_text(encoding="utf-8"))
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+    semantic_document = json.loads(semantic_path.read_text(encoding="utf-8"))
+    report = validate_spatial_relations_document(
+        document,
+        schema,
+        semantic_document,
+    )
+    output_path.write_text(
+        json.dumps(report, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    return report
+
+
 def main() -> int:
     exercise_report = validate()
     corpus_report = validate_corpus()
+    spatial_report = validate_spatial_relations()
     combined = {
-        "valid": exercise_report["valid"] and corpus_report["valid"],
-        "reports": [exercise_report, corpus_report],
+        "valid": (
+            exercise_report["valid"]
+            and corpus_report["valid"]
+            and spatial_report["valid"]
+        ),
+        "reports": [exercise_report, corpus_report, spatial_report],
     }
     print(json.dumps(combined, ensure_ascii=False, indent=2))
     return 0 if combined["valid"] else 1
