@@ -1,7 +1,7 @@
 {
   "meta": {
     "format": "TRACA_relacions_espacials",
-    "versio_contracte": "0.1.0",
+    "versio_contracte": "0.2.0",
     "versio_instancia": "0.1.0",
     "estat": "derivat_semantica_validada",
     "separacio_capes": {

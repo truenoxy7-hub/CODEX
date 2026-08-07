@@ -19,7 +19,7 @@ SPATIAL_RELATIONS = (
     ROOT / "exercises" / "TR-UVOF-001" / "spatial-relations.json"
 )
 SPATIAL_RELATIONS_SCHEMA = (
-    ROOT / "schema" / "traca.spatial-relations.schema.v0.1.json"
+    ROOT / "schema" / "traca.spatial-relations.schema.v0.2.json"
 )
 SPATIAL_RELATIONS_OUTPUT = (
     ROOT / "exercises" / "TR-UVOF-001" / "spatial-relations.validation.json"
@@ -420,6 +420,7 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
             ball.get("id"): ball.get("posseidor_inicial")
             for ball in exercise.get("pilotes", [])
         }
+        flow_groups: dict[tuple[str, str], list[tuple[int, Document]]] = {}
         for flow_index, flow in enumerate(_corpus_ball_flows(exercise)):
             ball_id = flow.get("pilota_id")
             if ball_id not in declared_balls:
@@ -432,19 +433,108 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
                         "message": f"{exercise_id}: la pilota {ball_id} no està declarada.",
                     }
                 )
-            elif flow.get("posseidor_inicial") != declared_balls[ball_id]:
+                continue
+            trajectory_id = flow.get("trajectoria_id", "FLUX_UNIC")
+            flow_groups.setdefault((ball_id, trajectory_id), []).append(
+                (flow_index, flow)
+            )
+
+        for (ball_id, trajectory_id), indexed_flows in flow_groups.items():
+            ordered_flows = sorted(
+                indexed_flows,
+                key=lambda item: (item[1].get("ordre", item[0] + 1), item[0]),
+            )
+            first_index, first_flow = ordered_flows[0]
+            if first_flow.get("posseidor_inicial") != declared_balls[ball_id]:
                 errors.append(
                     {
                         "code": "CORPUS_BALL_INITIAL_HOLDER",
                         "path": (
-                            f"exercicis/{exercise_index}/fluxos_pilota/{flow_index}"
+                            f"exercicis/{exercise_index}/fluxos_pilota/{first_index}"
                         ),
                         "message": (
                             f"{exercise_id}: el posseïdor inicial de {ball_id} "
-                            "no coincideix amb la declaració."
+                            f"a {trajectory_id} no coincideix amb la declaració."
                         ),
                     }
                 )
+            previous_final = first_flow.get("posseidor_final")
+            for flow_index, flow in ordered_flows[1:]:
+                if flow.get("posseidor_inicial") != previous_final:
+                    errors.append(
+                        {
+                            "code": "CORPUS_BALL_FLOW_DISCONNECTED",
+                            "path": (
+                                f"exercicis/{exercise_index}/fluxos_pilota/"
+                                f"{flow_index}"
+                            ),
+                            "message": (
+                                f"{exercise_id}: el flux de {ball_id} a "
+                                f"{trajectory_id} no conserva la possessió."
+                            ),
+                        }
+                    )
+                previous_final = flow.get("posseidor_final")
+
+    uvof_002 = _corpus_exercise(document, "TR-UVOF-002")
+    defenders_002 = {
+        participant.get("id")
+        for participant in uvof_002.get("participants", [])
+        if participant.get("equip") == "defensa"
+    }
+    if defenders_002 != {"D1", "D2", "D3_LOCAL", "D3_OPOSAT"}:
+        errors.append(
+            {
+                "code": "UVOF002_ACTIVE_DEFENDERS",
+                "path": "TR-UVOF-002/participants",
+                "message": (
+                    "TR-UVOF-002 ha de declarar D1, D2 i els dos D3 com a "
+                    "defensors reals i actius."
+                ),
+            }
+        )
+
+    balls_002 = {
+        ball.get("id"): ball.get("posseidor_inicial")
+        for ball in uvof_002.get("pilotes", [])
+    }
+    if balls_002 != {"B1": "L"}:
+        errors.append(
+            {
+                "code": "UVOF002_INITIAL_BALL",
+                "path": "TR-UVOF-002/pilotes",
+                "message": "TR-UVOF-002 ha de començar amb B1 en possessió de L.",
+            }
+        )
+
+    flows_002 = _corpus_ball_flows(uvof_002)
+    returns_002 = {
+        (
+            flow.get("trajectoria_id"),
+            flow.get("posseidor_inicial"),
+            flow.get("posseidor_final"),
+            flow.get("accio"),
+        )
+        for flow in flows_002
+        if flow.get("ordre") in (1, 2)
+    }
+    expected_returns_002 = {
+        ("FINTA_12_23", "L", "EXT", "passada_inicial"),
+        ("FINTA_12_23", "EXT", "L", "devolucio_a_inici_canvi_direccio"),
+        ("FINTA_23_12", "L", "CE", "passada_inicial"),
+        ("FINTA_23_12", "CE", "L", "devolucio_a_inici_canvi_direccio"),
+    }
+    if returns_002 != expected_returns_002:
+        errors.append(
+            {
+                "code": "UVOF002_PASS_RETURN",
+                "path": "TR-UVOF-002/fluxos_pilota",
+                "message": (
+                    "La passada inicial i la devolució de TR-UVOF-002 han de "
+                    "respectar el costat de l'interval inicial."
+                ),
+            }
+        )
 
     uvof_006 = _corpus_exercise(document, "TR-UVOF-006")
     switch_decision = next(
@@ -592,6 +682,34 @@ def _spatial_relations(document: Document) -> list[Document]:
     return relations
 
 
+def _semantic_exercise_id(document: Document) -> str | None:
+    return (
+        document.get("identificacio", {}).get("id")
+        or document.get("id")
+    )
+
+
+def _semantic_collections(document: Document) -> dict[str, list[Document]]:
+    model = document.get("model_exercici")
+    if isinstance(model, dict):
+        return {
+            "participants": model.get("participants_plantilla", []),
+            "materials": model.get("materials", []),
+            "pilotes": model.get("pilotes", []),
+            "espais": model.get("espais_i_intervals", []),
+            "fases": model.get("subaccions", []),
+            "decisions": model.get("situacions_decisionals", []),
+        }
+    return {
+        "participants": document.get("participants", []),
+        "materials": document.get("materials", []),
+        "pilotes": document.get("pilotes", []),
+        "espais": document.get("espais_i_intervals", []),
+        "fases": document.get("fases", []),
+        "decisions": _corpus_decisions(document),
+    }
+
+
 def _spatial_custom_errors(
     document: Document,
     semantic_document: Document,
@@ -613,7 +731,7 @@ def _spatial_custom_errors(
             }
         )
 
-    exercise_id = semantic_document.get("identificacio", {}).get("id")
+    exercise_id = _semantic_exercise_id(semantic_document)
     if document.get("font_semantica", {}).get("exercici_id") != exercise_id:
         errors.append(
             {
@@ -628,6 +746,7 @@ def _spatial_custom_errors(
         "espais": document.get("espais", []),
         "estats": document.get("estats", []),
         "transicions": document.get("transicions", []),
+        "fluxos_pilota": document.get("fluxos_pilota", []),
         "branques_decisionals": document.get("branques_decisionals", []),
     }
     for path, items in collections.items():
@@ -646,20 +765,27 @@ def _spatial_custom_errors(
     space_ids = {space.get("id") for space in spaces}
     all_reference_ids = node_ids | space_ids
 
-    semantic_model = semantic_document.get("model_exercici", {})
+    semantic = _semantic_collections(semantic_document)
     semantic_participant_ids = {
         participant.get("id")
-        for participant in semantic_model.get("participants_plantilla", [])
+        for participant in semantic["participants"]
     }
     semantic_material_ids = {
-        material.get("id") for material in semantic_model.get("materials", [])
+        material.get("id") for material in semantic["materials"]
+    }
+    semantic_ball_holders = {
+        ball.get("id"): ball.get("posseidor_inicial")
+        for ball in semantic["pilotes"]
     }
     semantic_space_ids = {
         space.get("id")
-        for space in semantic_model.get("espais_i_intervals", [])
+        for space in semantic["espais"]
     }
     semantic_phase_ids = {
-        phase.get("id") for phase in semantic_model.get("subaccions", [])
+        phase.get("id") for phase in semantic["fases"]
+    }
+    semantic_decision_ids = {
+        decision.get("id") for decision in semantic["decisions"]
     }
 
     for index, node in enumerate(nodes):
@@ -684,6 +810,17 @@ def _spatial_custom_errors(
                     "code": "SPATIAL_UNKNOWN_MATERIAL",
                     "path": f"nodes/{index}/id",
                     "message": f"El material {node_id} no existeix a la font.",
+                }
+            )
+        if (
+            node.get("classe") == "pilota"
+            and node_id not in semantic_ball_holders
+        ):
+            errors.append(
+                {
+                    "code": "SPATIAL_UNKNOWN_BALL",
+                    "path": f"nodes/{index}/id",
+                    "message": f"La pilota {node_id} no existeix a la font.",
                 }
             )
 
@@ -812,6 +949,34 @@ def _spatial_custom_errors(
                     }
                 )
 
+    for index, flow in enumerate(document.get("fluxos_pilota", [])):
+        phase_id = flow.get("fase_ref")
+        if phase_id not in semantic_phase_ids:
+            errors.append(
+                {
+                    "code": "SPATIAL_UNKNOWN_PHASE",
+                    "path": f"fluxos_pilota/{index}/fase_ref",
+                    "message": f"La fase {phase_id} no existeix a la font.",
+                }
+            )
+
+    for index, branch in enumerate(document.get("branques_decisionals", [])):
+        decision_refs = branch.get("decisions_semantiques_ref") or [
+            branch.get("decisio_semantica_ref")
+        ]
+        for decision_ref in decision_refs:
+            decision_id = str(decision_ref).rsplit("/", 1)[-1]
+            if semantic_decision_ids and decision_id not in semantic_decision_ids:
+                errors.append(
+                    {
+                        "code": "SPATIAL_UNKNOWN_DECISION",
+                        "path": f"branques_decisionals/{index}",
+                        "message": (
+                            f"La decisió {decision_id} no existeix a la font."
+                        ),
+                    }
+                )
+
     for index, relation in enumerate(_spatial_relations(document)):
         subject = relation.get("subjecte")
         if subject not in node_ids:
@@ -872,27 +1037,105 @@ def _spatial_custom_errors(
                 }
             )
 
-    previous_by_actor: dict[str, Document] = {}
+    transition_groups: dict[tuple[str, str], list[tuple[int, Document]]] = {}
     for index, transition in enumerate(transitions):
         actor = transition.get("actor")
-        previous = previous_by_actor.get(actor)
-        if (
-            previous
-            and transition.get("des_de") is not None
-            and previous.get("cap_a") != transition.get("des_de")
-        ):
+        trajectory_id = transition.get("trajectoria_id", "LEGACY")
+        transition_groups.setdefault((trajectory_id, actor), []).append(
+            (index, transition)
+        )
+    for (trajectory_id, actor), indexed_transitions in transition_groups.items():
+        if trajectory_id == "LEGACY":
+            ordered_transitions = indexed_transitions
+        else:
+            ordered_transitions = sorted(
+                indexed_transitions,
+                key=lambda item: (item[1].get("ordre", item[0] + 1), item[0]),
+            )
+        previous: Document | None = None
+        for index, transition in ordered_transitions:
+            if (
+                previous
+                and transition.get("des_de") is not None
+                and previous.get("cap_a") != transition.get("des_de")
+            ):
+                errors.append(
+                    {
+                        "code": "SPATIAL_DISCONNECTED_TRANSITION",
+                        "path": f"transicions/{index}/des_de",
+                        "message": (
+                            f"La trajectòria {trajectory_id} de {actor} comença "
+                            f"a {transition.get('des_de')}, però el tram anterior "
+                            f"acabava a {previous.get('cap_a')}."
+                        ),
+                    }
+                )
+            previous = transition
+
+    participant_node_ids = {
+        node.get("id") for node in nodes if node.get("classe") == "participant"
+    }
+    ball_node_ids = {
+        node.get("id") for node in nodes if node.get("classe") == "pilota"
+    }
+    ball_flow_groups: dict[tuple[str, str], list[tuple[int, Document]]] = {}
+    for index, flow in enumerate(document.get("fluxos_pilota", [])):
+        ball_id = flow.get("pilota_id")
+        if ball_id not in ball_node_ids:
             errors.append(
                 {
-                    "code": "SPATIAL_DISCONNECTED_TRANSITION",
-                    "path": f"transicions/{index}/des_de",
+                    "code": "SPATIAL_UNKNOWN_BALL",
+                    "path": f"fluxos_pilota/{index}/pilota_id",
+                    "message": f"La pilota {ball_id} no existeix com a node.",
+                }
+            )
+        for holder_field in ("posseidor_inicial", "posseidor_final"):
+            holder = flow.get(holder_field)
+            if holder not in participant_node_ids:
+                errors.append(
+                    {
+                        "code": "SPATIAL_UNKNOWN_BALL_HOLDER",
+                        "path": f"fluxos_pilota/{index}/{holder_field}",
+                        "message": f"El posseïdor {holder} no és un participant.",
+                    }
+                )
+        trajectory_id = flow.get("trajectoria_id")
+        ball_flow_groups.setdefault((trajectory_id, ball_id), []).append(
+            (index, flow)
+        )
+
+    for (trajectory_id, ball_id), indexed_flows in ball_flow_groups.items():
+        ordered_flows = sorted(
+            indexed_flows,
+            key=lambda item: (item[1].get("ordre", item[0] + 1), item[0]),
+        )
+        first_index, first_flow = ordered_flows[0]
+        expected_holder = semantic_ball_holders.get(ball_id)
+        if first_flow.get("posseidor_inicial") != expected_holder:
+            errors.append(
+                {
+                    "code": "SPATIAL_BALL_INITIAL_HOLDER",
+                    "path": f"fluxos_pilota/{first_index}/posseidor_inicial",
                     "message": (
-                        f"La transició de {actor} comença a "
-                        f"{transition.get('des_de')}, però el tram anterior "
-                        f"acabava a {previous.get('cap_a')}."
+                        f"El flux {trajectory_id} de {ball_id} no comença amb "
+                        "el posseïdor declarat a la font."
                     ),
                 }
             )
-        previous_by_actor[actor] = transition
+        previous_final = first_flow.get("posseidor_final")
+        for index, flow in ordered_flows[1:]:
+            if flow.get("posseidor_inicial") != previous_final:
+                errors.append(
+                    {
+                        "code": "SPATIAL_BALL_FLOW_DISCONNECTED",
+                        "path": f"fluxos_pilota/{index}/posseidor_inicial",
+                        "message": (
+                            f"El flux {trajectory_id} de {ball_id} no conserva "
+                            "la possessió entre passades."
+                        ),
+                    }
+                )
+            previous_final = flow.get("posseidor_final")
 
     invariant_operators = {
         invariant.get("operador") for invariant in document.get("invariants", [])
@@ -947,6 +1190,7 @@ def validate_spatial_relations_document(
             "space_count": len(document.get("espais", [])),
             "state_count": len(document.get("estats", [])),
             "transition_count": len(document.get("transicions", [])),
+            "ball_flow_count": len(document.get("fluxos_pilota", [])),
             "branch_count": len(document.get("branques_decisionals", [])),
             "error_count": len(errors),
             "structural_error_count": len(structural),
@@ -978,17 +1222,112 @@ def validate_spatial_relations(
     return report
 
 
+def validate_all_spatial_relations(
+    corpus_path: Path = CORPUS,
+) -> list[Document]:
+    corpus_document = json.loads(corpus_path.read_text(encoding="utf-8"))
+    reports: list[Document] = []
+    for spatial_path in sorted(
+        (ROOT / "exercises").glob("TR-*/spatial-relations.json")
+    ):
+        document = json.loads(spatial_path.read_text(encoding="utf-8"))
+        version = document.get("meta", {}).get("versio_contracte", "")
+        version_parts = version.split(".")
+        if len(version_parts) < 2:
+            reports.append(
+                {
+                    "exercise": document.get("font_semantica", {}).get(
+                        "exercici_id"
+                    ),
+                    "schema": None,
+                    "valid": False,
+                    "errors": [
+                        {
+                            "code": "SPATIAL_SCHEMA_VERSION",
+                            "path": "meta/versio_contracte",
+                            "message": f"Versió de contracte no reconeguda: {version}",
+                        }
+                    ],
+                    "warnings": [],
+                    "summary": {
+                        "error_count": 1,
+                        "structural_error_count": 1,
+                        "relational_error_count": 0,
+                    },
+                    "geometry_generated": False,
+                    "render_generated": False,
+                }
+            )
+            continue
+
+        schema_path = (
+            ROOT
+            / "schema"
+            / (
+                "traca.spatial-relations.schema.v"
+                f"{version_parts[0]}.{version_parts[1]}.json"
+            )
+        )
+        exercise_id = document.get("font_semantica", {}).get("exercici_id")
+        sibling_semantic_path = spatial_path.with_name("semantic.json")
+        if sibling_semantic_path.exists():
+            semantic_document = json.loads(
+                sibling_semantic_path.read_text(encoding="utf-8")
+            )
+        else:
+            semantic_document = _corpus_exercise(corpus_document, exercise_id)
+
+        if not schema_path.exists():
+            reports.append(
+                {
+                    "exercise": exercise_id,
+                    "schema": str(schema_path),
+                    "valid": False,
+                    "errors": [
+                        {
+                            "code": "SPATIAL_SCHEMA_MISSING",
+                            "path": "meta/versio_contracte",
+                            "message": f"No existeix l'esquema per a la versió {version}.",
+                        }
+                    ],
+                    "warnings": [],
+                    "summary": {
+                        "error_count": 1,
+                        "structural_error_count": 1,
+                        "relational_error_count": 0,
+                    },
+                    "geometry_generated": False,
+                    "render_generated": False,
+                }
+            )
+            continue
+
+        schema = json.loads(schema_path.read_text(encoding="utf-8"))
+        report = validate_spatial_relations_document(
+            document,
+            schema,
+            semantic_document,
+        )
+        output_path = spatial_path.with_name("spatial-relations.validation.json")
+        output_path.write_text(
+            json.dumps(report, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        reports.append(report)
+    return reports
+
+
 def main() -> int:
     exercise_report = validate()
     corpus_report = validate_corpus()
-    spatial_report = validate_spatial_relations()
+    spatial_reports = validate_all_spatial_relations()
     combined = {
         "valid": (
             exercise_report["valid"]
             and corpus_report["valid"]
-            and spatial_report["valid"]
+            and all(report["valid"] for report in spatial_reports)
         ),
-        "reports": [exercise_report, corpus_report, spatial_report],
+        "reports": [exercise_report, corpus_report, *spatial_reports],
     }
     print(json.dumps(combined, ensure_ascii=False, indent=2))
     return 0 if combined["valid"] else 1

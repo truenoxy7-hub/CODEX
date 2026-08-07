@@ -159,6 +159,11 @@ no hereta una posició fixa. Les contigüitats indiquen explícitament el defens
 compartit. Les decisions continuen obertes fins que la lectura de joc en
 selecciona una alternativa.
 
-El contracte v0.1 es documenta a
+El contracte v0.2 es documenta a
 [`SPATIAL_RELATIONS_CONTRACT.md`](SPATIAL_RELATIONS_CONTRACT.md). Encara no
 genera geometria.
+
+La v0.2 separa també el flux de pilota de les transicions dels participants.
+Cada trajectòria alternativa conserva la possessió entre passades i pot
+referenciar la condició tàctica que l'activa. Els encreuaments declaren el pas
+del receptor per darrere del portador i l'interval que ataca després de rebre.
