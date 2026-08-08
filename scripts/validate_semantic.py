@@ -600,6 +600,7 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
         for decision in _corpus_decisions(uvof_003)
     }
     mandatory_pivot_003 = decisions_003.get("D_PASSADA_PIVOT", {})
+    mandatory_wing_003 = decisions_003.get("D_PASSADA_EXTREM", {})
     mandatory_switch_003 = decisions_003.get("D_CANVI_BANDA", {})
     if mandatory_pivot_003.get("caracter") != "obligatori":
         errors.append(
@@ -612,6 +613,17 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
                 ),
             }
         )
+    if mandatory_wing_003.get("caracter") != "obligatori":
+        errors.append(
+            {
+                "code": "UVOF003_WING_PASS_GAME_RULE",
+                "path": "TR-UVOF-003/D_PASSADA_EXTREM",
+                "message": (
+                    "La passada a l'extrem quan D1 tanca ha de ser "
+                    "obligatòria com a principi general de joc."
+                ),
+            }
+        )
     if mandatory_switch_003.get("caracter") != "obligatori":
         errors.append(
             {
@@ -620,6 +632,51 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
                 "message": (
                     "El canvi de banda després d'un encreuament sense "
                     "avantatge ha de ser obligatori dins TR-UVOF-003."
+                ),
+            }
+        )
+
+    wing_pass_003 = next(
+        (
+            flow
+            for flow in _corpus_ball_flows(uvof_003)
+            if flow.get("trajectoria_id") == "SUPERA_12_AMB_AJUDA"
+        ),
+        {},
+    )
+    if (
+        wing_pass_003.get("posseidor_inicial") != "L_LOCAL"
+        or wing_pass_003.get("posseidor_final") != "EXT_LOCAL"
+        or wing_pass_003.get("accio") != "passada_obligatoria_extrem"
+        or wing_pass_003.get("condicio") != "D1_LOCAL_ajuda"
+    ):
+        errors.append(
+            {
+                "code": "UVOF003_WING_PASS_FLOW",
+                "path": "TR-UVOF-003/fluxos_pilota/SUPERA_12_AMB_AJUDA",
+                "message": (
+                    "Quan D1 ajuda, B1 ha de passar obligatòriament de "
+                    "L_LOCAL a EXT_LOCAL."
+                ),
+            }
+        )
+
+    actions_003 = {
+        action.get("accio")
+        for phase in uvof_003.get("fases", [])
+        for action in phase.get("accions", [])
+    }
+    if (
+        "mantenir_amplitud_anticipar_passada_i_finalitzar_a_espai_exterior"
+        not in actions_003
+    ):
+        errors.append(
+            {
+                "code": "UVOF003_WING_ANTICIPATION",
+                "path": "TR-UVOF-003/accions",
+                "message": (
+                    "EXT_LOCAL ha d'anticipar la passada mantenint "
+                    "l'amplitud i finalitzar a l'espai exterior."
                 ),
             }
         )

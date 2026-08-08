@@ -423,6 +423,43 @@ def test_uvof003_spatial_contract_represents_full_6x6_and_task_rules(
     )
     assert pivot_pass["estat_coneixement"] == "condicio_tasca"
     assert "obligatoria_com_a_condicio_tasca" in pivot_pass["qualificadors"]
+    wing_pass = next(
+        flow for flow in spatial_document_003["fluxos_pilota"]
+        if flow["id"] == "FP_12_AJUDA_EXTREM"
+    )
+    assert wing_pass["estat_coneixement"] == "validat"
+    assert "obligatoria_com_a_principi_de_joc" in wing_pass["qualificadors"]
+    wing_finish = next(
+        transition for transition in spatial_document_003["transicions"]
+        if transition["id"] == "T_EXT_LOCAL_FINALITZA"
+    )
+    assert {
+        "anticipa_passada",
+        "rep_dins_espai_exterior",
+        "salt_cap_al_centre",
+    } <= set(wing_finish["qualificadors"])
+    wing_branch = next(
+        branch for branch in spatial_document_003["branques_decisionals"]
+        if branch["id"] == "BR_SUPERA_12"
+    )
+    wing_help = next(
+        alternative for alternative in wing_branch["alternatives"]
+        if alternative["id"] == "A_12_AMB_AJUDA"
+    )
+    wing_effects = [
+        relation for relation in wing_help["efectes_espacials"]
+        if relation["subjecte"] == "EXT_LOCAL"
+    ]
+    assert {
+        "mante_amplitud_a",
+        "disponible_per_rebre_a",
+        "ataca",
+        "salta_cap_a",
+    } <= {relation["predicat"] for relation in wing_effects}
+    assert all(
+        relation["caracter"] == "obligatori"
+        for relation in wing_effects
+    )
     switch_branch = next(
         branch for branch in spatial_document_003["branques_decisionals"]
         if branch["id"] == "BR_CANVI_BANDA"

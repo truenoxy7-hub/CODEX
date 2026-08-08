@@ -2,7 +2,7 @@
   "meta": {
     "format": "TRACA_relacions_espacials",
     "versio_contracte": "0.2.0",
-    "versio_instancia": "0.1.0",
+    "versio_instancia": "0.2.0",
     "estat": "derivat_semantica_validada",
     "separacio_capes": {
       "semantica_tactica": "referenciada_no_duplicada",
@@ -706,6 +706,15 @@
         },
         {
           "subjecte": "EXT_LOCAL",
+          "predicat": "disponible_per_rebre_a",
+          "objectes": [
+            "ESPAI_EXT_LOCAL"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "EXT_LOCAL",
           "predicat": "salta_cap_a",
           "objectes": [
             "EIX_CENTRAL"
@@ -890,6 +899,8 @@
       "condicio": "D1_LOCAL_ajuda_i_EXT_LOCAL_rep",
       "qualificadors": [
         "mante_amplitud",
+        "anticipa_passada",
+        "rep_dins_espai_exterior",
         "salt_cap_al_centre",
         "guanya_angle"
       ],
@@ -924,7 +935,8 @@
       "posseidor_final": "EXT_LOCAL",
       "condicio": "D1_LOCAL_ajuda",
       "qualificadors": [
-        "resolucio_2x1_exterior"
+        "resolucio_2x1_exterior",
+        "obligatoria_com_a_principi_de_joc"
       ],
       "estat_coneixement": "validat"
     },
@@ -1071,7 +1083,10 @@
     {
       "id": "BR_SUPERA_12",
       "fase_ref": "F1",
-      "decisio_semantica_ref": "fases/F1/decisions/D_SUPERA_12",
+      "decisions_semantiques_ref": [
+        "fases/F1/decisions/D_SUPERA_12",
+        "fases/F1/decisions/D_PASSADA_EXTREM"
+      ],
       "caracter": "disponible",
       "resolucio": "no_predeterminada",
       "alternatives": [
@@ -1105,11 +1120,29 @@
             },
             {
               "subjecte": "EXT_LOCAL",
+              "predicat": "mante_amplitud_a",
+              "objectes": [
+                "ESPAI_EXT_LOCAL"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "EXT_LOCAL",
+              "predicat": "disponible_per_rebre_a",
+              "objectes": [
+                "ESPAI_EXT_LOCAL"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "EXT_LOCAL",
               "predicat": "ataca",
               "objectes": [
                 "ESPAI_EXT_LOCAL"
               ],
-              "caracter": "disponible",
+              "caracter": "obligatori",
               "estat_coneixement": "validat"
             },
             {
@@ -1279,7 +1312,7 @@
         "BR_CANVI_BANDA"
       ],
       "ambit": "F1",
-      "missatge": "La direcció del 1x1 i l'ajuda defensiva continuen obertes; només les respostes pedagògiques declarades són obligatòries."
+      "missatge": "La direcció del 1x1 i l'ajuda defensiva continuen obertes; les condicions pedagògiques declarades i la passada exterior quan D1 tanca conserven el seu caràcter obligatori."
     },
     {
       "code": "SP-CONTIGUITAT-003",
@@ -1322,7 +1355,7 @@
         "EXT_OPOSAT"
       ],
       "ambit": "F1",
-      "missatge": "Els extrems mantenen amplitud i salten cap al centre quan finalitzen."
+      "missatge": "Els extrems mantenen amplitud, anticipen la passada exterior i salten cap al centre quan finalitzen."
     },
     {
       "code": "SP-NO-SUPERPOSICIO-003",

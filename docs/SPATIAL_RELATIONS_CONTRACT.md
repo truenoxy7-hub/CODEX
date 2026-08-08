@@ -171,6 +171,8 @@ La tercera instància representa:
 - un atac `6x6` complet contra els sis defensors reals d'un `6:0`;
 - llibertat del lateral per atacar `1–2` o `2–3`;
 - `2x1` exterior amb l'extrem contra `D1` i interior amb el pivot contra `D3`;
+- passada obligatòria a l'extrem com a principi de joc quan `D1` tanca, amb
+  anticipació, amplitud, recepció exterior i salt cap al centre;
 - pivot inicialment a `3–3`, davant del tercer que no ajuda, mantenint el
   bloqueig estàtic i la línia de passada;
 - passada al pivot obligatòria només com a condició pedagògica quan `D3` ajuda;

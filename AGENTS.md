@@ -99,6 +99,11 @@ El pivot parteix a `3–3`, guanya posició davant del tercer que no ajuda i man
 un bloqueig estàtic. Si el tercer ajuda, la passada al pivot és obligatòria com
 a condició pedagògica de l'exercici, no com a principi universal.
 
+Si el lateral supera el segon per `1–2` i el primer defensor tanca, la passada
+a l'extrem és obligatòria com a principi general de joc. L'extrem anticipa la
+passada mantenint l'amplitud i finalitza dins el seu espai exterior amb el salt
+cap al centre.
+
 Si el lateral acaba a `2–3` sense superar, encreua el central per atacar `1–2`;
 si acaba a `1–2`, encreua l'extrem per atacar `2–3`. Si l'encreuament tampoc
 genera avantatge, el jugador que ocupa temporalment la posició central connecta

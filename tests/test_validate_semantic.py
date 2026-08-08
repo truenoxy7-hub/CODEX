@@ -378,6 +378,58 @@ def test_corpus_rejects_optional_pivot_pass_in_uvof003(
     ]
 
 
+def test_corpus_rejects_optional_wing_pass_in_uvof003(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-003")
+    decision = _corpus_decision(exercise, "D_PASSADA_EXTREM")
+    decision["caracter"] = "disponible"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF003_WING_PASS_GAME_RULE" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_broken_wing_pass_flow_in_uvof003(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-003")
+    flow = next(
+        flow
+        for phase in exercise["fases"]
+        for flow in phase["fluxos_pilota"]
+        if flow.get("trajectoria_id") == "SUPERA_12_AMB_AJUDA"
+    )
+    flow["accio"] = "passada_2x1_exterior"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF003_WING_PASS_FLOW" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_missing_wing_anticipation_in_uvof003(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-003")
+    actions = exercise["fases"][0]["accions"]
+    actions[:] = [
+        action
+        for action in actions
+        if action["accio"]
+        != "mantenir_amplitud_anticipar_passada_i_finalitzar_a_espai_exterior"
+    ]
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF003_WING_ANTICIPATION" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
 def test_corpus_rejects_optional_task_switch_in_uvof003(
     valid_corpus, corpus_schema
 ):
