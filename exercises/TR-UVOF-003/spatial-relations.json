@@ -1,0 +1,1377 @@
+{
+  "meta": {
+    "format": "TRACA_relacions_espacials",
+    "versio_contracte": "0.2.0",
+    "versio_instancia": "0.2.0",
+    "estat": "derivat_semantica_validada",
+    "separacio_capes": {
+      "semantica_tactica": "referenciada_no_duplicada",
+      "relacions_espacials": "incloses",
+      "geometria_resolta": "no_inclosa",
+      "renderitzat": "no_generat"
+    }
+  },
+  "font_semantica": {
+    "exercici_id": "TR-UVOF-003",
+    "fitxers": [
+      "corpus/uvof.semantic.json"
+    ],
+    "plantilla": "6x6_complet_amb_inici_a_banda_local",
+    "simetria": "sense_simetria"
+  },
+  "nodes": [
+    {
+      "id": "EXT_LOCAL",
+      "classe": "participant",
+      "referencia_semantica": "participants/EXT_LOCAL",
+      "rol": "extrem_banda_inicial",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "L_LOCAL",
+      "classe": "participant",
+      "referencia_semantica": "participants/L_LOCAL",
+      "rol": "lateral_iniciador",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "CE",
+      "classe": "participant",
+      "referencia_semantica": "participants/CE",
+      "rol": "central",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "PV",
+      "classe": "participant",
+      "referencia_semantica": "participants/PV",
+      "rol": "pivot_amb_bloqueig_estatic",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "L_OPOSAT",
+      "classe": "participant",
+      "referencia_semantica": "participants/L_OPOSAT",
+      "rol": "lateral_banda_contraria",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "EXT_OPOSAT",
+      "classe": "participant",
+      "referencia_semantica": "participants/EXT_OPOSAT",
+      "rol": "extrem_banda_contraria",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "D1_LOCAL",
+      "classe": "participant",
+      "referencia_semantica": "participants/D1_LOCAL",
+      "rol": "primer_defensor_banda_inicial",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "D2_LOCAL",
+      "classe": "participant",
+      "referencia_semantica": "participants/D2_LOCAL",
+      "rol": "segon_defensor_banda_inicial",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "D3_LOCAL",
+      "classe": "participant",
+      "referencia_semantica": "participants/D3_LOCAL",
+      "rol": "tercer_defensor_banda_inicial",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "D3_OPOSAT",
+      "classe": "participant",
+      "referencia_semantica": "participants/D3_OPOSAT",
+      "rol": "tercer_defensor_banda_contraria",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "D2_OPOSAT",
+      "classe": "participant",
+      "referencia_semantica": "participants/D2_OPOSAT",
+      "rol": "segon_defensor_banda_contraria",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "D1_OPOSAT",
+      "classe": "participant",
+      "referencia_semantica": "participants/D1_OPOSAT",
+      "rol": "primer_defensor_banda_contraria",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "B1",
+      "classe": "pilota",
+      "referencia_semantica": "pilotes/B1",
+      "funcio": "pilota_de_l_exercici",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "LINIA_FONS",
+      "classe": "referencia_reglamentaria",
+      "referencia_semantica": "linia_de_fons",
+      "funcio": "limit_dels_espais_exteriors",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "AREA_6M",
+      "classe": "referencia_reglamentaria",
+      "referencia_semantica": "area_de_6_metres",
+      "funcio": "marc_dels_espais_de_finalitzacio",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "PORTERIA_ADVERSARIA",
+      "classe": "referencia_reglamentaria",
+      "referencia_semantica": "porteria_adversaria",
+      "funcio": "orientacio_general_de_l_atac",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "EIX_CENTRAL",
+      "classe": "referencia_funcional",
+      "referencia_semantica": "centre_de_la_pista",
+      "funcio": "referencia_de_posicio_central_i_canvi_de_banda",
+      "estat_coneixement": "validat"
+    }
+  ],
+  "espais": [
+    {
+      "id": "ESPAI_EXT_LOCAL",
+      "classe": "espai_finalitzacio_extrem",
+      "nom_canonic": "espai_finalitzacio_extrem_local",
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "LINIA_FONS",
+          "D1_LOCAL"
+        ]
+      },
+      "restriccions": [
+        {
+          "operador": "interior_de",
+          "arguments": [
+            "AREA_6M"
+          ]
+        }
+      ],
+      "contiguitats": [
+        {
+          "espai": "INT_12_LOCAL",
+          "referent_compartit": "D1_LOCAL"
+        }
+      ],
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "INT_12_LOCAL",
+      "classe": "interval",
+      "nom_canonic": "interval_1-2_local",
+      "alies": [
+        "carril_local"
+      ],
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "D1_LOCAL",
+          "D2_LOCAL"
+        ]
+      },
+      "contiguitats": [
+        {
+          "espai": "ESPAI_EXT_LOCAL",
+          "referent_compartit": "D1_LOCAL"
+        },
+        {
+          "espai": "INT_23_LOCAL",
+          "referent_compartit": "D2_LOCAL"
+        }
+      ],
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "INT_23_LOCAL",
+      "classe": "interval",
+      "nom_canonic": "interval_2-3_local",
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "D2_LOCAL",
+          "D3_LOCAL"
+        ]
+      },
+      "contiguitats": [
+        {
+          "espai": "INT_12_LOCAL",
+          "referent_compartit": "D2_LOCAL"
+        },
+        {
+          "espai": "INT_33",
+          "referent_compartit": "D3_LOCAL"
+        }
+      ],
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "INT_33",
+      "classe": "interval",
+      "nom_canonic": "interval_3-3",
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "D3_LOCAL",
+          "D3_OPOSAT"
+        ]
+      },
+      "contiguitats": [
+        {
+          "espai": "INT_23_LOCAL",
+          "referent_compartit": "D3_LOCAL"
+        },
+        {
+          "espai": "INT_23_OPOSAT",
+          "referent_compartit": "D3_OPOSAT"
+        }
+      ],
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "INT_23_OPOSAT",
+      "classe": "interval",
+      "nom_canonic": "interval_2-3_oposat",
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "D3_OPOSAT",
+          "D2_OPOSAT"
+        ]
+      },
+      "contiguitats": [
+        {
+          "espai": "INT_33",
+          "referent_compartit": "D3_OPOSAT"
+        },
+        {
+          "espai": "INT_12_OPOSAT",
+          "referent_compartit": "D2_OPOSAT"
+        }
+      ],
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "INT_12_OPOSAT",
+      "classe": "interval",
+      "nom_canonic": "interval_1-2_oposat",
+      "alies": [
+        "carril_oposat"
+      ],
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "D2_OPOSAT",
+          "D1_OPOSAT"
+        ]
+      },
+      "contiguitats": [
+        {
+          "espai": "INT_23_OPOSAT",
+          "referent_compartit": "D2_OPOSAT"
+        },
+        {
+          "espai": "ESPAI_EXT_OPOSAT",
+          "referent_compartit": "D1_OPOSAT"
+        }
+      ],
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "ESPAI_EXT_OPOSAT",
+      "classe": "espai_finalitzacio_extrem",
+      "nom_canonic": "espai_finalitzacio_extrem_oposat",
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "D1_OPOSAT",
+          "LINIA_FONS"
+        ]
+      },
+      "restriccions": [
+        {
+          "operador": "interior_de",
+          "arguments": [
+            "AREA_6M"
+          ]
+        }
+      ],
+      "contiguitats": [
+        {
+          "espai": "INT_12_OPOSAT",
+          "referent_compartit": "D1_OPOSAT"
+        }
+      ],
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "POS_DARRERE_L_LOCAL",
+      "classe": "posicio_funcional",
+      "nom_canonic": "posicio_darrere_del_lateral_local",
+      "definicio": {
+        "operador": "darrere_de",
+        "arguments": [
+          "L_LOCAL"
+        ]
+      },
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "POS_CENTRAL_TEMP",
+      "classe": "posicio_funcional",
+      "nom_canonic": "posicio_central_temporal",
+      "definicio": {
+        "operador": "proper_a",
+        "arguments": [
+          "EIX_CENTRAL"
+        ]
+      },
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "POS_BLOQUEIG_D3_LOCAL",
+      "classe": "posicio_funcional",
+      "nom_canonic": "posicio_bloqueig_estatic_davant_D3_LOCAL",
+      "definicio": {
+        "operador": "proper_a",
+        "arguments": [
+          "D3_LOCAL"
+        ]
+      },
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "POS_BLOQUEIG_D3_OPOSAT",
+      "classe": "posicio_funcional",
+      "nom_canonic": "posicio_bloqueig_estatic_davant_D3_OPOSAT",
+      "definicio": {
+        "operador": "proper_a",
+        "arguments": [
+          "D3_OPOSAT"
+        ]
+      },
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    }
+  ],
+  "estats": [
+    {
+      "id": "E_INICI",
+      "fase_ref": "F1",
+      "moment": "inici",
+      "relacions": [
+        {
+          "subjecte": "L_LOCAL",
+          "predicat": "orientat_cap_a",
+          "objectes": [
+            "PORTERIA_ADVERSARIA"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "PV",
+          "predicat": "ocupa",
+          "objectes": [
+            "INT_33"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "EXT_LOCAL",
+          "predicat": "mante_amplitud_a",
+          "objectes": [
+            "ESPAI_EXT_LOCAL"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "EXT_OPOSAT",
+          "predicat": "mante_amplitud_a",
+          "objectes": [
+            "ESPAI_EXT_OPOSAT"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "E_SUPERACIO_INTERIOR",
+      "fase_ref": "F1",
+      "moment": "superacio",
+      "relacions": [
+        {
+          "subjecte": "L_LOCAL",
+          "predicat": "travessa_linia_defensiva_de",
+          "objectes": [
+            "D2_LOCAL"
+          ],
+          "caracter": "disponible",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "L_LOCAL",
+          "predicat": "relacionat_en_2x1_amb",
+          "objectes": [
+            "PV"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "PV",
+          "predicat": "per_davant_de",
+          "objectes": [
+            "D3_OPOSAT"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "E_SUPERACIO_EXTERIOR",
+      "fase_ref": "F1",
+      "moment": "superacio",
+      "relacions": [
+        {
+          "subjecte": "L_LOCAL",
+          "predicat": "travessa_linia_defensiva_de",
+          "objectes": [
+            "D2_LOCAL"
+          ],
+          "caracter": "disponible",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "L_LOCAL",
+          "predicat": "relacionat_en_2x1_amb",
+          "objectes": [
+            "EXT_LOCAL"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "EXT_LOCAL",
+          "predicat": "mante_amplitud_a",
+          "objectes": [
+            "ESPAI_EXT_LOCAL"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "E_BLOQUEIG_D3_OPOSAT",
+      "fase_ref": "F1",
+      "moment": "ajuda",
+      "relacions": [
+        {
+          "subjecte": "D3_LOCAL",
+          "predicat": "proper_a",
+          "objectes": [
+            "L_LOCAL"
+          ],
+          "caracter": "disponible",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "PV",
+          "predicat": "ocupa",
+          "objectes": [
+            "POS_BLOQUEIG_D3_OPOSAT"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "PV",
+          "predicat": "per_davant_de",
+          "objectes": [
+            "D3_OPOSAT"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "PV",
+          "predicat": "disponible_per_rebre_a",
+          "objectes": [
+            "INT_33"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "condicio_tasca"
+        }
+      ]
+    },
+    {
+      "id": "E_ENCREUAMENT_CE",
+      "fase_ref": "F1",
+      "moment": "encreuament",
+      "relacions": [
+        {
+          "subjecte": "CE",
+          "predicat": "darrere_de",
+          "objectes": [
+            "L_LOCAL"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "CE",
+          "predicat": "ataca",
+          "objectes": [
+            "INT_12_LOCAL"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "L_LOCAL",
+          "predicat": "ocupa",
+          "objectes": [
+            "POS_CENTRAL_TEMP"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "condicio_tasca"
+        }
+      ]
+    },
+    {
+      "id": "E_ENCREUAMENT_EXT",
+      "fase_ref": "F1",
+      "moment": "encreuament",
+      "relacions": [
+        {
+          "subjecte": "EXT_LOCAL",
+          "predicat": "darrere_de",
+          "objectes": [
+            "L_LOCAL"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "EXT_LOCAL",
+          "predicat": "ataca",
+          "objectes": [
+            "INT_23_LOCAL"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "CE",
+          "predicat": "ocupa",
+          "objectes": [
+            "POS_CENTRAL_TEMP"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "condicio_tasca"
+        }
+      ]
+    },
+    {
+      "id": "E_CANVI_BANDA",
+      "fase_ref": "F1",
+      "moment": "desenvolupament",
+      "relacions": [
+        {
+          "subjecte": "L_OPOSAT",
+          "predicat": "disponible_per_rebre_a",
+          "objectes": [
+            "INT_12_OPOSAT",
+            "INT_23_OPOSAT"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "condicio_tasca"
+        },
+        {
+          "subjecte": "D2_OPOSAT",
+          "predicat": "adapta_posicio_respecte_a",
+          "objectes": [
+            "L_OPOSAT"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "PV",
+          "predicat": "adapta_posicio_respecte_a",
+          "objectes": [
+            "D3_LOCAL"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "E_BLOQUEIG_D3_LOCAL",
+      "fase_ref": "F1",
+      "moment": "ajuda",
+      "relacions": [
+        {
+          "subjecte": "D3_OPOSAT",
+          "predicat": "proper_a",
+          "objectes": [
+            "L_OPOSAT"
+          ],
+          "caracter": "disponible",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "PV",
+          "predicat": "ocupa",
+          "objectes": [
+            "POS_BLOQUEIG_D3_LOCAL"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "PV",
+          "predicat": "per_davant_de",
+          "objectes": [
+            "D3_LOCAL"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "E_FINAL_EXTREM_LOCAL",
+      "fase_ref": "F1",
+      "moment": "resolucio",
+      "relacions": [
+        {
+          "subjecte": "EXT_LOCAL",
+          "predicat": "mante_amplitud_a",
+          "objectes": [
+            "ESPAI_EXT_LOCAL"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "EXT_LOCAL",
+          "predicat": "disponible_per_rebre_a",
+          "objectes": [
+            "ESPAI_EXT_LOCAL"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "EXT_LOCAL",
+          "predicat": "salta_cap_a",
+          "objectes": [
+            "EIX_CENTRAL"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        }
+      ]
+    }
+  ],
+  "transicions": [
+    {
+      "id": "T_L_LOCAL_ATAC_12",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_L_LOCAL_12",
+      "ordre": 1,
+      "actor": "L_LOCAL",
+      "tipus": "atac_espai",
+      "cap_a": "INT_12_LOCAL",
+      "referencia_oposicional": "D2_LOCAL",
+      "qualificadors": [
+        "eleccio_oberta",
+        "buscar_superacio"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_L_LOCAL_ATAC_23",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_L_LOCAL_23",
+      "ordre": 1,
+      "actor": "L_LOCAL",
+      "tipus": "atac_espai",
+      "cap_a": "INT_23_LOCAL",
+      "referencia_oposicional": "D2_LOCAL",
+      "qualificadors": [
+        "eleccio_oberta",
+        "buscar_superacio"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_PV_BLOQUEIG_D3_OPOSAT",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_PV_ADAPTACIO",
+      "ordre": 1,
+      "actor": "PV",
+      "tipus": "ajust_sense_pilota",
+      "des_de": "INT_33",
+      "cap_a": "POS_BLOQUEIG_D3_OPOSAT",
+      "condicio": "D3_LOCAL_ajuda_sobre_L_LOCAL",
+      "qualificadors": [
+        "guanya_posicio",
+        "manté_bloqueig_estatic",
+        "conserva_linia_passada"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_L_LOCAL_CENTRAL_TEMP",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_L_LOCAL_NO_SUPERA_23",
+      "ordre": 1,
+      "actor": "L_LOCAL",
+      "tipus": "continuitat",
+      "des_de": "INT_23_LOCAL",
+      "cap_a": "POS_CENTRAL_TEMP",
+      "condicio": "sense_superacio_i_encreuament_CE",
+      "qualificadors": [
+        "arrossega_D2_LOCAL",
+        "queda_de_central"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_CE_ENCREUAMENT_12",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_CE_ENCREUAMENT_12",
+      "ordre": 1,
+      "actor": "CE",
+      "tipus": "encreuament",
+      "via": [
+        "POS_DARRERE_L_LOCAL"
+      ],
+      "cap_a": "INT_12_LOCAL",
+      "condicio": "L_LOCAL_acaba_a_23_sense_superar",
+      "qualificadors": [
+        "rep_de_L_LOCAL",
+        "ataca_per_superar"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_L_LOCAL_CONTINUA_EXTERIOR",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_L_LOCAL_NO_SUPERA_12",
+      "ordre": 1,
+      "actor": "L_LOCAL",
+      "tipus": "continuitat",
+      "des_de": "INT_12_LOCAL",
+      "cap_a": "ESPAI_EXT_LOCAL",
+      "condicio": "sense_superacio_i_encreuament_EXT_LOCAL",
+      "qualificadors": [
+        "arrossega_D2_LOCAL",
+        "allibera_INT_23_LOCAL"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_EXT_LOCAL_ENCREUAMENT_23",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_EXT_LOCAL_ENCREUAMENT_23",
+      "ordre": 1,
+      "actor": "EXT_LOCAL",
+      "tipus": "encreuament",
+      "via": [
+        "POS_DARRERE_L_LOCAL"
+      ],
+      "cap_a": "INT_23_LOCAL",
+      "condicio": "L_LOCAL_acaba_a_12_sense_superar",
+      "qualificadors": [
+        "rep_de_L_LOCAL",
+        "ataca_per_superar"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_L_OPOSAT_ATAC_12",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_L_OPOSAT_12",
+      "ordre": 1,
+      "actor": "L_OPOSAT",
+      "tipus": "atac_espai",
+      "cap_a": "INT_12_OPOSAT",
+      "qualificadors": [
+        "despres_de_rebre_canvi_banda",
+        "reinicia_1x1",
+        "eleccio_oberta"
+      ],
+      "estat_coneixement": "condicio_tasca"
+    },
+    {
+      "id": "T_L_OPOSAT_ATAC_23",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_L_OPOSAT_23",
+      "ordre": 1,
+      "actor": "L_OPOSAT",
+      "tipus": "atac_espai",
+      "cap_a": "INT_23_OPOSAT",
+      "qualificadors": [
+        "despres_de_rebre_canvi_banda",
+        "reinicia_1x1",
+        "eleccio_oberta"
+      ],
+      "estat_coneixement": "condicio_tasca"
+    },
+    {
+      "id": "T_PV_BLOQUEIG_D3_LOCAL",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_PV_ADAPTACIO",
+      "ordre": 2,
+      "actor": "PV",
+      "tipus": "ajust_sense_pilota",
+      "des_de": "POS_BLOQUEIG_D3_OPOSAT",
+      "cap_a": "POS_BLOQUEIG_D3_LOCAL",
+      "condicio": "canvi_de_banda_i_D3_OPOSAT_ajuda",
+      "qualificadors": [
+        "adapta_posicio",
+        "guanya_posicio",
+        "manté_bloqueig_estatic"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_EXT_LOCAL_FINALITZA",
+      "fase_ref": "F1",
+      "trajectoria_id": "TR_EXT_LOCAL_FINALITZACIO",
+      "ordre": 1,
+      "actor": "EXT_LOCAL",
+      "tipus": "resolucio",
+      "cap_a": "ESPAI_EXT_LOCAL",
+      "condicio": "D1_LOCAL_ajuda_i_EXT_LOCAL_rep",
+      "qualificadors": [
+        "mante_amplitud",
+        "anticipa_passada",
+        "rep_dins_espai_exterior",
+        "salt_cap_al_centre",
+        "guanya_angle"
+      ],
+      "estat_coneixement": "validat"
+    }
+  ],
+  "fluxos_pilota": [
+    {
+      "id": "FP_23_AJUDA_PIVOT",
+      "fase_ref": "F1",
+      "trajectoria_id": "FP_SUPERA_23_AJUDA",
+      "ordre": 1,
+      "pilota_id": "B1",
+      "posseidor_inicial": "L_LOCAL",
+      "accio": "passada_continuitat",
+      "posseidor_final": "PV",
+      "condicio": "D3_LOCAL_ajuda",
+      "qualificadors": [
+        "obligatoria_com_a_condicio_tasca",
+        "PV_davant_D3_OPOSAT"
+      ],
+      "estat_coneixement": "condicio_tasca"
+    },
+    {
+      "id": "FP_12_AJUDA_EXTREM",
+      "fase_ref": "F1",
+      "trajectoria_id": "FP_SUPERA_12_AJUDA",
+      "ordre": 1,
+      "pilota_id": "B1",
+      "posseidor_inicial": "L_LOCAL",
+      "accio": "passada_continuitat",
+      "posseidor_final": "EXT_LOCAL",
+      "condicio": "D1_LOCAL_ajuda",
+      "qualificadors": [
+        "resolucio_2x1_exterior",
+        "obligatoria_com_a_principi_de_joc"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "FP_23_ENCREUAMENT_CE",
+      "fase_ref": "F1",
+      "trajectoria_id": "FP_NO_SUPERA_23_CANVI_BANDA",
+      "ordre": 1,
+      "pilota_id": "B1",
+      "posseidor_inicial": "L_LOCAL",
+      "accio": "passada_encreuament",
+      "posseidor_final": "CE",
+      "condicio": "L_LOCAL_no_supera_a_23",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "FP_23_RETORN_CENTRAL_TEMP",
+      "fase_ref": "F1",
+      "trajectoria_id": "FP_NO_SUPERA_23_CANVI_BANDA",
+      "ordre": 2,
+      "pilota_id": "B1",
+      "posseidor_inicial": "CE",
+      "accio": "passada_continuitat",
+      "posseidor_final": "L_LOCAL",
+      "condicio": "encreuament_CE_sense_avantatge",
+      "qualificadors": [
+        "L_LOCAL_ocupa_posicio_central"
+      ],
+      "estat_coneixement": "condicio_tasca"
+    },
+    {
+      "id": "FP_23_CANVI_BANDA",
+      "fase_ref": "F1",
+      "trajectoria_id": "FP_NO_SUPERA_23_CANVI_BANDA",
+      "ordre": 3,
+      "pilota_id": "B1",
+      "posseidor_inicial": "L_LOCAL",
+      "accio": "passada_continuitat",
+      "posseidor_final": "L_OPOSAT",
+      "condicio": "canvi_banda_obligatori",
+      "estat_coneixement": "condicio_tasca"
+    },
+    {
+      "id": "FP_12_ENCREUAMENT_EXT",
+      "fase_ref": "F1",
+      "trajectoria_id": "FP_NO_SUPERA_12_CANVI_BANDA",
+      "ordre": 1,
+      "pilota_id": "B1",
+      "posseidor_inicial": "L_LOCAL",
+      "accio": "passada_encreuament",
+      "posseidor_final": "EXT_LOCAL",
+      "condicio": "L_LOCAL_no_supera_a_12",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "FP_12_RETORN_CENTRAL_TEMP",
+      "fase_ref": "F1",
+      "trajectoria_id": "FP_NO_SUPERA_12_CANVI_BANDA",
+      "ordre": 2,
+      "pilota_id": "B1",
+      "posseidor_inicial": "EXT_LOCAL",
+      "accio": "passada_continuitat",
+      "posseidor_final": "CE",
+      "condicio": "encreuament_EXT_LOCAL_sense_avantatge",
+      "qualificadors": [
+        "CE_mante_posicio_central"
+      ],
+      "estat_coneixement": "condicio_tasca"
+    },
+    {
+      "id": "FP_12_CANVI_BANDA",
+      "fase_ref": "F1",
+      "trajectoria_id": "FP_NO_SUPERA_12_CANVI_BANDA",
+      "ordre": 3,
+      "pilota_id": "B1",
+      "posseidor_inicial": "CE",
+      "accio": "passada_continuitat",
+      "posseidor_final": "L_OPOSAT",
+      "condicio": "canvi_banda_obligatori",
+      "estat_coneixement": "condicio_tasca"
+    }
+  ],
+  "branques_decisionals": [
+    {
+      "id": "BR_SUPERA_23",
+      "fase_ref": "F1",
+      "decisions_semantiques_ref": [
+        "fases/F1/decisions/D_SUPERA_23",
+        "fases/F1/decisions/D_PASSADA_PIVOT"
+      ],
+      "caracter": "disponible",
+      "resolucio": "no_predeterminada",
+      "alternatives": [
+        {
+          "id": "A_23_SENSE_AJUDA",
+          "condicio": "L_LOCAL supera D2_LOCAL per INT_23_LOCAL i D3_LOCAL no ajuda",
+          "efectes_espacials": [
+            {
+              "subjecte": "L_LOCAL",
+              "predicat": "ataca",
+              "objectes": [
+                "INT_23_LOCAL"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "A_23_AMB_AJUDA",
+          "condicio": "L_LOCAL supera D2_LOCAL per INT_23_LOCAL i D3_LOCAL ajuda",
+          "efectes_espacials": [
+            {
+              "subjecte": "PV",
+              "predicat": "per_davant_de",
+              "objectes": [
+                "D3_OPOSAT"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "PV",
+              "predicat": "disponible_per_rebre_a",
+              "objectes": [
+                "INT_33"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "condicio_tasca"
+            },
+            {
+              "subjecte": "L_LOCAL",
+              "predicat": "relacionat_en_2x1_amb",
+              "objectes": [
+                "PV"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "condicio_tasca"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "BR_SUPERA_12",
+      "fase_ref": "F1",
+      "decisions_semantiques_ref": [
+        "fases/F1/decisions/D_SUPERA_12",
+        "fases/F1/decisions/D_PASSADA_EXTREM"
+      ],
+      "caracter": "disponible",
+      "resolucio": "no_predeterminada",
+      "alternatives": [
+        {
+          "id": "A_12_SENSE_AJUDA",
+          "condicio": "L_LOCAL supera D2_LOCAL per INT_12_LOCAL i D1_LOCAL no ajuda",
+          "efectes_espacials": [
+            {
+              "subjecte": "L_LOCAL",
+              "predicat": "ataca",
+              "objectes": [
+                "INT_12_LOCAL"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "A_12_AMB_AJUDA",
+          "condicio": "L_LOCAL supera D2_LOCAL per INT_12_LOCAL i D1_LOCAL ajuda",
+          "efectes_espacials": [
+            {
+              "subjecte": "L_LOCAL",
+              "predicat": "relacionat_en_2x1_amb",
+              "objectes": [
+                "EXT_LOCAL"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "EXT_LOCAL",
+              "predicat": "mante_amplitud_a",
+              "objectes": [
+                "ESPAI_EXT_LOCAL"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "EXT_LOCAL",
+              "predicat": "disponible_per_rebre_a",
+              "objectes": [
+                "ESPAI_EXT_LOCAL"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "EXT_LOCAL",
+              "predicat": "ataca",
+              "objectes": [
+                "ESPAI_EXT_LOCAL"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "EXT_LOCAL",
+              "predicat": "salta_cap_a",
+              "objectes": [
+                "EIX_CENTRAL"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "BR_NO_SUPERA",
+      "fase_ref": "F1",
+      "decisions_semantiques_ref": [
+        "fases/F1/decisions/D_NO_SUPERA_23",
+        "fases/F1/decisions/D_NO_SUPERA_12"
+      ],
+      "caracter": "obligatori",
+      "resolucio": "no_predeterminada",
+      "alternatives": [
+        {
+          "id": "A_NO_SUPERA_23",
+          "condicio": "L_LOCAL acaba a INT_23_LOCAL sense superar",
+          "efectes_espacials": [
+            {
+              "subjecte": "CE",
+              "predicat": "darrere_de",
+              "objectes": [
+                "L_LOCAL"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "CE",
+              "predicat": "ataca",
+              "objectes": [
+                "INT_12_LOCAL"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "A_NO_SUPERA_12",
+          "condicio": "L_LOCAL acaba a INT_12_LOCAL sense superar",
+          "efectes_espacials": [
+            {
+              "subjecte": "EXT_LOCAL",
+              "predicat": "darrere_de",
+              "objectes": [
+                "L_LOCAL"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "EXT_LOCAL",
+              "predicat": "ataca",
+              "objectes": [
+                "INT_23_LOCAL"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "BR_CANVI_BANDA",
+      "fase_ref": "F1",
+      "decisio_semantica_ref": "fases/F1/decisions/D_CANVI_BANDA",
+      "caracter": "obligatori",
+      "resolucio": "no_predeterminada",
+      "alternatives": [
+        {
+          "id": "A_CANVI_DESPRES_CE",
+          "condicio": "encreuament de CE sense avantatge",
+          "efectes_espacials": [
+            {
+              "subjecte": "L_LOCAL",
+              "predicat": "ocupa",
+              "objectes": [
+                "POS_CENTRAL_TEMP"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "condicio_tasca"
+            },
+            {
+              "subjecte": "L_OPOSAT",
+              "predicat": "disponible_per_rebre_a",
+              "objectes": [
+                "INT_12_OPOSAT",
+                "INT_23_OPOSAT"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "condicio_tasca"
+            }
+          ]
+        },
+        {
+          "id": "A_CANVI_DESPRES_EXT",
+          "condicio": "encreuament de EXT_LOCAL sense avantatge",
+          "efectes_espacials": [
+            {
+              "subjecte": "CE",
+              "predicat": "ocupa",
+              "objectes": [
+                "POS_CENTRAL_TEMP"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "condicio_tasca"
+            },
+            {
+              "subjecte": "L_OPOSAT",
+              "predicat": "disponible_per_rebre_a",
+              "objectes": [
+                "INT_12_OPOSAT",
+                "INT_23_OPOSAT"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "condicio_tasca"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "invariants": [
+    {
+      "code": "SP-NO-COORD-003",
+      "operador": "sense_coordenades",
+      "subjectes": [
+        "TR-UVOF-003"
+      ],
+      "ambit": "document_complet",
+      "missatge": "La instància només conté relacions qualitatives."
+    },
+    {
+      "code": "SP-IDENTITAT-003",
+      "operador": "identitat_persistent",
+      "subjectes": [
+        "EXT_LOCAL",
+        "L_LOCAL",
+        "CE",
+        "PV",
+        "L_OPOSAT",
+        "EXT_OPOSAT"
+      ],
+      "ambit": "F1",
+      "missatge": "La posició central temporal no altera la identitat del participant."
+    },
+    {
+      "code": "SP-DECISIO-003",
+      "operador": "decisio_no_predeterminada",
+      "subjectes": [
+        "BR_SUPERA_23",
+        "BR_SUPERA_12",
+        "BR_NO_SUPERA",
+        "BR_CANVI_BANDA"
+      ],
+      "ambit": "F1",
+      "missatge": "La direcció del 1x1 i l'ajuda defensiva continuen obertes; les condicions pedagògiques declarades i la passada exterior quan D1 tanca conserven el seu caràcter obligatori."
+    },
+    {
+      "code": "SP-CONTIGUITAT-003",
+      "operador": "contiguitat_amb_referent_compartit",
+      "subjectes": [
+        "INT_12_LOCAL",
+        "INT_23_LOCAL",
+        "INT_33",
+        "INT_23_OPOSAT",
+        "INT_12_OPOSAT"
+      ],
+      "ambit": "defensa_6-0",
+      "missatge": "Els intervals es deriven dels sis defensors reals del 6:0."
+    },
+    {
+      "code": "SP-FLUX-PILOTA-003",
+      "operador": "flux_pilota_coherent",
+      "subjectes": [
+        "B1"
+      ],
+      "ambit": "F1",
+      "missatge": "Els fluxos conserven la possessió durant encreuaments, retorn al central temporal i canvi de banda."
+    },
+    {
+      "code": "SP-ENCREUAMENT-003",
+      "operador": "encreuament_per_darrere",
+      "subjectes": [
+        "CE",
+        "EXT_LOCAL",
+        "L_LOCAL"
+      ],
+      "ambit": "branques_sense_superacio",
+      "missatge": "El receptor encreua per darrere de L_LOCAL i ataca l'interval oposat."
+    },
+    {
+      "code": "SP-AMPLITUD-003",
+      "operador": "mantenir_amplitud",
+      "subjectes": [
+        "EXT_LOCAL",
+        "EXT_OPOSAT"
+      ],
+      "ambit": "F1",
+      "missatge": "Els extrems mantenen amplitud, anticipen la passada exterior i salten cap al centre quan finalitzen."
+    },
+    {
+      "code": "SP-NO-SUPERPOSICIO-003",
+      "operador": "no_superposicio",
+      "subjectes": [
+        "PV",
+        "L_LOCAL",
+        "L_OPOSAT"
+      ],
+      "ambit": "adaptacio_del_pivot",
+      "missatge": "PV adapta el bloqueig al tercer que no ajuda sense ocupar la trajectòria del lateral."
+    }
+  ],
+  "governanca": {
+    "autoritat": "semantica_validada_per_entrenador",
+    "politica_inferencia": "tota_inferencia_no_validada_es_provisional",
+    "sortida_permesa": "graf_relacional_sense_coordenades"
+  }
+}

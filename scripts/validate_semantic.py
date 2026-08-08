@@ -536,6 +536,168 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
             }
         )
 
+    uvof_003 = _corpus_exercise(document, "TR-UVOF-003")
+    attackers_003 = {
+        participant.get("id")
+        for participant in uvof_003.get("participants", [])
+        if participant.get("equip") == "atac"
+    }
+    defenders_003 = {
+        participant.get("id")
+        for participant in uvof_003.get("participants", [])
+        if participant.get("equip") == "defensa"
+    }
+    expected_attackers_003 = {
+        "EXT_LOCAL",
+        "L_LOCAL",
+        "CE",
+        "PV",
+        "L_OPOSAT",
+        "EXT_OPOSAT",
+    }
+    expected_defenders_003 = {
+        "D1_LOCAL",
+        "D2_LOCAL",
+        "D3_LOCAL",
+        "D3_OPOSAT",
+        "D2_OPOSAT",
+        "D1_OPOSAT",
+    }
+    organization_003 = uvof_003.get("organitzacio", {})
+    if (
+        attackers_003 != expected_attackers_003
+        or defenders_003 != expected_defenders_003
+        or organization_003.get("sistema_defensiu") != "6-0"
+        or organization_003.get("relacio_numerica") != "6x6"
+        or uvof_003.get("tipus_exercici") != "situacio_partit"
+    ):
+        errors.append(
+            {
+                "code": "UVOF003_FULL_6X6",
+                "path": "TR-UVOF-003/participants",
+                "message": (
+                    "TR-UVOF-003 ha de declarar un atac 6x6 complet contra "
+                    "els sis defensors reals del 6:0."
+                ),
+            }
+        )
+
+    balls_003 = {
+        ball.get("id"): ball.get("posseidor_inicial")
+        for ball in uvof_003.get("pilotes", [])
+    }
+    if balls_003 != {"B1": "L_LOCAL"}:
+        errors.append(
+            {
+                "code": "UVOF003_INITIAL_BALL",
+                "path": "TR-UVOF-003/pilotes",
+                "message": "TR-UVOF-003 ha de començar amb B1 en possessió de L_LOCAL.",
+            }
+        )
+
+    decisions_003 = {
+        decision.get("id"): decision
+        for decision in _corpus_decisions(uvof_003)
+    }
+    mandatory_pivot_003 = decisions_003.get("D_PASSADA_PIVOT", {})
+    mandatory_wing_003 = decisions_003.get("D_PASSADA_EXTREM", {})
+    mandatory_switch_003 = decisions_003.get("D_CANVI_BANDA", {})
+    if mandatory_pivot_003.get("caracter") != "obligatori":
+        errors.append(
+            {
+                "code": "UVOF003_PIVOT_PASS_TASK_RULE",
+                "path": "TR-UVOF-003/D_PASSADA_PIVOT",
+                "message": (
+                    "La passada al pivot quan D3 ajuda ha de ser obligatòria "
+                    "com a condició pedagògica de TR-UVOF-003."
+                ),
+            }
+        )
+    if mandatory_wing_003.get("caracter") != "obligatori":
+        errors.append(
+            {
+                "code": "UVOF003_WING_PASS_GAME_RULE",
+                "path": "TR-UVOF-003/D_PASSADA_EXTREM",
+                "message": (
+                    "La passada a l'extrem quan D1 tanca ha de ser "
+                    "obligatòria com a principi general de joc."
+                ),
+            }
+        )
+    if mandatory_switch_003.get("caracter") != "obligatori":
+        errors.append(
+            {
+                "code": "UVOF003_SWITCH_TASK_RULE",
+                "path": "TR-UVOF-003/D_CANVI_BANDA",
+                "message": (
+                    "El canvi de banda després d'un encreuament sense "
+                    "avantatge ha de ser obligatori dins TR-UVOF-003."
+                ),
+            }
+        )
+
+    wing_pass_003 = next(
+        (
+            flow
+            for flow in _corpus_ball_flows(uvof_003)
+            if flow.get("trajectoria_id") == "SUPERA_12_AMB_AJUDA"
+        ),
+        {},
+    )
+    if (
+        wing_pass_003.get("posseidor_inicial") != "L_LOCAL"
+        or wing_pass_003.get("posseidor_final") != "EXT_LOCAL"
+        or wing_pass_003.get("accio") != "passada_obligatoria_extrem"
+        or wing_pass_003.get("condicio") != "D1_LOCAL_ajuda"
+    ):
+        errors.append(
+            {
+                "code": "UVOF003_WING_PASS_FLOW",
+                "path": "TR-UVOF-003/fluxos_pilota/SUPERA_12_AMB_AJUDA",
+                "message": (
+                    "Quan D1 ajuda, B1 ha de passar obligatòriament de "
+                    "L_LOCAL a EXT_LOCAL."
+                ),
+            }
+        )
+
+    actions_003 = {
+        action.get("accio")
+        for phase in uvof_003.get("fases", [])
+        for action in phase.get("accions", [])
+    }
+    if (
+        "mantenir_amplitud_anticipar_passada_i_finalitzar_a_espai_exterior"
+        not in actions_003
+    ):
+        errors.append(
+            {
+                "code": "UVOF003_WING_ANTICIPATION",
+                "path": "TR-UVOF-003/accions",
+                "message": (
+                    "EXT_LOCAL ha d'anticipar la passada mantenint "
+                    "l'amplitud i finalitzar a l'espai exterior."
+                ),
+            }
+        )
+
+    exercise_conditions_003 = set(uvof_003.get("condicions_tasca", []))
+    expected_conditions_003 = {
+        "passada_pivot_obligatoria_si_D3_ajuda",
+        "canvi_banda_obligatori_si_encreuament_sense_avantatge",
+    }
+    if not expected_conditions_003 <= exercise_conditions_003:
+        errors.append(
+            {
+                "code": "UVOF003_TASK_CONDITIONS",
+                "path": "TR-UVOF-003/condicions_tasca",
+                "message": (
+                    "Les dues obligacions pedagògiques de TR-UVOF-003 han "
+                    "d'estar separades dels principis generals."
+                ),
+            }
+        )
+
     uvof_006 = _corpus_exercise(document, "TR-UVOF-006")
     switch_decision = next(
         (

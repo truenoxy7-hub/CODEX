@@ -88,6 +88,28 @@ El contracte espacial vigent és la v0.2. La pilota té un flux independent i
 les alternatives utilitzen trajectòries identificades; no s'han d'encadenar
 branques incompatibles com si fossin una sola seqüència.
 
+## TR-UVOF-003
+
+És un `6x6` contra defensa `6:0` al 100%. El lateral local comença amb pilota i
+té llibertat per atacar `1–2` o `2–3`. Superar el segon per l'exterior genera un
+`2x1` amb l'extrem contra el primer; superar-lo per l'interior genera un `2x1`
+amb el pivot contra el tercer.
+
+El pivot parteix a `3–3`, guanya posició davant del tercer que no ajuda i manté
+un bloqueig estàtic. Si el tercer ajuda, la passada al pivot és obligatòria com
+a condició pedagògica de l'exercici, no com a principi universal.
+
+Si el lateral supera el segon per `1–2` i el primer defensor tanca, la passada
+a l'extrem és obligatòria com a principi general de joc. L'extrem anticipa la
+passada mantenint l'amplitud i finalitza dins el seu espai exterior amb el salt
+cap al centre.
+
+Si el lateral acaba a `2–3` sense superar, encreua el central per atacar `1–2`;
+si acaba a `1–2`, encreua l'extrem per atacar `2–3`. Si l'encreuament tampoc
+genera avantatge, el jugador que ocupa temporalment la posició central connecta
+obligatòriament amb el lateral contrari, que reinicia el `1x1`. El pivot adapta
+el bloqueig al nou tercer que no ajuda.
+
 ## Flux de treball obligatori
 
 Abans de tocar codi:

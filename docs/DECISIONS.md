@@ -132,3 +132,19 @@ les encadeni com si fossin una única solució.
 **Motiu:** `TR-UVOF-002` conté dues direccions de finta i desenllaços diferents
 segons la superació i l'ajuda defensiva. Barrejar-los en un sol recorregut faria
 perdre la lògica tàctica validada.
+
+## D-023 — Continuïtat després de superar el segon defensor
+
+**Decisió:** superar el segon per l'exterior genera un `2x1` amb l'extrem contra
+el primer defensor; superar-lo per l'interior genera un `2x1` amb el pivot
+contra el tercer. En la superació exterior, si el primer no tanca el lateral
+finalitza; si el primer tanca, la passada a l'extrem és obligatòria com a
+principi general de joc. L'extrem anticipa la passada, manté l'amplitud i
+finalitza dins el seu espai exterior amb el salt cap al centre.
+
+**Decisió:** una resposta obligatòria dins un exercici s'etiqueta com a
+`condicio_tasca`. A `TR-UVOF-003`, la passada al pivot quan el tercer ajuda i el
+canvi de banda després d'un encreuament sense avantatge són obligacions
+pedagògiques, no regles universals de la situació real. La passada exterior a
+l'extrem quan el primer tanca no és una `condicio_tasca`: és una regla del joc
+validada per l'entrenador.
