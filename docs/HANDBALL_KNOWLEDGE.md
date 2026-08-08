@@ -140,6 +140,19 @@ Cal separar:
 2. la situació local de superioritat;
 3. l'explotació mitjançant finalització o passada.
 
+Quan un lateral supera el segon defensor, la direcció de la superació determina
+la relació local:
+
+- per l'exterior, dins `1–2`, es genera un `2x1` amb l'extrem contra el primer
+  defensor;
+- per l'interior, dins `2–3`, es genera un `2x1` amb el pivot contra el tercer
+  defensor.
+
+Aquesta estructura general no converteix la passada en obligatòria: el portador
+continua o passa segons l'ajuda. Una tasca pot imposar una resposta concreta per
+forçar un aprenentatge —per exemple, passada obligatòria al pivot—, però aquesta
+obligació s'ha de marcar com a `condicio_tasca` i no com a principi universal.
+
 ## Coordinació amb jugadors sense pilota
 
 El portador ha d'entendre preferentment quin espai li correspon atacar. Aquesta

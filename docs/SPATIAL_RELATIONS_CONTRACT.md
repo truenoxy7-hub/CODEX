@@ -6,9 +6,8 @@ El contracte converteix la semàntica tàctica validada en un graf qualitatiu qu
 un futur motor espacial podrà resoldre. Defineix **què ha de quedar relacionat**
 sense decidir encara **a quines coordenades** s'ha de dibuixar.
 
-Les instàncies executables actuals són
-`exercises/TR-UVOF-001/spatial-relations.json` i
-`exercises/TR-UVOF-002/spatial-relations.json`; totes dues compleixen
+Les instàncies executables actuals són les de `TR-UVOF-001`, `TR-UVOF-002` i
+`TR-UVOF-003`; totes compleixen
 `schema/traca.spatial-relations.schema.v0.2.json`.
 
 ## Límits de la capa
@@ -165,6 +164,22 @@ La segona instància representa:
 - amplitud de l'extrem i salt cap al centre en la finalització exterior;
 - alternatives obertes segons la superació i l'ajuda de `D1` o `D3`.
 
+## Instància TR-UVOF-003
+
+La tercera instància representa:
+
+- un atac `6x6` complet contra els sis defensors reals d'un `6:0`;
+- llibertat del lateral per atacar `1–2` o `2–3`;
+- `2x1` exterior amb l'extrem contra `D1` i interior amb el pivot contra `D3`;
+- pivot inicialment a `3–3`, davant del tercer que no ajuda, mantenint el
+  bloqueig estàtic i la línia de passada;
+- passada al pivot obligatòria només com a condició pedagògica quan `D3` ajuda;
+- encreuament amb central o extrem segons l'interval final sense superació;
+- retorn de la pilota al jugador que ocupa temporalment la posició central;
+- canvi de banda obligatori dins la tasca i reinici del `1x1` pel lateral
+  contrari;
+- adaptació del pivot al nou tercer que no participa en l'ajuda.
+
 ## Validacions executables
 
 El validador comprova:
@@ -202,10 +217,10 @@ Sortida futura:
 
 ## Abast i pendents de v0.2
 
-La versió 0.2 valida l'arquitectura amb `TR-UVOF-001` i `TR-UVOF-002`; encara
-no és un motor. Abans de congelar-ne el vocabulari cal:
+La versió 0.2 valida l'arquitectura amb `TR-UVOF-001`, `TR-UVOF-002` i
+`TR-UVOF-003`; encara no és un motor. Abans de congelar-ne el vocabulari cal:
 
-- provar-lo amb exercicis de permuta, bloqueig i situació de partit;
+- provar-lo amb exercicis de permuta i situació de partit;
 - definir com canvien els intervals quan els defensors es desplacen entre
   estats;
 - especificar la normalització de costat i la reflexió de les dues bandes;

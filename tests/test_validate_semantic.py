@@ -347,6 +347,79 @@ def test_corpus_rejects_disconnected_pass_return_in_uvof002(
     ]
 
 
+def test_corpus_rejects_incomplete_6x6_in_uvof003(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-003")
+    exercise["participants"] = [
+        participant
+        for participant in exercise["participants"]
+        if participant["id"] != "D1_OPOSAT"
+    ]
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF003_FULL_6X6" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_optional_pivot_pass_in_uvof003(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-003")
+    decision = _corpus_decision(exercise, "D_PASSADA_PIVOT")
+    decision["caracter"] = "disponible"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF003_PIVOT_PASS_TASK_RULE" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_optional_task_switch_in_uvof003(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-003")
+    decision = _corpus_decision(exercise, "D_CANVI_BANDA")
+    decision["caracter"] = "preferent"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF003_SWITCH_TASK_RULE" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_analytic_classification_for_full_uvof003(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-003")
+    exercise["tipus_exercici"] = "analitic"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF003_FULL_6X6" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_missing_uvof003_task_condition(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-003")
+    exercise["condicions_tasca"].remove(
+        "passada_pivot_obligatoria_si_D3_ajuda"
+    )
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF003_TASK_CONDITIONS" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
 def test_corpus_rejects_geometry(valid_corpus, corpus_schema):
     exercise = _corpus_exercise(valid_corpus, "TR-UVOF-015")
     exercise["coordenades"] = [{"x": 1, "y": 2}]

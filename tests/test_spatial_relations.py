@@ -356,3 +356,109 @@ def test_uvof002_rejects_unknown_semantic_decision(
     )
 
     assert "SPATIAL_UNKNOWN_DECISION" in _error_codes(report)
+
+
+@pytest.fixture
+def spatial_document_003() -> dict:
+    return json.loads(
+        (
+            ROOT
+            / "exercises"
+            / "TR-UVOF-003"
+            / "spatial-relations.json"
+        ).read_text(encoding="utf-8")
+    )
+
+
+@pytest.fixture
+def semantic_document_003() -> dict:
+    corpus = json.loads(
+        (ROOT / "corpus" / "uvof.semantic.json").read_text(encoding="utf-8")
+    )
+    return next(
+        exercise
+        for exercise in corpus["exercicis"]
+        if exercise["id"] == "TR-UVOF-003"
+    )
+
+
+def test_uvof003_spatial_contract_represents_full_6x6_and_task_rules(
+    spatial_document_003,
+    spatial_schema,
+    semantic_document_003,
+) -> None:
+    report = validate_spatial_relations_document(
+        spatial_document_003,
+        spatial_schema,
+        semantic_document_003,
+    )
+
+    assert report["valid"] is True
+    assert report["summary"] == {
+        "node_count": 17,
+        "space_count": 11,
+        "state_count": 9,
+        "transition_count": 11,
+        "ball_flow_count": 8,
+        "branch_count": 4,
+        "error_count": 0,
+        "structural_error_count": 0,
+        "relational_error_count": 0,
+    }
+    nodes = {node["id"]: node for node in spatial_document_003["nodes"]}
+    assert all(
+        nodes[defender_id]["classe"] == "participant"
+        for defender_id in (
+            "D1_LOCAL",
+            "D2_LOCAL",
+            "D3_LOCAL",
+            "D3_OPOSAT",
+            "D2_OPOSAT",
+            "D1_OPOSAT",
+        )
+    )
+    pivot_pass = next(
+        flow for flow in spatial_document_003["fluxos_pilota"]
+        if flow["id"] == "FP_23_AJUDA_PIVOT"
+    )
+    assert pivot_pass["estat_coneixement"] == "condicio_tasca"
+    assert "obligatoria_com_a_condicio_tasca" in pivot_pass["qualificadors"]
+    switch_branch = next(
+        branch for branch in spatial_document_003["branques_decisionals"]
+        if branch["id"] == "BR_CANVI_BANDA"
+    )
+    assert switch_branch["caracter"] == "obligatori"
+    pivot_blocks = {
+        tuple(relation["objectes"])
+        for state in spatial_document_003["estats"]
+        for relation in state["relacions"]
+        if relation["subjecte"] == "PV"
+        and relation["predicat"] == "per_davant_de"
+    }
+    assert pivot_blocks == {("D3_LOCAL",), ("D3_OPOSAT",)}
+    assert {
+        flow["posseidor_final"]
+        for flow in spatial_document_003["fluxos_pilota"]
+        if flow["id"] in {"FP_23_CANVI_BANDA", "FP_12_CANVI_BANDA"}
+    } == {"L_OPOSAT"}
+
+
+def test_uvof003_rejects_disconnected_change_of_side_flow(
+    spatial_document_003,
+    spatial_schema,
+    semantic_document_003,
+) -> None:
+    document = deepcopy(spatial_document_003)
+    switch_flow = next(
+        flow for flow in document["fluxos_pilota"]
+        if flow["id"] == "FP_23_CANVI_BANDA"
+    )
+    switch_flow["posseidor_inicial"] = "CE"
+
+    report = validate_spatial_relations_document(
+        document,
+        spatial_schema,
+        semantic_document_003,
+    )
+
+    assert "SPATIAL_BALL_FLOW_DISCONNECTED" in _error_codes(report)

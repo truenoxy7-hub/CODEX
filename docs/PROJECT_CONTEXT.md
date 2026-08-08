@@ -74,6 +74,7 @@ formen el primer corpus complet de la família.
 
 S'ha creat un JSON detallat de `TR-UVOF-001`, un corpus semàntic v1.1 amb els
 quinze exercicis UVOF i un contracte de relacions espacials v0.2 aplicat a
-`TR-UVOF-001` i `TR-UVOF-002`. La segona instància incorpora trajectòries
-alternatives, flux independent de pilota, continuïtats i encreuaments. Cap
-d'aquestes capes conté coordenades ni render.
+`TR-UVOF-001`, `TR-UVOF-002` i `TR-UVOF-003`. Les instàncies incorporen
+trajectòries alternatives, flux independent de pilota, continuïtats,
+encreuaments, bloqueig estàtic i canvi de banda. Cap d'aquestes capes conté
+coordenades ni render.

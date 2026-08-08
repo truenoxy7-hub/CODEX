@@ -132,3 +132,14 @@ les encadeni com si fossin una única solució.
 **Motiu:** `TR-UVOF-002` conté dues direccions de finta i desenllaços diferents
 segons la superació i l'ajuda defensiva. Barrejar-los en un sol recorregut faria
 perdre la lògica tàctica validada.
+
+## D-023 — Continuïtat després de superar el segon defensor
+
+**Decisió:** superar el segon per l'exterior genera un `2x1` amb l'extrem contra
+el primer defensor; superar-lo per l'interior genera un `2x1` amb el pivot
+contra el tercer. La finalització o la passada depenen de l'ajuda.
+
+**Decisió:** una resposta obligatòria dins un exercici s'etiqueta com a
+`condicio_tasca`. A `TR-UVOF-003`, la passada al pivot quan el tercer ajuda i el
+canvi de banda després d'un encreuament sense avantatge són obligacions
+pedagògiques, no regles universals de la situació real.
