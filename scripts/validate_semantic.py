@@ -19,7 +19,7 @@ SPATIAL_RELATIONS = (
     ROOT / "exercises" / "TR-UVOF-001" / "spatial-relations.json"
 )
 SPATIAL_RELATIONS_SCHEMA = (
-    ROOT / "schema" / "traca.spatial-relations.schema.v0.2.json"
+    ROOT / "schema" / "traca.spatial-relations.schema.v0.3.json"
 )
 SPATIAL_RELATIONS_OUTPUT = (
     ROOT / "exercises" / "TR-UVOF-001" / "spatial-relations.validation.json"
@@ -1962,15 +1962,71 @@ def validate_spatial_relations_document(
         }
         for error in structural
     ]
+    preflight: Document | None = None
     if not structural:
-        errors.extend(_spatial_custom_errors(document, semantic_document))
+        if document.get("meta", {}).get("versio_contracte") == "0.3.0":
+            # v0.3 resolves its own declared, fingerprinted sources. Reusing a
+            # sibling semantic.json here would silently choose a source in the
+            # exact conflict that the contract must preserve.
+            try:
+                from scripts.spatial_preflight import preflight_document
+            except ModuleNotFoundError:  # direct execution: python scripts/...
+                from spatial_preflight import preflight_document
+
+            local_codes = {
+                "SPATIAL_NO_GEOMETRY",
+                "SPATIAL_SOURCE_EXERCISE",
+                "SPATIAL_DUPLICATE_ID",
+                "SPATIAL_UNKNOWN_BOUNDARY",
+                "SPATIAL_UNKNOWN_ADJACENT_SPACE",
+                "SPATIAL_ASYMMETRIC_ADJACENCY",
+                "SPATIAL_INVALID_SHARED_REFERENCE",
+                "SPATIAL_UNKNOWN_RELATION_SUBJECT",
+                "SPATIAL_UNKNOWN_RELATION_OBJECT",
+                "SPATIAL_UNKNOWN_TRANSITION_ACTOR",
+                "SPATIAL_UNKNOWN_TRANSITION_SPACE",
+                "SPATIAL_UNKNOWN_OPPOSITION_REFERENCE",
+                "SPATIAL_DISCONNECTED_TRANSITION",
+                "SPATIAL_UNKNOWN_BALL_HOLDER",
+                "SPATIAL_BALL_FLOW_DISCONNECTED",
+                "SPATIAL_REQUIRED_INVARIANT",
+            }
+            errors.extend(
+                error
+                for error in _spatial_custom_errors(document, semantic_document)
+                if error["code"] in local_codes
+            )
+            preflight = preflight_document(document)
+            expected_domain_diagnostics = {
+                "SEMANTIC_SOURCE_CONFLICT",
+                "SEMANTIC_BALL_FLOW_UNSPECIFIED",
+                "SEMANTIC_BALL_INFORMATION_UNSPECIFIED",
+                "SPATIAL_UNANCHORED_CYCLE",
+                "UNINSTANTIATED_PARTICIPANT_GROUP",
+                "SEMANTIC_OPTIONS_PRESERVED_SYMBOLICALLY",
+                "FINTA_ADJACENT_SPACE_MISSING",
+                "SPATIAL_FRAME_INSUFFICIENT",
+                "KNOWLEDGE_STATUS_PROPAGATED",
+            }
+            errors.extend(
+                {
+                    "code": diagnostic["code"],
+                    "path": diagnostic["entity_ref"],
+                    "message": diagnostic["message"],
+                }
+                for diagnostic in preflight["diagnostics"]
+                if diagnostic["code"] not in expected_domain_diagnostics
+            )
+        else:
+            errors.extend(_spatial_custom_errors(document, semantic_document))
 
     return {
         "exercise": document.get("font_semantica", {}).get("exercici_id"),
         "schema": schema.get("$id"),
         "valid": not errors,
         "errors": errors,
-        "warnings": [],
+        "warnings": preflight["diagnostics"] if preflight else [],
+        "preflight": preflight,
         "summary": {
             "node_count": len(document.get("nodes", [])),
             "space_count": len(document.get("espais", [])),
@@ -1995,7 +2051,12 @@ def validate_spatial_relations(
 ) -> Document:
     document = json.loads(spatial_path.read_text(encoding="utf-8"))
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
-    semantic_document = json.loads(semantic_path.read_text(encoding="utf-8"))
+    if document.get("meta", {}).get("versio_contracte") == "0.3.0":
+        semantic_document = {
+            "id": document.get("semantic_source", {}).get("exercise_id")
+        }
+    else:
+        semantic_document = json.loads(semantic_path.read_text(encoding="utf-8"))
     report = validate_spatial_relations_document(
         document,
         schema,
@@ -2055,13 +2116,18 @@ def validate_all_spatial_relations(
             )
         )
         exercise_id = document.get("font_semantica", {}).get("exercici_id")
-        sibling_semantic_path = spatial_path.with_name("semantic.json")
-        if sibling_semantic_path.exists():
-            semantic_document = json.loads(
-                sibling_semantic_path.read_text(encoding="utf-8")
-            )
+        if version == "0.3.0":
+            semantic_document = {
+                "id": document.get("semantic_source", {}).get("exercise_id")
+            }
         else:
-            semantic_document = _corpus_exercise(corpus_document, exercise_id)
+            sibling_semantic_path = spatial_path.with_name("semantic.json")
+            if sibling_semantic_path.exists():
+                semantic_document = json.loads(
+                    sibling_semantic_path.read_text(encoding="utf-8")
+                )
+            else:
+                semantic_document = _corpus_exercise(corpus_document, exercise_id)
 
         if not schema_path.exists():
             reports.append(

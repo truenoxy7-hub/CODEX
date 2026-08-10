@@ -30,7 +30,7 @@ def spatial_schema() -> dict:
         (
             ROOT
             / "schema"
-            / "traca.spatial-relations.schema.v0.2.json"
+            / "traca.spatial-relations.schema.v0.3.json"
         ).read_text(encoding="utf-8")
     )
 
@@ -68,11 +68,11 @@ def test_repository_spatial_contract_passes(
     assert report["valid"] is True
     assert report["errors"] == []
     assert report["summary"] == {
-        "node_count": 17,
+        "node_count": 19,
         "space_count": 9,
         "state_count": 7,
         "transition_count": 6,
-        "ball_flow_count": 0,
+        "ball_flow_count": 2,
         "branch_count": 2,
         "error_count": 0,
         "structural_error_count": 0,
@@ -339,7 +339,7 @@ def test_uvof002_rejects_disconnected_ball_flow(
     assert "SPATIAL_BALL_FLOW_DISCONNECTED" in _error_codes(report)
 
 
-def test_uvof002_rejects_unknown_semantic_decision(
+def test_uvof002_rejects_non_stable_semantic_decision_reference(
     spatial_document_002,
     spatial_schema,
     semantic_document_002,
@@ -355,7 +355,7 @@ def test_uvof002_rejects_unknown_semantic_decision(
         semantic_document_002,
     )
 
-    assert "SPATIAL_UNKNOWN_DECISION" in _error_codes(report)
+    assert "SCHEMA_ERROR" in _error_codes(report)
 
 
 @pytest.fixture

@@ -1,110 +1,1710 @@
 {
   "meta": {
     "format": "TRACA_relacions_espacials",
-    "versio_contracte": "0.2.0",
-    "versio_instancia": "0.2.0",
+    "versio_contracte": "0.3.0",
+    "versio_instancia": "0.3.0",
     "estat": "derivat_semantica_validada",
-    "separacio_capes": {"semantica_tactica": "referenciada_no_duplicada", "relacions_espacials": "incloses", "geometria_resolta": "no_inclosa", "renderitzat": "no_generat"}
+    "separacio_capes": {
+      "semantica_tactica": "referenciada_no_duplicada",
+      "relacions_espacials": "incloses",
+      "geometria_resolta": "no_inclosa",
+      "renderitzat": "no_generat"
+    }
   },
-  "font_semantica": {"exercici_id": "TR-UVOF-012", "fitxers": ["corpus/uvof.semantic.json"], "plantilla": "dues_superioritats_despres_de_permuta_lateral_central", "simetria": "reflectible"},
+  "font_semantica": {
+    "exercici_id": "TR-UVOF-012",
+    "fitxers": [
+      "corpus/uvof.semantic.json"
+    ],
+    "plantilla": "dues_superioritats_despres_de_permuta_lateral_central",
+    "simetria": "reflectible"
+  },
   "nodes": [
-    {"id": "L", "classe": "participant", "referencia_semantica": "participants/L", "rol": "primer_jugador_de_la_permuta_i_resolutor_del_primer_2x1", "estat_coneixement": "validat"},
-    {"id": "CE", "classe": "participant", "referencia_semantica": "participants/CE", "rol": "lateral_temporal_del_segon_2x1", "estat_coneixement": "validat"},
-    {"id": "L_OPOSAT", "classe": "participant", "referencia_semantica": "participants/L_OPOSAT", "rol": "passador_de_la_permuta_lateral_central", "estat_coneixement": "validat"},
-    {"id": "PV", "classe": "participant", "referencia_semantica": "participants/PV", "rol": "receptor_amb_lliscament_obligatori_si_D3_puja", "estat_coneixement": "validat"},
-    {"id": "EXT", "classe": "participant", "referencia_semantica": "participants/EXT", "rol": "passador_i_company_del_segon_2x1", "estat_coneixement": "validat"},
-    {"id": "D1", "classe": "participant", "referencia_semantica": "participants/D1", "rol": "primer_defensor_del_segon_2x1", "estat_coneixement": "validat"},
-    {"id": "D3", "classe": "participant", "referencia_semantica": "participants/D3", "rol": "tercer_o_central_defensiu_del_primer_2x1", "estat_coneixement": "validat"},
-    {"id": "BANC", "classe": "material", "referencia_semantica": "materials/BANC", "funcio": "condicionant_de_la_primera_accio", "estat_coneixement": "condicio_tasca"},
-    {"id": "B1", "classe": "pilota", "referencia_semantica": "pilotes/B1", "funcio": "pilota_del_primer_2x1", "estat_coneixement": "validat"},
-    {"id": "B2", "classe": "pilota", "referencia_semantica": "pilotes/B2", "funcio": "pilota_del_segon_2x1", "estat_coneixement": "validat"},
-    {"id": "LINIA_FONS", "classe": "referencia_reglamentaria", "referencia_semantica": "linia_de_fons", "funcio": "limit_de_lespai_exterior", "estat_coneixement": "validat"},
-    {"id": "AREA_6M", "classe": "referencia_reglamentaria", "referencia_semantica": "area_de_6_metres", "funcio": "zona_de_finalitzacio", "estat_coneixement": "validat"},
-    {"id": "PORTERIA_ADVERSARIA", "classe": "referencia_reglamentaria", "referencia_semantica": "porteria_adversaria", "funcio": "orientacio_general_de_latac", "estat_coneixement": "validat"},
-    {"id": "EIX_CENTRAL", "classe": "referencia_funcional", "referencia_semantica": "centre_de_la_pista", "funcio": "posicio_central_temporal_de_L", "estat_coneixement": "validat"},
-    {"id": "EIX_LATERAL", "classe": "referencia_funcional", "referencia_semantica": "sector_lateral", "funcio": "posicio_lateral_temporal_de_CE", "estat_coneixement": "validat"}
+    {
+      "id": "L",
+      "classe": "participant",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/11/participants/0",
+      "rol": "primer_jugador_de_la_permuta_i_resolutor_del_primer_2x1",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "CE",
+      "classe": "participant",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/11/participants/1",
+      "rol": "lateral_temporal_del_segon_2x1",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "L_OPOSAT",
+      "classe": "participant",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/11/participants/2",
+      "rol": "passador_de_la_permuta_lateral_central",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "PV",
+      "classe": "participant",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/11/participants/3",
+      "rol": "receptor_amb_lliscament_obligatori_si_D3_puja",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "EXT",
+      "classe": "participant",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/11/participants/4",
+      "rol": "passador_i_company_del_segon_2x1",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "D1",
+      "classe": "participant",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/11/participants/5",
+      "rol": "primer_defensor_del_segon_2x1",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "D3",
+      "classe": "participant",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/11/participants/6",
+      "rol": "tercer_o_central_defensiu_del_primer_2x1",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "BANC",
+      "classe": "material",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/11/materials/0",
+      "funcio": "condicionant_de_la_primera_accio",
+      "estat_coneixement": "condicio_tasca"
+    },
+    {
+      "id": "B1",
+      "classe": "pilota",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/11/pilotes/0",
+      "funcio": "pilota_del_primer_2x1",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "B2",
+      "classe": "pilota",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/11/pilotes/1",
+      "funcio": "pilota_del_segon_2x1",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "LINIA_FONS",
+      "classe": "referencia_reglamentaria",
+      "funcio": "limit_de_lespai_exterior",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "AREA_6M",
+      "classe": "referencia_reglamentaria",
+      "funcio": "zona_de_finalitzacio",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "PORTERIA_ADVERSARIA",
+      "classe": "referencia_reglamentaria",
+      "funcio": "orientacio_general_de_latac",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "EIX_CENTRAL",
+      "classe": "referencia_funcional",
+      "funcio": "posicio_central_temporal_de_L",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "EIX_LATERAL",
+      "classe": "referencia_funcional",
+      "funcio": "posicio_lateral_temporal_de_CE",
+      "estat_coneixement": "validat"
+    }
   ],
   "espais": [
-    {"id": "POS_LATERAL", "classe": "posicio_funcional", "nom_canonic": "posicio_lateral", "definicio": {"operador": "proper_a", "arguments": ["EIX_LATERAL"]}, "fases_actives": ["F1", "F2"], "estat_coneixement": "validat"},
-    {"id": "POS_CENTRAL", "classe": "posicio_funcional", "nom_canonic": "posicio_central_despres_de_la_permuta", "definicio": {"operador": "proper_a", "arguments": ["EIX_CENTRAL"]}, "fases_actives": ["F1"], "estat_coneixement": "validat"},
-    {"id": "ZONA_BANC", "classe": "posicio_funcional", "nom_canonic": "zona_de_salt_del_banc", "definicio": {"operador": "proper_a", "arguments": ["BANC"]}, "fases_actives": ["F1"], "estat_coneixement": "condicio_tasca"},
-    {"id": "ESPAI_PV", "classe": "zona_resolucio", "nom_canonic": "espai_de_lliscament_i_recepcio_del_pivot", "definicio": {"operador": "proper_a", "arguments": ["D3"]}, "restriccions": [{"operador": "interior_de", "arguments": ["AREA_6M"]}], "fases_actives": ["F1"], "estat_coneixement": "validat"},
-    {"id": "ESPAI_EXT", "classe": "espai_finalitzacio_extrem", "nom_canonic": "espai_exterior_contra_D1", "definicio": {"operador": "entre", "arguments": ["LINIA_FONS", "D1"]}, "restriccions": [{"operador": "interior_de", "arguments": ["AREA_6M"]}], "fases_actives": ["F2"], "estat_coneixement": "validat"},
-    {"id": "ZONA_FINAL_6M", "classe": "zona_resolucio", "nom_canonic": "zona_de_finalitzacio", "definicio": {"operador": "interior_de", "arguments": ["AREA_6M"]}, "fases_actives": ["F1", "F2"], "estat_coneixement": "validat"}
+    {
+      "id": "POS_LATERAL",
+      "classe": "posicio_funcional",
+      "nom_canonic": "posicio_lateral",
+      "definicio": {
+        "operador": "proper_a",
+        "arguments": [
+          "EIX_LATERAL"
+        ]
+      },
+      "fases_actives": [
+        "F1",
+        "F2"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "POS_CENTRAL",
+      "classe": "posicio_funcional",
+      "nom_canonic": "posicio_central_despres_de_la_permuta",
+      "definicio": {
+        "operador": "proper_a",
+        "arguments": [
+          "EIX_CENTRAL"
+        ]
+      },
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "ZONA_BANC",
+      "classe": "posicio_funcional",
+      "nom_canonic": "zona_de_salt_del_banc",
+      "definicio": {
+        "operador": "proper_a",
+        "arguments": [
+          "BANC"
+        ]
+      },
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "condicio_tasca"
+    },
+    {
+      "id": "ESPAI_PV",
+      "classe": "zona_resolucio",
+      "nom_canonic": "espai_de_lliscament_i_recepcio_del_pivot",
+      "definicio": {
+        "operador": "proper_a",
+        "arguments": [
+          "D3"
+        ]
+      },
+      "restriccions": [
+        {
+          "operador": "interior_de",
+          "arguments": [
+            "AREA_6M"
+          ]
+        }
+      ],
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "ESPAI_EXT",
+      "classe": "espai_finalitzacio_extrem",
+      "nom_canonic": "espai_exterior_contra_D1",
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "LINIA_FONS",
+          "D1"
+        ]
+      },
+      "restriccions": [
+        {
+          "operador": "interior_de",
+          "arguments": [
+            "AREA_6M"
+          ]
+        }
+      ],
+      "fases_actives": [
+        "F2"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "ZONA_FINAL_6M",
+      "classe": "zona_resolucio",
+      "nom_canonic": "zona_de_finalitzacio",
+      "definicio": {
+        "operador": "interior_de",
+        "arguments": [
+          "AREA_6M"
+        ]
+      },
+      "fases_actives": [
+        "F1",
+        "F2"
+      ],
+      "estat_coneixement": "validat"
+    }
   ],
   "estats": [
-    {"id": "S_PERMUTA", "fase_ref": "F1", "moment": "preparacio", "relacions": [
-      {"subjecte": "L", "predicat": "ocupa", "objectes": ["POS_CENTRAL"], "caracter": "obligatori", "estat_coneixement": "validat"},
-      {"subjecte": "CE", "predicat": "ocupa", "objectes": ["POS_LATERAL"], "caracter": "obligatori", "estat_coneixement": "validat"},
-      {"subjecte": "L_OPOSAT", "predicat": "orientat_cap_a", "objectes": ["L"], "caracter": "obligatori", "estat_coneixement": "validat"}
-    ]},
-    {"id": "S_PRIMER_2X1", "fase_ref": "F1", "moment": "desenvolupament", "relacions": [
-      {"subjecte": "L", "predicat": "ocupa", "objectes": ["ZONA_BANC"], "caracter": "obligatori", "estat_coneixement": "condicio_tasca"},
-      {"subjecte": "L", "predicat": "relacionat_en_2x1_amb", "objectes": ["PV", "D3"], "caracter": "obligatori", "estat_coneixement": "validat"},
-      {"subjecte": "L", "predicat": "orientat_cap_a", "objectes": ["PORTERIA_ADVERSARIA"], "caracter": "obligatori", "estat_coneixement": "validat"}
-    ]},
-    {"id": "S_LLISCAMENT_PV", "fase_ref": "F1", "moment": "ajuda", "relacions": [
-      {"subjecte": "PV", "predicat": "adapta_posicio_respecte_a", "objectes": ["D3"], "caracter": "obligatori", "estat_coneixement": "condicio_tasca"},
-      {"subjecte": "PV", "predicat": "disponible_per_rebre_a", "objectes": ["ESPAI_PV"], "caracter": "obligatori", "estat_coneixement": "condicio_tasca"}
-    ]},
-    {"id": "S_SEGON_2X1", "fase_ref": "F2", "moment": "recepcio", "relacions": [
-      {"subjecte": "CE", "predicat": "ocupa", "objectes": ["POS_LATERAL"], "caracter": "obligatori", "estat_coneixement": "validat"},
-      {"subjecte": "EXT", "predicat": "mante_amplitud_a", "objectes": ["ESPAI_EXT"], "caracter": "obligatori", "estat_coneixement": "validat"},
-      {"subjecte": "CE", "predicat": "relacionat_en_2x1_amb", "objectes": ["EXT", "D1"], "caracter": "obligatori", "estat_coneixement": "validat"}
-    ]},
-    {"id": "S_RESOLUCIO_SEGON_2X1", "fase_ref": "F2", "moment": "resolucio", "relacions": [
-      {"subjecte": "CE", "predicat": "ataca", "objectes": ["ZONA_FINAL_6M"], "caracter": "disponible", "estat_coneixement": "validat"},
-      {"subjecte": "EXT", "predicat": "disponible_per_rebre_a", "objectes": ["ESPAI_EXT"], "caracter": "disponible", "estat_coneixement": "validat"}
-    ]}
+    {
+      "id": "S_PERMUTA",
+      "fase_ref": "F1",
+      "moment": "preparacio",
+      "relacions": [
+        {
+          "subjecte": "L",
+          "predicat": "ocupa",
+          "objectes": [
+            "POS_CENTRAL"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "CE",
+          "predicat": "ocupa",
+          "objectes": [
+            "POS_LATERAL"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "L_OPOSAT",
+          "predicat": "orientat_cap_a",
+          "objectes": [
+            "L"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "S_PRIMER_2X1",
+      "fase_ref": "F1",
+      "moment": "desenvolupament",
+      "relacions": [
+        {
+          "subjecte": "L",
+          "predicat": "ocupa",
+          "objectes": [
+            "ZONA_BANC"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "condicio_tasca"
+        },
+        {
+          "subjecte": "L",
+          "predicat": "relacionat_en_2x1_amb",
+          "objectes": [
+            "PV",
+            "D3"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "L",
+          "predicat": "orientat_cap_a",
+          "objectes": [
+            "PORTERIA_ADVERSARIA"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "S_LLISCAMENT_PV",
+      "fase_ref": "F1",
+      "moment": "ajuda",
+      "relacions": [
+        {
+          "subjecte": "PV",
+          "predicat": "adapta_posicio_respecte_a",
+          "objectes": [
+            "D3"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "condicio_tasca"
+        },
+        {
+          "subjecte": "PV",
+          "predicat": "disponible_per_rebre_a",
+          "objectes": [
+            "ESPAI_PV"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "condicio_tasca"
+        }
+      ]
+    },
+    {
+      "id": "S_SEGON_2X1",
+      "fase_ref": "F2",
+      "moment": "recepcio",
+      "relacions": [
+        {
+          "subjecte": "CE",
+          "predicat": "ocupa",
+          "objectes": [
+            "POS_LATERAL"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "EXT",
+          "predicat": "mante_amplitud_a",
+          "objectes": [
+            "ESPAI_EXT"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "CE",
+          "predicat": "relacionat_en_2x1_amb",
+          "objectes": [
+            "EXT",
+            "D1"
+          ],
+          "caracter": "obligatori",
+          "estat_coneixement": "validat"
+        }
+      ]
+    },
+    {
+      "id": "S_RESOLUCIO_SEGON_2X1",
+      "fase_ref": "F2",
+      "moment": "resolucio",
+      "relacions": [
+        {
+          "subjecte": "CE",
+          "predicat": "ataca",
+          "objectes": [
+            "ZONA_FINAL_6M"
+          ],
+          "caracter": "disponible",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "EXT",
+          "predicat": "disponible_per_rebre_a",
+          "objectes": [
+            "ESPAI_EXT"
+          ],
+          "caracter": "disponible",
+          "estat_coneixement": "validat"
+        }
+      ]
+    }
   ],
   "transicions": [
-    {"id": "T_L_PERMUTA", "fase_ref": "F1", "ordre": 1, "trajectoria_id": "PRIMER_2X1", "actor": "L", "tipus": "ajust_sense_pilota", "des_de": "POS_LATERAL", "cap_a": "POS_CENTRAL", "accio_semantica_ref": "fases/F1/accions/1", "estat_coneixement": "validat"},
-    {"id": "T_L_REP_OPOSAT", "fase_ref": "F1", "ordre": 2, "trajectoria_id": "PRIMER_2X1", "actor": "L", "tipus": "recepcio", "des_de": "POS_CENTRAL", "cap_a": "POS_CENTRAL", "accio_semantica_ref": "fases/F1/accions/3", "qualificadors": ["rep_de_L_OPOSAT", "rol_temporal_CE"], "estat_coneixement": "validat"},
-    {"id": "T_L_SALTA_BANC", "fase_ref": "F1", "ordre": 3, "trajectoria_id": "PRIMER_2X1", "actor": "L", "tipus": "atac_espai", "des_de": "POS_CENTRAL", "cap_a": "ZONA_BANC", "referencia_oposicional": "D3", "accio_semantica_ref": "fases/F1/accions/3", "estat_coneixement": "validat"},
-    {"id": "T_L_RESOL_PRIMER", "fase_ref": "F1", "ordre": 4, "trajectoria_id": "PRIMER_2X1", "actor": "L", "tipus": "resolucio", "des_de": "ZONA_BANC", "cap_a": "ZONA_FINAL_6M", "referencia_oposicional": "D3", "estat_coneixement": "validat"},
-    {"id": "T_CE_OBRE", "fase_ref": "F1", "ordre": 1, "trajectoria_id": "OBERTURA_CE", "actor": "CE", "tipus": "ajust_sense_pilota", "des_de": "POS_CENTRAL", "cap_a": "POS_LATERAL", "accio_semantica_ref": "fases/F1/accions/1", "estat_coneixement": "validat"},
-    {"id": "T_PV_LLISCA", "fase_ref": "F1", "ordre": 1, "trajectoria_id": "LLISCAMENT_PV", "actor": "PV", "tipus": "ajust_sense_pilota", "cap_a": "ESPAI_PV", "accio_semantica_ref": "fases/F1/accions/4", "condicio": "D3_puja", "estat_coneixement": "condicio_tasca"},
-    {"id": "T_CE_REP_EXT", "fase_ref": "F2", "ordre": 1, "trajectoria_id": "SEGON_2X1", "actor": "CE", "tipus": "recepcio", "des_de": "POS_LATERAL", "cap_a": "POS_LATERAL", "accio_semantica_ref": "fases/F2/accions/1", "estat_coneixement": "validat"},
-    {"id": "T_CE_RESOL", "fase_ref": "F2", "ordre": 2, "trajectoria_id": "SEGON_2X1", "actor": "CE", "tipus": "resolucio", "des_de": "POS_LATERAL", "cap_a": "ZONA_FINAL_6M", "referencia_oposicional": "D1", "accio_semantica_ref": "fases/F2/accions/2", "estat_coneixement": "validat"},
-    {"id": "T_EXT_RESOL", "fase_ref": "F2", "ordre": 1, "trajectoria_id": "FINAL_EXT", "actor": "EXT", "tipus": "resolucio", "des_de": "ESPAI_EXT", "cap_a": "ZONA_FINAL_6M", "referencia_oposicional": "D1", "condicio": "D1_tanca_CE", "qualificadors": ["mante_amplitud", "salt_cap_al_centre"], "estat_coneixement": "validat"}
+    {
+      "id": "T_L_PERMUTA",
+      "fase_ref": "F1",
+      "ordre": 1,
+      "trajectoria_id": "PRIMER_2X1",
+      "actor": "L",
+      "tipus": "ajust_sense_pilota",
+      "des_de": "POS_LATERAL",
+      "cap_a": "POS_CENTRAL",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/0/accions/1",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_L_REP_OPOSAT",
+      "fase_ref": "F1",
+      "ordre": 2,
+      "trajectoria_id": "PRIMER_2X1",
+      "actor": "L",
+      "tipus": "recepcio",
+      "des_de": "POS_CENTRAL",
+      "cap_a": "POS_CENTRAL",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/0/accions/3",
+      "qualificadors": [
+        "rep_de_L_OPOSAT",
+        "rol_temporal_CE"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_L_SALTA_BANC",
+      "fase_ref": "F1",
+      "ordre": 3,
+      "trajectoria_id": "PRIMER_2X1",
+      "actor": "L",
+      "tipus": "atac_espai",
+      "des_de": "POS_CENTRAL",
+      "cap_a": "ZONA_BANC",
+      "referencia_oposicional": "D3",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/0/accions/3",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_L_RESOL_PRIMER",
+      "fase_ref": "F1",
+      "ordre": 4,
+      "trajectoria_id": "PRIMER_2X1",
+      "actor": "L",
+      "tipus": "resolucio",
+      "des_de": "ZONA_BANC",
+      "cap_a": "ZONA_FINAL_6M",
+      "referencia_oposicional": "D3",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_CE_OBRE",
+      "fase_ref": "F1",
+      "ordre": 1,
+      "trajectoria_id": "OBERTURA_CE",
+      "actor": "CE",
+      "tipus": "ajust_sense_pilota",
+      "des_de": "POS_CENTRAL",
+      "cap_a": "POS_LATERAL",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/0/accions/1",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_PV_LLISCA",
+      "fase_ref": "F1",
+      "ordre": 1,
+      "trajectoria_id": "LLISCAMENT_PV",
+      "actor": "PV",
+      "tipus": "ajust_sense_pilota",
+      "cap_a": "ESPAI_PV",
+      "condicio": "D3_puja",
+      "estat_coneixement": "condicio_tasca"
+    },
+    {
+      "id": "T_CE_REP_EXT",
+      "fase_ref": "F2",
+      "ordre": 1,
+      "trajectoria_id": "SEGON_2X1",
+      "actor": "CE",
+      "tipus": "recepcio",
+      "des_de": "POS_LATERAL",
+      "cap_a": "POS_LATERAL",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/1/accions/1",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_CE_RESOL",
+      "fase_ref": "F2",
+      "ordre": 2,
+      "trajectoria_id": "SEGON_2X1",
+      "actor": "CE",
+      "tipus": "resolucio",
+      "des_de": "POS_LATERAL",
+      "cap_a": "ZONA_FINAL_6M",
+      "referencia_oposicional": "D1",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_EXT_RESOL",
+      "fase_ref": "F2",
+      "ordre": 1,
+      "trajectoria_id": "FINAL_EXT",
+      "actor": "EXT",
+      "tipus": "resolucio",
+      "des_de": "ESPAI_EXT",
+      "cap_a": "ZONA_FINAL_6M",
+      "referencia_oposicional": "D1",
+      "condicio": "D1_tanca_CE",
+      "qualificadors": [
+        "mante_amplitud",
+        "salt_cap_al_centre"
+      ],
+      "estat_coneixement": "validat"
+    }
   ],
   "fluxos_pilota": [
-    {"id": "FP_LOPOSAT_L", "fase_ref": "F1", "trajectoria_id": "PRIMER_2X1", "ordre": 1, "pilota_id": "B1", "posseidor_inicial": "L_OPOSAT", "accio": "passada", "posseidor_final": "L", "qualificadors": ["passada_habilitadora_permuta"], "estat_coneixement": "validat"},
-    {"id": "FP_L_PV", "fase_ref": "F1", "trajectoria_id": "PRIMER_2X1", "ordre": 2, "pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_continuitat", "posseidor_final": "PV", "condicio": "D3_puja", "estat_coneixement": "condicio_tasca"},
-    {"id": "FP_EXT_CE", "fase_ref": "F2", "trajectoria_id": "SEGON_2X1", "ordre": 1, "pilota_id": "B2", "posseidor_inicial": "EXT", "accio": "passada", "posseidor_final": "CE", "estat_coneixement": "validat"},
-    {"id": "FP_CE_EXT", "fase_ref": "F2", "trajectoria_id": "SEGON_2X1", "ordre": 2, "pilota_id": "B2", "posseidor_inicial": "CE", "accio": "passada_continuitat", "posseidor_final": "EXT", "condicio": "D1_tanca_CE", "estat_coneixement": "validat"}
+    {
+      "id": "FP_LOPOSAT_L",
+      "fase_ref": "F1",
+      "trajectoria_id": "PRIMER_2X1",
+      "ordre": 1,
+      "pilota_id": "B1",
+      "posseidor_inicial": "L_OPOSAT",
+      "accio": "passada",
+      "posseidor_final": "L",
+      "qualificadors": [
+        "passada_habilitadora_permuta"
+      ],
+      "estat_coneixement": "validat",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/11/fases/0/fluxos_pilota/0"
+    },
+    {
+      "id": "FP_L_PV",
+      "fase_ref": "F1",
+      "trajectoria_id": "PRIMER_2X1",
+      "ordre": 2,
+      "pilota_id": "B1",
+      "posseidor_inicial": "L",
+      "accio": "passada_continuitat",
+      "posseidor_final": "PV",
+      "condicio": "D3_puja",
+      "estat_coneixement": "condicio_tasca",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/11/fases/0/fluxos_pilota/1"
+    },
+    {
+      "id": "FP_EXT_CE",
+      "fase_ref": "F2",
+      "trajectoria_id": "SEGON_2X1",
+      "ordre": 1,
+      "pilota_id": "B2",
+      "posseidor_inicial": "EXT",
+      "accio": "passada",
+      "posseidor_final": "CE",
+      "estat_coneixement": "validat",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/11/fases/1/fluxos_pilota/0"
+    },
+    {
+      "id": "FP_CE_EXT",
+      "fase_ref": "F2",
+      "trajectoria_id": "SEGON_2X1",
+      "ordre": 2,
+      "pilota_id": "B2",
+      "posseidor_inicial": "CE",
+      "accio": "passada_continuitat",
+      "posseidor_final": "EXT",
+      "condicio": "D1_tanca_CE",
+      "estat_coneixement": "validat",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/11/fases/1/fluxos_pilota/1"
+    }
   ],
   "branques_decisionals": [
     {
       "id": "BR_PRIMER_2X1",
       "fase_ref": "F1",
-      "decisio_semantica_ref": "fases/F1/decisions/D_F1",
       "caracter": "obligatori",
       "resolucio": "no_predeterminada",
       "alternatives": [
-        {"id": "A_D3_NO_PUJA", "condicio": "D3_es_mante_pla", "efectes_espacials": [{"subjecte": "L", "predicat": "ataca", "objectes": ["ZONA_FINAL_6M"], "caracter": "obligatori", "estat_coneixement": "validat"}]},
-        {"id": "A_D3_PUJA", "condicio": "D3_puja_a_contactar", "efectes_espacials": [{"subjecte": "PV", "predicat": "adapta_posicio_respecte_a", "objectes": ["D3"], "caracter": "obligatori", "estat_coneixement": "condicio_tasca"}, {"subjecte": "PV", "predicat": "disponible_per_rebre_a", "objectes": ["ESPAI_PV"], "caracter": "obligatori", "estat_coneixement": "condicio_tasca"}]}
-      ]
+        {
+          "id": "A_D3_NO_PUJA",
+          "condicio": "D3_es_mante_pla",
+          "efectes_espacials": [
+            {
+              "subjecte": "L",
+              "predicat": "ataca",
+              "objectes": [
+                "ZONA_FINAL_6M"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "A_D3_PUJA",
+          "condicio": "D3_puja_a_contactar",
+          "efectes_espacials": [
+            {
+              "subjecte": "PV",
+              "predicat": "adapta_posicio_respecte_a",
+              "objectes": [
+                "D3"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "condicio_tasca"
+            },
+            {
+              "subjecte": "PV",
+              "predicat": "disponible_per_rebre_a",
+              "objectes": [
+                "ESPAI_PV"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "condicio_tasca"
+            }
+          ]
+        }
+      ],
+      "decisio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/0/decisions/0"
     },
     {
       "id": "BR_SEGON_2X1",
       "fase_ref": "F2",
-      "decisio_semantica_ref": "fases/F2/decisions/D_F2",
       "caracter": "disponible",
       "resolucio": "no_predeterminada",
       "alternatives": [
-        {"id": "A_CE_FINALITZA", "condicio": "D1_no_tanca_CE", "efectes_espacials": [{"subjecte": "CE", "predicat": "ataca", "objectes": ["ZONA_FINAL_6M"], "caracter": "disponible", "estat_coneixement": "validat"}]},
-        {"id": "A_CE_PASSA_EXT", "condicio": "D1_tanca_i_queda_compromes", "efectes_espacials": [{"subjecte": "EXT", "predicat": "disponible_per_rebre_a", "objectes": ["ESPAI_EXT"], "caracter": "obligatori", "estat_coneixement": "validat"}, {"subjecte": "EXT", "predicat": "salta_cap_a", "objectes": ["PORTERIA_ADVERSARIA"], "caracter": "obligatori", "estat_coneixement": "validat"}]}
-      ]
+        {
+          "id": "A_CE_FINALITZA",
+          "condicio": "D1_no_tanca_CE",
+          "efectes_espacials": [
+            {
+              "subjecte": "CE",
+              "predicat": "ataca",
+              "objectes": [
+                "ZONA_FINAL_6M"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "A_CE_PASSA_EXT",
+          "condicio": "D1_tanca_i_queda_compromes",
+          "efectes_espacials": [
+            {
+              "subjecte": "EXT",
+              "predicat": "disponible_per_rebre_a",
+              "objectes": [
+                "ESPAI_EXT"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "EXT",
+              "predicat": "salta_cap_a",
+              "objectes": [
+                "PORTERIA_ADVERSARIA"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            }
+          ]
+        }
+      ],
+      "decisio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/1/decisions/0"
     }
   ],
   "invariants": [
-    {"code": "SP-UVOF012-NO-COORD", "operador": "sense_coordenades", "subjectes": ["L", "CE", "L_OPOSAT", "PV", "EXT", "BANC"], "ambit": "document", "missatge": "Les dues superioritats i la permuta es conserven sense coordenades."},
-    {"code": "SP-UVOF012-ID", "operador": "identitat_persistent", "subjectes": ["L", "CE", "L_OPOSAT", "PV", "EXT"], "ambit": "F1-F2", "missatge": "L i CE mantenen la identitat després d'intercanviar posicions."},
-    {"code": "SP-UVOF012-DEC", "operador": "decisio_no_predeterminada", "subjectes": ["L", "PV", "CE", "EXT", "D1", "D3"], "ambit": "BR_PRIMER_2X1-BR_SEGON_2X1", "missatge": "Les respostes de D3 i D1 determinen les dues resolucions."},
-    {"code": "SP-UVOF012-FLUX", "operador": "flux_pilota_coherent", "subjectes": ["B1", "B2", "L_OPOSAT", "L", "PV", "EXT", "CE"], "ambit": "F1-F2", "missatge": "B1 segueix L_OPOSAT-L-PV i B2 segueix EXT-CE-EXT."},
-    {"code": "SP-UVOF012-PERMUTA", "operador": "transicio_connectada", "subjectes": ["L", "CE"], "ambit": "F1", "missatge": "L va al centre i rep de L_OPOSAT mentre CE queda obert a lateral."},
-    {"code": "SP-UVOF012-AMPLITUD", "operador": "mantenir_amplitud", "subjectes": ["EXT"], "ambit": "F2", "missatge": "EXT manté amplitud i guanya angle cap al centre en la finalització."}
+    {
+      "code": "SP-UVOF012-NO-COORD",
+      "operador": "sense_coordenades",
+      "subjectes": [
+        "L",
+        "CE",
+        "L_OPOSAT",
+        "PV",
+        "EXT",
+        "BANC"
+      ],
+      "ambit": "document",
+      "missatge": "Les dues superioritats i la permuta es conserven sense coordenades."
+    },
+    {
+      "code": "SP-UVOF012-ID",
+      "operador": "identitat_persistent",
+      "subjectes": [
+        "L",
+        "CE",
+        "L_OPOSAT",
+        "PV",
+        "EXT"
+      ],
+      "ambit": "F1-F2",
+      "missatge": "L i CE mantenen la identitat després d'intercanviar posicions."
+    },
+    {
+      "code": "SP-UVOF012-DEC",
+      "operador": "decisio_no_predeterminada",
+      "subjectes": [
+        "L",
+        "PV",
+        "CE",
+        "EXT",
+        "D1",
+        "D3"
+      ],
+      "ambit": "BR_PRIMER_2X1-BR_SEGON_2X1",
+      "missatge": "Les respostes de D3 i D1 determinen les dues resolucions."
+    },
+    {
+      "code": "SP-UVOF012-FLUX",
+      "operador": "flux_pilota_coherent",
+      "subjectes": [
+        "B1",
+        "B2",
+        "L_OPOSAT",
+        "L",
+        "PV",
+        "EXT",
+        "CE"
+      ],
+      "ambit": "F1-F2",
+      "missatge": "B1 segueix L_OPOSAT-L-PV i B2 segueix EXT-CE-EXT."
+    },
+    {
+      "code": "SP-UVOF012-PERMUTA",
+      "operador": "transicio_connectada",
+      "subjectes": [
+        "L",
+        "CE"
+      ],
+      "ambit": "F1",
+      "missatge": "L va al centre i rep de L_OPOSAT mentre CE queda obert a lateral."
+    },
+    {
+      "code": "SP-UVOF012-AMPLITUD",
+      "operador": "mantenir_amplitud",
+      "subjectes": [
+        "EXT"
+      ],
+      "ambit": "F2",
+      "missatge": "EXT manté amplitud i guanya angle cap al centre en la finalització."
+    }
   ],
-  "governanca": {"autoritat": "semantica_validada_per_entrenador", "politica_inferencia": "tota_inferencia_no_validada_es_provisional", "sortida_permesa": "graf_relacional_sense_coordenades"}
+  "governanca": {
+    "autoritat": "semantica_validada_per_entrenador",
+    "politica_inferencia": "tota_inferencia_no_validada_es_provisional",
+    "sortida_permesa": "graf_relacional_sense_coordenades"
+  },
+  "semantic_source": {
+    "exercise_id": "TR-UVOF-012",
+    "status": "canonical",
+    "candidates": [
+      {
+        "id": "corpus",
+        "artifact": "corpus/uvof.semantic.json",
+        "selector": "/exercicis/11",
+        "version": "1.6.0",
+        "digest": "sha256:c538126967db07ddd6e7ea1f7903b33417e411e20dbc5b64cab20ecf7540dc0d",
+        "canonical": true,
+        "validation_status": "validated"
+      }
+    ]
+  },
+  "namespace": {
+    "base": "traca:TR-UVOF-012",
+    "entities": [
+      {
+        "ref": "traca:TR-UVOF-012:node:L",
+        "kind": "participant",
+        "local_id": "L",
+        "knowledge_status": "validat",
+        "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/0"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:node:CE",
+        "kind": "participant",
+        "local_id": "CE",
+        "knowledge_status": "validat",
+        "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/1"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:node:L_OPOSAT",
+        "kind": "participant",
+        "local_id": "L_OPOSAT",
+        "knowledge_status": "validat",
+        "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/2"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:node:PV",
+        "kind": "participant",
+        "local_id": "PV",
+        "knowledge_status": "validat",
+        "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/3"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:node:EXT",
+        "kind": "participant",
+        "local_id": "EXT",
+        "knowledge_status": "validat",
+        "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/4"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:node:D1",
+        "kind": "participant",
+        "local_id": "D1",
+        "knowledge_status": "validat",
+        "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/5"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:node:D3",
+        "kind": "participant",
+        "local_id": "D3",
+        "knowledge_status": "validat",
+        "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/6"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:node:BANC",
+        "kind": "material",
+        "local_id": "BANC",
+        "knowledge_status": "condicio_tasca",
+        "source_ref": "corpus/uvof.semantic.json#/exercicis/11/materials/0"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:node:B1",
+        "kind": "ball",
+        "local_id": "B1",
+        "knowledge_status": "validat",
+        "source_ref": "corpus/uvof.semantic.json#/exercicis/11/pilotes/0"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:node:B2",
+        "kind": "ball",
+        "local_id": "B2",
+        "knowledge_status": "validat",
+        "source_ref": "corpus/uvof.semantic.json#/exercicis/11/pilotes/1"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:node:LINIA_FONS",
+        "kind": "reference",
+        "local_id": "LINIA_FONS",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:node:AREA_6M",
+        "kind": "reference",
+        "local_id": "AREA_6M",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:node:PORTERIA_ADVERSARIA",
+        "kind": "reference",
+        "local_id": "PORTERIA_ADVERSARIA",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:node:EIX_CENTRAL",
+        "kind": "reference",
+        "local_id": "EIX_CENTRAL",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:node:EIX_LATERAL",
+        "kind": "reference",
+        "local_id": "EIX_LATERAL",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:space:POS_LATERAL",
+        "kind": "space",
+        "local_id": "POS_LATERAL",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:space:POS_CENTRAL",
+        "kind": "space",
+        "local_id": "POS_CENTRAL",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:space:ZONA_BANC",
+        "kind": "space",
+        "local_id": "ZONA_BANC",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:space:ESPAI_PV",
+        "kind": "space",
+        "local_id": "ESPAI_PV",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:space:ESPAI_EXT",
+        "kind": "space",
+        "local_id": "ESPAI_EXT",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:space:ZONA_FINAL_6M",
+        "kind": "space",
+        "local_id": "ZONA_FINAL_6M",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:state:S_PERMUTA",
+        "kind": "state",
+        "local_id": "S_PERMUTA",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:state:S_PRIMER_2X1",
+        "kind": "state",
+        "local_id": "S_PRIMER_2X1",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:state:S_LLISCAMENT_PV",
+        "kind": "state",
+        "local_id": "S_LLISCAMENT_PV",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:state:S_SEGON_2X1",
+        "kind": "state",
+        "local_id": "S_SEGON_2X1",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:state:S_RESOLUCIO_SEGON_2X1",
+        "kind": "state",
+        "local_id": "S_RESOLUCIO_SEGON_2X1",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:transition:T_L_PERMUTA",
+        "kind": "transition",
+        "local_id": "T_L_PERMUTA",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:transition:T_L_REP_OPOSAT",
+        "kind": "transition",
+        "local_id": "T_L_REP_OPOSAT",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:transition:T_L_SALTA_BANC",
+        "kind": "transition",
+        "local_id": "T_L_SALTA_BANC",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:transition:T_L_RESOL_PRIMER",
+        "kind": "transition",
+        "local_id": "T_L_RESOL_PRIMER",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:transition:T_CE_OBRE",
+        "kind": "transition",
+        "local_id": "T_CE_OBRE",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:transition:T_PV_LLISCA",
+        "kind": "transition",
+        "local_id": "T_PV_LLISCA",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:transition:T_CE_REP_EXT",
+        "kind": "transition",
+        "local_id": "T_CE_REP_EXT",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:transition:T_CE_RESOL",
+        "kind": "transition",
+        "local_id": "T_CE_RESOL",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:transition:T_EXT_RESOL",
+        "kind": "transition",
+        "local_id": "T_EXT_RESOL",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:flow:FP_LOPOSAT_L",
+        "kind": "ball_flow",
+        "local_id": "FP_LOPOSAT_L",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:flow:FP_L_PV",
+        "kind": "ball_flow",
+        "local_id": "FP_L_PV",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:flow:FP_EXT_CE",
+        "kind": "ball_flow",
+        "local_id": "FP_EXT_CE",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:flow:FP_CE_EXT",
+        "kind": "ball_flow",
+        "local_id": "FP_CE_EXT",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:branch:BR_PRIMER_2X1",
+        "kind": "decision_branch",
+        "local_id": "BR_PRIMER_2X1",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:alternative:A_D3_NO_PUJA",
+        "kind": "decision_alternative",
+        "local_id": "A_D3_NO_PUJA",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:alternative:A_D3_PUJA",
+        "kind": "decision_alternative",
+        "local_id": "A_D3_PUJA",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:branch:BR_SEGON_2X1",
+        "kind": "decision_branch",
+        "local_id": "BR_SEGON_2X1",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:alternative:A_CE_FINALITZA",
+        "kind": "decision_alternative",
+        "local_id": "A_CE_FINALITZA",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-012:alternative:A_CE_PASSA_EXT",
+        "kind": "decision_alternative",
+        "local_id": "A_CE_PASSA_EXT",
+        "knowledge_status": "validat"
+      }
+    ]
+  },
+  "bindings": [],
+  "participant_semantics": [
+    {
+      "participant_ref": "traca:TR-UVOF-012:node:L",
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/0",
+      "team": {
+        "value": "atac",
+        "status": "validated"
+      },
+      "canonical_role": {
+        "value": "lateral",
+        "status": "validated"
+      },
+      "side": {
+        "value": null,
+        "status": "unknown"
+      },
+      "temporal_role": {
+        "value": null,
+        "status": "unknown"
+      },
+      "exercise_function": {
+        "value": "primer_jugador_de_la_permuta_i_resolutor_del_primer_2x1",
+        "status": "validated"
+      }
+    },
+    {
+      "participant_ref": "traca:TR-UVOF-012:node:CE",
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/1",
+      "team": {
+        "value": "atac",
+        "status": "validated"
+      },
+      "canonical_role": {
+        "value": "central",
+        "status": "validated"
+      },
+      "side": {
+        "value": null,
+        "status": "unknown"
+      },
+      "temporal_role": {
+        "value": null,
+        "status": "unknown"
+      },
+      "exercise_function": {
+        "value": "lateral_temporal_del_segon_2x1",
+        "status": "validated"
+      }
+    },
+    {
+      "participant_ref": "traca:TR-UVOF-012:node:L_OPOSAT",
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/2",
+      "team": {
+        "value": "atac",
+        "status": "validated"
+      },
+      "canonical_role": {
+        "value": "lateral_contrari_passador",
+        "status": "validated"
+      },
+      "side": {
+        "value": null,
+        "status": "unknown"
+      },
+      "temporal_role": {
+        "value": null,
+        "status": "unknown"
+      },
+      "exercise_function": {
+        "value": "passador_de_la_permuta_lateral_central",
+        "status": "validated"
+      }
+    },
+    {
+      "participant_ref": "traca:TR-UVOF-012:node:PV",
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/3",
+      "team": {
+        "value": "atac",
+        "status": "validated"
+      },
+      "canonical_role": {
+        "value": "pivot",
+        "status": "validated"
+      },
+      "side": {
+        "value": null,
+        "status": "unknown"
+      },
+      "temporal_role": {
+        "value": null,
+        "status": "unknown"
+      },
+      "exercise_function": {
+        "value": "receptor_amb_lliscament_obligatori_si_D3_puja",
+        "status": "validated"
+      }
+    },
+    {
+      "participant_ref": "traca:TR-UVOF-012:node:EXT",
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/4",
+      "team": {
+        "value": "atac",
+        "status": "validated"
+      },
+      "canonical_role": {
+        "value": "extrem",
+        "status": "validated"
+      },
+      "side": {
+        "value": null,
+        "status": "unknown"
+      },
+      "temporal_role": {
+        "value": null,
+        "status": "unknown"
+      },
+      "exercise_function": {
+        "value": "passador_i_company_del_segon_2x1",
+        "status": "validated"
+      }
+    },
+    {
+      "participant_ref": "traca:TR-UVOF-012:node:D1",
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/5",
+      "team": {
+        "value": "defensa",
+        "status": "validated"
+      },
+      "canonical_role": {
+        "value": "primer_defensor",
+        "status": "validated"
+      },
+      "side": {
+        "value": null,
+        "status": "unknown"
+      },
+      "temporal_role": {
+        "value": null,
+        "status": "unknown"
+      },
+      "exercise_function": {
+        "value": "primer_defensor_del_segon_2x1",
+        "status": "validated"
+      }
+    },
+    {
+      "participant_ref": "traca:TR-UVOF-012:node:D3",
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/6",
+      "team": {
+        "value": "defensa",
+        "status": "validated"
+      },
+      "canonical_role": {
+        "value": "tercer_o_central_defensiu",
+        "status": "validated"
+      },
+      "side": {
+        "value": null,
+        "status": "unknown"
+      },
+      "temporal_role": {
+        "value": null,
+        "status": "unknown"
+      },
+      "exercise_function": {
+        "value": "tercer_o_central_defensiu_del_primer_2x1",
+        "status": "validated"
+      }
+    }
+  ],
+  "participant_groups": [],
+  "material_semantics": [
+    {
+      "material_ref": "traca:TR-UVOF-012:node:BANC",
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/materials/0",
+      "instance_function": "condicionant_de_la_primera_accio",
+      "capabilities": [
+        "instance_function:condicionant_de_la_primera_accio"
+      ],
+      "knowledge_status": "condicio_tasca"
+    }
+  ],
+  "typed_relations": [
+    {
+      "id": "REL_2X1_1",
+      "kind": "2x1",
+      "primary_attacker_ref": "traca:TR-UVOF-012:node:CE",
+      "supporting_attacker_ref": "traca:TR-UVOF-012:node:EXT",
+      "defender_ref": "traca:TR-UVOF-012:node:D1",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/estats/3/relacions/2",
+      "knowledge_status": "validat"
+    }
+  ],
+  "typed_conditions": [
+    {
+      "id": "COND_1",
+      "kind": "task_condition",
+      "expression": "D3_puja",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/transicions/5/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_2",
+      "kind": "observation",
+      "expression": "D1_tanca_CE",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/transicions/8/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_3",
+      "kind": "task_condition",
+      "expression": "D3_puja",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/fluxos_pilota/1/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_4",
+      "kind": "observation",
+      "expression": "D1_tanca_CE",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/fluxos_pilota/3/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_5",
+      "kind": "observation",
+      "expression": "D3_es_mante_pla",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/branques_decisionals/0/alternatives/0/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_6",
+      "kind": "observation",
+      "expression": "D3_puja_a_contactar",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/branques_decisionals/0/alternatives/1/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_7",
+      "kind": "observation",
+      "expression": "D1_no_tanca_CE",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/branques_decisionals/1/alternatives/0/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_8",
+      "kind": "observation",
+      "expression": "D1_tanca_i_queda_compromes",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/branques_decisionals/1/alternatives/1/condicio",
+      "status": "validated"
+    }
+  ],
+  "operator_frames": [
+    {
+      "id": "FRAME_POS_LATERAL_1",
+      "space_ref": "traca:TR-UVOF-012:space:POS_LATERAL",
+      "definition_ref": "exercises/TR-UVOF-012/spatial-relations.json#/espais/0/definicio",
+      "operator": "proper_a",
+      "axis": "relational",
+      "viewpoint": "subject_relative",
+      "distance_class": "functional",
+      "closure": "not_applicable",
+      "status": "complete"
+    },
+    {
+      "id": "FRAME_POS_CENTRAL_2",
+      "space_ref": "traca:TR-UVOF-012:space:POS_CENTRAL",
+      "definition_ref": "exercises/TR-UVOF-012/spatial-relations.json#/espais/1/definicio",
+      "operator": "proper_a",
+      "axis": "relational",
+      "viewpoint": "subject_relative",
+      "distance_class": "functional",
+      "closure": "not_applicable",
+      "status": "complete"
+    },
+    {
+      "id": "FRAME_ZONA_BANC_3",
+      "space_ref": "traca:TR-UVOF-012:space:ZONA_BANC",
+      "definition_ref": "exercises/TR-UVOF-012/spatial-relations.json#/espais/2/definicio",
+      "operator": "proper_a",
+      "axis": "relational",
+      "viewpoint": "subject_relative",
+      "distance_class": "functional",
+      "closure": "not_applicable",
+      "status": "complete"
+    },
+    {
+      "id": "FRAME_ESPAI_PV_4",
+      "space_ref": "traca:TR-UVOF-012:space:ESPAI_PV",
+      "definition_ref": "exercises/TR-UVOF-012/spatial-relations.json#/espais/3/definicio",
+      "operator": "proper_a",
+      "axis": "relational",
+      "viewpoint": "subject_relative",
+      "distance_class": "functional",
+      "closure": "not_applicable",
+      "status": "complete"
+    },
+    {
+      "id": "FRAME_ESPAI_PV_5",
+      "space_ref": "traca:TR-UVOF-012:space:ESPAI_PV",
+      "definition_ref": "exercises/TR-UVOF-012/spatial-relations.json#/espais/3/restriccions/0",
+      "operator": "interior_de",
+      "axis": "attack_relative",
+      "viewpoint": "attacking_team",
+      "distance_class": "not_applicable",
+      "closure": "referenced_boundary",
+      "status": "complete"
+    },
+    {
+      "id": "FRAME_ESPAI_EXT_6",
+      "space_ref": "traca:TR-UVOF-012:space:ESPAI_EXT",
+      "definition_ref": "exercises/TR-UVOF-012/spatial-relations.json#/espais/4/restriccions/0",
+      "operator": "interior_de",
+      "axis": "attack_relative",
+      "viewpoint": "attacking_team",
+      "distance_class": "not_applicable",
+      "closure": "referenced_boundary",
+      "status": "complete"
+    },
+    {
+      "id": "FRAME_ZONA_FINAL_6M_7",
+      "space_ref": "traca:TR-UVOF-012:space:ZONA_FINAL_6M",
+      "definition_ref": "exercises/TR-UVOF-012/spatial-relations.json#/espais/5/definicio",
+      "operator": "interior_de",
+      "axis": "attack_relative",
+      "viewpoint": "attacking_team",
+      "distance_class": "not_applicable",
+      "closure": "referenced_boundary",
+      "status": "complete"
+    }
+  ],
+  "decision_mappings": [
+    {
+      "decision_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/0/decisions/0",
+      "branch_refs": [
+        "traca:TR-UVOF-012:branch:BR_PRIMER_2X1"
+      ],
+      "options": [
+        {
+          "option_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/0/decisions/0/opcions/0",
+          "alternative_refs": [
+            "traca:TR-UVOF-012:alternative:A_D3_NO_PUJA"
+          ],
+          "status": "mapped"
+        },
+        {
+          "option_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/0/decisions/0/opcions/1",
+          "alternative_refs": [
+            "traca:TR-UVOF-012:alternative:A_D3_NO_PUJA"
+          ],
+          "status": "mapped"
+        }
+      ]
+    },
+    {
+      "decision_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/1/decisions/0",
+      "branch_refs": [
+        "traca:TR-UVOF-012:branch:BR_SEGON_2X1"
+      ],
+      "options": [
+        {
+          "option_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/1/decisions/0/opcions/0",
+          "alternative_refs": [],
+          "status": "preserved_symbolically"
+        },
+        {
+          "option_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/1/decisions/0/opcions/1",
+          "alternative_refs": [],
+          "status": "preserved_symbolically"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "from_ref": "traca:TR-UVOF-012:space:POS_LATERAL",
+      "to_ref": "traca:TR-UVOF-012:node:EIX_LATERAL",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/espais/0/definicio"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-012:space:POS_CENTRAL",
+      "to_ref": "traca:TR-UVOF-012:node:EIX_CENTRAL",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/espais/1/definicio"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-012:space:ZONA_BANC",
+      "to_ref": "traca:TR-UVOF-012:node:BANC",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/espais/2/definicio"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-012:space:ESPAI_PV",
+      "to_ref": "traca:TR-UVOF-012:node:D3",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/espais/3/definicio"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-012:space:ESPAI_PV",
+      "to_ref": "traca:TR-UVOF-012:node:AREA_6M",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/espais/3/restriccions/0"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-012:space:ESPAI_EXT",
+      "to_ref": "traca:TR-UVOF-012:node:LINIA_FONS",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/espais/4/definicio"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-012:space:ESPAI_EXT",
+      "to_ref": "traca:TR-UVOF-012:node:D1",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/espais/4/definicio"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-012:space:ESPAI_EXT",
+      "to_ref": "traca:TR-UVOF-012:node:AREA_6M",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/espais/4/restriccions/0"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-012:space:ZONA_FINAL_6M",
+      "to_ref": "traca:TR-UVOF-012:node:AREA_6M",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/espais/5/definicio"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-012:node:L",
+      "to_ref": "traca:TR-UVOF-012:space:POS_CENTRAL",
+      "kind": "relational_constraint",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/estats/0/relacions/0"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-012:node:CE",
+      "to_ref": "traca:TR-UVOF-012:space:POS_LATERAL",
+      "kind": "relational_constraint",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/estats/0/relacions/1"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-012:node:L",
+      "to_ref": "traca:TR-UVOF-012:space:ZONA_BANC",
+      "kind": "relational_constraint",
+      "origin_ref": "exercises/TR-UVOF-012/spatial-relations.json#/estats/1/relacions/0"
+    }
+  ],
+  "replication": {
+    "mode": "reflectible",
+    "status": "unresolved",
+    "identity_mapping": [],
+    "required_for_preflight": false
+  },
+  "unresolved_items": [],
+  "compatibility": {
+    "migrated_from": "0.2.0",
+    "v02_status": "historical_read_only",
+    "policy": "no_implicit_downgrade"
+  },
+  "semantic_coverage": [
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/0",
+      "kind": "participant",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:node:L"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/1",
+      "kind": "participant",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:node:CE"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/2",
+      "kind": "participant",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:node:L_OPOSAT"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/3",
+      "kind": "participant",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:node:PV"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/4",
+      "kind": "participant",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:node:EXT"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/5",
+      "kind": "participant",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:node:D1"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/participants/6",
+      "kind": "participant",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:node:D3"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/materials/0",
+      "kind": "material",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:node:BANC"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/pilotes/0",
+      "kind": "ball",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:node:B1"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/pilotes/1",
+      "kind": "ball",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:node:B2"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/0/accions/0",
+      "kind": "action",
+      "preservation": "preserved_symbolically",
+      "spatial_refs": []
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/0/accions/1",
+      "kind": "action",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:transition:T_CE_OBRE",
+        "traca:TR-UVOF-012:transition:T_L_PERMUTA"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/0/accions/2",
+      "kind": "action",
+      "preservation": "preserved_symbolically",
+      "spatial_refs": []
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/0/accions/3",
+      "kind": "action",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:transition:T_L_REP_OPOSAT",
+        "traca:TR-UVOF-012:transition:T_L_SALTA_BANC"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/0/fluxos_pilota/0",
+      "kind": "ball_flow",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:flow:FP_LOPOSAT_L"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/0/fluxos_pilota/1",
+      "kind": "ball_flow",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:flow:FP_L_PV"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/0/decisions/0",
+      "kind": "decision",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:branch:BR_PRIMER_2X1"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/0/decisions/0/opcions/0",
+      "kind": "decision_option",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:alternative:A_D3_NO_PUJA"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/0/decisions/0/opcions/1",
+      "kind": "decision_option",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:alternative:A_D3_NO_PUJA"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/1/accions/0",
+      "kind": "action",
+      "preservation": "preserved_symbolically",
+      "spatial_refs": []
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/1/accions/1",
+      "kind": "action",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:transition:T_CE_REP_EXT"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/1/fluxos_pilota/0",
+      "kind": "ball_flow",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:flow:FP_EXT_CE"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/1/fluxos_pilota/1",
+      "kind": "ball_flow",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:flow:FP_CE_EXT"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/1/decisions/0",
+      "kind": "decision",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-012:branch:BR_SEGON_2X1"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/1/decisions/0/opcions/0",
+      "kind": "decision_option",
+      "preservation": "preserved_symbolically",
+      "spatial_refs": []
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/11/fases/1/decisions/0/opcions/1",
+      "kind": "decision_option",
+      "preservation": "preserved_symbolically",
+      "spatial_refs": []
+    }
+  ],
+  "integrity": {
+    "algorithm": "sha256",
+    "spatial_digest": "sha256:d3e9903786862489e124f83add8a0e76cc08589c1438acd3c50f230aeee04fdc"
+  }
 }

@@ -1,0 +1,1550 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://traca.local/schema/traca.spatial-relations.v0.3.json",
+  "title": "TRAÇA — contracte de relacions espacials v0.3",
+  "description": "Capa qualitativa traçable i apta per a preflight. No admet coordenades, geometria resolta ni renderitzat.",
+  "type": "object",
+  "required": [
+    "meta",
+    "font_semantica",
+    "nodes",
+    "espais",
+    "estats",
+    "transicions",
+    "branques_decisionals",
+    "invariants",
+    "governanca",
+    "semantic_source",
+    "namespace",
+    "bindings",
+    "participant_semantics",
+    "participant_groups",
+    "material_semantics",
+    "typed_relations",
+    "typed_conditions",
+    "operator_frames",
+    "decision_mappings",
+    "semantic_coverage",
+    "dependencies",
+    "replication",
+    "unresolved_items",
+    "integrity",
+    "compatibility",
+    "fluxos_pilota"
+  ],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": [
+        "format",
+        "versio_contracte",
+        "versio_instancia",
+        "estat",
+        "separacio_capes"
+      ],
+      "properties": {
+        "format": {
+          "const": "TRACA_relacions_espacials"
+        },
+        "versio_contracte": {
+          "const": "0.3.0"
+        },
+        "versio_instancia": {
+          "$ref": "#/$defs/semver"
+        },
+        "estat": {
+          "enum": [
+            "derivat_semantica_validada",
+            "derivat_amb_punts_oberts",
+            "provisional"
+          ]
+        },
+        "separacio_capes": {
+          "type": "object",
+          "required": [
+            "semantica_tactica",
+            "relacions_espacials",
+            "geometria_resolta",
+            "renderitzat"
+          ],
+          "properties": {
+            "semantica_tactica": {
+              "const": "referenciada_no_duplicada"
+            },
+            "relacions_espacials": {
+              "const": "incloses"
+            },
+            "geometria_resolta": {
+              "const": "no_inclosa"
+            },
+            "renderitzat": {
+              "const": "no_generat"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "font_semantica": {
+      "type": "object",
+      "required": [
+        "exercici_id",
+        "fitxers",
+        "plantilla",
+        "simetria"
+      ],
+      "properties": {
+        "exercici_id": {
+          "type": "string",
+          "pattern": "^TR-[A-Z0-9-]+-[0-9]{3}$"
+        },
+        "fitxers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "plantilla": {
+          "type": "string",
+          "minLength": 1
+        },
+        "simetria": {
+          "enum": [
+            "sense_simetria",
+            "reflectible",
+            "dues_bandes_paraleles"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/node"
+      }
+    },
+    "espais": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/espai"
+      }
+    },
+    "estats": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/estat"
+      }
+    },
+    "transicions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/transicio"
+      }
+    },
+    "fluxos_pilota": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/fluxPilota"
+      }
+    },
+    "branques_decisionals": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/branca"
+      }
+    },
+    "invariants": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/invariant"
+      }
+    },
+    "governanca": {
+      "type": "object",
+      "required": [
+        "autoritat",
+        "politica_inferencia",
+        "sortida_permesa"
+      ],
+      "properties": {
+        "autoritat": {
+          "const": "semantica_validada_per_entrenador"
+        },
+        "politica_inferencia": {
+          "const": "tota_inferencia_no_validada_es_provisional"
+        },
+        "sortida_permesa": {
+          "const": "graf_relacional_sense_coordenades"
+        }
+      },
+      "additionalProperties": false
+    },
+    "semantic_source": {
+      "$ref": "#/$defs/semanticSource"
+    },
+    "namespace": {
+      "$ref": "#/$defs/namespace"
+    },
+    "bindings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/binding"
+      }
+    },
+    "participant_semantics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/participantSemantic"
+      }
+    },
+    "participant_groups": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/participantGroup"
+      }
+    },
+    "material_semantics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/materialSemantic"
+      }
+    },
+    "typed_relations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/typedRelation"
+      }
+    },
+    "typed_conditions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/typedCondition"
+      }
+    },
+    "operator_frames": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/operatorFrame"
+      }
+    },
+    "decision_mappings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/decisionMapping"
+      }
+    },
+    "semantic_coverage": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/coverage"
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dependency"
+      }
+    },
+    "replication": {
+      "$ref": "#/$defs/replication"
+    },
+    "unresolved_items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/unresolvedItem"
+      }
+    },
+    "integrity": {
+      "$ref": "#/$defs/integrity"
+    },
+    "compatibility": {
+      "$ref": "#/$defs/compatibility"
+    }
+  },
+  "$defs": {
+    "semver": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "estatConeixement": {
+      "enum": [
+        "validat",
+        "condicio_tasca",
+        "principi_preferent",
+        "derivat",
+        "provisional",
+        "unknown",
+        "unresolved"
+      ]
+    },
+    "caracter": {
+      "enum": [
+        "obligatori",
+        "preferent",
+        "disponible"
+      ]
+    },
+    "node": {
+      "type": "object",
+      "required": [
+        "id",
+        "classe",
+        "estat_coneixement"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "classe": {
+          "enum": [
+            "participant",
+            "material",
+            "pilota",
+            "defensor_implicit",
+            "referencia_reglamentaria",
+            "referencia_funcional"
+          ]
+        },
+        "referencia_semantica": {
+          "$ref": "#/$defs/stableSemanticRef"
+        },
+        "rol": {
+          "type": "string",
+          "minLength": 1
+        },
+        "funcio": {
+          "type": "string",
+          "minLength": 1
+        },
+        "estat_coneixement": {
+          "$ref": "#/$defs/estatConeixement"
+        }
+      },
+      "additionalProperties": false
+    },
+    "definicioEspai": {
+      "type": "object",
+      "required": [
+        "operador",
+        "arguments"
+      ],
+      "properties": {
+        "operador": {
+          "enum": [
+            "entre",
+            "exterior_de",
+            "interior_de",
+            "darrere_de",
+            "proper_a",
+            "delimitat_per"
+          ]
+        },
+        "arguments": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "operador": {
+                "const": "entre"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "arguments": {
+                "minItems": 2,
+                "maxItems": 2
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "operador": {
+                "enum": [
+                  "exterior_de",
+                  "interior_de",
+                  "darrere_de",
+                  "proper_a"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "arguments": {
+                "minItems": 1,
+                "maxItems": 1
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "espai": {
+      "type": "object",
+      "required": [
+        "id",
+        "classe",
+        "definicio",
+        "estat_coneixement"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "classe": {
+          "enum": [
+            "interval",
+            "espai_finalitzacio_extrem",
+            "zona_resolucio",
+            "corredor",
+            "posicio_funcional"
+          ]
+        },
+        "referencia_semantica": {
+          "$ref": "#/$defs/stableSemanticRef"
+        },
+        "nom_canonic": {
+          "type": "string",
+          "minLength": 1
+        },
+        "alies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "definicio": {
+          "$ref": "#/$defs/definicioEspai"
+        },
+        "restriccions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/definicioEspai"
+          }
+        },
+        "contiguitats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "espai",
+              "referent_compartit"
+            ],
+            "properties": {
+              "espai": {
+                "type": "string"
+              },
+              "referent_compartit": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "fases_actives": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "estat_coneixement": {
+          "$ref": "#/$defs/estatConeixement"
+        }
+      },
+      "additionalProperties": false
+    },
+    "relacio": {
+      "type": "object",
+      "required": [
+        "subjecte",
+        "predicat",
+        "objectes",
+        "caracter",
+        "estat_coneixement"
+      ],
+      "properties": {
+        "subjecte": {
+          "type": "string"
+        },
+        "predicat": {
+          "enum": [
+            "ocupa",
+            "ataca",
+            "mante_amplitud_a",
+            "orientat_cap_a",
+            "per_davant_de",
+            "darrere_de",
+            "proper_a",
+            "travessa_linia_defensiva_de",
+            "evita_superposicio_amb",
+            "relacionat_en_2x1_amb",
+            "disponible_per_rebre_a",
+            "adapta_posicio_respecte_a",
+            "sostingut_per",
+            "salta_cap_a"
+          ]
+        },
+        "objectes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "caracter": {
+          "$ref": "#/$defs/caracter"
+        },
+        "estat_coneixement": {
+          "$ref": "#/$defs/estatConeixement"
+        }
+      },
+      "additionalProperties": false
+    },
+    "estat": {
+      "type": "object",
+      "required": [
+        "id",
+        "fase_ref",
+        "moment",
+        "relacions"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "fase_ref": {
+          "type": "string"
+        },
+        "moment": {
+          "enum": [
+            "inici",
+            "preparacio",
+            "recepcio",
+            "canvi_direccio",
+            "desenvolupament",
+            "superacio",
+            "ajuda",
+            "encreuament",
+            "resolucio",
+            "final"
+          ]
+        },
+        "relacions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/relacio"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "transicio": {
+      "type": "object",
+      "required": [
+        "id",
+        "fase_ref",
+        "ordre",
+        "actor",
+        "tipus",
+        "cap_a",
+        "estat_coneixement"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "fase_ref": {
+          "type": "string"
+        },
+        "ordre": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "trajectoria_id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "actor": {
+          "type": "string"
+        },
+        "tipus": {
+          "enum": [
+            "recepcio",
+            "finta",
+            "atac_espai",
+            "recuperacio_sense_pilota",
+            "ajust_sense_pilota",
+            "encreuament",
+            "continuitat",
+            "resolucio"
+          ]
+        },
+        "des_de": {
+          "type": "string"
+        },
+        "via": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "cap_a": {
+          "type": "string"
+        },
+        "referencia_oposicional": {
+          "type": "string"
+        },
+        "accio_semantica_ref": {
+          "$ref": "#/$defs/stableSemanticRef"
+        },
+        "qualificadors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "condicio": {
+          "type": "string"
+        },
+        "estat_coneixement": {
+          "$ref": "#/$defs/estatConeixement"
+        }
+      },
+      "additionalProperties": false
+    },
+    "fluxPilota": {
+      "type": "object",
+      "required": [
+        "id",
+        "fase_ref",
+        "trajectoria_id",
+        "ordre",
+        "pilota_id",
+        "posseidor_inicial",
+        "accio",
+        "posseidor_final",
+        "estat_coneixement",
+        "referencia_semantica"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "fase_ref": {
+          "type": "string"
+        },
+        "trajectoria_id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "ordre": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "pilota_id": {
+          "type": "string"
+        },
+        "posseidor_inicial": {
+          "type": "string"
+        },
+        "accio": {
+          "enum": [
+            "passada",
+            "passada_inicial",
+            "devolucio",
+            "passada_continuitat",
+            "passada_encreuament"
+          ]
+        },
+        "posseidor_final": {
+          "type": "string"
+        },
+        "condicio": {
+          "type": "string",
+          "minLength": 1
+        },
+        "qualificadors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "estat_coneixement": {
+          "$ref": "#/$defs/estatConeixement"
+        },
+        "referencia_semantica": {
+          "$ref": "#/$defs/stableSemanticRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "alternativa": {
+      "type": "object",
+      "required": [
+        "id",
+        "condicio",
+        "efectes_espacials"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "condicio": {
+          "type": "string",
+          "minLength": 1
+        },
+        "efectes_espacials": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/relacio"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "branca": {
+      "type": "object",
+      "required": [
+        "id",
+        "fase_ref",
+        "caracter",
+        "resolucio",
+        "alternatives"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "fase_ref": {
+          "type": "string"
+        },
+        "decisio_semantica_ref": {
+          "$ref": "#/$defs/stableSemanticRef"
+        },
+        "decisions_semantiques_ref": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/stableSemanticRef"
+          },
+          "uniqueItems": true
+        },
+        "caracter": {
+          "$ref": "#/$defs/caracter"
+        },
+        "resolucio": {
+          "const": "no_predeterminada"
+        },
+        "alternatives": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/alternativa"
+          }
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "decisio_semantica_ref"
+          ]
+        },
+        {
+          "required": [
+            "decisions_semantiques_ref"
+          ]
+        }
+      ],
+      "additionalProperties": false
+    },
+    "invariant": {
+      "type": "object",
+      "required": [
+        "code",
+        "operador",
+        "subjectes",
+        "ambit",
+        "missatge"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^SP-[A-Z0-9-]+$"
+        },
+        "operador": {
+          "enum": [
+            "sense_coordenades",
+            "identitat_persistent",
+            "contiguitat_amb_referent_compartit",
+            "no_superposicio",
+            "mantenir_amplitud",
+            "transicio_connectada",
+            "decisio_no_predeterminada",
+            "flux_pilota_coherent",
+            "encreuament_per_darrere",
+            "recepcio_inici_canvi_direccio"
+          ]
+        },
+        "subjectes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "ambit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "missatge": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "stableSemanticRef": {
+      "type": "string",
+      "pattern": "^[^#]+#(?:/.*)?$"
+    },
+    "globalRef": {
+      "type": "string",
+      "pattern": "^traca:TR-UVOF-[0-9]{3}:[a-z_]+:[A-Z0-9_:-]+$"
+    },
+    "semanticCandidate": {
+      "type": "object",
+      "required": [
+        "id",
+        "artifact",
+        "selector",
+        "version",
+        "digest",
+        "canonical",
+        "validation_status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selector": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "canonical": {
+          "type": "boolean"
+        },
+        "validation_status": {
+          "enum": [
+            "validated",
+            "partially_validated",
+            "conflict"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "semanticSource": {
+      "type": "object",
+      "required": [
+        "exercise_id",
+        "status",
+        "candidates"
+      ],
+      "properties": {
+        "exercise_id": {
+          "type": "string",
+          "pattern": "^TR-UVOF-[0-9]{3}$"
+        },
+        "status": {
+          "enum": [
+            "canonical",
+            "conflict"
+          ]
+        },
+        "candidates": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/semanticCandidate"
+          }
+        },
+        "conflict_code": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "namespaceEntity": {
+      "type": "object",
+      "required": [
+        "ref",
+        "kind",
+        "local_id",
+        "knowledge_status"
+      ],
+      "properties": {
+        "ref": {
+          "$ref": "#/$defs/globalRef"
+        },
+        "kind": {
+          "enum": [
+            "participant",
+            "material",
+            "ball",
+            "reference",
+            "space",
+            "state",
+            "transition",
+            "ball_flow",
+            "decision_branch",
+            "decision_alternative"
+          ]
+        },
+        "local_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_ref": {
+          "$ref": "#/$defs/stableSemanticRef"
+        },
+        "knowledge_status": {
+          "$ref": "#/$defs/estatConeixement"
+        }
+      },
+      "additionalProperties": false
+    },
+    "namespace": {
+      "type": "object",
+      "required": [
+        "base",
+        "entities"
+      ],
+      "properties": {
+        "base": {
+          "type": "string",
+          "pattern": "^traca:TR-UVOF-[0-9]{3}$"
+        },
+        "entities": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/namespaceEntity"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "binding": {
+      "type": "object",
+      "required": [
+        "id",
+        "actor",
+        "source_refs",
+        "target_refs",
+        "mode",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "actor": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/stableSemanticRef"
+          },
+          "uniqueItems": true
+        },
+        "target_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/globalRef"
+          },
+          "uniqueItems": true
+        },
+        "mode": {
+          "enum": [
+            "runtime_choice",
+            "replicated"
+          ]
+        },
+        "status": {
+          "enum": [
+            "resolved",
+            "provisional",
+            "unresolved"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "declaredValue": {
+      "type": "object",
+      "required": [
+        "value",
+        "status"
+      ],
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "enum": [
+            "validated",
+            "provisional",
+            "unknown",
+            "unresolved"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "participantSemantic": {
+      "type": "object",
+      "required": [
+        "participant_ref",
+        "source_ref",
+        "team",
+        "canonical_role",
+        "side",
+        "temporal_role",
+        "exercise_function"
+      ],
+      "properties": {
+        "participant_ref": {
+          "$ref": "#/$defs/globalRef"
+        },
+        "source_ref": {
+          "$ref": "#/$defs/stableSemanticRef"
+        },
+        "team": {
+          "$ref": "#/$defs/declaredValue"
+        },
+        "canonical_role": {
+          "$ref": "#/$defs/declaredValue"
+        },
+        "side": {
+          "$ref": "#/$defs/declaredValue"
+        },
+        "temporal_role": {
+          "$ref": "#/$defs/declaredValue"
+        },
+        "exercise_function": {
+          "$ref": "#/$defs/declaredValue"
+        }
+      },
+      "additionalProperties": false
+    },
+    "participantGroup": {
+      "type": "object",
+      "required": [
+        "id",
+        "source_ref",
+        "expected_cardinality",
+        "instance_refs",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "source_ref": {
+          "$ref": "#/$defs/stableSemanticRef"
+        },
+        "expected_cardinality": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "instance_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/globalRef"
+          },
+          "uniqueItems": true
+        },
+        "status": {
+          "enum": [
+            "resolved",
+            "unresolved"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "materialSemantic": {
+      "type": "object",
+      "required": [
+        "material_ref",
+        "source_ref",
+        "instance_function",
+        "capabilities",
+        "knowledge_status"
+      ],
+      "properties": {
+        "material_ref": {
+          "$ref": "#/$defs/globalRef"
+        },
+        "source_ref": {
+          "$ref": "#/$defs/stableSemanticRef"
+        },
+        "instance_function": {
+          "type": "string",
+          "minLength": 1
+        },
+        "capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "knowledge_status": {
+          "$ref": "#/$defs/estatConeixement"
+        }
+      },
+      "additionalProperties": false
+    },
+    "typedRelation": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "primary_attacker_ref",
+        "supporting_attacker_ref",
+        "defender_ref",
+        "origin_ref",
+        "knowledge_status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "kind": {
+          "const": "2x1"
+        },
+        "primary_attacker_ref": {
+          "$ref": "#/$defs/globalRef"
+        },
+        "supporting_attacker_ref": {
+          "$ref": "#/$defs/globalRef"
+        },
+        "defender_ref": {
+          "$ref": "#/$defs/globalRef"
+        },
+        "origin_ref": {
+          "$ref": "#/$defs/stableSemanticRef"
+        },
+        "knowledge_status": {
+          "$ref": "#/$defs/estatConeixement"
+        }
+      },
+      "additionalProperties": false
+    },
+    "typedCondition": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "expression",
+        "origin_ref",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "kind": {
+          "enum": [
+            "task_condition",
+            "state",
+            "observation",
+            "predicate"
+          ]
+        },
+        "expression": {
+          "type": "string",
+          "minLength": 1
+        },
+        "origin_ref": {
+          "$ref": "#/$defs/stableSemanticRef"
+        },
+        "status": {
+          "enum": [
+            "validated",
+            "provisional",
+            "unresolved"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "operatorFrame": {
+      "type": "object",
+      "required": [
+        "id",
+        "space_ref",
+        "definition_ref",
+        "operator",
+        "axis",
+        "viewpoint",
+        "distance_class",
+        "closure",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "space_ref": {
+          "$ref": "#/$defs/globalRef"
+        },
+        "definition_ref": {
+          "$ref": "#/$defs/stableSemanticRef"
+        },
+        "operator": {
+          "enum": [
+            "exterior_de",
+            "interior_de",
+            "darrere_de",
+            "proper_a",
+            "delimitat_per"
+          ]
+        },
+        "axis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "viewpoint": {
+          "type": "string",
+          "minLength": 1
+        },
+        "distance_class": {
+          "type": "string",
+          "minLength": 1
+        },
+        "closure": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "complete",
+            "unresolved"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "optionMapping": {
+      "type": "object",
+      "required": [
+        "option_ref",
+        "alternative_refs",
+        "status"
+      ],
+      "properties": {
+        "option_ref": {
+          "$ref": "#/$defs/stableSemanticRef"
+        },
+        "alternative_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/globalRef"
+          },
+          "uniqueItems": true
+        },
+        "status": {
+          "enum": [
+            "mapped",
+            "preserved_symbolically"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "decisionMapping": {
+      "type": "object",
+      "required": [
+        "decision_ref",
+        "branch_refs",
+        "options"
+      ],
+      "properties": {
+        "decision_ref": {
+          "$ref": "#/$defs/stableSemanticRef"
+        },
+        "branch_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/globalRef"
+          },
+          "uniqueItems": true
+        },
+        "options": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/optionMapping"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "coverage": {
+      "type": "object",
+      "required": [
+        "source_ref",
+        "kind",
+        "preservation",
+        "spatial_refs"
+      ],
+      "properties": {
+        "source_ref": {
+          "$ref": "#/$defs/stableSemanticRef"
+        },
+        "kind": {
+          "enum": [
+            "participant",
+            "material",
+            "ball",
+            "action",
+            "ball_flow",
+            "decision",
+            "decision_option"
+          ]
+        },
+        "preservation": {
+          "enum": [
+            "mapped",
+            "preserved_symbolically"
+          ]
+        },
+        "spatial_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "dependency": {
+      "type": "object",
+      "required": [
+        "from_ref",
+        "to_ref",
+        "kind",
+        "origin_ref"
+      ],
+      "properties": {
+        "from_ref": {
+          "$ref": "#/$defs/globalRef"
+        },
+        "to_ref": {
+          "$ref": "#/$defs/globalRef"
+        },
+        "kind": {
+          "enum": [
+            "defined_by",
+            "relational_constraint"
+          ]
+        },
+        "origin_ref": {
+          "$ref": "#/$defs/stableSemanticRef"
+        }
+      },
+      "additionalProperties": false
+    },
+    "replication": {
+      "type": "object",
+      "required": [
+        "mode",
+        "status",
+        "identity_mapping",
+        "required_for_preflight"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "sense_simetria",
+            "reflectible",
+            "dues_bandes_paraleles"
+          ]
+        },
+        "status": {
+          "enum": [
+            "resolved",
+            "unresolved"
+          ]
+        },
+        "identity_mapping": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "source_ref",
+              "target_ref"
+            ],
+            "properties": {
+              "source_ref": {
+                "$ref": "#/$defs/globalRef"
+              },
+              "target_ref": {
+                "$ref": "#/$defs/globalRef"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required_for_preflight": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "unresolvedItem": {
+      "type": "object",
+      "required": [
+        "code",
+        "impact",
+        "entity_refs",
+        "message",
+        "requires_trainer"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_:-]+$"
+        },
+        "impact": {
+          "enum": [
+            "partial",
+            "blocked"
+          ]
+        },
+        "entity_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requires_trainer": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "integrity": {
+      "type": "object",
+      "required": [
+        "algorithm",
+        "spatial_digest"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "sha256"
+        },
+        "spatial_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "compatibility": {
+      "type": "object",
+      "required": [
+        "migrated_from",
+        "v02_status",
+        "policy"
+      ],
+      "properties": {
+        "migrated_from": {
+          "const": "0.2.0"
+        },
+        "v02_status": {
+          "const": "historical_read_only"
+        },
+        "policy": {
+          "const": "no_implicit_downgrade"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
