@@ -124,7 +124,7 @@ seus delimitadors i les contigüitats pel defensor compartit.
 coordenades ni tancar decisions que depenen de la lectura del jugador.
 
 **Abast actual:** la decisió continua vigent i el contracte ha evolucionat a
-v0.2 amb `TR-UVOF-001` i `TR-UVOF-002`. La geometria de sortida continua
+v0.3 amb `TR-UVOF-001`–`TR-UVOF-015`. La geometria de sortida continua
 pendent.
 
 ## D-022 — Flux de pilota i trajectòries alternatives al contracte espacial
@@ -207,3 +207,44 @@ compartits.
 
 **Motiu:** confondre la quantitat dibuixada amb la quantitat operativa eliminaria
 dos dels tres duels simultanis especificats per la tasca.
+
+## D-028 — Contracte v0.3 traçable i sense selecció implícita de font
+
+**Decisió tècnica:** cada instància v0.3 declara candidats de font, versió,
+selector JSON Pointer i fingerprint determinista. Un exercici ordinari exigeix
+exactament un candidat canònic. Si les fonts discrepen, com a UVOF001, el
+contracte declara `conflict`, cap candidat esdevé canònic i el preflight
+retorna `SEMANTIC_SOURCE_CONFLICT`.
+
+**Decisió tècnica:** el validador no pot seleccionar el `semantic.json` germà
+per la seva mera existència. La font executable és únicament la declarada i
+fingerprinted per l'artefacte v0.3.
+
+**Motiu:** la coincidència d'IDs o de l'últim segment d'un pseudo-camí no prova
+identitat ni preservació semàntica.
+
+## D-029 — Preflight pur com a gate anterior al resolutor
+
+**Decisió tècnica:** el preflight és read-only, no genera geometria i només
+retorna `ready`, `partial` o `blocked`. `valid` descriu conformitat estructural;
+no és sinònim de `ready`.
+
+**Decisió tècnica:** els bloquejos es deriven dels tipus i invariants generals:
+resolució de referències, namespace, bindings, cardinalitat, capabilities,
+cobertura semàntica, mapping d'opcions, marcs i cicles. Els buits coneguts que
+requereixen entrenador viuen a l'artefacte com `unresolved_items`, no en una
+regla del validador condicionada pel número d'UVOF.
+
+## D-030 — Migració mecànica, preservació simbòlica i estats de coneixement
+
+**Decisió tècnica:** v0.2 es conserva com a esquema històric read-only. La
+migració a v0.3 no completa buits tàctics: pot mapar una entitat, preservar-la
+simbòlicament o declarar-la `unknown`, `provisional` o `unresolved`.
+
+**Decisió tècnica:** equip, rol canònic, costat, rol temporal i funció són camps
+separats. No es dedueixen costat o rol temporal dels IDs ni es parteixen rols
+compostos. La funció i les capabilities del material es declaren per instància.
+
+**Decisió tècnica:** una simetria només pot donar-se per resolta amb mapping
+explícit d'identitats. No es dupliquen participants, materials o pilotes per
+inferència.

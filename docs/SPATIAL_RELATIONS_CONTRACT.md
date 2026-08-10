@@ -1,4 +1,4 @@
-# Contracte de relacions espacials v0.2
+# Contracte de relacions espacials v0.3
 
 ## Propòsit
 
@@ -6,9 +6,13 @@ El contracte converteix la semàntica tàctica validada en un graf qualitatiu qu
 un futur motor espacial podrà resoldre. Defineix **què ha de quedar relacionat**
 sense decidir encara **a quines coordenades** s'ha de dibuixar.
 
-Les instàncies executables actuals són les de `TR-UVOF-001` a `TR-UVOF-012`;
-totes compleixen
-`schema/traca.spatial-relations.schema.v0.2.json`.
+Les quinze instàncies, de `TR-UVOF-001` a `TR-UVOF-015`, compleixen
+`schema/traca.spatial-relations.schema.v0.3.json`. Complir l'esquema no implica
+estar preparat per a un resolutor: el preflight pot retornar `partial` o
+`blocked` sense invalidar estructuralment el document.
+
+L'esquema v0.2 es conserva com a versió històrica read-only. La migració és
+explícita `0.2.0 → 0.3.0` i no existeix cap downgrade implícit.
 
 ## Límits de la capa
 
@@ -30,6 +34,44 @@ No pot contenir:
 - relacions tàctiques noves no presents a la font, tret que es marquin com a
   `provisional`.
 
+## Traçabilitat i tipus de v0.3
+
+Cada artefacte declara:
+
+- `semantic_source`: exercici, versió, candidats, estat canònic/conflictiu i
+  digest SHA-256 del fragment exacte;
+- `integrity.spatial_digest`: fingerprint determinista del mateix document,
+  excloent el valor del digest;
+- referències estables en forma `camí/artefacte.json#/JSON/Pointer`;
+- `namespace.entities`: identitats globals tipades
+  `traca:TR-UVOF-NNN:tipus:ID`, contrastades amb les entitats reals;
+- `bindings`: correspondència entre actors genèrics de la font i instàncies
+  participants;
+- `participant_semantics`: equip, rol canònic, costat, rol temporal i funció
+  com a dimensions separades. Un camp absent queda `unknown`; no es parteixen
+  ni interpreten strings compostes;
+- `participant_groups`: cardinalitat esperada i instàncies identificables;
+- `material_semantics`: funció i capabilities declarades per instància, mai
+  deduïdes de la forma física;
+- `typed_relations`: papers diferenciats d'atacant principal, suport i
+  defensor als 2x1;
+- `typed_conditions`: condició de tasca, estat, observació o predicat, amb
+  referència al literal d'origen;
+- `operator_frames`: eix, punt de vista, proximitat i tancament per als
+  operadors ambigus;
+- `decision_mappings`: una entrada individual per cada opció semàntica, encara
+  que només es pugui preservar simbòlicament;
+- `semantic_coverage`: inventari de preservació de participants, materials,
+  pilotes, accions, fluxos, decisions i opcions;
+- `dependencies`: arestes tipades que permeten detectar cicles no ancorats;
+- `replication`: simetria pendent o mapping explícit d'identitats, sense
+  duplicació inferida;
+- `unresolved_items`: buits coneguts, impacte i necessitat d'entrenador.
+
+Els valors `validated`, `provisional`, `unknown` i `unresolved` conserven l'estat
+del coneixement. Un valor provisional o unresolved que afecti el preflight no
+es promociona silenciosament.
+
 ## Model de graf
 
 ### 1. Nodes
@@ -49,7 +91,7 @@ nodes implícits, però han de declarar el seu estat de coneixement.
 
 ### 2. Espais
 
-Un espai és una relació derivada, no una franja fixa. La versió 0.1 admet:
+Un espai és una relació derivada, no una franja fixa. La versió 0.3 admet:
 
 - `entre(A, B)`;
 - `exterior_de(A)`;
@@ -134,7 +176,10 @@ endavant quina succeirà.
 
 ## Instància TR-UVOF-001
 
-La primera instància representa:
+La primera instància conserva explícitament el conflicte entre el model
+detallat i el corpus. Cap candidat és canònic fins que l'entrenador aprovi un
+mapping. A més de les relacions següents, v0.3 incorpora B1 i B2 amb els seus
+dos fluxos del corpus perquè la divergència de fonts no provoqui pèrdua:
 
 - `INT_1` entre el primer defensor implícit i el banc;
 - `INT_2` entre el banc i el tercer defensor;
@@ -146,7 +191,7 @@ La primera instància representa:
 - les dues resolucions 2x1 com a branques obertes.
 
 Les dues bandes es descriuen a partir d'una plantilla i una declaració de
-simetria. La versió 0.2 encara no executa la reflexió geomètrica.
+simetria pendent. La versió 0.3 no executa cap reflexió ni duplica identitats.
 
 ## Instància TR-UVOF-002
 
@@ -204,6 +249,9 @@ La cinquena instància representa:
 - finalització obligatòria des de 6 m com a condició de tasca;
 - classificació `situacio_partit` derivada de la relació `6x6`.
 
+La font declara B1 però no un flux verificable. El document no inventa
+posseïdors ni passades i el preflight retorna `partial`.
+
 ## Instància TR-UVOF-006
 
 La sisena instància representa:
@@ -227,6 +275,9 @@ La setena instància representa:
 - `EXT_2` activat després per resoldre amb `L` contra `D1`;
 - identitats i decisions separades per als dos extrems de la fila.
 
+La font no especifica pilota ni flux. El preflight ho conserva com a
+informació absent i retorna `partial`.
+
 ## Instància TR-UVOF-008
 
 La vuitena instància representa:
@@ -236,6 +287,10 @@ La vuitena instància representa:
 - `DAV` sense intervenir sobre el pivot;
 - l'espai afavorit per al 1x1 de `L_OPOSAT`;
 - finalització, continuïtat o encreuament com a alternatives obertes.
+
+`ZONA_CONCENTRACIO` i l'ocupació de `PV` formen el cicle no ancorat documentat
+per l'auditoria. No s'hi afegeix cap ancoratge inventat. Juntament amb la
+informació de pilota no especificada, el resultat és `blocked`.
 
 ## Instància TR-UVOF-009
 
@@ -260,6 +315,9 @@ La desena instància representa:
 - 2x1 conceptual contra `D3` tancat a llançament exterior si queda pla o
   passada a `PV` si puja.
 
+La dependència entre `ESPAI_PV` i `D3` continua sent circular i el preflight la
+retorna com `SPATIAL_UNANCHORED_CYCLE`; v0.3 no la trenca artificialment.
+
 ## Instància TR-UVOF-011
 
 L'onzena instància representa:
@@ -269,6 +327,10 @@ L'onzena instància representa:
   de la permuta;
 - `L` rebent al centre com a rol temporal de central i iniciant l'1x1;
 - finalització, continuïtat o encreuament com a alternatives obertes.
+
+`DEF_4` declara cardinalitat esperada quatre però només té una instància. La
+situació resta `blocked` fins que l'entrenador identifiqui o validi els quatre
+defensors.
 
 ## Instància TR-UVOF-012
 
@@ -299,6 +361,10 @@ La catorzena instància representa:
 - permuta inicial lateral–central amb recepció `L_OPOSAT → L_LOCAL`;
 - continuació oberta després de complir la condició pedagògica inicial.
 
+Les sis opcions de la decisió semàntica tenen sis referències individuals.
+`encreuament` no desapareix: es conserva simbòlicament fins que existeixi un
+mapping espacial aprovat. Per això el preflight actual és `partial`.
+
 ## Instància TR-UVOF-015
 
 La quinzena instància representa:
@@ -310,24 +376,68 @@ La quinzena instància representa:
 - la pilota única del gràfic font com a exemple visual replicable i no com a
   límit operatiu de la tasca.
 
+La font no diferencia l'espai inicial, l'espai contigu ni el criteri de
+superació de cada finta. Les transicions ho conserven sense inventar i el
+preflight retorna `FINTA_ADJACENT_SPACE_MISSING` amb estat `blocked`.
+
 ## Validacions executables
 
-El validador comprova:
+`scripts/spatial_preflight.py` és pur i read-only. Carrega les fonts declarades,
+però no selecciona cap candidat en conflicte. Retorna només:
+
+- `ready`: cap diagnòstic impedeix el futur pas següent;
+- `partial`: el model preserva informació absent, provisional o simbòlica que
+  no requereix inventar geometria;
+- `blocked`: una contradicció, pèrdua, referència, cicle o entrada tàctica
+  pendent impedeix continuar de manera fiable.
+
+Cada diagnòstic té `code`, `impact`, `file`, `entity_ref`, `message` i
+`source_refs`. L'ordre és estable i `geometry_generated` és sempre `false`.
+
+El validador i el preflight comproven:
 
 - compliment de l'esquema;
-- absència de geometria;
-- correspondència amb l'exercici font;
-- identificadors únics;
-- existència de participants, materials, espais, fases i referències;
+- versió i fingerprints de font i de l'artefacte espacial;
+- absència de coordenades, geometria, SVG o render;
+- resolució real de JSON Pointer i tipus de referència;
+- identificadors locals únics, namespace global i entitats penjants;
+- bindings, perfils de participants, cardinalitats i capabilities;
 - contigüitats simètriques amb un referent realment compartit;
-- relacions i transicions sense referències penjants;
+- papers tipats de 2x1 i procedència de les condicions;
+- marcs dels operadors ambigus;
+- graf de dependències i cicles no ancorats;
 - continuïtat de les transicions d'un mateix actor;
 - continuïtat del posseïdor dins cada flux de pilota;
-- correspondència de pilotes i decisions amb la font semàntica;
+- preservació de participants, materials, pilotes, accions, fluxos, decisions i
+  opcions;
+- mapping individual i exhaustiu de les opcions;
+- simetria només amb mapping explícit, mai per duplicació inferida;
+- propagació de `provisional` i `unresolved`;
 - presència dels invariants de no-coordenades, identitat persistent i decisió
   no predeterminada.
 
-Els errors mantenen `code`, `path` i `message`.
+Codis principals actuals:
+
+| Codi | Significat |
+|---|---|
+| `SEMANTIC_SOURCE_CONFLICT` | Hi ha fonts divergents sense candidat canònic aprovat |
+| `SEMANTIC_SOURCE_DIGEST_MISMATCH` | La font ja no coincideix amb el fingerprint |
+| `SEMANTIC_REFERENCE_UNRESOLVED` | Un JSON Pointer no es pot resoldre |
+| `SEMANTIC_REFERENCE_TYPE_MISMATCH` | El punter resol una identitat o tipus diferent |
+| `GLOBAL_NAMESPACE_COLLISION` | Dues entitats comparteixen la mateixa identitat global |
+| `GLOBAL_NAMESPACE_DANGLING_ENTITY` | El namespace apunta a una entitat eliminada |
+| `BINDING_TARGET_TYPE_MISMATCH` | Un actor genèric no apunta a participants |
+| `UNINSTANTIATED_PARTICIPANT_GROUP` | La cardinalitat real és inferior a l'esperada |
+| `SEMANTIC_FLOW_LOSS` | Un flux de la font ha desaparegut |
+| `SEMANTIC_OPTION_COVERAGE_GAP` | Una opció no té mapping ni preservació individual |
+| `SPATIAL_UNANCHORED_CYCLE` | El graf depèn circularment de si mateix |
+| `SPATIAL_FRAME_INSUFFICIENT` | Falta marc per interpretar un operador ambigu |
+| `FINTA_ADJACENT_SPACE_MISSING` | No existeix una distinció validada entre espai inicial i contigu |
+| `SPATIAL_GEOMETRY_FORBIDDEN` | L'entrada conté geometria, coordenades o SVG fora de contracte |
+| `KNOWLEDGE_STATUS_PROPAGATED` | Una entrada provisional/unresolved continua sent-ho |
+
+Els diagnòstics específics d'informació pendent de pilota o entrenador es
+declaren a `unresolved_items`; el preflight no els dedueix del número d'UVOF.
 
 ## Entrada i sortida del futur resolutor
 
@@ -345,14 +455,15 @@ Sortida futura:
 3. alternatives separades quan la decisió no és única;
 4. cap canvi del significat tàctic per satisfer el dibuix.
 
-## Abast i pendents de v0.2
+## Abast i pendents de v0.3
 
-La versió 0.2 valida l'arquitectura amb `TR-UVOF-001`–`TR-UVOF-015`; encara no
-és un motor. Abans de congelar-ne el vocabulari cal:
+La versió 0.3 valida l'arquitectura amb `TR-UVOF-001`–`TR-UVOF-015`; encara no
+és un resolutor ni un motor geomètric. Abans d'implementar-los cal:
 
 - provar-lo amb més permutes i opcions de resolució tancades;
 - definir com canvien els intervals quan els defensors es desplacen entre
   estats;
-- especificar la normalització de costat i la reflexió de les dues bandes;
+- validar els camps de costat que ara són `unknown` i aprovar els mappings de
+  reflexió quan realment siguin necessaris;
 - separar les prioritats tàctiques de les preferències del futur solucionador;
 - decidir el contracte de sortida geomètrica en una versió posterior.

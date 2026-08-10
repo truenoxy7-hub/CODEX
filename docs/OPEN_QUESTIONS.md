@@ -27,6 +27,34 @@ Aquest document evita que Codex resolgui per inferència decisions tàctiques en
 5. Validar el vocabulari contra altres famílies abans de congelar una nova
    versió del llenguatge.
 
+## Bloquejos i parcials exposats pel preflight v0.3
+
+1. **UVOF001 — autoritat de font:** decidir si el model detallat, el corpus o
+   un mapping explícit entre tots dos és la font canònica. Fins aleshores cap
+   candidat es marca canònic i el resultat és `blocked`.
+2. **UVOF005/007/008 — pilota:** validar, si escau, pilota, posseïdor inicial i
+   passades que avui no estan especificats. No s'afegirà cap flux per
+   inferència.
+3. **UVOF008 — ancoratge:** validar una referència independent per a
+   `ZONA_CONCENTRACIO` o reformular la relació amb `PV`. La dependència actual
+   és circular.
+4. **UVOF010 — ancoratge:** validar una definició no circular entre `ESPAI_PV`
+   i `D3`.
+5. **UVOF011 — cardinalitat:** identificar quatre defensors concrets o validar
+   una plantilla i el seu mecanisme d'instanciació. `DEF_4` no equival per si
+   sol a quatre persones.
+6. **UVOF014 — mapping:** validar l'alternativa espacial específica
+   d'`encreuament` i qualsevol separació addicional entre les sis opcions que
+   avui només es preserven simbòlicament.
+7. **UVOF015 — finta:** definir per a cada duel l'espai inicial, l'espai
+   contigu i el criteri de superació. No es deduiran dels límits de zona.
+8. **Simetria:** aprovar mappings d'identitat només als exercicis que realment
+   els necessitin. `reflectible` o `dues_bandes_paraleles` no autoritzen a
+   duplicar participants o pilotes.
+
+Els diagnòstics anteriors descriuen informació absent o conflictiva; no són
+noves conclusions tàctiques.
+
 ## Regla de treball
 
 Fins que una pregunta no estigui resolta:
