@@ -181,5 +181,5 @@ ordre.
 diferents: `BANC_EXTERIOR` substitueix l'oposició del 1x1 de `CE` i
 `BANC_CENTRAL` condiciona la trepitjada del llançament de `L`.
 
-**Punt obert:** la vinculació del cilindre visible amb l'espai restringit del
-pivot es manté provisional fins a validació específica de l'entrenador.
+**Aplicació validada:** a `TR-UVOF-009`, `CIL_RESTRINGIT` referencia l'espai
+restringit des del qual el pivot finalitza després del lliscament.
