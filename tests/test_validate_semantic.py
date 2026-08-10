@@ -472,6 +472,66 @@ def test_corpus_rejects_missing_uvof003_task_condition(
     ]
 
 
+def test_corpus_rejects_non_situation_game_classification_for_any_6x6(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-005")
+    exercise["tipus_exercici"] = "analitic"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "CORPUS_6X6_SITUATION_GAME" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_cone_as_substitute_defender_in_uvof004(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-004")
+    exercise["materials"][0]["funcio"] = "substitut_de_defensor"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF004_D2_CONE_HANDICAP" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_incomplete_51_defense_in_uvof005(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-005")
+    exercise["participants"] = [
+        participant
+        for participant in exercise["participants"]
+        if participant["id"] != "DAV"
+    ]
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF005_FULL_6X6_51" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_missing_cylinder_handicap_in_uvof006(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-006")
+    exercise["materials"] = [
+        material
+        for material in exercise["materials"]
+        if material["id"] != "CIL_D3_OPOSAT"
+    ]
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF006_CYLINDER_HANDICAPS" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
 def test_corpus_rejects_geometry(valid_corpus, corpus_schema):
     exercise = _corpus_exercise(valid_corpus, "TR-UVOF-015")
     exercise["coordenades"] = [{"x": 1, "y": 2}]

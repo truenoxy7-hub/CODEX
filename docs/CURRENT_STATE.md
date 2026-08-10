@@ -16,10 +16,12 @@
 - Vocabulari validat d'encreuament, permuta, bloqueig estàtic, lliscament,
   situació de partit i punt fort/feble.
 - Contracte de relacions espacials v0.2 sense coordenades.
-- Instàncies relacionals executables de `TR-UVOF-001`, `TR-UVOF-002` i
-  `TR-UVOF-003`.
+- Instàncies relacionals executables de `TR-UVOF-001` a `TR-UVOF-006`.
 - Flux de pilota per trajectòria i encreuament explícit per darrere del portador.
 - Bloqueig estàtic del pivot, rols temporals i canvi de banda validats en 6x6.
+- Passada–devolució amb handicap de recorregut, defensa 5:1 completa i
+  handicaps defensius amb cilindres representats explícitament.
+- Classificació executable de qualsevol relació 6x6 com a `situacio_partit`.
 - Validacions de referències, contigüitats, continuïtat i decisions obertes.
 
 ## No completat
@@ -41,5 +43,5 @@ Tornar a introduir coordenades abans d'haver estabilitzat el model tàctic.
 
 ## Pròxima fita recomanada
 
-Aplicar el contracte relacional v0.2 a un exercici de permuta abans de definir
-el resolutor geomètric.
+Aplicar el contracte relacional v0.2 a `TR-UVOF-007`–`TR-UVOF-009`, incloent la
+primera instància de permuta, abans de definir el resolutor geomètric.
