@@ -130,7 +130,11 @@ posseïdor o la transferència.
 
 La permuta utilitza la notació `primer_jugador-segon_jugador`. El primer canvia
 cap a la posició del segon i rep després de la permuta; el segon ocupa l'espai
-deixat. La identitat del participant i la posició temporal no són equivalents.
+deixat. Per norma general, `central–lateral` s'habilita amb una passada de
+l'extrem i `lateral–central` amb una passada del lateral contrari. Aquest flux
+es declara separadament perquè la identitat del participant, la posició
+temporal, el passador i el posseïdor de pilota no són equivalents. Un flux
+específic validat per la tasca preval sobre la topologia general.
 
 ## 10. Caràcter de les decisions
 

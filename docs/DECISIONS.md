@@ -80,7 +80,16 @@ avantatge local, el canvi de banda és una opció preferent i no obligatòria.
 ## D-016 — Regla ordenada de la permuta
 
 **Decisió:** a la notació `primer-segon`, el primer jugador canvia cap a la
-posició del segon i és qui rep després de la permuta.
+posició del segon, el segon ocupa l'espai deixat i el primer rep després de la
+permuta. Per norma general, la direcció també determina la topologia de passada:
+
+- `central–lateral`: el central va a lateral i la passada habilitadora es fa
+  amb l'extrem;
+- `lateral–central`: el lateral va al centre i rep del lateral contrari.
+
+La passada habilitadora és un flux de pilota explícit i separat del canvi de
+posicions. Si una tasca valida un flux específic diferent, com `L → EXT → L` a
+`TR-UVOF-011`, el corpus el conserva com a particularitat de l'exercici.
 
 ## D-017 — Fort conceptual i fort individual
 

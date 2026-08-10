@@ -16,7 +16,7 @@
 - Vocabulari validat d'encreuament, permuta, bloqueig estàtic, lliscament,
   situació de partit i punt fort/feble.
 - Contracte de relacions espacials v0.2 sense coordenades.
-- Instàncies relacionals executables de `TR-UVOF-001` a `TR-UVOF-009`.
+- Instàncies relacionals executables de `TR-UVOF-001` a `TR-UVOF-012`.
 - Flux de pilota per trajectòria i encreuament explícit per darrere del portador.
 - Bloqueig estàtic del pivot, rols temporals i canvi de banda validats en 6x6.
 - Passada–devolució amb handicap de recorregut, defensa 5:1 completa i
@@ -25,6 +25,10 @@
 - Ordre d'activació de dos extrems, concentració defensiva completa en 5:1 i
   primera permuta central–lateral amb tres fluxos de pilota independents.
 - Cilindre d'UVOF009 validat com a referència de l'espai restringit del pivot.
+- Topologia general de passada de les permutes i variant específica
+  `L → EXT → L` d'UVOF011 representades explícitament.
+- Activació condicional posterior d'UVOF010 i dues superioritats ordenades
+  d'UVOF012 amb defensors `D3` i `D1` diferenciats.
 - Validacions de referències, contigüitats, continuïtat i decisions obertes.
 
 ## No completat
@@ -46,6 +50,6 @@ Tornar a introduir coordenades abans d'haver estabilitzat el model tàctic.
 
 ## Pròxima fita recomanada
 
-Aplicar el contracte relacional v0.2 a `TR-UVOF-010`–`TR-UVOF-012` i contrastar
-les opcions tancades i les permutes lateral–central abans de definir el
-resolutor geomètric.
+Aplicar el contracte relacional v0.2 a `TR-UVOF-013`–`TR-UVOF-015`, completar
+el primer corpus relacional UVOF i revisar-lo abans de definir el resolutor
+geomètric.

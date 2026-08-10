@@ -595,6 +595,46 @@ def test_corpus_rejects_provisional_restricted_space_cylinder_in_uvof009(
     ]
 
 
+def test_corpus_rejects_wrong_opposite_lateral_passer_in_uvof010(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-010")
+    exercise["organitzacio"]["passador_permuta"] = "EXT"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF010_ORDERED_CONDITIONAL_ACTION" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_broken_specific_l_ext_l_flow_in_uvof011(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-011")
+    exercise["fases"][0]["fluxos_pilota"][1]["posseidor_final"] = "CE"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF011_SPECIFIC_L_EXT_L_FLOW" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_wrong_first_passer_in_uvof012(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-012")
+    first_flow = exercise["fases"][0]["fluxos_pilota"][0]
+    first_flow["posseidor_inicial"] = "PV"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF012_TWO_ORDERED_SUPERIORITIES" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
 def test_corpus_rejects_geometry(valid_corpus, corpus_schema):
     exercise = _corpus_exercise(valid_corpus, "TR-UVOF-015")
     exercise["coordenades"] = [{"x": 1, "y": 2}]

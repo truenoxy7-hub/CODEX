@@ -256,9 +256,14 @@ La nomenclatura de la permuta és ordenada:
 Per tant:
 
 - `central–lateral`: el central canvia cap a lateral, el lateral va al centre i
-  el central original rep;
+  el central original rep mitjançant una passada amb l'extrem;
 - `lateral–central`: el lateral canvia cap al centre, el central s'obre i el
-  lateral original rep.
+  lateral original rep del lateral contrari.
+
+Aquesta és la topologia general de passada. La tasca pot fixar un flux específic
+diferent, però s'ha de declarar explícitament i haver estat validat. La passada
+habilitadora, l'intercanvi de posicions i la primera acció posterior són moments
+separats encara que el llenguatge oral els agrupi sota el terme `permuta`.
 
 La identitat inicial, la posició temporal i la funció actual s'han de conservar
 com a propietats separades.

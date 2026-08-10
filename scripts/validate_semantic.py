@@ -1042,6 +1042,162 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
             }
         )
 
+    participants_010 = {
+        participant.get("id") for participant in uvof_010.get("participants", [])
+    }
+    balls_010 = {
+        ball.get("id"): ball.get("posseidor_inicial")
+        for ball in uvof_010.get("pilotes", [])
+    }
+    flows_010 = {
+        (
+            flow.get("trajectoria_id"),
+            flow.get("ordre"),
+            flow.get("pilota_id"),
+            flow.get("posseidor_inicial"),
+            flow.get("posseidor_final"),
+            flow.get("condicio"),
+        )
+        for flow in _corpus_ball_flows(uvof_010)
+    }
+    phase_2_010 = next(
+        (phase for phase in uvof_010.get("fases", []) if phase.get("id") == "F2"),
+        {},
+    )
+    if (
+        not {"L", "CE", "L_OPOSAT", "PV", "D3"} <= participants_010
+        or uvof_010.get("organitzacio", {}).get("passador_permuta")
+        != "L_OPOSAT"
+        or balls_010 != {"B1": "L_OPOSAT", "B2": "PV"}
+        or (
+            "PERMUTA_L_CE",
+            1,
+            "B1",
+            "L_OPOSAT",
+            "L",
+            None,
+        )
+        not in flows_010
+        or (
+            "2X1_TANCAT",
+            1,
+            "B2",
+            "PV",
+            "L",
+            "L_no_requerit_en_la_continuitat_posterior_de_F1",
+        )
+        not in flows_010
+        or phase_2_010.get("condicio_activacio")
+        != "L_no_requerit_en_la_continuitat_posterior_de_F1"
+    ):
+        errors.append(
+            {
+                "code": "UVOF010_ORDERED_CONDITIONAL_ACTION",
+                "path": "TR-UVOF-010",
+                "message": (
+                    "TR-UVOF-010 ha de començar amb L_OPOSAT-L i només "
+                    "activar PV-L després de F1 quan L no sigui necessari "
+                    "en la continuïtat."
+                ),
+            }
+        )
+
+    uvof_011 = _corpus_exercise(document, "TR-UVOF-011")
+    attackers_011 = {
+        participant.get("id")
+        for participant in uvof_011.get("participants", [])
+        if participant.get("equip") == "atac"
+    }
+    balls_011 = {
+        ball.get("id"): ball.get("posseidor_inicial")
+        for ball in uvof_011.get("pilotes", [])
+    }
+    flows_011 = {
+        (
+            flow.get("trajectoria_id"),
+            flow.get("ordre"),
+            flow.get("pilota_id"),
+            flow.get("posseidor_inicial"),
+            flow.get("posseidor_final"),
+        )
+        for flow in _corpus_ball_flows(uvof_011)
+    }
+    if (
+        attackers_011 != {"EXT", "L", "CE", "PV"}
+        or balls_011 != {"B1": "L"}
+        or uvof_011.get("organitzacio", {}).get("passador_permuta") != "EXT"
+        or flows_011
+        != {
+            ("PERMUTA_L_CE_ESPECIFICA", 1, "B1", "L", "EXT"),
+            ("PERMUTA_L_CE_ESPECIFICA", 2, "B1", "EXT", "L"),
+        }
+    ):
+        errors.append(
+            {
+                "code": "UVOF011_SPECIFIC_L_EXT_L_FLOW",
+                "path": "TR-UVOF-011",
+                "message": (
+                    "TR-UVOF-011 ha de conservar els quatre atacants "
+                    "EXT-L-CE-PV i el flux específic L-EXT-L que inicia "
+                    "el 4x4 des de la posició central temporal."
+                ),
+            }
+        )
+
+    uvof_012 = _corpus_exercise(document, "TR-UVOF-012")
+    participants_012 = {
+        participant.get("id") for participant in uvof_012.get("participants", [])
+    }
+    balls_012 = {
+        ball.get("id"): ball.get("posseidor_inicial")
+        for ball in uvof_012.get("pilotes", [])
+    }
+    flows_012 = {
+        (
+            flow.get("trajectoria_id"),
+            flow.get("ordre"),
+            flow.get("pilota_id"),
+            flow.get("posseidor_inicial"),
+            flow.get("posseidor_final"),
+        )
+        for flow in _corpus_ball_flows(uvof_012)
+    }
+    decisions_012 = {
+        decision.get("id"): decision
+        for decision in _corpus_decisions(uvof_012)
+    }
+    actions_012 = {
+        action.get("accio") for action in _corpus_actions(uvof_012)
+    }
+    if (
+        not {"L", "CE", "L_OPOSAT", "PV", "EXT", "D1", "D3"}
+        <= participants_012
+        or uvof_012.get("organitzacio", {}).get("passador_permuta")
+        != "L_OPOSAT"
+        or balls_012 != {"B1": "L_OPOSAT", "B2": "EXT"}
+        or flows_012
+        != {
+            ("PRIMER_2X1", 1, "B1", "L_OPOSAT", "L"),
+            ("PRIMER_2X1", 2, "B1", "L", "PV"),
+            ("SEGON_2X1", 1, "B2", "EXT", "CE"),
+            ("SEGON_2X1", 2, "B2", "CE", "EXT"),
+        }
+        or decisions_012.get("D_F1", {}).get("condicio") != "conducta_de_D3"
+        or decisions_012.get("D_F2", {}).get("condicio") != "D1_compromes"
+        or "jugar_2x1_amb_EXT_contra_D1" not in actions_012
+    ):
+        errors.append(
+            {
+                "code": "UVOF012_TWO_ORDERED_SUPERIORITIES",
+                "path": "TR-UVOF-012",
+                "message": (
+                    "TR-UVOF-012 ha de conservar L_OPOSAT-L-PV en la "
+                    "primera superioritat i EXT-CE-EXT en la segona, "
+                    "contra D3 i D1 respectivament."
+                ),
+            }
+        )
+
     for exercise_id in ("TR-UVOF-012", "TR-UVOF-013", "TR-UVOF-014"):
         exercise = _corpus_exercise(document, exercise_id)
         if "lateral-central" not in exercise.get("organitzacio", {}).values():
