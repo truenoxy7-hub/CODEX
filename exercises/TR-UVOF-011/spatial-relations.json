@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "format": "TRACA_relacions_espacials",
+    "versio_contracte": "0.2.0",
+    "versio_instancia": "0.2.0",
+    "estat": "derivat_semantica_validada",
+    "separacio_capes": {"semantica_tactica": "referenciada_no_duplicada", "relacions_espacials": "incloses", "geometria_resolta": "no_inclosa", "renderitzat": "no_generat"}
+  },
+  "font_semantica": {"exercici_id": "TR-UVOF-011", "fitxers": ["corpus/uvof.semantic.json"], "plantilla": "situacio_partit_reduida_4x4_amb_flux_L_EXT_L", "simetria": "reflectible"},
+  "nodes": [
+    {"id": "L", "classe": "participant", "referencia_semantica": "participants/L", "rol": "iniciador_amb_pilota_i_central_temporal", "estat_coneixement": "validat"},
+    {"id": "CE", "classe": "participant", "referencia_semantica": "participants/CE", "rol": "segon_jugador_de_la_permuta_i_lateral_temporal", "estat_coneixement": "validat"},
+    {"id": "EXT", "classe": "participant", "referencia_semantica": "participants/EXT", "rol": "passador_del_flux_especific_i_continuitat_exterior", "estat_coneixement": "validat"},
+    {"id": "PV", "classe": "participant", "referencia_semantica": "participants/PV", "rol": "continuitat_interior_del_4x4", "estat_coneixement": "validat"},
+    {"id": "DEF_4", "classe": "participant", "referencia_semantica": "participants/DEF_4", "rol": "unitat_dels_quatre_defensors", "estat_coneixement": "validat"},
+    {"id": "B1", "classe": "pilota", "referencia_semantica": "pilotes/B1", "funcio": "pilota_del_flux_L_EXT_L", "estat_coneixement": "validat"},
+    {"id": "LINIA_FONS", "classe": "referencia_reglamentaria", "referencia_semantica": "linia_de_fons", "funcio": "limit_exterior", "estat_coneixement": "validat"},
+    {"id": "AREA_6M", "classe": "referencia_reglamentaria", "referencia_semantica": "area_de_6_metres", "funcio": "zona_de_finalitzacio", "estat_coneixement": "validat"},
+    {"id": "PORTERIA_ADVERSARIA", "classe": "referencia_reglamentaria", "referencia_semantica": "porteria_adversaria", "funcio": "orientacio_general_de_latac", "estat_coneixement": "validat"},
+    {"id": "EIX_CENTRAL", "classe": "referencia_funcional", "referencia_semantica": "centre_de_la_pista", "funcio": "posicio_central_temporal_de_L", "estat_coneixement": "validat"},
+    {"id": "EIX_LATERAL", "classe": "referencia_funcional", "referencia_semantica": "sector_lateral", "funcio": "posicio_lateral_temporal_de_CE", "estat_coneixement": "validat"}
+  ],
+  "espais": [
+    {"id": "POS_LATERAL", "classe": "posicio_funcional", "nom_canonic": "posicio_lateral", "definicio": {"operador": "proper_a", "arguments": ["EIX_LATERAL"]}, "fases_actives": ["F1"], "estat_coneixement": "validat"},
+    {"id": "POS_CENTRAL", "classe": "posicio_funcional", "nom_canonic": "posicio_central_despres_de_la_permuta", "definicio": {"operador": "proper_a", "arguments": ["EIX_CENTRAL"]}, "fases_actives": ["F1"], "estat_coneixement": "validat"},
+    {"id": "ESPAI_EXT", "classe": "espai_finalitzacio_extrem", "nom_canonic": "espai_exterior_del_4x4", "definicio": {"operador": "entre", "arguments": ["LINIA_FONS", "DEF_4"]}, "restriccions": [{"operador": "interior_de", "arguments": ["AREA_6M"]}], "fases_actives": ["F1"], "estat_coneixement": "derivat"},
+    {"id": "ZONA_PV", "classe": "zona_resolucio", "nom_canonic": "zona_interior_del_pivot", "definicio": {"operador": "interior_de", "arguments": ["AREA_6M"]}, "fases_actives": ["F1"], "estat_coneixement": "validat"},
+    {"id": "ZONA_FINAL_6M", "classe": "zona_resolucio", "nom_canonic": "zona_de_finalitzacio_del_4x4", "definicio": {"operador": "interior_de", "arguments": ["AREA_6M"]}, "fases_actives": ["F1"], "estat_coneixement": "validat"}
+  ],
+  "estats": [
+    {"id": "S_INICI", "fase_ref": "F1", "moment": "inici", "relacions": [
+      {"subjecte": "L", "predicat": "ocupa", "objectes": ["POS_LATERAL"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "L", "predicat": "orientat_cap_a", "objectes": ["EXT"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "EXT", "predicat": "mante_amplitud_a", "objectes": ["ESPAI_EXT"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "PV", "predicat": "ocupa", "objectes": ["ZONA_PV"], "caracter": "disponible", "estat_coneixement": "validat"}
+    ]},
+    {"id": "S_PERMUTA", "fase_ref": "F1", "moment": "preparacio", "relacions": [
+      {"subjecte": "L", "predicat": "ocupa", "objectes": ["POS_CENTRAL"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "CE", "predicat": "ocupa", "objectes": ["POS_LATERAL"], "caracter": "obligatori", "estat_coneixement": "validat"}
+    ]},
+    {"id": "S_RECEPCIO_CENTRAL", "fase_ref": "F1", "moment": "recepcio", "relacions": [
+      {"subjecte": "L", "predicat": "disponible_per_rebre_a", "objectes": ["POS_CENTRAL"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "L", "predicat": "orientat_cap_a", "objectes": ["PORTERIA_ADVERSARIA"], "caracter": "obligatori", "estat_coneixement": "validat"}
+    ]},
+    {"id": "S_JOC_4X4", "fase_ref": "F1", "moment": "desenvolupament", "relacions": [
+      {"subjecte": "L", "predicat": "ataca", "objectes": ["ZONA_FINAL_6M"], "caracter": "disponible", "estat_coneixement": "validat"},
+      {"subjecte": "CE", "predicat": "disponible_per_rebre_a", "objectes": ["POS_LATERAL"], "caracter": "disponible", "estat_coneixement": "validat"},
+      {"subjecte": "EXT", "predicat": "disponible_per_rebre_a", "objectes": ["ESPAI_EXT"], "caracter": "disponible", "estat_coneixement": "validat"},
+      {"subjecte": "PV", "predicat": "disponible_per_rebre_a", "objectes": ["ZONA_PV"], "caracter": "disponible", "estat_coneixement": "validat"}
+    ]}
+  ],
+  "transicions": [
+    {"id": "T_L_PERMUTA", "fase_ref": "F1", "ordre": 1, "trajectoria_id": "PERMUTA_L_CE_ESPECIFICA", "actor": "L", "tipus": "ajust_sense_pilota", "des_de": "POS_LATERAL", "cap_a": "POS_CENTRAL", "accio_semantica_ref": "fases/F1/accions/2", "estat_coneixement": "validat"},
+    {"id": "T_L_REP_EXT", "fase_ref": "F1", "ordre": 2, "trajectoria_id": "PERMUTA_L_CE_ESPECIFICA", "actor": "L", "tipus": "recepcio", "des_de": "POS_CENTRAL", "cap_a": "POS_CENTRAL", "accio_semantica_ref": "fases/F1/accions/3", "qualificadors": ["flux_especific_L_EXT_L", "rol_temporal_CE"], "estat_coneixement": "validat"},
+    {"id": "T_L_INICIA_1X1", "fase_ref": "F1", "ordre": 3, "trajectoria_id": "PERMUTA_L_CE_ESPECIFICA", "actor": "L", "tipus": "atac_espai", "des_de": "POS_CENTRAL", "cap_a": "ZONA_FINAL_6M", "referencia_oposicional": "DEF_4", "accio_semantica_ref": "fases/F1/accions/4", "estat_coneixement": "validat"},
+    {"id": "T_CE_OBRE", "fase_ref": "F1", "ordre": 1, "trajectoria_id": "OBERTURA_CE", "actor": "CE", "tipus": "ajust_sense_pilota", "des_de": "POS_CENTRAL", "cap_a": "POS_LATERAL", "accio_semantica_ref": "fases/F1/accions/2", "estat_coneixement": "validat"}
+  ],
+  "fluxos_pilota": [
+    {"id": "FP_L_EXT", "fase_ref": "F1", "trajectoria_id": "PERMUTA_L_CE_ESPECIFICA", "ordre": 1, "pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_inicial", "posseidor_final": "EXT", "estat_coneixement": "validat"},
+    {"id": "FP_EXT_L", "fase_ref": "F1", "trajectoria_id": "PERMUTA_L_CE_ESPECIFICA", "ordre": 2, "pilota_id": "B1", "posseidor_inicial": "EXT", "accio": "devolucio", "posseidor_final": "L", "qualificadors": ["recepcio_al_centre_despres_de_la_permuta"], "estat_coneixement": "validat"}
+  ],
+  "branques_decisionals": [
+    {
+      "id": "BR_JOC_4X4",
+      "fase_ref": "F1",
+      "decisio_semantica_ref": "fases/F1/decisions/D_4X4",
+      "caracter": "disponible",
+      "resolucio": "no_predeterminada",
+      "alternatives": [
+        {"id": "A_FINALITZA", "condicio": "L_supera_en_1x1", "efectes_espacials": [{"subjecte": "L", "predicat": "ataca", "objectes": ["ZONA_FINAL_6M"], "caracter": "disponible", "estat_coneixement": "validat"}]},
+        {"id": "A_CONTINUITAT", "condicio": "la_defensa_tanca_L", "efectes_espacials": [{"subjecte": "CE", "predicat": "disponible_per_rebre_a", "objectes": ["POS_LATERAL"], "caracter": "disponible", "estat_coneixement": "validat"}, {"subjecte": "PV", "predicat": "disponible_per_rebre_a", "objectes": ["ZONA_PV"], "caracter": "disponible", "estat_coneixement": "validat"}]},
+        {"id": "A_ENCREUAMENT", "condicio": "no_hi_ha_superacio_ni_continuitat_directa", "efectes_espacials": [{"subjecte": "CE", "predicat": "darrere_de", "objectes": ["L"], "caracter": "disponible", "estat_coneixement": "validat"}]}
+      ]
+    }
+  ],
+  "invariants": [
+    {"code": "SP-UVOF011-NO-COORD", "operador": "sense_coordenades", "subjectes": ["L", "CE", "EXT", "PV", "DEF_4"], "ambit": "document", "missatge": "El 4x4 i la permuta es representen sense coordenades."},
+    {"code": "SP-UVOF011-ID", "operador": "identitat_persistent", "subjectes": ["L", "CE", "EXT", "PV"], "ambit": "F1", "missatge": "Els quatre atacants mantenen la identitat encara que L i CE canviïn de posició."},
+    {"code": "SP-UVOF011-DEC", "operador": "decisio_no_predeterminada", "subjectes": ["L", "CE", "EXT", "PV", "DEF_4"], "ambit": "BR_JOC_4X4", "missatge": "La situació de partit reduïda conserva la lectura oberta."},
+    {"code": "SP-UVOF011-FLUX", "operador": "flux_pilota_coherent", "subjectes": ["B1", "L", "EXT"], "ambit": "F1", "missatge": "L inicia amb pilota, passa a EXT i rep al centre."},
+    {"code": "SP-UVOF011-PERMUTA", "operador": "transicio_connectada", "subjectes": ["L", "CE"], "ambit": "F1", "missatge": "L ocupa el centre, CE s'obre i L inicia l'1x1 com a central temporal."},
+    {"code": "SP-UVOF011-AMPLITUD", "operador": "mantenir_amplitud", "subjectes": ["EXT"], "ambit": "F1", "missatge": "L'extrem manté amplitud durant l'inici del 4x4."}
+  ],
+  "governanca": {"autoritat": "semantica_validada_per_entrenador", "politica_inferencia": "tota_inferencia_no_validada_es_provisional", "sortida_permesa": "graf_relacional_sense_coordenades"}
+}

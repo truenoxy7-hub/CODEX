@@ -588,9 +588,51 @@ def test_uvof003_rejects_disconnected_change_of_side_flow(
                 "relational_error_count": 0,
             },
         ),
+        (
+            "TR-UVOF-010",
+            {
+                "node_count": 12,
+                "space_count": 5,
+                "state_count": 5,
+                "transition_count": 7,
+                "ball_flow_count": 3,
+                "branch_count": 2,
+                "error_count": 0,
+                "structural_error_count": 0,
+                "relational_error_count": 0,
+            },
+        ),
+        (
+            "TR-UVOF-011",
+            {
+                "node_count": 11,
+                "space_count": 5,
+                "state_count": 4,
+                "transition_count": 4,
+                "ball_flow_count": 2,
+                "branch_count": 1,
+                "error_count": 0,
+                "structural_error_count": 0,
+                "relational_error_count": 0,
+            },
+        ),
+        (
+            "TR-UVOF-012",
+            {
+                "node_count": 15,
+                "space_count": 6,
+                "state_count": 5,
+                "transition_count": 9,
+                "ball_flow_count": 4,
+                "branch_count": 2,
+                "error_count": 0,
+                "structural_error_count": 0,
+                "relational_error_count": 0,
+            },
+        ),
     ],
 )
-def test_uvof004_to_009_spatial_contracts_pass(
+def test_uvof004_to_012_spatial_contracts_pass(
     exercise_id,
     expected_summary,
     spatial_schema,
@@ -815,3 +857,113 @@ def test_uvof009_preserves_permutation_positions_and_three_ball_flows() -> None:
         ("FINAL_L_CENTRAL", 1, "B2", "PV", "L"),
         ("LLISCAMENT_PV", 1, "B3", "EXT_2", "PV"),
     }
+
+
+def test_uvof010_separates_permutation_from_conditional_second_ball() -> None:
+    document = json.loads(
+        (
+            ROOT / "exercises" / "TR-UVOF-010" / "spatial-relations.json"
+        ).read_text(encoding="utf-8")
+    )
+    positions = {
+        relation["subjecte"]: relation["objectes"][0]
+        for state in document["estats"]
+        if state["id"] == "S_PERMUTA"
+        for relation in state["relacions"]
+    }
+    flows = {
+        (
+            flow["trajectoria_id"],
+            flow["ordre"],
+            flow["pilota_id"],
+            flow["posseidor_inicial"],
+            flow["posseidor_final"],
+            flow.get("condicio"),
+        )
+        for flow in document["fluxos_pilota"]
+    }
+    closed_branch = next(
+        branch
+        for branch in document["branques_decisionals"]
+        if branch["id"] == "BR_2X1_TANCAT"
+    )
+
+    assert positions == {"L": "POS_CENTRAL", "CE": "POS_LATERAL"}
+    assert (
+        "PERMUTA_L_CE",
+        1,
+        "B1",
+        "L_OPOSAT",
+        "L",
+        None,
+    ) in flows
+    assert (
+        "2X1_TANCAT",
+        1,
+        "B2",
+        "PV",
+        "L",
+        "L_no_requerit_en_la_continuitat_posterior_de_F1",
+    ) in flows
+    assert closed_branch["caracter"] == "obligatori"
+    assert {item["id"] for item in closed_branch["alternatives"]} == {
+        "A_D3_PLA",
+        "A_D3_PUJA",
+    }
+
+
+def test_uvof011_keeps_specific_l_ext_l_flow_and_four_attackers() -> None:
+    document = json.loads(
+        (
+            ROOT / "exercises" / "TR-UVOF-011" / "spatial-relations.json"
+        ).read_text(encoding="utf-8")
+    )
+    participants = {
+        node["id"]
+        for node in document["nodes"]
+        if node["classe"] == "participant"
+    }
+    flows = [
+        (flow["posseidor_inicial"], flow["posseidor_final"])
+        for flow in sorted(document["fluxos_pilota"], key=lambda item: item["ordre"])
+    ]
+
+    assert {"EXT", "L", "CE", "PV"} <= participants
+    assert flows == [("L", "EXT"), ("EXT", "L")]
+
+
+def test_uvof012_keeps_two_ordered_superiorities_and_defenders() -> None:
+    document = json.loads(
+        (
+            ROOT / "exercises" / "TR-UVOF-012" / "spatial-relations.json"
+        ).read_text(encoding="utf-8")
+    )
+    flows = {
+        flow["trajectoria_id"]: []
+        for flow in document["fluxos_pilota"]
+    }
+    for flow in sorted(document["fluxos_pilota"], key=lambda item: item["ordre"]):
+        flows[flow["trajectoria_id"]].append(
+            (flow["posseidor_inicial"], flow["posseidor_final"])
+        )
+    relations_2x1 = {
+        (relation["subjecte"], tuple(relation["objectes"]))
+        for state in document["estats"]
+        for relation in state["relacions"]
+        if relation["predicat"] == "relacionat_en_2x1_amb"
+    }
+    first_branch = next(
+        branch
+        for branch in document["branques_decisionals"]
+        if branch["id"] == "BR_PRIMER_2X1"
+    )
+
+    assert flows == {
+        "PRIMER_2X1": [("L_OPOSAT", "L"), ("L", "PV")],
+        "SEGON_2X1": [("EXT", "CE"), ("CE", "EXT")],
+    }
+    assert relations_2x1 == {
+        ("L", ("PV", "D3")),
+        ("CE", ("EXT", "D1")),
+    }
+    assert first_branch["caracter"] == "obligatori"

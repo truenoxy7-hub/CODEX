@@ -6,7 +6,7 @@ El contracte converteix la semàntica tàctica validada en un graf qualitatiu qu
 un futur motor espacial podrà resoldre. Defineix **què ha de quedar relacionat**
 sense decidir encara **a quines coordenades** s'ha de dibuixar.
 
-Les instàncies executables actuals són les de `TR-UVOF-001` a `TR-UVOF-009`;
+Les instàncies executables actuals són les de `TR-UVOF-001` a `TR-UVOF-012`;
 totes compleixen
 `schema/traca.spatial-relations.schema.v0.2.json`.
 
@@ -248,6 +248,38 @@ La novena instància representa:
 - flux `B3`: `EXT_2 → PV`, després del lliscament del pivot;
 - el cilindre com a referència validada de l'espai restringit del pivot.
 
+## Instància TR-UVOF-010
+
+La desena instància representa:
+
+- permuta lateral–central amb `L` al centre, `CE` obert a lateral i recepció
+  `L_OPOSAT → L`;
+- primera acció oberta amb superació, continuïtat o encreuament;
+- segona pilota independent `PV → L`, activada només si `L` no ha estat
+  necessari en la continuïtat posterior de la primera acció;
+- 2x1 conceptual contra `D3` tancat a llançament exterior si queda pla o
+  passada a `PV` si puja.
+
+## Instància TR-UVOF-011
+
+L'onzena instància representa:
+
+- situació de partit reduïda `4x4` amb `EXT`, `L`, `CE` i `PV`;
+- flux específic validat `L → EXT → L`, que preval sobre la topologia general
+  de la permuta;
+- `L` rebent al centre com a rol temporal de central i iniciant l'1x1;
+- finalització, continuïtat o encreuament com a alternatives obertes.
+
+## Instància TR-UVOF-012
+
+La dotzena instància representa:
+
+- permuta lateral–central habilitada per `L_OPOSAT → L`;
+- primer 2x1 de `L` i `PV` contra `D3`, amb lliscament obligatori del pivot si
+  `D3` puja;
+- segon flux independent `EXT → CE`, amb 2x1 de `CE` i `EXT` contra `D1`;
+- amplitud de l'extrem i salt cap al centre si rep per finalitzar.
+
 ## Validacions executables
 
 El validador comprova:
@@ -285,7 +317,7 @@ Sortida futura:
 
 ## Abast i pendents de v0.2
 
-La versió 0.2 valida l'arquitectura amb `TR-UVOF-001`–`TR-UVOF-009`; encara no
+La versió 0.2 valida l'arquitectura amb `TR-UVOF-001`–`TR-UVOF-012`; encara no
 és un motor. Abans de congelar-ne el vocabulari cal:
 
 - provar-lo amb més permutes i opcions de resolució tancades;

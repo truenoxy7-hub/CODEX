@@ -3,7 +3,7 @@
   "meta": {
     "format": "TRACA_corpus_semantic",
     "versio_llenguatge": "1.1.0",
-    "versio_corpus": "1.4.1",
+    "versio_corpus": "1.5.0",
     "estat": "validat_i_viu",
     "separacio_capes": {
       "semantica_tactica": "inclosa",
@@ -672,6 +672,7 @@
       },
       "organitzacio": {
         "permuta": "central-lateral",
+        "passador_permuta": "EXT_1",
         "accions_amb_pilota": 3
       },
       "participants": [
@@ -749,7 +750,7 @@
     },
     {
       "id": "TR-UVOF-010",
-      "nom": "Permuta lateral–central amb 2x1 de dues opcions tancades",
+      "nom": "Permuta lateral–central amb continuïtat i 2x1 condicional tancat",
       "estat": "validat_entrenador",
       "tipus_exercici": "superioritat_reduida",
       "origen": {
@@ -760,43 +761,69 @@
       },
       "organitzacio": {
         "permuta": "lateral-central",
+        "passador_permuta": "L_OPOSAT",
+        "accions_amb_pilota": 2,
         "branca_tancada": true
       },
       "participants": [
         {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
         {"id": "CE", "rol_inicial": "central", "equip": "atac"},
+        {"id": "L_OPOSAT", "rol_inicial": "lateral_contrari_passador", "equip": "atac"},
         {"id": "PV", "rol_inicial": "pivot", "equip": "atac"},
-        {"id": "D", "rol_inicial": "defensor_directe", "equip": "defensa"}
+        {"id": "D3", "rol_inicial": "tercer_o_central_defensiu", "equip": "defensa"}
       ],
       "materials": [
         {"id": "BANC", "tipus": "banc", "funcio": "condicionant_del_llancament_o_passada"}
       ],
       "pilotes": [
-        {"id": "B1", "posseidor_inicial": "PV"}
+        {"id": "B1", "posseidor_inicial": "L_OPOSAT"},
+        {"id": "B2", "posseidor_inicial": "PV"}
       ],
       "fases": [
         {
           "id": "F1",
-          "objectiu": "Donar continuïtat al lateral que no ha participat mitjançant dues opcions tancades.",
+          "objectiu": "Executar la permuta lateral–central i iniciar la primera acció des de la posició central temporal.",
           "accions": [
             {"ordre": 1, "actor": "L", "accio": "permuta", "primer_jugador": "L", "segon_jugador": "CE", "receptor_despres_permuta": "L", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "L_OPOSAT", "accio": "passar_al_lateral_que_arriba_al_centre", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "L", "accio": "rebre_al_centre_com_a_rol_temporal_CE_i_iniciar_1x1", "estat_coneixement": "validat"},
+            {"ordre": 4, "actor": "L", "accio": "donar_continuitat_o_encreuament_segons_resposta", "estat_coneixement": "validat"}
+          ],
+          "fluxos_pilota": [
+            {"trajectoria_id": "PERMUTA_L_CE", "ordre": 1, "pilota_id": "B1", "posseidor_inicial": "L_OPOSAT", "accio": "passada_habilitadora_permuta", "posseidor_final": "L"}
+          ],
+          "decisions": [
+            {"id": "D_PRIMERA_ACCIO", "condicio": "resposta_defensiva_despres_del_1x1", "caracter": "disponible", "opcions": ["superar", "continuitat", "encreuament"]}
+          ]
+        },
+        {
+          "id": "F2",
+          "objectiu": "Activar el lateral situat temporalment al centre si no ha estat necessari en la continuïtat de la primera acció.",
+          "condicio_activacio": "L_no_requerit_en_la_continuitat_posterior_de_F1",
+          "accions": [
+            {"ordre": 1, "actor": "PV", "accio": "passar_a_L_si_no_ha_intervingut_en_la_continuitat", "estat_coneixement": "validat"},
             {"ordre": 2, "actor": "L", "accio": "rebre_de_pivot_i_saltar_el_banc", "estat_coneixement": "validat"}
           ],
           "fluxos_pilota": [
-            {"pilota_id": "B1", "posseidor_inicial": "PV", "accio": "passada", "posseidor_final": "L"}
+            {"trajectoria_id": "2X1_TANCAT", "ordre": 1, "pilota_id": "B2", "posseidor_inicial": "PV", "accio": "passada_condicional", "posseidor_final": "L", "condicio": "L_no_requerit_en_la_continuitat_posterior_de_F1"},
+            {"trajectoria_id": "2X1_TANCAT", "ordre": 2, "pilota_id": "B2", "posseidor_inicial": "L", "accio": "passada_pivot", "posseidor_final": "PV", "condicio": "D3_puja"}
           ],
           "decisions": [
-            {"id": "D_2X1_TANCAT", "condicio": "posicio_del_defensor", "caracter": "obligatori", "opcions": ["llancament_exterior_si_defensor_pla_a_6m", "passada_pivot_si_defensor_puja"]}
+            {"id": "D_2X1_TANCAT", "condicio": "posicio_de_D3", "caracter": "obligatori", "opcions": ["llancament_exterior_si_defensor_pla_a_6m", "passada_pivot_si_defensor_puja"]}
           ]
         }
       ],
       "invariants": [
+        "en la permuta lateral–central L va al centre i rep de L_OPOSAT",
+        "la segona acció només s'activa després de F1 si L no ha estat necessari en la continuïtat",
         "és un 2x1 conceptual amb només dues opcions tancades",
         "si el defensor queda pla es llança de fora",
         "si el defensor puja es passa al pivot"
       ],
       "validacions_entrenador": [
         "permuta_lateral-central",
+        "passada_habilitadora_des_de_lateral_contrari",
+        "activacio_condicional_despres_de_la_primera_accio",
         "dues_opcions_tancades_del_2x1"
       ]
     },
@@ -813,24 +840,35 @@
       },
       "organitzacio": {
         "relacio": "4x4",
-        "permuta": "lateral-central"
+        "permuta": "lateral-central",
+        "passador_permuta": "EXT",
+        "flux_especific_validat": "L-EXT-L"
       },
       "participants": [
         {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
         {"id": "CE", "rol_inicial": "central", "equip": "atac"},
-        {"id": "ATAC_4", "rol_inicial": "unitat_de_quatre_atacants", "equip": "atac"},
+        {"id": "EXT", "rol_inicial": "extrem", "equip": "atac"},
+        {"id": "PV", "rol_inicial": "pivot", "equip": "atac"},
         {"id": "DEF_4", "rol_inicial": "quatre_defensors", "equip": "defensa"}
+      ],
+      "pilotes": [
+        {"id": "B1", "posseidor_inicial": "L"}
       ],
       "fases": [
         {
           "id": "F1",
           "objectiu": "Iniciar el joc 4x4 mitjançant una permuta i un 1x1 real.",
           "accions": [
-            {"ordre": 1, "actor": "L", "accio": "permuta", "primer_jugador": "L", "segon_jugador": "CE", "receptor_despres_permuta": "L", "estat_coneixement": "validat"},
-            {"ordre": 2, "actor": "L", "accio": "iniciar_1x1", "estat_coneixement": "validat"},
-            {"ordre": 3, "actor": "ATAC_4", "accio": "donar_continuitat_amb_criteri", "estat_coneixement": "validat"}
+            {"ordre": 1, "actor": "L", "accio": "passar_a_EXT_abans_de_la_permuta", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "L", "accio": "permuta", "primer_jugador": "L", "segon_jugador": "CE", "receptor_despres_permuta": "L", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "EXT", "accio": "retornar_a_L_que_arriba_al_centre", "estat_coneixement": "validat"},
+            {"ordre": 4, "actor": "L", "accio": "iniciar_1x1_des_de_la_posicio_temporal_CE", "estat_coneixement": "validat"},
+            {"ordre": 5, "actor": "L", "accio": "donar_continuitat_amb_EXT_CE_i_PV_segons_criteri", "estat_coneixement": "validat"}
           ],
-          "fluxos_pilota": [],
+          "fluxos_pilota": [
+            {"trajectoria_id": "PERMUTA_L_CE_ESPECIFICA", "ordre": 1, "pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_inicial", "posseidor_final": "EXT"},
+            {"trajectoria_id": "PERMUTA_L_CE_ESPECIFICA", "ordre": 2, "pilota_id": "B1", "posseidor_inicial": "EXT", "accio": "passada_post_permuta", "posseidor_final": "L"}
+          ],
           "decisions": [
             {"id": "D_4X4", "condicio": "resposta_defensiva", "caracter": "disponible", "opcions": ["finalitzar", "continuïtat", "encreuament"]}
           ]
@@ -838,11 +876,15 @@
       ],
       "invariants": [
         "la permuta és lateral-central",
-        "el lateral és el primer jugador i rep després de la permuta"
+        "els quatre atacants actius són EXT, L, CE i PV",
+        "L inicia amb pilota, passa a EXT i rep de nou al centre",
+        "el lateral és el primer jugador, ocupa temporalment el centre i inicia l'1x1"
       ],
       "validacions_entrenador": [
         "situacio_de_partit_reduida_4x4",
-        "regla_general_de_la_permuta"
+        "atacants_EXT_L_CE_PV",
+        "flux_especific_L_EXT_L",
+        "L_inicia_1x1_des_de_la_posicio_central"
       ]
     },
     {
@@ -859,19 +901,23 @@
       },
       "organitzacio": {
         "permuta": "lateral-central",
+        "passador_permuta": "L_OPOSAT",
         "accions": 2
       },
       "participants": [
         {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
         {"id": "CE", "rol_inicial": "central", "equip": "atac"},
+        {"id": "L_OPOSAT", "rol_inicial": "lateral_contrari_passador", "equip": "atac"},
         {"id": "PV", "rol_inicial": "pivot", "equip": "atac"},
         {"id": "EXT", "rol_inicial": "extrem", "equip": "atac"},
-        {"id": "DEF", "rol_inicial": "defensors_de_sector", "equip": "defensa"}
+        {"id": "D1", "rol_inicial": "primer_defensor", "equip": "defensa"},
+        {"id": "D3", "rol_inicial": "tercer_o_central_defensiu", "equip": "defensa"}
       ],
       "materials": [
         {"id": "BANC", "tipus": "banc", "funcio": "condicionant_de_la_primera_accio"}
       ],
       "pilotes": [
+        {"id": "B1", "posseidor_inicial": "L_OPOSAT"},
         {"id": "B2", "posseidor_inicial": "EXT"}
       ],
       "fases": [
@@ -880,12 +926,16 @@
           "objectiu": "Resoldre l'acció interior del lateral amb llançament o pivot.",
           "accions": [
             {"ordre": 1, "actor": "L", "accio": "permuta", "primer_jugador": "L", "segon_jugador": "CE", "receptor_despres_permuta": "L", "estat_coneixement": "validat"},
-            {"ordre": 2, "actor": "L", "accio": "anar_al_centre_i_saltar_el_banc", "estat_coneixement": "validat"},
-            {"ordre": 3, "actor": "PV", "accio": "lliscar_si_el_defensor_puja", "estat_coneixement": "condicio_tasca"}
+            {"ordre": 2, "actor": "L_OPOSAT", "accio": "passar_a_L_que_arriba_al_centre", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "L", "accio": "rebre_al_centre_i_saltar_el_banc", "estat_coneixement": "validat"},
+            {"ordre": 4, "actor": "PV", "accio": "lliscar_si_D3_puja", "estat_coneixement": "condicio_tasca"}
           ],
-          "fluxos_pilota": [],
+          "fluxos_pilota": [
+            {"trajectoria_id": "PRIMER_2X1", "ordre": 1, "pilota_id": "B1", "posseidor_inicial": "L_OPOSAT", "accio": "passada_habilitadora_permuta", "posseidor_final": "L"},
+            {"trajectoria_id": "PRIMER_2X1", "ordre": 2, "pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_pivot", "posseidor_final": "PV", "condicio": "D3_puja"}
+          ],
           "decisions": [
-            {"id": "D_F1", "condicio": "conducta_del_defensor", "caracter": "obligatori", "opcions": ["llancament_si_no_puja", "passada_pivot_si_puja"]}
+            {"id": "D_F1", "condicio": "conducta_de_D3", "caracter": "obligatori", "opcions": ["llancament_si_D3_no_puja", "passada_pivot_si_D3_puja"]}
           ]
         },
         {
@@ -893,24 +943,29 @@
           "objectiu": "Jugar el segon 2x1 entre el central obert i l'extrem.",
           "accions": [
             {"ordre": 1, "actor": "EXT", "accio": "passar_al_central_obert", "estat_coneixement": "validat"},
-            {"ordre": 2, "actor": "CE", "accio": "jugar_2x1_amb_extrem", "estat_coneixement": "validat"}
+            {"ordre": 2, "actor": "CE", "accio": "jugar_2x1_amb_EXT_contra_D1", "estat_coneixement": "validat"}
           ],
           "fluxos_pilota": [
-            {"pilota_id": "B2", "posseidor_inicial": "EXT", "accio": "passada", "posseidor_final": "CE"}
+            {"trajectoria_id": "SEGON_2X1", "ordre": 1, "pilota_id": "B2", "posseidor_inicial": "EXT", "accio": "passada", "posseidor_final": "CE"},
+            {"trajectoria_id": "SEGON_2X1", "ordre": 2, "pilota_id": "B2", "posseidor_inicial": "CE", "accio": "passada_extrem", "posseidor_final": "EXT", "condicio": "D1_tanca_CE"}
           ],
           "decisions": [
-            {"id": "D_F2", "condicio": "defensor_compromes", "caracter": "disponible", "opcions": ["finalitzacio_CE", "passada_EXT"]}
+            {"id": "D_F2", "condicio": "D1_compromes", "caracter": "disponible", "opcions": ["finalitzacio_CE", "passada_EXT"]}
           ]
         }
       ],
       "invariants": [
         "la permuta correcta és lateral-central",
-        "el pivot ha de lliscar obligatòriament si el defensor puja",
-        "la segona acció comença amb passada de l'extrem al central obert"
+        "L rep al centre de L_OPOSAT, que actua com a passador de la permuta",
+        "el pivot ha de lliscar obligatòriament si D3 puja",
+        "la segona acció comença amb passada de l'extrem al central obert",
+        "CE i EXT juguen el segon 2x1 contra D1"
       ],
       "validacions_entrenador": [
         "correccio_de_la_permuta",
-        "lliscament_obligatori_del_pivot"
+        "passada_L_OPOSAT_a_L_al_centre",
+        "lliscament_obligatori_del_pivot",
+        "segon_2x1_CE_EXT_contra_D1"
       ]
     },
     {

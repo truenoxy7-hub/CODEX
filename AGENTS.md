@@ -164,6 +164,14 @@ centre, rep de `PV` i llença trepitjant `BANC_CENTRAL`. Abans, `L` passa a
 finalitza des de l'espai restringit. Els tres fluxos de pilota són independents.
 El cilindre referencia l'espai restringit de finalització del pivot.
 
+## Regla general de permuta
+
+La direcció nomena el jugador que canvia de posició i el lloc que ocupa. En una
+permuta `central–lateral`, `CE` va a lateral i la recepció s'habilita amb
+`EXT`. En una permuta `lateral–central`, `L` va al centre i rep de
+`L_OPOSAT`. La passada habilitadora és un flux separat; una variant específica
+de tasca només preval si l'entrenador l'ha validada explícitament.
+
 ## Flux de treball obligatori
 
 Abans de tocar codi:
