@@ -127,11 +127,18 @@
           </div>
 
           <div id="court-preview" class="court-preview" aria-live="polite">
-            <div class="court" aria-hidden="true">
-              <div class="goal"></div>
-              <div class="goal-area"></div>
-              <div class="nine-metre"></div>
-              <div class="centre-mark"></div>
+            <div
+              class="court"
+              role="img"
+              aria-label="Mitja pista d’handbol de 20 per 20 metres, amb porteria i línies de 4, 6, 7 i 9 metres"
+            >
+              <div class="court-goal" aria-hidden="true"><i></i></div>
+              <div class="goal-area-line" aria-hidden="true"></div>
+              <div class="free-throw-line" aria-hidden="true"></div>
+              <div class="penalty-line" aria-hidden="true"></div>
+              <div class="goalkeeper-line" aria-hidden="true"></div>
+              <div class="throw-off-area" aria-hidden="true"></div>
+              <span class="court-scale" aria-hidden="true">Mitja pista · 20 × 20 m</span>
             </div>
             <div id="preview-message" class="preview-message">
               <span class="preview-symbol" aria-hidden="true">↗</span>

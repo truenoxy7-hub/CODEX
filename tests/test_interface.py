@@ -31,6 +31,18 @@ def test_interface_does_not_pretend_to_render_tactical_geometry():
     assert "<svg" not in html.lower()
 
 
+def test_preview_uses_a_recognisable_regulation_handball_half_court():
+    html = (INTERFACE / "index.html").read_text(encoding="utf-8")
+    css = (INTERFACE / "styles.css").read_text(encoding="utf-8")
+
+    assert "Mitja pista d’handbol de 20 per 20 metres" in html
+    assert 'class="goal-area-line"' in html
+    assert 'class="free-throw-line"' in html
+    assert 'class="penalty-line"' in html
+    assert 'class="goalkeeper-line"' in html
+    assert "aspect-ratio: 1 / 1" in css
+
+
 def test_interface_has_a_mobile_layout_and_accessible_live_feedback():
     html = (INTERFACE / "index.html").read_text(encoding="utf-8")
     css = (INTERFACE / "styles.css").read_text(encoding="utf-8")
