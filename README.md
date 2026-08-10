@@ -17,6 +17,9 @@ La geometria i el renderer anteriors es consideren prototips descartables. No s'
 - `exercises/TR-UVOF-001/spatial-relations.json`
 - `exercises/TR-UVOF-002/spatial-relations.json`
 - `exercises/TR-UVOF-003/spatial-relations.json`
+- `exercises/TR-UVOF-004/spatial-relations.json`
+- `exercises/TR-UVOF-005/spatial-relations.json`
+- `exercises/TR-UVOF-006/spatial-relations.json`
 - `schema/traca.spatial-relations.schema.v0.2.json`
 - `docs/DOMAIN_MODEL.md`
 - `docs/SPATIAL_RELATIONS_CONTRACT.md`

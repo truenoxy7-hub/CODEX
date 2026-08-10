@@ -499,3 +499,172 @@ def test_uvof003_rejects_disconnected_change_of_side_flow(
     )
 
     assert "SPATIAL_BALL_FLOW_DISCONNECTED" in _error_codes(report)
+
+
+@pytest.mark.parametrize(
+    ("exercise_id", "expected_summary"),
+    [
+        (
+            "TR-UVOF-004",
+            {
+                "node_count": 13,
+                "space_count": 6,
+                "state_count": 5,
+                "transition_count": 10,
+                "ball_flow_count": 6,
+                "branch_count": 3,
+                "error_count": 0,
+                "structural_error_count": 0,
+                "relational_error_count": 0,
+            },
+        ),
+        (
+            "TR-UVOF-005",
+            {
+                "node_count": 16,
+                "space_count": 7,
+                "state_count": 4,
+                "transition_count": 6,
+                "ball_flow_count": 0,
+                "branch_count": 1,
+                "error_count": 0,
+                "structural_error_count": 0,
+                "relational_error_count": 0,
+            },
+        ),
+        (
+            "TR-UVOF-006",
+            {
+                "node_count": 18,
+                "space_count": 8,
+                "state_count": 7,
+                "transition_count": 9,
+                "ball_flow_count": 9,
+                "branch_count": 4,
+                "error_count": 0,
+                "structural_error_count": 0,
+                "relational_error_count": 0,
+            },
+        ),
+    ],
+)
+def test_uvof004_to_006_spatial_contracts_pass(
+    exercise_id,
+    expected_summary,
+    spatial_schema,
+) -> None:
+    spatial_document = json.loads(
+        (
+            ROOT / "exercises" / exercise_id / "spatial-relations.json"
+        ).read_text(encoding="utf-8")
+    )
+    corpus = json.loads(
+        (ROOT / "corpus" / "uvof.semantic.json").read_text(encoding="utf-8")
+    )
+    semantic_document = next(
+        exercise
+        for exercise in corpus["exercicis"]
+        if exercise["id"] == exercise_id
+    )
+
+    report = validate_spatial_relations_document(
+        spatial_document,
+        spatial_schema,
+        semantic_document,
+    )
+
+    assert report["valid"] is True
+    assert report["summary"] == expected_summary
+
+
+def test_uvof004_links_pass_side_to_interval_and_opposite_cone() -> None:
+    document = json.loads(
+        (
+            ROOT / "exercises" / "TR-UVOF-004" / "spatial-relations.json"
+        ).read_text(encoding="utf-8")
+    )
+    branch = next(
+        item
+        for item in document["branques_decisionals"]
+        if item["id"] == "BR_COSTAT_PASSADA"
+    )
+    effects = {
+        alternative["id"]: {
+            (relation["subjecte"], relation["predicat"], tuple(relation["objectes"]))
+            for relation in alternative["efectes_espacials"]
+        }
+        for alternative in branch["alternatives"]
+    }
+
+    assert ("L", "ataca", ("INT_12",)) in effects["A_PASSADA_EXT"]
+    assert ("D2", "proper_a", ("ZONA_CON_CE",)) in effects["A_PASSADA_EXT"]
+    assert ("L", "ataca", ("INT_23",)) in effects["A_PASSADA_CE"]
+    assert ("D2", "proper_a", ("ZONA_CON_EXT",)) in effects["A_PASSADA_CE"]
+
+
+def test_uvof005_represents_six_attackers_and_full_51_defense() -> None:
+    document = json.loads(
+        (
+            ROOT / "exercises" / "TR-UVOF-005" / "spatial-relations.json"
+        ).read_text(encoding="utf-8")
+    )
+    participant_ids = {
+        node["id"]
+        for node in document["nodes"]
+        if node["classe"] == "participant"
+    }
+
+    assert {
+        "EXT_LOCAL",
+        "L_LOCAL",
+        "CE",
+        "L_OPOSAT",
+        "EXT_OPOSAT",
+        "PV",
+    } <= participant_ids
+    assert {
+        "D1_LOCAL",
+        "D2_LOCAL",
+        "D3_CENTRAL",
+        "D2_OPOSAT",
+        "D1_OPOSAT",
+        "DAV",
+    } <= participant_ids
+    advanced_relation = next(
+        relation
+        for state in document["estats"]
+        for relation in state["relacions"]
+        if relation["subjecte"] == "DAV"
+    )
+    assert advanced_relation["predicat"] == "per_davant_de"
+    assert advanced_relation["objectes"] == ["D3_CENTRAL"]
+
+
+def test_uvof006_keeps_both_cylinders_as_defender_handicaps() -> None:
+    document = json.loads(
+        (
+            ROOT / "exercises" / "TR-UVOF-006" / "spatial-relations.json"
+        ).read_text(encoding="utf-8")
+    )
+    holder_relations = {
+        relation["subjecte"]: relation["objectes"][0]
+        for state in document["estats"]
+        for relation in state["relacions"]
+        if relation["predicat"] == "sostingut_per"
+    }
+    node_classes = {node["id"]: node["classe"] for node in document["nodes"]}
+    switch_branch = next(
+        branch
+        for branch in document["branques_decisionals"]
+        if branch["id"] == "BR_CANVI_BANDA"
+    )
+
+    assert holder_relations == {
+        "CIL_D2_LOCAL": "D2_LOCAL",
+        "CIL_D3_OPOSAT": "D3_OPOSAT",
+    }
+    assert all(
+        node_classes[defender_id] == "participant"
+        for defender_id in ("D1_LOCAL", "D2_LOCAL", "D3_LOCAL", "D3_OPOSAT")
+    )
+    assert switch_branch["caracter"] == "preferent"

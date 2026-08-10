@@ -3,7 +3,7 @@
   "meta": {
     "format": "TRACA_corpus_semantic",
     "versio_llenguatge": "1.1.0",
-    "versio_corpus": "1.2.0",
+    "versio_corpus": "1.3.0",
     "estat": "validat_i_viu",
     "separacio_capes": {
       "semantica_tactica": "inclosa",
@@ -309,7 +309,11 @@
       },
       "organitzacio": {
         "defensor_directe": "segon_defensor",
-        "recepcio": "en_carrera"
+        "recepcio": "en_carrera",
+        "correspondencia_passada_interval": {
+          "EXT": "1-2",
+          "CE": "2-3"
+        }
       },
       "participants": [
         {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
@@ -320,7 +324,8 @@
         {"id": "D3", "rol_inicial": "tercer_defensor", "equip": "defensa"}
       ],
       "materials": [
-        {"id": "CONS_HANDICAP", "tipus": "cons", "funcio": "handicap_de_recorregut_del_segon_defensor"}
+        {"id": "CON_EXT", "tipus": "con", "funcio": "handicap_de_recorregut_exterior_del_segon_defensor"},
+        {"id": "CON_CE", "tipus": "con", "funcio": "handicap_de_recorregut_interior_del_segon_defensor"}
       ],
       "pilotes": [
         {"id": "B1", "posseidor_inicial": "L"}
@@ -336,23 +341,34 @@
             {"ordre": 4, "actor": "L", "accio": "atacar_el_costat_de_la_passada", "estat_coneixement": "validat"}
           ],
           "fluxos_pilota": [
-            {"pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_i_devolucio", "posseidor_final": "L"}
+            {"trajectoria_id": "PASSADA_EXT_12", "ordre": 1, "pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_inicial", "posseidor_final": "EXT"},
+            {"trajectoria_id": "PASSADA_EXT_12", "ordre": 2, "pilota_id": "B1", "posseidor_inicial": "EXT", "accio": "devolucio_per_rebre_en_carrera", "posseidor_final": "L"},
+            {"trajectoria_id": "PASSADA_CE_23", "ordre": 1, "pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_inicial", "posseidor_final": "CE"},
+            {"trajectoria_id": "PASSADA_CE_23", "ordre": 2, "pilota_id": "B1", "posseidor_inicial": "CE", "accio": "devolucio_per_rebre_en_carrera", "posseidor_final": "L"},
+            {"trajectoria_id": "CONTINUITAT_EXT", "ordre": 1, "pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_obligatoria_extrem_si_D1_tanca", "posseidor_final": "EXT", "condicio": "superacio_1-2_i_D1_tanca"},
+            {"trajectoria_id": "CONTINUITAT_CE", "ordre": 1, "pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_central_si_D3_tanca", "posseidor_final": "CE", "condicio": "superacio_2-3_i_D3_tanca"}
           ],
           "decisions": [
             {"id": "D_PASSADA_EXTREM", "condicio": "passada_inicial_a_extrem", "caracter": "disponible", "opcions": ["atacar_1-2", "2x1_lateral_extrem_contra_primer_defensor"]},
             {"id": "D_PASSADA_CENTRAL", "condicio": "passada_inicial_a_central", "caracter": "disponible", "opcions": ["atacar_2-3", "2x1_lateral_central_contra_tercer_defensor"]},
             {"id": "D_RECUPERACIO", "condicio": "segon_defensor_recupera", "caracter": "disponible", "opcions": ["resoldre_1x1"]},
-            {"id": "D_NO_RECUPERACIO", "condicio": "segon_defensor_no_recupera", "caracter": "disponible", "opcions": ["finalitzacio_directa"]}
+            {"id": "D_NO_RECUPERACIO", "condicio": "segon_defensor_no_recupera", "caracter": "disponible", "opcions": ["finalitzacio_directa"]},
+            {"id": "D_CONTINUITAT_2X1", "condicio": "resposta_del_primer_o_del_tercer_despres_de_superar_D2", "caracter": "disponible", "opcions": ["finalitzacio_lateral_si_no_hi_ha_ajuda", "passada_obligatoria_extrem_si_D1_tanca", "passada_central_si_D3_tanca"]}
           ]
         }
       ],
       "invariants": [
         "els cons només creen l'hàndicap i no representen intervals ni defensors",
-        "el lateral ataca el costat on ha passat"
+        "D2 és el defensor real i el con només en condiciona el recorregut",
+        "el lateral ataca el costat on ha passat",
+        "passar a EXT activa 1-2 i passar a CE activa 2-3",
+        "D1 i D3 defensen activament les continuïtats del 2x1"
       ],
       "validacions_entrenador": [
         "segon_defensor_com_a_oponent",
-        "cons_com_a_handicap_de_recorregut"
+        "cons_com_a_handicap_de_recorregut",
+        "recepcio_en_carrera_i_atac_al_costat_de_la_passada",
+        "primer_i_tercer_defensen_les_continuitats"
       ]
     },
     {
@@ -369,11 +385,25 @@
       "organitzacio": {
         "relacio": "6x6",
         "defensa": "5:1",
-        "iniciador": "lateral_contrari_al_pivot"
+        "iniciador": "L_OPOSAT",
+        "banda_pivot": "banda_local"
       },
       "participants": [
-        {"id": "ATAC_6", "rol_inicial": "sis_rols_ofensius", "equip": "atac"},
-        {"id": "DEF_5_1", "rol_inicial": "defensa_5:1_completa", "equip": "defensa"}
+        {"id": "EXT_LOCAL", "rol_inicial": "extrem_banda_pivot", "equip": "atac"},
+        {"id": "L_LOCAL", "rol_inicial": "lateral_banda_pivot", "equip": "atac"},
+        {"id": "CE", "rol_inicial": "central", "equip": "atac"},
+        {"id": "L_OPOSAT", "rol_inicial": "lateral_contrari_al_pivot", "equip": "atac"},
+        {"id": "EXT_OPOSAT", "rol_inicial": "extrem_banda_contraria", "equip": "atac"},
+        {"id": "PV", "rol_inicial": "pivot", "equip": "atac"},
+        {"id": "D1_LOCAL", "rol_inicial": "primer_defensor_banda_pivot", "equip": "defensa"},
+        {"id": "D2_LOCAL", "rol_inicial": "segon_defensor_banda_pivot", "equip": "defensa"},
+        {"id": "D3_CENTRAL", "rol_inicial": "tercer_o_central_defensiu", "equip": "defensa"},
+        {"id": "D2_OPOSAT", "rol_inicial": "segon_defensor_banda_contraria", "equip": "defensa"},
+        {"id": "D1_OPOSAT", "rol_inicial": "primer_defensor_banda_contraria", "equip": "defensa"},
+        {"id": "DAV", "rol_inicial": "avancat_defensiu", "equip": "defensa"}
+      ],
+      "pilotes": [
+        {"id": "B1", "posseidor_inicial": "L_OPOSAT"}
       ],
       "fases": [
         {
@@ -381,8 +411,9 @@
           "objectiu": "Alliberar un sector per al 1x1 del lateral contrari al pivot i donar continuïtat.",
           "accions": [
             {"ordre": 1, "actor": "PV", "accio": "situar_se_en_una_banda", "estat_coneixement": "condicio_tasca"},
-            {"ordre": 2, "actor": "L_CONTRARI", "accio": "iniciar_1x1_a_lespai_alliberat", "estat_coneixement": "validat"},
-            {"ordre": 3, "actor": "ATAC_6", "accio": "donar_continuitat_amb_criteri", "estat_coneixement": "validat"}
+            {"ordre": 2, "actor": "L_OPOSAT", "accio": "iniciar_1x1_a_lespai_alliberat", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "PORTADOR_ACTUAL", "accio": "donar_continuitat_amb_criteri", "estat_coneixement": "validat"},
+            {"ordre": 4, "actor": "PORTADOR_ACTUAL", "accio": "finalitzar_des_de_6_metres", "estat_coneixement": "condicio_tasca"}
           ],
           "fluxos_pilota": [],
           "decisions": [
@@ -393,6 +424,8 @@
       "invariants": [
         "és un 6x6 i no una superioritat numèrica",
         "la defensa 5:1 inclou un avançat",
+        "la defensa 5:1 completa té dos primers, dos segons, un tercer o central defensiu i un avançat",
+        "tot exercici 6x6 es categoritza com a situació de partit",
         "situació de partit és un tipus recurrent d'exercici amb rols complets i condicions pedagògiques"
       ],
       "condicions_tasca": [
@@ -401,7 +434,8 @@
       ],
       "validacions_entrenador": [
         "6x6_contra_5:1",
-        "lateral_contrari_al_pivot_inicia_el_1x1"
+        "lateral_contrari_al_pivot_inicia_el_1x1",
+        "classificacio_situacio_partit_per_relacio_6x6"
       ]
     },
     {
@@ -416,15 +450,29 @@
         "text_original": "La tasca consta d'un 1v1* amb segon amb handicap, amb continuitat amb pivot o extrem en cas de superar i en cas de no èxit pilota ràpida a banda contrària per continuar a l'altre banda amb espai."
       },
       "organitzacio": {
-        "defensor_directe": "segon_defensor",
+        "defensor_directe": "D2_LOCAL",
+        "handicaps_defensius": ["D2_LOCAL_amb_cilindre", "D3_OPOSAT_amb_cilindre"],
         "canvi_banda": "recomanable_no_obligatori"
       },
       "participants": [
-        {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
+        {"id": "L", "rol_inicial": "lateral_iniciador", "equip": "atac"},
         {"id": "CE", "rol_inicial": "central", "equip": "atac"},
         {"id": "EXT", "rol_inicial": "extrem", "equip": "atac"},
         {"id": "PV", "rol_inicial": "pivot", "equip": "atac"},
-        {"id": "D2", "rol_inicial": "segon_defensor", "equip": "defensa"}
+        {"id": "L_OPOSAT", "rol_inicial": "lateral_banda_contraria", "equip": "atac"},
+        {"id": "EXT_OPOSAT", "rol_inicial": "extrem_banda_contraria", "equip": "atac"},
+        {"id": "D1_LOCAL", "rol_inicial": "primer_defensor_banda_inicial", "equip": "defensa"},
+        {"id": "D2_LOCAL", "rol_inicial": "segon_defensor_amb_handicap", "equip": "defensa"},
+        {"id": "D3_LOCAL", "rol_inicial": "tercer_defensor_de_la_continuitat", "equip": "defensa"},
+        {"id": "D3_OPOSAT", "rol_inicial": "tercer_defensor_oposat_amb_handicap", "equip": "defensa"},
+        {"id": "D1_OPOSAT", "rol_inicial": "primer_defensor_banda_contraria", "equip": "defensa"}
+      ],
+      "materials": [
+        {"id": "CIL_D2_LOCAL", "tipus": "cilindre", "funcio": "handicap_sostingut_pel_segon_defensor_local"},
+        {"id": "CIL_D3_OPOSAT", "tipus": "cilindre", "funcio": "handicap_sostingut_pel_tercer_defensor_oposat"}
+      ],
+      "pilotes": [
+        {"id": "B1", "posseidor_inicial": "L"}
       ],
       "fases": [
         {
@@ -433,12 +481,24 @@
           "accions": [
             {"ordre": 1, "actor": "L", "accio": "iniciar_1x1_contra_segon_amb_handicap", "estat_coneixement": "validat"},
             {"ordre": 2, "actor": "RECEPTOR_ENCREUAMENT", "accio": "atacar_per_superar_despres_de_cada_encreuament", "estat_coneixement": "validat"},
-            {"ordre": 3, "actor": "JUGADOR_QUE_OCUPA_CENTRAL", "accio": "facilitar_canvi_de_banda_si_es_convenient", "estat_coneixement": "principi_preferent"}
+            {"ordre": 3, "actor": "D1_LOCAL", "accio": "defensar_activament_la_continuitat_exterior", "estat_coneixement": "validat"},
+            {"ordre": 4, "actor": "D3_LOCAL", "accio": "defensar_activament_la_continuitat_interior", "estat_coneixement": "validat"},
+            {"ordre": 5, "actor": "JUGADOR_QUE_OCUPA_CENTRAL", "accio": "facilitar_canvi_de_banda_si_es_convenient", "estat_coneixement": "principi_preferent"}
           ],
-          "fluxos_pilota": [],
+          "fluxos_pilota": [
+            {"trajectoria_id": "SUPERA_12_AMB_AJUDA", "ordre": 1, "pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_obligatoria_extrem_si_D1_tanca", "posseidor_final": "EXT", "condicio": "superacio_1-2_i_D1_LOCAL_tanca"},
+            {"trajectoria_id": "SUPERA_23_AMB_AJUDA", "ordre": 1, "pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_pivot_si_D3_LOCAL_tanca", "posseidor_final": "PV", "condicio": "superacio_2-3_i_D3_LOCAL_tanca"},
+            {"trajectoria_id": "NO_SUPERA_23_CANVI", "ordre": 1, "pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_encreuament", "posseidor_final": "CE", "condicio": "L_no_supera_a_2-3"},
+            {"trajectoria_id": "NO_SUPERA_23_CANVI", "ordre": 2, "pilota_id": "B1", "posseidor_inicial": "CE", "accio": "passada_encreuament", "posseidor_final": "EXT", "condicio": "CE_tampoc_supera_a_1-2"},
+            {"trajectoria_id": "NO_SUPERA_23_CANVI", "ordre": 3, "pilota_id": "B1", "posseidor_inicial": "EXT", "accio": "retorn_al_jugador_que_ocupa_central", "posseidor_final": "L", "condicio": "sense_avantatge_despres_del_segon_encreuament"},
+            {"trajectoria_id": "NO_SUPERA_23_CANVI", "ordre": 4, "pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_preferent_banda_contraria", "posseidor_final": "L_OPOSAT", "condicio": "canvi_de_banda_convenient"},
+            {"trajectoria_id": "NO_SUPERA_12_CANVI", "ordre": 1, "pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_encreuament", "posseidor_final": "EXT", "condicio": "L_no_supera_a_1-2"},
+            {"trajectoria_id": "NO_SUPERA_12_CANVI", "ordre": 2, "pilota_id": "B1", "posseidor_inicial": "EXT", "accio": "retorn_al_jugador_que_ocupa_central", "posseidor_final": "CE", "condicio": "sense_avantatge_despres_de_lencreuament"},
+            {"trajectoria_id": "NO_SUPERA_12_CANVI", "ordre": 3, "pilota_id": "B1", "posseidor_inicial": "CE", "accio": "passada_preferent_banda_contraria", "posseidor_final": "L_OPOSAT", "condicio": "canvi_de_banda_convenient"}
+          ],
           "decisions": [
-            {"id": "D_SUPERA_12", "condicio": "superacio_cap_a_1-2", "caracter": "disponible", "opcions": ["continuïtat_extrem"]},
-            {"id": "D_SUPERA_23", "condicio": "superacio_cap_a_2-3", "caracter": "disponible", "opcions": ["continuïtat_pivot"]},
+            {"id": "D_SUPERA_12", "condicio": "superacio_cap_a_1-2", "caracter": "disponible", "opcions": ["finalitzacio_lateral_si_D1_no_tanca", "passada_obligatoria_extrem_si_D1_tanca"]},
+            {"id": "D_SUPERA_23", "condicio": "superacio_cap_a_2-3", "caracter": "disponible", "opcions": ["finalitzacio_lateral_si_D3_no_tanca", "passada_pivot_si_D3_tanca"]},
             {"id": "D_NO_SUPERA_23", "condicio": "1x1_cap_a_2-3_sense_avantatge", "caracter": "disponible", "opcions": ["encreuament_central_per_atacar_1-2"]},
             {"id": "D_SEGON_ENCREUAMENT", "condicio": "central_tampoc_supera_a_1-2", "caracter": "disponible", "opcions": ["encreuament_amb_extrem_i_nova_intencio_de_superar"]},
             {"id": "D_NO_SUPERA_12", "condicio": "1x1_cap_a_1-2_sense_avantatge", "caracter": "disponible", "opcions": ["encreuament_directe_amb_extrem_i_nova_intencio_de_superar"]},
@@ -447,6 +507,11 @@
         }
       ],
       "invariants": [
+        "D2_LOCAL és el defensor directe real i el cilindre només en limita la intervenció",
+        "D3_OPOSAT és un defensor real i el seu cilindre és un segon handicap visible de la tasca",
+        "D1_LOCAL i D3_LOCAL defensen activament les continuïtats exterior i interior",
+        "superar D2_LOCAL per 1-2 genera el 2x1 amb EXT contra D1_LOCAL",
+        "superar D2_LOCAL per 2-3 genera el 2x1 amb PV contra D3_LOCAL",
         "després de cada encreuament es busca superar",
         "central descriu la posició ocupada i no necessàriament el rol inicial",
         "el canvi de banda és preferent quan no hi ha avantatge local, però no obligatori"
@@ -455,6 +520,10 @@
         "canviar_de_banda_si_no_hi_ha_avantatge_local"
       ],
       "validacions_entrenador": [
+        "dos_cilindres_com_a_handicaps_de_defensors_reals",
+        "primer_i_tercer_defensen_activament",
+        "llibertat_de_direccio_en_el_1x1",
+        "2x1_exterior_amb_extrem_i_interior_amb_pivot",
         "cadena_dencreuaments_amb_intencio_real_de_superar",
         "canvi_de_banda_no_obligatori"
       ]

@@ -397,6 +397,26 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
                 }
             )
 
+        organization = exercise.get("organitzacio", {})
+        numeric_relation = (
+            organization.get("relacio")
+            or organization.get("relacio_numerica")
+        )
+        if (
+            numeric_relation == "6x6"
+            and exercise.get("tipus_exercici") != "situacio_partit"
+        ):
+            errors.append(
+                {
+                    "code": "CORPUS_6X6_SITUATION_GAME",
+                    "path": f"exercicis/{exercise_index}/tipus_exercici",
+                    "message": (
+                        f"{exercise_id}: tot exercici 6x6 s'ha de "
+                        "categoritzar com a situacio_partit."
+                    ),
+                }
+            )
+
         for action_index, action in enumerate(_corpus_actions(exercise)):
             if action.get("accio") != "permuta":
                 continue
@@ -698,7 +718,125 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
             }
         )
 
+    uvof_004 = _corpus_exercise(document, "TR-UVOF-004")
+    materials_004 = {
+        material.get("id"): material.get("funcio")
+        for material in uvof_004.get("materials", [])
+    }
+    if materials_004 != {
+        "CON_EXT": "handicap_de_recorregut_exterior_del_segon_defensor",
+        "CON_CE": "handicap_de_recorregut_interior_del_segon_defensor",
+    }:
+        errors.append(
+            {
+                "code": "UVOF004_D2_CONE_HANDICAP",
+                "path": "TR-UVOF-004/materials",
+                "message": (
+                    "TR-UVOF-004 ha de declarar els cons com a handicaps "
+                    "de recorregut de D2, mai com a defensors."
+                ),
+            }
+        )
+
+    flows_004 = _corpus_ball_flows(uvof_004)
+    returns_004 = {
+        (
+            flow.get("trajectoria_id"),
+            flow.get("posseidor_inicial"),
+            flow.get("posseidor_final"),
+        )
+        for flow in flows_004
+        if flow.get("ordre") in (1, 2)
+        and flow.get("trajectoria_id") in {"PASSADA_EXT_12", "PASSADA_CE_23"}
+    }
+    if returns_004 != {
+        ("PASSADA_EXT_12", "L", "EXT"),
+        ("PASSADA_EXT_12", "EXT", "L"),
+        ("PASSADA_CE_23", "L", "CE"),
+        ("PASSADA_CE_23", "CE", "L"),
+    }:
+        errors.append(
+            {
+                "code": "UVOF004_PASS_RETURN",
+                "path": "TR-UVOF-004/fluxos_pilota",
+                "message": (
+                    "TR-UVOF-004 ha de conservar la passada i devolució "
+                    "que activen 1-2 amb EXT i 2-3 amb CE."
+                ),
+            }
+        )
+
+    uvof_005 = _corpus_exercise(document, "TR-UVOF-005")
+    attackers_005 = {
+        participant.get("id")
+        for participant in uvof_005.get("participants", [])
+        if participant.get("equip") == "atac"
+    }
+    defenders_005 = {
+        participant.get("id")
+        for participant in uvof_005.get("participants", [])
+        if participant.get("equip") == "defensa"
+    }
+    if (
+        attackers_005
+        != {"EXT_LOCAL", "L_LOCAL", "CE", "L_OPOSAT", "EXT_OPOSAT", "PV"}
+        or defenders_005
+        != {
+            "D1_LOCAL",
+            "D2_LOCAL",
+            "D3_CENTRAL",
+            "D2_OPOSAT",
+            "D1_OPOSAT",
+            "DAV",
+        }
+        or uvof_005.get("tipus_exercici") != "situacio_partit"
+    ):
+        errors.append(
+            {
+                "code": "UVOF005_FULL_6X6_51",
+                "path": "TR-UVOF-005/participants",
+                "message": (
+                    "TR-UVOF-005 ha de declarar els sis atacants i els sis "
+                    "rols defensius del 5:1, inclòs l'avançat."
+                ),
+            }
+        )
+
     uvof_006 = _corpus_exercise(document, "TR-UVOF-006")
+    defenders_006 = {
+        participant.get("id")
+        for participant in uvof_006.get("participants", [])
+        if participant.get("equip") == "defensa"
+    }
+    materials_006 = {
+        material.get("id"): material.get("funcio")
+        for material in uvof_006.get("materials", [])
+    }
+    if not {"D1_LOCAL", "D2_LOCAL", "D3_LOCAL", "D3_OPOSAT"} <= defenders_006:
+        errors.append(
+            {
+                "code": "UVOF006_ACTIVE_DEFENDERS",
+                "path": "TR-UVOF-006/participants",
+                "message": (
+                    "TR-UVOF-006 ha de conservar D1, D2 i D3 com a "
+                    "defensors reals i actius."
+                ),
+            }
+        )
+    if materials_006 != {
+        "CIL_D2_LOCAL": "handicap_sostingut_pel_segon_defensor_local",
+        "CIL_D3_OPOSAT": "handicap_sostingut_pel_tercer_defensor_oposat",
+    }:
+        errors.append(
+            {
+                "code": "UVOF006_CYLINDER_HANDICAPS",
+                "path": "TR-UVOF-006/materials",
+                "message": (
+                    "TR-UVOF-006 ha d'explicitar els dos cilindres com a "
+                    "handicaps sostinguts per defensors reals."
+                ),
+            }
+        )
     switch_decision = next(
         (
             decision

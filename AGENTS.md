@@ -110,6 +110,38 @@ genera avantatge, el jugador que ocupa temporalment la posició central connecta
 obligatòriament amb el lateral contrari, que reinicia el `1x1`. El pivot adapta
 el bloqueig al nou tercer que no ajuda.
 
+## TR-UVOF-004
+
+El lateral comença amb pilota, passa a l'extrem o al central i rep la devolució
+en carrera. La passada a l'extrem activa l'atac de `1–2`; la passada al central
+activa `2–3`. `D2` és el defensor directe real i volta el con del costat contrari
+de la passada. Els cons només creen el handicap de recorregut.
+
+Si `D2` recupera, es resol l'1x1; si no recupera, el lateral finalitza. Després de
+superar, `D1` i `D3` defensen activament les continuïtats amb extrem i central.
+
+## TR-UVOF-005
+
+És un `6x6` complet contra defensa `5:1`: sis atacants i sis defensors —dos
+primers, dos segons, un tercer o central defensiu i un avançat. El pivot se situa
+a una banda i el lateral contrari inicia l'1x1 a l'espai alliberat. La
+continuïtat és oberta, però la finalització des de 6 m i el canvi atac–defensa
+cada tres pèrdues són condicions de la tasca.
+
+Tot exercici declarat `6x6` s'ha de categoritzar com a `situacio_partit`.
+
+## TR-UVOF-006
+
+El lateral té llibertat per atacar `1–2` o `2–3` contra `D2_LOCAL`. El cilindre
+de `D2_LOCAL` és un handicap i no un defensor. El gràfic també declara un segon
+cilindre sostingut per `D3_OPOSAT`; aquest tercer continua sent un defensor real.
+`D1_LOCAL` i `D3_LOCAL` defensen activament les continuïtats exterior i interior.
+
+Superar per `1–2` genera el 2x1 amb l'extrem; superar per `2–3`, el 2x1 amb el
+pivot. Sense superació, encreuen central o extrem segons l'interval final i cada
+receptor busca superar. Si la cadena no crea avantatge, el canvi de banda és
+preferent, mai obligatori.
+
 ## Flux de treball obligatori
 
 Abans de tocar codi:

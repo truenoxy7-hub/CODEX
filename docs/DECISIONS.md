@@ -148,3 +148,23 @@ canvi de banda després d'un encreuament sense avantatge són obligacions
 pedagògiques, no regles universals de la situació real. La passada exterior a
 l'extrem quan el primer tanca no és una `condicio_tasca`: és una regla del joc
 validada per l'entrenador.
+
+## D-024 — Classificació canònica del 6x6
+
+**Decisió:** qualsevol exercici que declari una relació `6x6` es categoritza com
+a `situacio_partit`. La regla és independent de les condicions pedagògiques
+d'inici, finalització o recompte d'errors.
+
+**Motiu:** el 6x6 conserva els rols complets, l'oposició real i les decisions
+obertes pròpies del joc. La taxonomia es podrà especialitzar més endavant sense
+perdre aquesta categoria base.
+
+## D-025 — Cilindres com a handicaps de defensors reals
+
+**Decisió:** un cilindre o xirimbolo sostingut per un defensor limita la seva
+intervenció, però no el substitueix ni l'elimina. Quan el gràfic mostra diversos
+cilindres, cada material referencia explícitament el defensor que el sosté.
+
+**Aplicació validada:** a `TR-UVOF-006`, `CIL_D2_LOCAL` condiciona el segon
+defensor directe i `CIL_D3_OPOSAT` condiciona el tercer oposat. `D1_LOCAL` i
+`D3_LOCAL` continuen defensant activament les continuïtats.

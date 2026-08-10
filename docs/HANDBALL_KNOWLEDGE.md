@@ -204,9 +204,13 @@ sigui un banc o un con.
 
 Un material també pot actuar com a hàndicap sense representar cap defensor:
 
-- un defensor real pot sostenir un xirimbolo que en limita la intervenció;
+- un defensor real pot sostenir un xirimbolo o cilindre que en limita la
+  intervenció;
 - un con pot obligar el defensor a fer un recorregut addicional;
 - en tots dos casos el defensor continua sent la referència oposicional real.
+
+Quan hi ha més d'un material de handicap, cal declarar quin defensor real sosté
+cadascun. El material no elimina el rol ni converteix el defensor en passiu.
 
 ## Punt fort i punt feble del 1x1
 
@@ -283,6 +287,10 @@ inclou:
 Una permuta obligatòria, una finalització des de 6 m o un recompte de pèrdues
 poden ser condicions de la tasca sense convertir tota la situació en una jugada
 tancada.
+
+Com a regla de classificació del corpus, qualsevol exercici `6x6` és una
+`situacio_partit`. Més endavant es podrà especialitzar aquest tipus, però no es
+reclassifica provisionalment com a exercici analític o reduït.
 
 ## Files, ordre d'activació i múltiples pilotes
 

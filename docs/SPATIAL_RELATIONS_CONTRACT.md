@@ -6,8 +6,8 @@ El contracte converteix la semàntica tàctica validada en un graf qualitatiu qu
 un futur motor espacial podrà resoldre. Defineix **què ha de quedar relacionat**
 sense decidir encara **a quines coordenades** s'ha de dibuixar.
 
-Les instàncies executables actuals són les de `TR-UVOF-001`, `TR-UVOF-002` i
-`TR-UVOF-003`; totes compleixen
+Les instàncies executables actuals són les de `TR-UVOF-001` a `TR-UVOF-006`;
+totes compleixen
 `schema/traca.spatial-relations.schema.v0.2.json`.
 
 ## Límits de la capa
@@ -182,6 +182,41 @@ La tercera instància representa:
   contrari;
 - adaptació del pivot al nou tercer que no participa en l'ajuda.
 
+## Instància TR-UVOF-004
+
+La quarta instància representa:
+
+- passada a extrem i devolució per rebre en carrera i atacar `1–2`;
+- passada a central i devolució per rebre en carrera i atacar `2–3`;
+- recorregut de `D2` pel con contrari a la passada com a handicap de la tasca;
+- `D2` com a defensor directe real i els cons només com a materials;
+- recuperació de `D2` o finalització directa com a alternatives;
+- continuïtats contra `D1` i `D3`, que defensen activament.
+
+## Instància TR-UVOF-005
+
+La cinquena instància representa:
+
+- els sis atacants i els sis defensors reals d'un `5:1`;
+- dos primers, dos segons, un tercer o central defensiu i un avançat;
+- pivot a una banda i inici del lateral contrari a l'espai alliberat;
+- continuïtats obertes segons la resposta defensiva;
+- finalització obligatòria des de 6 m com a condició de tasca;
+- classificació `situacio_partit` derivada de la relació `6x6`.
+
+## Instància TR-UVOF-006
+
+La sisena instància representa:
+
+- `CIL_D2_LOCAL` sostingut per `D2_LOCAL` i `CIL_D3_OPOSAT` sostingut per
+  `D3_OPOSAT`, tots dos com a handicaps visibles;
+- `D1_LOCAL`, `D2_LOCAL`, `D3_LOCAL` i `D3_OPOSAT` com a defensors reals;
+- llibertat d'atac del lateral a `1–2` o `2–3`;
+- 2x1 exterior amb extrem i interior amb pivot;
+- encreuaments de central o extrem amb intenció real de superar;
+- retorn al jugador que ocupa temporalment el centre;
+- canvi de banda preferent i no obligatori.
+
 ## Validacions executables
 
 El validador comprova:
@@ -219,8 +254,8 @@ Sortida futura:
 
 ## Abast i pendents de v0.2
 
-La versió 0.2 valida l'arquitectura amb `TR-UVOF-001`, `TR-UVOF-002` i
-`TR-UVOF-003`; encara no és un motor. Abans de congelar-ne el vocabulari cal:
+La versió 0.2 valida l'arquitectura amb `TR-UVOF-001`–`TR-UVOF-006`; encara no
+és un motor. Abans de congelar-ne el vocabulari cal:
 
 - provar-lo amb exercicis de permuta i situació de partit;
 - definir com canvien els intervals quan els defensors es desplacen entre
