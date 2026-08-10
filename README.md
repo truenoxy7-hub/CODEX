@@ -64,6 +64,19 @@ python scripts/validate_semantic.py
 python -m pytest -q
 ```
 
+## Primera interfície de l'MVP
+
+La primera iteració navegable permet escriure la descripció original de
+`TR-UVOF-001`, revisar-ne la interpretació tàctica i confirmar-la abans del
+futur pas geomètric. No genera encara trajectòries ni SVG tàctic.
+
+```bash
+make interface
+```
+
+La interfície queda disponible a `http://localhost:8000`. L'abast i les
+iteracions següents es documenten a [`docs/MVP.md`](docs/MVP.md).
+
 ## Com començar amb Codex
 
 Obre aquest repositori a Codex i utilitza el contingut de

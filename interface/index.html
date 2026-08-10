@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Prototip de TRAÇA per interpretar descripcions d'exercicis d'handbol abans de generar-ne el gràfic."
+    />
+    <title>TRAÇA · Interpretar abans de dibuixar</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#main" aria-label="TRAÇA, anar al contingut principal">
+        <span class="brand-mark" aria-hidden="true">T</span>
+        <span>
+          <strong>TRAÇA</strong>
+          <small>Exercicis d’handbol que conserven el significat</small>
+        </span>
+      </a>
+      <div class="topbar-actions">
+        <span class="corpus-status"><i aria-hidden="true"></i> Corpus UVOF · 15 validats</span>
+        <span class="prototype-badge">Prototip 01</span>
+      </div>
+    </header>
+
+    <main id="main" class="page-shell">
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Nou exercici</p>
+          <h1 id="page-title">De la descripció al gràfic, sense perdre la intenció.</h1>
+        </div>
+        <ol class="stepper" aria-label="Procés de creació">
+          <li class="is-active" data-step="write"><span>1</span>Descriure</li>
+          <li data-step="review"><span>2</span>Revisar</li>
+          <li data-step="generate"><span>3</span>Generar</li>
+        </ol>
+      </section>
+
+      <div class="workspace">
+        <section class="panel input-panel" aria-labelledby="description-title">
+          <div class="panel-heading">
+            <div>
+              <p class="panel-kicker">Entrada</p>
+              <h2 id="description-title">Descriu l’exercici</h2>
+            </div>
+            <label class="exercise-select">
+              <span>Exemple</span>
+              <select id="exercise" aria-label="Exercici de prova">
+                <option value="TR-UVOF-001">TR-UVOF-001</option>
+              </select>
+            </label>
+          </div>
+
+          <label class="description-label" for="description">
+            Explica organització, seqüència i què han de resoldre els jugadors.
+          </label>
+          <textarea id="description" rows="9">El treball consisteix en un treball a dues bandes, on en la primera acció amb 1v1 sobre el banc cap al centre juguem un 2v1 amb PV, i recuperem per rebre de l’extrem donant importància a la trajectòria per jugar un 2v1 amb extrems.</textarea>
+          <div class="input-footer">
+            <p><span aria-hidden="true">◎</span> TRAÇA marcarà qualsevol dada que necessiti confirmació.</p>
+            <button id="interpret" class="button button-primary" type="button">
+              Interpretar descripció
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+
+          <section id="interpretation" class="interpretation" aria-labelledby="interpretation-title" hidden>
+            <div class="section-divider"></div>
+            <div class="interpretation-heading">
+              <div>
+                <p class="panel-kicker">Interpretació provisional</p>
+                <h3 id="interpretation-title" tabindex="-1">Això és el que TRAÇA ha entès</h3>
+              </div>
+              <span class="confidence"><i aria-hidden="true"></i> Basat en coneixement validat</span>
+            </div>
+
+            <dl class="fact-grid">
+              <div><dt>Organització</dt><dd>2 bandes simètriques</dd></div>
+              <div><dt>Participants</dt><dd>4 atacants · 2 defensors</dd></div>
+              <div><dt>Materials</dt><dd>Banc · 3 cons</dd></div>
+            </dl>
+
+            <div class="phase-list">
+              <article class="phase-card">
+                <span class="phase-number">01</span>
+                <div>
+                  <h4>Finta i 2x1 interior</h4>
+                  <p>El lateral rep en carrera a 1–2, supera el segon defensor simulat pel banc i resol amb el pivot.</p>
+                  <div class="tags" aria-label="Conceptes de la primera fase">
+                    <span>Finta en U</span><span>1–2 → 2–3</span><span>2x1 amb pivot</span>
+                  </div>
+                </div>
+              </article>
+              <article class="phase-card">
+                <span class="phase-number">02</span>
+                <div>
+                  <h4>Recuperació i 2x1 exterior</h4>
+                  <p>El mateix lateral recupera sense pilota, rep de l’extrem orientat i ataca directament el carril.</p>
+                  <div class="tags" aria-label="Conceptes de la segona fase">
+                    <span>Sense bot</span><span>Atac 1–2</span><span>2x1 amb extrem</span>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="validation-note">
+              <span class="validation-icon" aria-hidden="true">✓</span>
+              <div><strong>Sense preguntes pendents</strong><p>Aquesta interpretació coincideix amb l’UVOF001 validat per l’entrenador.</p></div>
+            </div>
+
+            <div class="review-actions">
+              <button id="edit" class="button button-secondary" type="button">Modificar descripció</button>
+              <button id="confirm" class="button button-primary" type="button">Confirmar interpretació</button>
+            </div>
+          </section>
+        </section>
+
+        <aside class="panel preview-panel" aria-labelledby="preview-title">
+          <div class="panel-heading preview-heading">
+            <div>
+              <p class="panel-kicker">Sortida</p>
+              <h2 id="preview-title">Previsualització</h2>
+            </div>
+            <span id="preview-state" class="state-badge">Esperant interpretació</span>
+          </div>
+
+          <div id="court-preview" class="court-preview" aria-live="polite">
+            <div class="court" aria-hidden="true">
+              <div class="goal"></div>
+              <div class="goal-area"></div>
+              <div class="nine-metre"></div>
+              <div class="centre-mark"></div>
+            </div>
+            <div id="preview-message" class="preview-message">
+              <span class="preview-symbol" aria-hidden="true">↗</span>
+              <strong>El gràfic apareixerà aquí</strong>
+              <p>Primer interpreta i confirma què ha d’entendre TRAÇA.</p>
+            </div>
+          </div>
+
+          <div class="preview-actions">
+            <button id="generate" class="button button-primary button-wide" type="button" disabled>
+              Generar gràfic · propera iteració
+            </button>
+            <div class="export-actions">
+              <button type="button" disabled>Descarregar SVG</button>
+              <button type="button" disabled>Descarregar PNG</button>
+            </div>
+          </div>
+
+          <section class="trace-card" aria-labelledby="trace-title">
+            <div class="trace-heading">
+              <h3 id="trace-title">Traçabilitat</h3>
+              <span>En directe</span>
+            </div>
+            <ul>
+              <li><i class="trace-dot is-ready" aria-hidden="true"></i><span><strong>Text original</strong><small>Font preservada</small></span></li>
+              <li><i id="semantic-dot" class="trace-dot" aria-hidden="true"></i><span><strong>Interpretació tàctica</strong><small id="semantic-status">Pendent</small></span></li>
+              <li><i id="relation-dot" class="trace-dot" aria-hidden="true"></i><span><strong>Relacions espacials</strong><small id="relation-status">Pendent de confirmació</small></span></li>
+              <li><i class="trace-dot" aria-hidden="true"></i><span><strong>Geometria i SVG</strong><small>Proper bloc de treball</small></span></li>
+            </ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer>
+      <p>TRAÇA diferencia coneixement tàctic, relacions espacials i representació gràfica.</p>
+      <span>Primera iteració de la interfície · sense geometria tàctica</span>
+    </footer>
+
+    <div id="announcer" class="sr-only" aria-live="polite"></div>
+  </body>
+</html>

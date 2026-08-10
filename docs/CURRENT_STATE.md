@@ -48,7 +48,8 @@ Tornar a introduir coordenades abans d'haver estabilitzat el model tàctic.
 
 - Primera versió viva del coneixement canònic d'handbol.
 - Consolidació del corpus UVOF com a font de proves per al futur motor espacial.
-- Preparació del primer MVP sobre el corpus UVOF complet i validat.
+- Primera interfície navegable del MVP amb el flux descripció → interpretació →
+  confirmació, encara sense geometria tàctica.
 
 ## Pròxima fita recomanada
 
