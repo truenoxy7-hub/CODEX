@@ -532,6 +532,51 @@ def test_corpus_rejects_missing_cylinder_handicap_in_uvof006(
     ]
 
 
+def test_corpus_rejects_wrong_second_2x1_defender_in_uvof007(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-007")
+    second_action = next(
+        action
+        for phase in exercise["fases"]
+        for action in phase["accions"]
+        if action["actor"] == "EXT_2" and "2x1" in action["accio"]
+    )
+    second_action["accio"] = "jugar_2x1_amb_lateral_que_recupera_contra_D3"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF007_ORDERED_2X1" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_incomplete_51_in_uvof008(valid_corpus, corpus_schema):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-008")
+    exercise["participants"] = [
+        participant
+        for participant in exercise["participants"]
+        if participant["id"] != "DAV"
+    ]
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF008_FULL_6X6_51" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_wrong_first_holder_in_uvof009(valid_corpus, corpus_schema):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-009")
+    exercise["pilotes"][0]["posseidor_inicial"] = "PV"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF009_ORDERED_THREE_FLOWS" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
 def test_corpus_rejects_geometry(valid_corpus, corpus_schema):
     exercise = _corpus_exercise(valid_corpus, "TR-UVOF-015")
     exercise["coordenades"] = [{"x": 1, "y": 2}]

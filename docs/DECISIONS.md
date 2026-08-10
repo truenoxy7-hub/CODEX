@@ -168,3 +168,18 @@ cilindres, cada material referencia explícitament el defensor que el sosté.
 **Aplicació validada:** a `TR-UVOF-006`, `CIL_D2_LOCAL` condiciona el segon
 defensor directe i `CIL_D3_OPOSAT` condiciona el tercer oposat. `D1_LOCAL` i
 `D3_LOCAL` continuen defensant activament les continuïtats.
+
+## D-026 — Permuta amb recepcions i fluxos independents
+
+**Decisió:** la permuta només canvia la posició funcional; no canvia la
+identitat del participant. A `TR-UVOF-009`, `CE` va a lateral i rep d'`EXT_1`,
+mentre `L` ocupa el centre i rep de `PV`. El flux inicial `L → EXT_1 → CE`, el
+flux `PV → L` i el flux posterior `EXT_2 → PV` es declaren separadament i en
+ordre.
+
+**Decisió:** dos bancs visibles amb funcions diferents són dos materials
+diferents: `BANC_EXTERIOR` substitueix l'oposició del 1x1 de `CE` i
+`BANC_CENTRAL` condiciona la trepitjada del llançament de `L`.
+
+**Punt obert:** la vinculació del cilindre visible amb l'espai restringit del
+pivot es manté provisional fins a validació específica de l'entrenador.
