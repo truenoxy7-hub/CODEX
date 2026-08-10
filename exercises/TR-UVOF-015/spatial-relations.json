@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "format": "TRACA_relacions_espacials",
+    "versio_contracte": "0.2.0",
+    "versio_instancia": "0.2.0",
+    "estat": "derivat_semantica_validada",
+    "separacio_capes": {"semantica_tactica": "referenciada_no_duplicada", "relacions_espacials": "incloses", "geometria_resolta": "no_inclosa", "renderitzat": "no_generat"}
+  },
+  "font_semantica": {"exercici_id": "TR-UVOF-015", "fitxers": ["corpus/uvof.semantic.json"], "plantilla": "tres_duels_simultanis_per_zones_amb_passada_devolucio", "simetria": "reflectible"},
+  "nodes": [
+    {"id": "A_ESQ", "classe": "participant", "referencia_semantica": "participants/A_ESQ", "rol": "atacant_del_duel_esquerre", "estat_coneixement": "validat"},
+    {"id": "A_CE", "classe": "participant", "referencia_semantica": "participants/A_CE", "rol": "atacant_del_duel_central", "estat_coneixement": "validat"},
+    {"id": "A_DRE", "classe": "participant", "referencia_semantica": "participants/A_DRE", "rol": "atacant_del_duel_dret", "estat_coneixement": "validat"},
+    {"id": "D_ESQ", "classe": "participant", "referencia_semantica": "participants/D_ESQ", "rol": "defensor_real_del_duel_esquerre", "estat_coneixement": "validat"},
+    {"id": "D_CE", "classe": "participant", "referencia_semantica": "participants/D_CE", "rol": "defensor_real_del_duel_central", "estat_coneixement": "validat"},
+    {"id": "D_DRE", "classe": "participant", "referencia_semantica": "participants/D_DRE", "rol": "defensor_real_del_duel_dret", "estat_coneixement": "validat"},
+    {"id": "P_ESQ", "classe": "participant", "referencia_semantica": "participants/P_ESQ", "rol": "passador_de_suport_del_duel_esquerre", "estat_coneixement": "validat"},
+    {"id": "P_CE", "classe": "participant", "referencia_semantica": "participants/P_CE", "rol": "passador_de_suport_del_duel_central", "estat_coneixement": "validat"},
+    {"id": "P_DRE", "classe": "participant", "referencia_semantica": "participants/P_DRE", "rol": "passador_de_suport_del_duel_dret", "estat_coneixement": "validat"},
+    {"id": "LIM_0", "classe": "material", "referencia_semantica": "materials/LIM_0", "funcio": "limit_exterior_de_Z_ESQ", "estat_coneixement": "validat"},
+    {"id": "LIM_1", "classe": "material", "referencia_semantica": "materials/LIM_1", "funcio": "limit_compartit_de_Z_ESQ_i_Z_CE", "estat_coneixement": "validat"},
+    {"id": "LIM_2", "classe": "material", "referencia_semantica": "materials/LIM_2", "funcio": "limit_compartit_de_Z_CE_i_Z_DRE", "estat_coneixement": "validat"},
+    {"id": "LIM_3", "classe": "material", "referencia_semantica": "materials/LIM_3", "funcio": "limit_exterior_de_Z_DRE", "estat_coneixement": "validat"},
+    {"id": "B_ESQ", "classe": "pilota", "referencia_semantica": "pilotes/B_ESQ", "funcio": "pilota_replicada_del_duel_esquerre", "estat_coneixement": "validat"},
+    {"id": "B_CE", "classe": "pilota", "referencia_semantica": "pilotes/B_CE", "funcio": "pilota_replicada_del_duel_central", "estat_coneixement": "validat"},
+    {"id": "B_DRE", "classe": "pilota", "referencia_semantica": "pilotes/B_DRE", "funcio": "pilota_replicada_del_duel_dret", "estat_coneixement": "validat"},
+    {"id": "PORTERIA_ADVERSARIA", "classe": "referencia_reglamentaria", "referencia_semantica": "porteria_adversaria", "funcio": "orientacio_general_dels_tres_duels", "estat_coneixement": "validat"}
+  ],
+  "espais": [
+    {"id": "Z_ESQ", "classe": "zona_resolucio", "nom_canonic": "zona_del_duel_esquerre", "definicio": {"operador": "delimitat_per", "arguments": ["LIM_0", "LIM_1"]}, "contiguitats": [{"espai": "Z_CE", "referent_compartit": "LIM_1"}], "fases_actives": ["F1"], "estat_coneixement": "validat"},
+    {"id": "Z_CE", "classe": "zona_resolucio", "nom_canonic": "zona_del_duel_central", "definicio": {"operador": "delimitat_per", "arguments": ["LIM_1", "LIM_2"]}, "contiguitats": [{"espai": "Z_ESQ", "referent_compartit": "LIM_1"}, {"espai": "Z_DRE", "referent_compartit": "LIM_2"}], "fases_actives": ["F1"], "estat_coneixement": "validat"},
+    {"id": "Z_DRE", "classe": "zona_resolucio", "nom_canonic": "zona_del_duel_dret", "definicio": {"operador": "delimitat_per", "arguments": ["LIM_2", "LIM_3"]}, "contiguitats": [{"espai": "Z_CE", "referent_compartit": "LIM_2"}], "fases_actives": ["F1"], "estat_coneixement": "validat"}
+  ],
+  "estats": [
+    {"id": "S_INICI_PARALLEL", "fase_ref": "F1", "moment": "inici", "relacions": [
+      {"subjecte": "A_ESQ", "predicat": "ocupa", "objectes": ["Z_ESQ"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "D_ESQ", "predicat": "ocupa", "objectes": ["Z_ESQ"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "A_CE", "predicat": "ocupa", "objectes": ["Z_CE"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "D_CE", "predicat": "ocupa", "objectes": ["Z_CE"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "A_DRE", "predicat": "ocupa", "objectes": ["Z_DRE"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "D_DRE", "predicat": "ocupa", "objectes": ["Z_DRE"], "caracter": "obligatori", "estat_coneixement": "validat"}
+    ]},
+    {"id": "S_RECEPCIONS_ORIENTADES", "fase_ref": "F1", "moment": "recepcio", "relacions": [
+      {"subjecte": "A_ESQ", "predicat": "disponible_per_rebre_a", "objectes": ["Z_ESQ"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "A_ESQ", "predicat": "orientat_cap_a", "objectes": ["PORTERIA_ADVERSARIA"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "A_CE", "predicat": "disponible_per_rebre_a", "objectes": ["Z_CE"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "A_CE", "predicat": "orientat_cap_a", "objectes": ["PORTERIA_ADVERSARIA"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "A_DRE", "predicat": "disponible_per_rebre_a", "objectes": ["Z_DRE"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "A_DRE", "predicat": "orientat_cap_a", "objectes": ["PORTERIA_ADVERSARIA"], "caracter": "obligatori", "estat_coneixement": "validat"}
+    ]},
+    {"id": "S_TRES_DUELS", "fase_ref": "F1", "moment": "desenvolupament", "relacions": [
+      {"subjecte": "A_ESQ", "predicat": "ataca", "objectes": ["Z_ESQ"], "caracter": "obligatori", "estat_coneixement": "condicio_tasca"},
+      {"subjecte": "A_CE", "predicat": "ataca", "objectes": ["Z_CE"], "caracter": "obligatori", "estat_coneixement": "condicio_tasca"},
+      {"subjecte": "A_DRE", "predicat": "ataca", "objectes": ["Z_DRE"], "caracter": "obligatori", "estat_coneixement": "condicio_tasca"}
+    ]}
+  ],
+  "transicions": [
+    {"id": "T_AESQ_INICIA", "fase_ref": "F1", "ordre": 1, "trajectoria_id": "DUEL_ESQ", "actor": "A_ESQ", "tipus": "recuperacio_sense_pilota", "des_de": "Z_ESQ", "cap_a": "Z_ESQ", "accio_semantica_ref": "fases/F1/accions/2", "estat_coneixement": "validat"},
+    {"id": "T_AESQ_REP", "fase_ref": "F1", "ordre": 2, "trajectoria_id": "DUEL_ESQ", "actor": "A_ESQ", "tipus": "recepcio", "des_de": "Z_ESQ", "cap_a": "Z_ESQ", "accio_semantica_ref": "fases/F1/accions/3", "estat_coneixement": "validat"},
+    {"id": "T_AESQ_FINTA", "fase_ref": "F1", "ordre": 3, "trajectoria_id": "DUEL_ESQ", "actor": "A_ESQ", "tipus": "finta", "des_de": "Z_ESQ", "cap_a": "Z_ESQ", "referencia_oposicional": "D_ESQ", "accio_semantica_ref": "fases/F1/accions/5", "qualificadors": ["sense_bot", "dins_limits_zona"], "estat_coneixement": "condicio_tasca"},
+    {"id": "T_AESQ_RESOL", "fase_ref": "F1", "ordre": 4, "trajectoria_id": "DUEL_ESQ", "actor": "A_ESQ", "tipus": "resolucio", "des_de": "Z_ESQ", "cap_a": "Z_ESQ", "referencia_oposicional": "D_ESQ", "qualificadors": ["sense_bot"], "estat_coneixement": "condicio_tasca"},
+    {"id": "T_ACE_INICIA", "fase_ref": "F1", "ordre": 1, "trajectoria_id": "DUEL_CE", "actor": "A_CE", "tipus": "recuperacio_sense_pilota", "des_de": "Z_CE", "cap_a": "Z_CE", "accio_semantica_ref": "fases/F1/accions/2", "estat_coneixement": "validat"},
+    {"id": "T_ACE_REP", "fase_ref": "F1", "ordre": 2, "trajectoria_id": "DUEL_CE", "actor": "A_CE", "tipus": "recepcio", "des_de": "Z_CE", "cap_a": "Z_CE", "accio_semantica_ref": "fases/F1/accions/3", "estat_coneixement": "validat"},
+    {"id": "T_ACE_FINTA", "fase_ref": "F1", "ordre": 3, "trajectoria_id": "DUEL_CE", "actor": "A_CE", "tipus": "finta", "des_de": "Z_CE", "cap_a": "Z_CE", "referencia_oposicional": "D_CE", "accio_semantica_ref": "fases/F1/accions/5", "qualificadors": ["sense_bot", "dins_limits_zona"], "estat_coneixement": "condicio_tasca"},
+    {"id": "T_ACE_RESOL", "fase_ref": "F1", "ordre": 4, "trajectoria_id": "DUEL_CE", "actor": "A_CE", "tipus": "resolucio", "des_de": "Z_CE", "cap_a": "Z_CE", "referencia_oposicional": "D_CE", "qualificadors": ["sense_bot"], "estat_coneixement": "condicio_tasca"},
+    {"id": "T_ADRE_INICIA", "fase_ref": "F1", "ordre": 1, "trajectoria_id": "DUEL_DRE", "actor": "A_DRE", "tipus": "recuperacio_sense_pilota", "des_de": "Z_DRE", "cap_a": "Z_DRE", "accio_semantica_ref": "fases/F1/accions/2", "estat_coneixement": "validat"},
+    {"id": "T_ADRE_REP", "fase_ref": "F1", "ordre": 2, "trajectoria_id": "DUEL_DRE", "actor": "A_DRE", "tipus": "recepcio", "des_de": "Z_DRE", "cap_a": "Z_DRE", "accio_semantica_ref": "fases/F1/accions/3", "estat_coneixement": "validat"},
+    {"id": "T_ADRE_FINTA", "fase_ref": "F1", "ordre": 3, "trajectoria_id": "DUEL_DRE", "actor": "A_DRE", "tipus": "finta", "des_de": "Z_DRE", "cap_a": "Z_DRE", "referencia_oposicional": "D_DRE", "accio_semantica_ref": "fases/F1/accions/5", "qualificadors": ["sense_bot", "dins_limits_zona"], "estat_coneixement": "condicio_tasca"},
+    {"id": "T_ADRE_RESOL", "fase_ref": "F1", "ordre": 4, "trajectoria_id": "DUEL_DRE", "actor": "A_DRE", "tipus": "resolucio", "des_de": "Z_DRE", "cap_a": "Z_DRE", "referencia_oposicional": "D_DRE", "qualificadors": ["sense_bot"], "estat_coneixement": "condicio_tasca"}
+  ],
+  "fluxos_pilota": [
+    {"id": "FP_AESQ_PESQ", "fase_ref": "F1", "trajectoria_id": "DUEL_ESQ", "ordre": 1, "pilota_id": "B_ESQ", "posseidor_inicial": "A_ESQ", "accio": "passada_inicial", "posseidor_final": "P_ESQ", "estat_coneixement": "validat"},
+    {"id": "FP_PESQ_AESQ", "fase_ref": "F1", "trajectoria_id": "DUEL_ESQ", "ordre": 2, "pilota_id": "B_ESQ", "posseidor_inicial": "P_ESQ", "accio": "devolucio", "posseidor_final": "A_ESQ", "qualificadors": ["recepcio_orientada_abans_del_1x1"], "estat_coneixement": "validat"},
+    {"id": "FP_ACE_PCE", "fase_ref": "F1", "trajectoria_id": "DUEL_CE", "ordre": 1, "pilota_id": "B_CE", "posseidor_inicial": "A_CE", "accio": "passada_inicial", "posseidor_final": "P_CE", "estat_coneixement": "validat"},
+    {"id": "FP_PCE_ACE", "fase_ref": "F1", "trajectoria_id": "DUEL_CE", "ordre": 2, "pilota_id": "B_CE", "posseidor_inicial": "P_CE", "accio": "devolucio", "posseidor_final": "A_CE", "qualificadors": ["recepcio_orientada_abans_del_1x1"], "estat_coneixement": "validat"},
+    {"id": "FP_ADRE_PDRE", "fase_ref": "F1", "trajectoria_id": "DUEL_DRE", "ordre": 1, "pilota_id": "B_DRE", "posseidor_inicial": "A_DRE", "accio": "passada_inicial", "posseidor_final": "P_DRE", "estat_coneixement": "validat"},
+    {"id": "FP_PDRE_ADRE", "fase_ref": "F1", "trajectoria_id": "DUEL_DRE", "ordre": 2, "pilota_id": "B_DRE", "posseidor_inicial": "P_DRE", "accio": "devolucio", "posseidor_final": "A_DRE", "qualificadors": ["recepcio_orientada_abans_del_1x1"], "estat_coneixement": "validat"}
+  ],
+  "branques_decisionals": [
+    {
+      "id": "BR_DUEL_ESQ", "fase_ref": "F1", "decisio_semantica_ref": "fases/F1/decisions/D_1X1_ESQ", "caracter": "disponible", "resolucio": "no_predeterminada",
+      "alternatives": [
+        {"id": "A_ESQ_COSTAT_1", "condicio": "D_ESQ_allibera_un_costat", "efectes_espacials": [{"subjecte": "A_ESQ", "predicat": "ataca", "objectes": ["Z_ESQ"], "caracter": "disponible", "estat_coneixement": "validat"}]},
+        {"id": "A_ESQ_COSTAT_2", "condicio": "D_ESQ_allibera_laltre_costat", "efectes_espacials": [{"subjecte": "A_ESQ", "predicat": "ataca", "objectes": ["Z_ESQ"], "caracter": "disponible", "estat_coneixement": "validat"}]}
+      ]
+    },
+    {
+      "id": "BR_DUEL_CE", "fase_ref": "F1", "decisio_semantica_ref": "fases/F1/decisions/D_1X1_CE", "caracter": "disponible", "resolucio": "no_predeterminada",
+      "alternatives": [
+        {"id": "A_CE_COSTAT_1", "condicio": "D_CE_allibera_un_costat", "efectes_espacials": [{"subjecte": "A_CE", "predicat": "ataca", "objectes": ["Z_CE"], "caracter": "disponible", "estat_coneixement": "validat"}]},
+        {"id": "A_CE_COSTAT_2", "condicio": "D_CE_allibera_laltre_costat", "efectes_espacials": [{"subjecte": "A_CE", "predicat": "ataca", "objectes": ["Z_CE"], "caracter": "disponible", "estat_coneixement": "validat"}]}
+      ]
+    },
+    {
+      "id": "BR_DUEL_DRE", "fase_ref": "F1", "decisio_semantica_ref": "fases/F1/decisions/D_1X1_DRE", "caracter": "disponible", "resolucio": "no_predeterminada",
+      "alternatives": [
+        {"id": "A_DRE_COSTAT_1", "condicio": "D_DRE_allibera_un_costat", "efectes_espacials": [{"subjecte": "A_DRE", "predicat": "ataca", "objectes": ["Z_DRE"], "caracter": "disponible", "estat_coneixement": "validat"}]},
+        {"id": "A_DRE_COSTAT_2", "condicio": "D_DRE_allibera_laltre_costat", "efectes_espacials": [{"subjecte": "A_DRE", "predicat": "ataca", "objectes": ["Z_DRE"], "caracter": "disponible", "estat_coneixement": "validat"}]}
+      ]
+    }
+  ],
+  "invariants": [
+    {"code": "SP-UVOF015-NO-COORD", "operador": "sense_coordenades", "subjectes": ["A_ESQ", "A_CE", "A_DRE", "D_ESQ", "D_CE", "D_DRE", "LIM_0", "LIM_1", "LIM_2", "LIM_3"], "ambit": "document", "missatge": "Les tres zones es representen qualitativament sense coordenades."},
+    {"code": "SP-UVOF015-ID", "operador": "identitat_persistent", "subjectes": ["A_ESQ", "A_CE", "A_DRE", "P_ESQ", "P_CE", "P_DRE"], "ambit": "F1", "missatge": "Cada duel conserva atacant, passador, defensor, pilota i zona propis."},
+    {"code": "SP-UVOF015-DEC", "operador": "decisio_no_predeterminada", "subjectes": ["A_ESQ", "A_CE", "A_DRE", "D_ESQ", "D_CE", "D_DRE"], "ambit": "BR_DUEL_ESQ-BR_DUEL_CE-BR_DUEL_DRE", "missatge": "Cada atacant decideix com superar segons la resposta del seu defensor."},
+    {"code": "SP-UVOF015-CONTIG", "operador": "contiguitat_amb_referent_compartit", "subjectes": ["Z_ESQ", "LIM_1", "Z_CE", "LIM_2", "Z_DRE"], "ambit": "F1", "missatge": "Quatre límits delimiten tres zones contigües."},
+    {"code": "SP-UVOF015-FLUX", "operador": "flux_pilota_coherent", "subjectes": ["B_ESQ", "B_CE", "B_DRE", "A_ESQ", "A_CE", "A_DRE", "P_ESQ", "P_CE", "P_DRE"], "ambit": "F1", "missatge": "Cada pilota fa passada i devolució dins la seva rèplica."},
+    {"code": "SP-UVOF015-RECEP", "operador": "recepcio_inici_canvi_direccio", "subjectes": ["A_ESQ", "A_CE", "A_DRE"], "ambit": "F1", "missatge": "Les tres devolucions permeten rebre orientat abans del canvi de direcció."}
+  ],
+  "governanca": {"autoritat": "semantica_validada_per_entrenador", "politica_inferencia": "tota_inferencia_no_validada_es_provisional", "sortida_permesa": "graf_relacional_sense_coordenades"}
+}

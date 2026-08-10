@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "format": "TRACA_relacions_espacials",
+    "versio_contracte": "0.2.0",
+    "versio_instancia": "0.2.0",
+    "estat": "derivat_semantica_validada",
+    "separacio_capes": {"semantica_tactica": "referenciada_no_duplicada", "relacions_espacials": "incloses", "geometria_resolta": "no_inclosa", "renderitzat": "no_generat"}
+  },
+  "font_semantica": {"exercici_id": "TR-UVOF-014", "fitxers": ["corpus/uvof.semantic.json"], "plantilla": "situacio_de_partit_6x6_contra_6-0_amb_permuta_inicial", "simetria": "reflectible"},
+  "nodes": [
+    {"id": "EXT_LOCAL", "classe": "participant", "referencia_semantica": "participants/EXT_LOCAL", "rol": "extrem_local", "estat_coneixement": "validat"},
+    {"id": "L_LOCAL", "classe": "participant", "referencia_semantica": "participants/L_LOCAL", "rol": "lateral_que_va_al_centre_i_rep", "estat_coneixement": "validat"},
+    {"id": "CE", "classe": "participant", "referencia_semantica": "participants/CE", "rol": "central_que_sobre_a_lateral", "estat_coneixement": "validat"},
+    {"id": "L_OPOSAT", "classe": "participant", "referencia_semantica": "participants/L_OPOSAT", "rol": "lateral_oposat_que_habilita_la_permuta", "estat_coneixement": "validat"},
+    {"id": "EXT_OPOSAT", "classe": "participant", "referencia_semantica": "participants/EXT_OPOSAT", "rol": "extrem_oposat", "estat_coneixement": "validat"},
+    {"id": "PV", "classe": "participant", "referencia_semantica": "participants/PV", "rol": "pivot", "estat_coneixement": "validat"},
+    {"id": "D1_LOCAL", "classe": "participant", "referencia_semantica": "participants/D1_LOCAL", "rol": "primer_defensor_local_del_6-0", "estat_coneixement": "validat"},
+    {"id": "D2_LOCAL", "classe": "participant", "referencia_semantica": "participants/D2_LOCAL", "rol": "segon_defensor_local_del_6-0", "estat_coneixement": "validat"},
+    {"id": "D3_LOCAL", "classe": "participant", "referencia_semantica": "participants/D3_LOCAL", "rol": "tercer_defensor_local_del_6-0", "estat_coneixement": "validat"},
+    {"id": "D3_OPOSAT", "classe": "participant", "referencia_semantica": "participants/D3_OPOSAT", "rol": "tercer_defensor_oposat_del_6-0", "estat_coneixement": "validat"},
+    {"id": "D2_OPOSAT", "classe": "participant", "referencia_semantica": "participants/D2_OPOSAT", "rol": "segon_defensor_oposat_del_6-0", "estat_coneixement": "validat"},
+    {"id": "D1_OPOSAT", "classe": "participant", "referencia_semantica": "participants/D1_OPOSAT", "rol": "primer_defensor_oposat_del_6-0", "estat_coneixement": "validat"},
+    {"id": "B1", "classe": "pilota", "referencia_semantica": "pilotes/B1", "funcio": "pilota_de_la_permuta_i_del_joc_obert", "estat_coneixement": "validat"},
+    {"id": "AREA_6M", "classe": "referencia_reglamentaria", "referencia_semantica": "area_de_6_metres", "funcio": "referencia_de_la_defensa_6-0_i_finalitzacio", "estat_coneixement": "validat"},
+    {"id": "PORTERIA_ADVERSARIA", "classe": "referencia_reglamentaria", "referencia_semantica": "porteria_adversaria", "funcio": "orientacio_general_de_latac", "estat_coneixement": "validat"},
+    {"id": "EIX_CENTRAL", "classe": "referencia_funcional", "referencia_semantica": "centre_de_la_pista", "funcio": "posicio_central", "estat_coneixement": "validat"}
+  ],
+  "espais": [
+    {"id": "POS_EXT_LOCAL", "classe": "posicio_funcional", "nom_canonic": "posicio_extrem_local", "definicio": {"operador": "proper_a", "arguments": ["D1_LOCAL"]}, "fases_actives": ["F1"], "estat_coneixement": "validat"},
+    {"id": "POS_LATERAL_LOCAL", "classe": "posicio_funcional", "nom_canonic": "posicio_lateral_local", "definicio": {"operador": "proper_a", "arguments": ["D2_LOCAL"]}, "fases_actives": ["F1"], "estat_coneixement": "validat"},
+    {"id": "POS_CENTRAL", "classe": "posicio_funcional", "nom_canonic": "posicio_central", "definicio": {"operador": "proper_a", "arguments": ["EIX_CENTRAL"]}, "fases_actives": ["F1"], "estat_coneixement": "validat"},
+    {"id": "POS_LATERAL_OPOSAT", "classe": "posicio_funcional", "nom_canonic": "posicio_lateral_oposat", "definicio": {"operador": "proper_a", "arguments": ["D2_OPOSAT"]}, "fases_actives": ["F1"], "estat_coneixement": "validat"},
+    {"id": "POS_EXT_OPOSAT", "classe": "posicio_funcional", "nom_canonic": "posicio_extrem_oposat", "definicio": {"operador": "proper_a", "arguments": ["D1_OPOSAT"]}, "fases_actives": ["F1"], "estat_coneixement": "validat"},
+    {"id": "ZONA_PV", "classe": "posicio_funcional", "nom_canonic": "zona_del_pivot", "definicio": {"operador": "proper_a", "arguments": ["D3_LOCAL"]}, "restriccions": [{"operador": "interior_de", "arguments": ["AREA_6M"]}], "fases_actives": ["F1"], "estat_coneixement": "validat"},
+    {"id": "ZONA_FINAL_6M", "classe": "zona_resolucio", "nom_canonic": "zona_de_finalitzacio", "definicio": {"operador": "interior_de", "arguments": ["AREA_6M"]}, "fases_actives": ["F1"], "estat_coneixement": "validat"}
+  ],
+  "estats": [
+    {"id": "S_INICI_6X6", "fase_ref": "F1", "moment": "inici", "relacions": [
+      {"subjecte": "EXT_LOCAL", "predicat": "mante_amplitud_a", "objectes": ["POS_EXT_LOCAL"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "L_LOCAL", "predicat": "ocupa", "objectes": ["POS_LATERAL_LOCAL"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "CE", "predicat": "ocupa", "objectes": ["POS_CENTRAL"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "L_OPOSAT", "predicat": "ocupa", "objectes": ["POS_LATERAL_OPOSAT"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "EXT_OPOSAT", "predicat": "mante_amplitud_a", "objectes": ["POS_EXT_OPOSAT"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "PV", "predicat": "ocupa", "objectes": ["ZONA_PV"], "caracter": "disponible", "estat_coneixement": "validat"}
+    ]},
+    {"id": "S_DEFENSA_6_0", "fase_ref": "F1", "moment": "inici", "relacions": [
+      {"subjecte": "D1_LOCAL", "predicat": "proper_a", "objectes": ["AREA_6M"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "D2_LOCAL", "predicat": "proper_a", "objectes": ["AREA_6M"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "D3_LOCAL", "predicat": "proper_a", "objectes": ["AREA_6M"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "D3_OPOSAT", "predicat": "proper_a", "objectes": ["AREA_6M"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "D2_OPOSAT", "predicat": "proper_a", "objectes": ["AREA_6M"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "D1_OPOSAT", "predicat": "proper_a", "objectes": ["AREA_6M"], "caracter": "obligatori", "estat_coneixement": "validat"}
+    ]},
+    {"id": "S_PERMUTA_INICIAL", "fase_ref": "F1", "moment": "preparacio", "relacions": [
+      {"subjecte": "L_LOCAL", "predicat": "ocupa", "objectes": ["POS_CENTRAL"], "caracter": "obligatori", "estat_coneixement": "condicio_tasca"},
+      {"subjecte": "CE", "predicat": "ocupa", "objectes": ["POS_LATERAL_LOCAL"], "caracter": "obligatori", "estat_coneixement": "condicio_tasca"},
+      {"subjecte": "L_OPOSAT", "predicat": "orientat_cap_a", "objectes": ["L_LOCAL"], "caracter": "obligatori", "estat_coneixement": "condicio_tasca"}
+    ]},
+    {"id": "S_JOC_OBERT", "fase_ref": "F1", "moment": "desenvolupament", "relacions": [
+      {"subjecte": "L_LOCAL", "predicat": "orientat_cap_a", "objectes": ["PORTERIA_ADVERSARIA"], "caracter": "obligatori", "estat_coneixement": "validat"},
+      {"subjecte": "L_LOCAL", "predicat": "ataca", "objectes": ["ZONA_FINAL_6M"], "caracter": "disponible", "estat_coneixement": "validat"},
+      {"subjecte": "PV", "predicat": "disponible_per_rebre_a", "objectes": ["ZONA_PV"], "caracter": "disponible", "estat_coneixement": "validat"},
+      {"subjecte": "EXT_LOCAL", "predicat": "disponible_per_rebre_a", "objectes": ["POS_EXT_LOCAL"], "caracter": "disponible", "estat_coneixement": "validat"},
+      {"subjecte": "EXT_OPOSAT", "predicat": "disponible_per_rebre_a", "objectes": ["POS_EXT_OPOSAT"], "caracter": "disponible", "estat_coneixement": "validat"}
+    ]}
+  ],
+  "transicions": [
+    {"id": "T_LLOCAL_PERMUTA", "fase_ref": "F1", "ordre": 1, "trajectoria_id": "PERMUTA_INICIAL", "actor": "L_LOCAL", "tipus": "ajust_sense_pilota", "des_de": "POS_LATERAL_LOCAL", "cap_a": "POS_CENTRAL", "accio_semantica_ref": "fases/F1/accions/1", "estat_coneixement": "condicio_tasca"},
+    {"id": "T_CE_OBRE", "fase_ref": "F1", "ordre": 1, "trajectoria_id": "OBERTURA_CE", "actor": "CE", "tipus": "ajust_sense_pilota", "des_de": "POS_CENTRAL", "cap_a": "POS_LATERAL_LOCAL", "accio_semantica_ref": "fases/F1/accions/1", "estat_coneixement": "condicio_tasca"},
+    {"id": "T_LLOCAL_REP", "fase_ref": "F1", "ordre": 2, "trajectoria_id": "PERMUTA_INICIAL", "actor": "L_LOCAL", "tipus": "recepcio", "des_de": "POS_CENTRAL", "cap_a": "POS_CENTRAL", "accio_semantica_ref": "fases/F1/accions/3", "qualificadors": ["rep_de_L_OPOSAT", "inici_obligatori"], "estat_coneixement": "condicio_tasca"},
+    {"id": "T_LLOCAL_INICIA_JOC", "fase_ref": "F1", "ordre": 3, "trajectoria_id": "PERMUTA_INICIAL", "actor": "L_LOCAL", "tipus": "atac_espai", "des_de": "POS_CENTRAL", "cap_a": "ZONA_FINAL_6M", "accio_semantica_ref": "fases/F1/accions/4", "qualificadors": ["continuacio_oberta"], "estat_coneixement": "validat"}
+  ],
+  "fluxos_pilota": [
+    {"id": "FP_LOPOSAT_LLOCAL", "fase_ref": "F1", "trajectoria_id": "PERMUTA_INICIAL", "ordre": 1, "pilota_id": "B1", "posseidor_inicial": "L_OPOSAT", "accio": "passada_inicial", "posseidor_final": "L_LOCAL", "qualificadors": ["passada_habilitadora_permuta"], "estat_coneixement": "condicio_tasca"}
+  ],
+  "branques_decisionals": [
+    {
+      "id": "BR_JOC_OBERT_6X6",
+      "fase_ref": "F1",
+      "decisio_semantica_ref": "fases/F1/decisions/D_JOC",
+      "caracter": "disponible",
+      "resolucio": "no_predeterminada",
+      "alternatives": [
+        {"id": "A_SUPERAR", "condicio": "el_portador_identifica_espai_de_superacio", "efectes_espacials": [{"subjecte": "L_LOCAL", "predicat": "ataca", "objectes": ["ZONA_FINAL_6M"], "caracter": "disponible", "estat_coneixement": "validat"}]},
+        {"id": "A_CONTINUITAT_INTERIOR", "condicio": "un_defensor_interior_ajuda", "efectes_espacials": [{"subjecte": "PV", "predicat": "disponible_per_rebre_a", "objectes": ["ZONA_PV"], "caracter": "disponible", "estat_coneixement": "validat"}]},
+        {"id": "A_CONTINUITAT_EXTERIOR", "condicio": "un_primer_defensor_tanca", "efectes_espacials": [{"subjecte": "EXT_LOCAL", "predicat": "disponible_per_rebre_a", "objectes": ["POS_EXT_LOCAL"], "caracter": "disponible", "estat_coneixement": "validat"}]},
+        {"id": "A_CANVI_BANDA", "condicio": "no_hi_ha_avantatge_local_i_conve_canviar_banda", "efectes_espacials": [{"subjecte": "EXT_OPOSAT", "predicat": "disponible_per_rebre_a", "objectes": ["POS_EXT_OPOSAT"], "caracter": "preferent", "estat_coneixement": "validat"}]}
+      ]
+    }
+  ],
+  "invariants": [
+    {"code": "SP-UVOF014-NO-COORD", "operador": "sense_coordenades", "subjectes": ["EXT_LOCAL", "L_LOCAL", "CE", "L_OPOSAT", "EXT_OPOSAT", "PV", "D1_LOCAL", "D2_LOCAL", "D3_LOCAL", "D3_OPOSAT", "D2_OPOSAT", "D1_OPOSAT"], "ambit": "document", "missatge": "El 6x6 contra 6:0 es representa sense coordenades."},
+    {"code": "SP-UVOF014-ID", "operador": "identitat_persistent", "subjectes": ["L_LOCAL", "CE", "L_OPOSAT"], "ambit": "F1", "missatge": "L_LOCAL i CE conserven identitat després de la permuta."},
+    {"code": "SP-UVOF014-DEC", "operador": "decisio_no_predeterminada", "subjectes": ["EXT_LOCAL", "L_LOCAL", "CE", "L_OPOSAT", "EXT_OPOSAT", "PV"], "ambit": "BR_JOC_OBERT_6X6", "missatge": "Després de la permuta obligatòria el joc continua obert."},
+    {"code": "SP-UVOF014-FLUX", "operador": "flux_pilota_coherent", "subjectes": ["B1", "L_OPOSAT", "L_LOCAL"], "ambit": "F1", "missatge": "L_OPOSAT habilita la recepció de L_LOCAL al centre."},
+    {"code": "SP-UVOF014-PERMUTA", "operador": "transicio_connectada", "subjectes": ["L_LOCAL", "CE"], "ambit": "F1", "missatge": "La situació comença obligatòriament amb permuta lateral-central."}
+  ],
+  "governanca": {"autoritat": "semantica_validada_per_entrenador", "politica_inferencia": "tota_inferencia_no_validada_es_provisional", "sortida_permesa": "graf_relacional_sense_coordenades"}
+}

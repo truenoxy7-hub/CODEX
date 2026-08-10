@@ -192,3 +192,18 @@ diferents: `BANC_EXTERIOR` substitueix l'oposició del 1x1 de `CE` i
 
 **Aplicació validada:** a `TR-UVOF-009`, `CIL_RESTRINGIT` referencia l'espai
 restringit des del qual el pivot finalitza després del lliscament.
+
+## D-027 — Un gràfic exemplar pot descriure rèpliques simultànies
+
+**Decisió:** quan el text i la validació de l'entrenador declaren diverses
+accions simultànies equivalents, un únic flux dibuixat al gràfic es considera
+un exemple visual i no limita el nombre d'execucions del model.
+
+**Aplicació validada:** a `TR-UVOF-015`, la pilota visible exemplifica una
+passada–devolució que es replica a les tres zones. El corpus declara tres
+pilotes, tres passadors, tres defensors i tres decisions de 1x1 independents.
+Quatre cons delimiten les tres zones i els dos cons interiors són referents
+compartits.
+
+**Motiu:** confondre la quantitat dibuixada amb la quantitat operativa eliminaria
+dos dels tres duels simultanis especificats per la tasca.

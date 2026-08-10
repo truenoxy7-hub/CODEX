@@ -630,9 +630,51 @@ def test_uvof003_rejects_disconnected_change_of_side_flow(
                 "relational_error_count": 0,
             },
         ),
+        (
+            "TR-UVOF-013",
+            {
+                "node_count": 14,
+                "space_count": 5,
+                "state_count": 4,
+                "transition_count": 6,
+                "ball_flow_count": 2,
+                "branch_count": 1,
+                "error_count": 0,
+                "structural_error_count": 0,
+                "relational_error_count": 0,
+            },
+        ),
+        (
+            "TR-UVOF-014",
+            {
+                "node_count": 16,
+                "space_count": 7,
+                "state_count": 4,
+                "transition_count": 4,
+                "ball_flow_count": 1,
+                "branch_count": 1,
+                "error_count": 0,
+                "structural_error_count": 0,
+                "relational_error_count": 0,
+            },
+        ),
+        (
+            "TR-UVOF-015",
+            {
+                "node_count": 17,
+                "space_count": 3,
+                "state_count": 3,
+                "transition_count": 12,
+                "ball_flow_count": 6,
+                "branch_count": 3,
+                "error_count": 0,
+                "structural_error_count": 0,
+                "relational_error_count": 0,
+            },
+        ),
     ],
 )
-def test_uvof004_to_012_spatial_contracts_pass(
+def test_uvof004_to_015_spatial_contracts_pass(
     exercise_id,
     expected_summary,
     spatial_schema,
@@ -967,3 +1009,100 @@ def test_uvof012_keeps_two_ordered_superiorities_and_defenders() -> None:
         ("CE", ("EXT", "D1")),
     }
     assert first_branch["caracter"] == "obligatori"
+
+
+def test_uvof013_keeps_first_post_attack_and_mandatory_pivot_slide() -> None:
+    document = json.loads(
+        (
+            ROOT / "exercises" / "TR-UVOF-013" / "spatial-relations.json"
+        ).read_text(encoding="utf-8")
+    )
+    flows = [
+        (flow["posseidor_inicial"], flow["posseidor_final"], flow.get("condicio"))
+        for flow in sorted(document["fluxos_pilota"], key=lambda item: item["ordre"])
+    ]
+    attack = next(
+        transition
+        for transition in document["transicions"]
+        if transition["id"] == "T_L_ATACA_23"
+    )
+    slide = next(
+        transition
+        for transition in document["transicions"]
+        if transition["id"] == "T_PV_LLISCA"
+    )
+
+    assert flows == [
+        ("L_OPOSAT", "L", None),
+        ("L", "PV", "D3_LOCAL_puja"),
+    ]
+    assert attack["cap_a"] == "INT_23"
+    assert slide["estat_coneixement"] == "condicio_tasca"
+    assert slide["condicio"] == "D3_LOCAL_puja"
+
+
+def test_uvof014_is_full_6x6_against_60_and_stays_open() -> None:
+    document = json.loads(
+        (
+            ROOT / "exercises" / "TR-UVOF-014" / "spatial-relations.json"
+        ).read_text(encoding="utf-8")
+    )
+    participant_ids = {
+        node["id"]
+        for node in document["nodes"]
+        if node["classe"] == "participant"
+    }
+    defense_at_6m = {
+        relation["subjecte"]
+        for state in document["estats"]
+        for relation in state["relacions"]
+        if relation["predicat"] == "proper_a"
+        and relation["objectes"] == ["AREA_6M"]
+    }
+    branch = document["branques_decisionals"][0]
+
+    assert len(participant_ids) == 12
+    assert defense_at_6m == {
+        "D1_LOCAL",
+        "D2_LOCAL",
+        "D3_LOCAL",
+        "D3_OPOSAT",
+        "D2_OPOSAT",
+        "D1_OPOSAT",
+    }
+    assert branch["id"] == "BR_JOC_OBERT_6X6"
+    assert branch["resolucio"] == "no_predeterminada"
+
+
+def test_uvof015_replicates_three_simultaneous_duels_by_zone() -> None:
+    document = json.loads(
+        (
+            ROOT / "exercises" / "TR-UVOF-015" / "spatial-relations.json"
+        ).read_text(encoding="utf-8")
+    )
+    balls = {
+        node["id"] for node in document["nodes"] if node["classe"] == "pilota"
+    }
+    zones = {space["id"]: space for space in document["espais"]}
+    flows = {
+        flow["trajectoria_id"]: [] for flow in document["fluxos_pilota"]
+    }
+    for flow in sorted(document["fluxos_pilota"], key=lambda item: item["ordre"]):
+        flows[flow["trajectoria_id"]].append(
+            (flow["posseidor_inicial"], flow["posseidor_final"])
+        )
+
+    assert balls == {"B_ESQ", "B_CE", "B_DRE"}
+    assert zones["Z_ESQ"]["definicio"]["arguments"] == ["LIM_0", "LIM_1"]
+    assert zones["Z_CE"]["definicio"]["arguments"] == ["LIM_1", "LIM_2"]
+    assert zones["Z_DRE"]["definicio"]["arguments"] == ["LIM_2", "LIM_3"]
+    assert flows == {
+        "DUEL_ESQ": [("A_ESQ", "P_ESQ"), ("P_ESQ", "A_ESQ")],
+        "DUEL_CE": [("A_CE", "P_CE"), ("P_CE", "A_CE")],
+        "DUEL_DRE": [("A_DRE", "P_DRE"), ("P_DRE", "A_DRE")],
+    }
+    assert all(
+        "sense_bot" in transition.get("qualificadors", [])
+        for transition in document["transicions"]
+        if transition["tipus"] in {"finta", "resolucio"}
+    )

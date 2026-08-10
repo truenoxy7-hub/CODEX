@@ -164,6 +164,28 @@ centre, rep de `PV` i llença trepitjant `BANC_CENTRAL`. Abans, `L` passa a
 finalitza des de l'espai restringit. Els tres fluxos de pilota són independents.
 El cilindre referencia l'espai restringit de finalització del pivot.
 
+## TR-UVOF-013
+
+És un `4x4` amb un passador extern que no computa en la relació. Després de la
+permuta lateral–central, `L` rep de `L_OPOSAT` al centre i ataca obligatòriament
+l'interval `2–3`, anomenat primer pal a la tasca. Si `D3_LOCAL` no puja, `L`
+continua i finalitza; si puja, `PV` llisca i la passada és obligatòria.
+
+## TR-UVOF-014
+
+És una situació de partit `6x6` contra una defensa `6:0` completa. L'atac ha de
+començar amb permuta lateral–central: `L_LOCAL` ocupa el centre, `CE` s'obre i
+`L_LOCAL` rep de `L_OPOSAT`. Després d'aquest inici obligatori, les decisions de
+joc continuen obertes.
+
+## TR-UVOF-015
+
+Són tres 1x1 simultanis en tres zones delimitades per quatre cons. Cada zona té
+atacant, passador de suport, defensor real i pilota propis. L'atacant passa,
+inicia en carrera, rep orientat i resol sense bot dins els límits de la seva
+zona. La pilota única del gràfic és un exemple visual que es replica a les tres
+zones; no s'ha de reduir el model a un sol duel.
+
 ## Regla general de permuta
 
 La direcció nomena el jugador que canvia de posició i el lloc que ocupa. En una

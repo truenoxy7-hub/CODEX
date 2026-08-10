@@ -635,6 +635,45 @@ def test_corpus_rejects_wrong_first_passer_in_uvof012(
     ]
 
 
+def test_corpus_rejects_missing_pivot_flow_in_uvof013(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-013")
+    exercise["fases"][0]["fluxos_pilota"].pop()
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF013_ORDERED_4X4_FIRST_POST" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_non_match_classification_in_uvof014(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-014")
+    exercise["tipus_exercici"] = "situacio_partit_reduida"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF014_FULL_MATCH_SITUATION" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_single_graphic_ball_as_only_ball_in_uvof015(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-015")
+    exercise["pilotes"] = exercise["pilotes"][:1]
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF015_THREE_SIMULTANEOUS_DUELS" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
 def test_corpus_rejects_geometry(valid_corpus, corpus_schema):
     exercise = _corpus_exercise(valid_corpus, "TR-UVOF-015")
     exercise["coordenades"] = [{"x": 1, "y": 2}]
