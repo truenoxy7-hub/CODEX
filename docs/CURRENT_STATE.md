@@ -16,7 +16,7 @@
 - Vocabulari validat d'encreuament, permuta, bloqueig estàtic, lliscament,
   situació de partit i punt fort/feble.
 - Contracte de relacions espacials v0.2 sense coordenades.
-- Instàncies relacionals executables de `TR-UVOF-001` a `TR-UVOF-012`.
+- Instàncies relacionals executables de `TR-UVOF-001` a `TR-UVOF-015`.
 - Flux de pilota per trajectòria i encreuament explícit per darrere del portador.
 - Bloqueig estàtic del pivot, rols temporals i canvi de banda validats en 6x6.
 - Passada–devolució amb handicap de recorregut, defensa 5:1 completa i
@@ -29,6 +29,8 @@
   `L → EXT → L` d'UVOF011 representades explícitament.
 - Activació condicional posterior d'UVOF010 i dues superioritats ordenades
   d'UVOF012 amb defensors `D3` i `D1` diferenciats.
+- Atac de `2–3` i lliscament obligatori d'UVOF013, situació de partit 6x6
+  contra 6:0 d'UVOF014 i tres duels simultanis delimitats d'UVOF015.
 - Validacions de referències, contigüitats, continuïtat i decisions obertes.
 
 ## No completat
@@ -46,10 +48,11 @@ Tornar a introduir coordenades abans d'haver estabilitzat el model tàctic.
 
 - Primera versió viva del coneixement canònic d'handbol.
 - Consolidació del corpus UVOF com a font de proves per al futur motor espacial.
-- Contrast del contracte relacional amb exercicis més enllà de `TR-UVOF-001`.
+- Preparació del primer MVP sobre el corpus UVOF complet i validat.
 
 ## Pròxima fita recomanada
 
-Aplicar el contracte relacional v0.2 a `TR-UVOF-013`–`TR-UVOF-015`, completar
-el primer corpus relacional UVOF i revisar-lo abans de definir el resolutor
-geomètric.
+Definir un MVP que consumeixi el corpus relacional UVOF complet sense perdre la
+traçabilitat semàntica. La següent decisió tècnica és l'abast mínim del
+resolutor espacial i de la seva sortida, encara sense reintroduir coordenades
+com a font de veritat.

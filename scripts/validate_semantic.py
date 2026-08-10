@@ -1198,6 +1198,187 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
             }
         )
 
+    uvof_013 = _corpus_exercise(document, "TR-UVOF-013")
+    participants_013 = {
+        participant.get("id") for participant in uvof_013.get("participants", [])
+    }
+    balls_013 = {
+        ball.get("id"): ball.get("posseidor_inicial")
+        for ball in uvof_013.get("pilotes", [])
+    }
+    flows_013 = {
+        (
+            flow.get("trajectoria_id"),
+            flow.get("ordre"),
+            flow.get("pilota_id"),
+            flow.get("posseidor_inicial"),
+            flow.get("posseidor_final"),
+            flow.get("condicio"),
+        )
+        for flow in _corpus_ball_flows(uvof_013)
+    }
+    actions_013 = {action.get("accio") for action in _corpus_actions(uvof_013)}
+    if (
+        not {
+            "L",
+            "CE",
+            "PV",
+            "EXT",
+            "L_OPOSAT",
+            "D1",
+            "D2",
+            "D3_LOCAL",
+            "D3_OPOSAT",
+        }
+        <= participants_013
+        or uvof_013.get("organitzacio", {}).get("relacio") != "4x4"
+        or uvof_013.get("organitzacio", {}).get("passador_permuta")
+        != "L_OPOSAT"
+        or uvof_013.get("organitzacio", {}).get("interval_atac") != "2-3"
+        or balls_013 != {"B1": "L_OPOSAT"}
+        or flows_013
+        != {
+            ("PERMUTA_I_PRIMER_PAL", 1, "B1", "L_OPOSAT", "L", None),
+            ("PERMUTA_I_PRIMER_PAL", 2, "B1", "L", "PV", "D3_LOCAL_puja"),
+        }
+        or "rebre_al_centre_i_atacar_interval_2-3" not in actions_013
+        or "lliscar_si_D3_LOCAL_puja" not in actions_013
+    ):
+        errors.append(
+            {
+                "code": "UVOF013_ORDERED_4X4_FIRST_POST",
+                "path": "TR-UVOF-013",
+                "message": (
+                    "TR-UVOF-013 ha de conservar el 4x4, la recepció "
+                    "L_OPOSAT-L, l'atac obligatori de 2-3 i la passada "
+                    "L-PV quan D3_LOCAL puja i el pivot llisca."
+                ),
+            }
+        )
+
+    uvof_014 = _corpus_exercise(document, "TR-UVOF-014")
+    attackers_014 = {
+        participant.get("id")
+        for participant in uvof_014.get("participants", [])
+        if participant.get("equip") == "atac"
+    }
+    defenders_014 = {
+        participant.get("id")
+        for participant in uvof_014.get("participants", [])
+        if participant.get("equip") == "defensa"
+    }
+    balls_014 = {
+        ball.get("id"): ball.get("posseidor_inicial")
+        for ball in uvof_014.get("pilotes", [])
+    }
+    flows_014 = {
+        (
+            flow.get("trajectoria_id"),
+            flow.get("ordre"),
+            flow.get("pilota_id"),
+            flow.get("posseidor_inicial"),
+            flow.get("posseidor_final"),
+        )
+        for flow in _corpus_ball_flows(uvof_014)
+    }
+    if (
+        uvof_014.get("tipus_exercici") != "situacio_partit"
+        or uvof_014.get("organitzacio", {}).get("relacio") != "6x6"
+        or uvof_014.get("organitzacio", {}).get("sistema_defensiu") != "6-0"
+        or uvof_014.get("organitzacio", {}).get("passador_permuta")
+        != "L_OPOSAT"
+        or attackers_014
+        != {"EXT_LOCAL", "L_LOCAL", "CE", "L_OPOSAT", "EXT_OPOSAT", "PV"}
+        or defenders_014
+        != {
+            "D1_LOCAL",
+            "D2_LOCAL",
+            "D3_LOCAL",
+            "D3_OPOSAT",
+            "D2_OPOSAT",
+            "D1_OPOSAT",
+        }
+        or balls_014 != {"B1": "L_OPOSAT"}
+        or flows_014
+        != {("PERMUTA_INICIAL", 1, "B1", "L_OPOSAT", "L_LOCAL")}
+    ):
+        errors.append(
+            {
+                "code": "UVOF014_FULL_MATCH_SITUATION",
+                "path": "TR-UVOF-014",
+                "message": (
+                    "TR-UVOF-014 ha de ser una situació de partit 6x6 "
+                    "contra 6:0 amb sis atacants, sis defensors i passada "
+                    "L_OPOSAT-L_LOCAL després de la permuta inicial."
+                ),
+            }
+        )
+
+    uvof_015 = _corpus_exercise(document, "TR-UVOF-015")
+    participants_015 = {
+        participant.get("id") for participant in uvof_015.get("participants", [])
+    }
+    materials_015 = {
+        material.get("id") for material in uvof_015.get("materials", [])
+    }
+    balls_015 = {
+        ball.get("id"): ball.get("posseidor_inicial")
+        for ball in uvof_015.get("pilotes", [])
+    }
+    flows_015 = {
+        (
+            flow.get("trajectoria_id"),
+            flow.get("ordre"),
+            flow.get("pilota_id"),
+            flow.get("posseidor_inicial"),
+            flow.get("posseidor_final"),
+        )
+        for flow in _corpus_ball_flows(uvof_015)
+    }
+    decisions_015 = {decision.get("id") for decision in _corpus_decisions(uvof_015)}
+    if (
+        uvof_015.get("organitzacio", {}).get("zones") != 3
+        or uvof_015.get("organitzacio", {}).get("execucio")
+        != "simultania_i_replicada"
+        or not {
+            "A_ESQ",
+            "A_CE",
+            "A_DRE",
+            "D_ESQ",
+            "D_CE",
+            "D_DRE",
+            "P_ESQ",
+            "P_CE",
+            "P_DRE",
+        }
+        <= participants_015
+        or materials_015 != {"LIM_0", "LIM_1", "LIM_2", "LIM_3"}
+        or balls_015
+        != {"B_ESQ": "A_ESQ", "B_CE": "A_CE", "B_DRE": "A_DRE"}
+        or flows_015
+        != {
+            ("DUEL_ESQ", 1, "B_ESQ", "A_ESQ", "P_ESQ"),
+            ("DUEL_ESQ", 2, "B_ESQ", "P_ESQ", "A_ESQ"),
+            ("DUEL_CE", 1, "B_CE", "A_CE", "P_CE"),
+            ("DUEL_CE", 2, "B_CE", "P_CE", "A_CE"),
+            ("DUEL_DRE", 1, "B_DRE", "A_DRE", "P_DRE"),
+            ("DUEL_DRE", 2, "B_DRE", "P_DRE", "A_DRE"),
+        }
+        or decisions_015 != {"D_1X1_ESQ", "D_1X1_CE", "D_1X1_DRE"}
+        or "bot_prohibit" not in uvof_015.get("condicions_tasca", [])
+    ):
+        errors.append(
+            {
+                "code": "UVOF015_THREE_SIMULTANEOUS_DUELS",
+                "path": "TR-UVOF-015",
+                "message": (
+                    "TR-UVOF-015 ha de replicar tres duels simultanis: "
+                    "tres atacants, tres passadors, tres defensors, tres "
+                    "pilotes, quatre límits i passada-devolució per zona."
+                ),
+            }
+        )
+
     for exercise_id in ("TR-UVOF-012", "TR-UVOF-013", "TR-UVOF-014"):
         exercise = _corpus_exercise(document, exercise_id)
         if "lateral-central" not in exercise.get("organitzacio", {}).values():

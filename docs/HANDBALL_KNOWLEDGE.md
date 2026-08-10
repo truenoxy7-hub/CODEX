@@ -316,6 +316,21 @@ Dos materials del mateix tipus no comparteixen automàticament funció. Un banc
 pot substituir l'oposició d'un 1x1 i un altre pot ser només una base de
 trepitjada per a un llançament; el model els ha d'identificar per separat.
 
+## Gràfic exemplar i rèpliques simultànies
+
+Un gràfic pot mostrar només una pilota o una seqüència per facilitar-ne la
+lectura encara que la tasca es realitzi simultàniament en diverses zones. Quan
+el text o la validació de l'entrenador estableixen la rèplica:
+
+- cada zona conserva atacant, passador, defensor i pilota propis;
+- cada flux de passada–devolució es representa per separat;
+- els límits compartits entre zones són referents espacials reals;
+- la decisió del 1x1 es manté independent a cada duel;
+- la prohibició del bot s'aplica a les tres rèpliques.
+
+La quantitat d'icones de pilota del gràfic no substitueix la quantitat operativa
+validada de la tasca.
+
 ## Coneixement encara obert
 
 El vocabulari continuarà creixent amb nous exercicis. Encara cal aprofundir en:

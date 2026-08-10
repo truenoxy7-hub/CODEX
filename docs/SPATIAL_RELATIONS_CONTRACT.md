@@ -280,6 +280,36 @@ La dotzena instància representa:
 - segon flux independent `EXT → CE`, amb 2x1 de `CE` i `EXT` contra `D1`;
 - amplitud de l'extrem i salt cap al centre si rep per finalitzar.
 
+## Instància TR-UVOF-013
+
+La tretzena instància representa:
+
+- 4x4 amb passador extern que no computa en la relació;
+- permuta lateral–central habilitada per `L_OPOSAT → L`;
+- atac obligatori de `L` a l'interval `2–3`, anomenat primer pal a la tasca;
+- resolució condicionada per `D3_LOCAL`: finalització si queda pla o
+  lliscament i passada obligatòria al pivot si puja.
+
+## Instància TR-UVOF-014
+
+La catorzena instància representa:
+
+- situació de partit 6x6 contra defensa 6:0 completa;
+- sis identitats ofensives i sis identitats defensives explícites;
+- permuta inicial lateral–central amb recepció `L_OPOSAT → L_LOCAL`;
+- continuació oberta després de complir la condició pedagògica inicial.
+
+## Instància TR-UVOF-015
+
+La quinzena instància representa:
+
+- tres zones contigües definides per quatre cons delimitadors;
+- tres 1x1 simultanis, cadascun amb atacant, passador, defensor i pilota propis;
+- passada, desmarcatge, devolució orientada i duel sense bot a cada zona;
+- tres branques decisionals independents, una per defensor;
+- la pilota única del gràfic font com a exemple visual replicable i no com a
+  límit operatiu de la tasca.
+
 ## Validacions executables
 
 El validador comprova:
@@ -317,7 +347,7 @@ Sortida futura:
 
 ## Abast i pendents de v0.2
 
-La versió 0.2 valida l'arquitectura amb `TR-UVOF-001`–`TR-UVOF-012`; encara no
+La versió 0.2 valida l'arquitectura amb `TR-UVOF-001`–`TR-UVOF-015`; encara no
 és un motor. Abans de congelar-ne el vocabulari cal:
 
 - provar-lo amb més permutes i opcions de resolució tancades;

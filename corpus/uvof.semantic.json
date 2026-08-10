@@ -3,7 +3,7 @@
   "meta": {
     "format": "TRACA_corpus_semantic",
     "versio_llenguatge": "1.1.0",
-    "versio_corpus": "1.5.0",
+    "versio_corpus": "1.6.0",
     "estat": "validat_i_viu",
     "separacio_capes": {
       "semantica_tactica": "inclosa",
@@ -982,15 +982,24 @@
       },
       "organitzacio": {
         "relacio": "4x4",
-        "permuta": "lateral-central"
+        "permuta": "lateral-central",
+        "passador_permuta": "L_OPOSAT",
+        "passador_extern_no_computa_4x4": true,
+        "interval_atac": "2-3"
       },
       "participants": [
         {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
         {"id": "CE", "rol_inicial": "central", "equip": "atac"},
         {"id": "PV", "rol_inicial": "pivot", "equip": "atac"},
         {"id": "EXT", "rol_inicial": "extrem", "equip": "atac"},
-        {"id": "D3", "rol_inicial": "tercer_defensor", "equip": "defensa"},
-        {"id": "DEF_RESTANTS", "rol_inicial": "tres_defensors", "equip": "defensa"}
+        {"id": "L_OPOSAT", "rol_inicial": "lateral_oposat_passador_extern", "equip": "atac"},
+        {"id": "D1", "rol_inicial": "primer_defensor", "equip": "defensa"},
+        {"id": "D2", "rol_inicial": "segon_defensor", "equip": "defensa"},
+        {"id": "D3_LOCAL", "rol_inicial": "tercer_defensor_que_pot_ajudar", "equip": "defensa"},
+        {"id": "D3_OPOSAT", "rol_inicial": "tercer_defensor_oposat", "equip": "defensa"}
+      ],
+      "pilotes": [
+        {"id": "B1", "posseidor_inicial": "L_OPOSAT"}
       ],
       "fases": [
         {
@@ -998,24 +1007,30 @@
           "objectiu": "Atacar primer pal i coordinar el lliscament del pivot amb l'ajuda del tercer.",
           "accions": [
             {"ordre": 1, "actor": "L", "accio": "permuta", "primer_jugador": "L", "segon_jugador": "CE", "receptor_despres_permuta": "L", "estat_coneixement": "validat"},
-            {"ordre": 2, "actor": "L", "accio": "atacar_primer_pal", "estat_coneixement": "condicio_tasca"},
-            {"ordre": 3, "actor": "PV", "accio": "lliscar_si_D3_puja", "estat_coneixement": "condicio_tasca"}
+            {"ordre": 2, "actor": "L_OPOSAT", "accio": "passar_a_L_al_centre", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "L", "accio": "rebre_al_centre_i_atacar_interval_2-3", "estat_coneixement": "condicio_tasca"},
+            {"ordre": 4, "actor": "PV", "accio": "lliscar_si_D3_LOCAL_puja", "estat_coneixement": "condicio_tasca"}
           ],
-          "fluxos_pilota": [],
+          "fluxos_pilota": [
+            {"trajectoria_id": "PERMUTA_I_PRIMER_PAL", "ordre": 1, "pilota_id": "B1", "posseidor_inicial": "L_OPOSAT", "accio": "passada_habilitadora_permuta", "posseidor_final": "L"},
+            {"trajectoria_id": "PERMUTA_I_PRIMER_PAL", "ordre": 2, "pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_pivot", "posseidor_final": "PV", "condicio": "D3_LOCAL_puja"}
+          ],
           "decisions": [
-            {"id": "D_PRIMER_PAL", "condicio": "D3_puja_a_lajuda", "caracter": "obligatori", "opcions": ["passada_pivot_que_llisca"]},
-            {"id": "D_NO_AJUDA", "condicio": "D3_no_puja", "caracter": "disponible", "opcions": ["continuar_i_finalitzar_lateral"]}
+            {"id": "D_PRIMER_PAL", "condicio": "conducta_de_D3_LOCAL", "caracter": "obligatori", "opcions": ["continuar_i_finalitzar_si_D3_LOCAL_no_puja", "passada_pivot_que_llisca_si_D3_LOCAL_puja"]}
           ]
         }
       ],
       "invariants": [
         "la permuta correcta és lateral-central",
-        "el lateral ataca primer pal",
-        "si el tercer puja el pivot llisca sempre"
+        "L rep al centre de L_OPOSAT després de la permuta",
+        "el lateral ataca primer pal, és a dir l'interval 2-3",
+        "si D3_LOCAL puja el pivot llisca sempre"
       ],
       "validacions_entrenador": [
         "correccio_de_la_permuta",
-        "relacio_entre_ajuda_del_tercer_i_lliscament_del_pivot"
+        "passada_L_OPOSAT_a_L_al_centre",
+        "atac_de_linterval_2-3",
+        "relacio_entre_ajuda_del_tercer_i_lliscament_obligatori_del_pivot"
       ]
     },
     {
@@ -1032,21 +1047,40 @@
       },
       "organitzacio": {
         "relacio": "6x6",
-        "permuta_inicial": "lateral-central"
+        "sistema_defensiu": "6-0",
+        "permuta_inicial": "lateral-central",
+        "passador_permuta": "L_OPOSAT"
       },
       "participants": [
-        {"id": "ATAC_6", "rol_inicial": "sis_rols_ofensius", "equip": "atac"},
-        {"id": "DEF_6", "rol_inicial": "sis_defensors", "equip": "defensa"}
+        {"id": "EXT_LOCAL", "rol_inicial": "extrem_local", "equip": "atac"},
+        {"id": "L_LOCAL", "rol_inicial": "lateral_que_permuta", "equip": "atac"},
+        {"id": "CE", "rol_inicial": "central", "equip": "atac"},
+        {"id": "L_OPOSAT", "rol_inicial": "lateral_oposat_i_passador", "equip": "atac"},
+        {"id": "EXT_OPOSAT", "rol_inicial": "extrem_oposat", "equip": "atac"},
+        {"id": "PV", "rol_inicial": "pivot", "equip": "atac"},
+        {"id": "D1_LOCAL", "rol_inicial": "primer_defensor_local", "equip": "defensa"},
+        {"id": "D2_LOCAL", "rol_inicial": "segon_defensor_local", "equip": "defensa"},
+        {"id": "D3_LOCAL", "rol_inicial": "tercer_defensor_local", "equip": "defensa"},
+        {"id": "D3_OPOSAT", "rol_inicial": "tercer_defensor_oposat", "equip": "defensa"},
+        {"id": "D2_OPOSAT", "rol_inicial": "segon_defensor_oposat", "equip": "defensa"},
+        {"id": "D1_OPOSAT", "rol_inicial": "primer_defensor_oposat", "equip": "defensa"}
+      ],
+      "pilotes": [
+        {"id": "B1", "posseidor_inicial": "L_OPOSAT"}
       ],
       "fases": [
         {
           "id": "F1",
           "objectiu": "Iniciar obligatòriament amb permuta i continuar segons l'avantatge.",
           "accions": [
-            {"ordre": 1, "actor": "L", "accio": "permuta", "primer_jugador": "L", "segon_jugador": "CE", "receptor_despres_permuta": "L", "estat_coneixement": "condicio_tasca"},
-            {"ordre": 2, "actor": "ATAC_6", "accio": "continuar_amb_criteri", "estat_coneixement": "validat"}
+            {"ordre": 1, "actor": "L_LOCAL", "accio": "permuta", "primer_jugador": "L_LOCAL", "segon_jugador": "CE", "receptor_despres_permuta": "L_LOCAL", "estat_coneixement": "condicio_tasca"},
+            {"ordre": 2, "actor": "L_OPOSAT", "accio": "passar_a_L_LOCAL_al_centre", "estat_coneixement": "condicio_tasca"},
+            {"ordre": 3, "actor": "L_LOCAL", "accio": "rebre_al_centre_i_iniciar_joc_obert", "estat_coneixement": "validat"},
+            {"ordre": 4, "actor": "ATAC_6", "accio": "continuar_amb_criteri", "estat_coneixement": "validat"}
           ],
-          "fluxos_pilota": [],
+          "fluxos_pilota": [
+            {"trajectoria_id": "PERMUTA_INICIAL", "ordre": 1, "pilota_id": "B1", "posseidor_inicial": "L_OPOSAT", "accio": "passada_habilitadora_permuta", "posseidor_final": "L_LOCAL"}
+          ],
           "decisions": [
             {"id": "D_JOC", "condicio": "avantatge_despres_permuta", "caracter": "disponible", "opcions": ["superar", "continuïtat", "encreuament", "pivot", "extrem", "canvi_de_banda_si_conve"]}
           ]
@@ -1054,6 +1088,9 @@
       ],
       "invariants": [
         "la permuta inicial correcta és lateral-central",
+        "L_LOCAL rep al centre de L_OPOSAT",
+        "els sis defensors formen una defensa 6-0",
+        "tot 6x6 es categoritza com a situació de partit",
         "després de la condició inicial la situació de partit conserva decisions obertes"
       ],
       "condicions_tasca": [
@@ -1061,7 +1098,8 @@
       ],
       "validacions_entrenador": [
         "correccio_de_la_permuta",
-        "situacio_de_partit_6x6"
+        "passada_L_OPOSAT_a_L_LOCAL_al_centre",
+        "situacio_de_partit_6x6_contra_6-0"
       ]
     },
     {
@@ -1077,7 +1115,9 @@
       },
       "organitzacio": {
         "zones": 3,
-        "duels": "1x1"
+        "duels": "1x1",
+        "execucio": "simultania_i_replicada",
+        "representacio_font": "un_exemple_amb_una_pilota_replicable_a_les_tres_zones"
       },
       "participants": [
         {"id": "A_ESQ", "rol_inicial": "atacant_zona_esquerra", "equip": "atac"},
@@ -1085,7 +1125,16 @@
         {"id": "A_DRE", "rol_inicial": "atacant_zona_dreta", "equip": "atac"},
         {"id": "D_ESQ", "rol_inicial": "defensor_zona_esquerra", "equip": "defensa"},
         {"id": "D_CE", "rol_inicial": "defensor_zona_central", "equip": "defensa"},
-        {"id": "D_DRE", "rol_inicial": "defensor_zona_dreta", "equip": "defensa"}
+        {"id": "D_DRE", "rol_inicial": "defensor_zona_dreta", "equip": "defensa"},
+        {"id": "P_ESQ", "rol_inicial": "passador_de_suport_zona_esquerra", "equip": "atac"},
+        {"id": "P_CE", "rol_inicial": "passador_de_suport_zona_central", "equip": "atac"},
+        {"id": "P_DRE", "rol_inicial": "passador_de_suport_zona_dreta", "equip": "atac"}
+      ],
+      "materials": [
+        {"id": "LIM_0", "tipus": "con", "funcio": "limit_exterior_zona_esquerra"},
+        {"id": "LIM_1", "tipus": "con", "funcio": "limit_compartit_zones_esquerra_i_central"},
+        {"id": "LIM_2", "tipus": "con", "funcio": "limit_compartit_zones_central_i_dreta"},
+        {"id": "LIM_3", "tipus": "con", "funcio": "limit_exterior_zona_dreta"}
       ],
       "pilotes": [
         {"id": "B_ESQ", "posseidor_inicial": "A_ESQ"},
@@ -1097,22 +1146,32 @@
           "id": "F1",
           "objectiu": "Resoldre el 1x1 dins cada zona sense utilitzar el bot.",
           "accions": [
-            {"ordre": 1, "actor": "ATACANT_DE_ZONA", "accio": "rebre_o_iniciar_orientat", "estat_coneixement": "validat"},
-            {"ordre": 2, "actor": "ATACANT_DE_ZONA", "accio": "atacar_espai_i_comprometre_defensor", "estat_coneixement": "validat"},
-            {"ordre": 3, "actor": "ATACANT_DE_ZONA", "accio": "canviar_direccio_i_ritme_per_superar", "estat_coneixement": "validat"}
+            {"ordre": 1, "actor": "ATACANT_DE_ZONA", "accio": "passar_al_passador_de_la_mateixa_zona", "estat_coneixement": "validat"},
+            {"ordre": 2, "actor": "ATACANT_DE_ZONA", "accio": "iniciar_en_carrera_sense_pilota", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "ATACANT_DE_ZONA", "accio": "rebre_devolucio_orientat", "estat_coneixement": "validat"},
+            {"ordre": 4, "actor": "ATACANT_DE_ZONA", "accio": "atacar_espai_i_comprometre_defensor", "estat_coneixement": "validat"},
+            {"ordre": 5, "actor": "ATACANT_DE_ZONA", "accio": "canviar_direccio_i_ritme_per_superar_sense_bot", "estat_coneixement": "condicio_tasca"}
           ],
           "fluxos_pilota": [
-            {"pilota_id": "B_ESQ", "posseidor_inicial": "A_ESQ", "accio": "conduccio_sense_bot", "posseidor_final": "A_ESQ"},
-            {"pilota_id": "B_CE", "posseidor_inicial": "A_CE", "accio": "conduccio_sense_bot", "posseidor_final": "A_CE"},
-            {"pilota_id": "B_DRE", "posseidor_inicial": "A_DRE", "accio": "conduccio_sense_bot", "posseidor_final": "A_DRE"}
+            {"trajectoria_id": "DUEL_ESQ", "ordre": 1, "pilota_id": "B_ESQ", "posseidor_inicial": "A_ESQ", "accio": "passada_inicial", "posseidor_final": "P_ESQ"},
+            {"trajectoria_id": "DUEL_ESQ", "ordre": 2, "pilota_id": "B_ESQ", "posseidor_inicial": "P_ESQ", "accio": "devolucio", "posseidor_final": "A_ESQ"},
+            {"trajectoria_id": "DUEL_CE", "ordre": 1, "pilota_id": "B_CE", "posseidor_inicial": "A_CE", "accio": "passada_inicial", "posseidor_final": "P_CE"},
+            {"trajectoria_id": "DUEL_CE", "ordre": 2, "pilota_id": "B_CE", "posseidor_inicial": "P_CE", "accio": "devolucio", "posseidor_final": "A_CE"},
+            {"trajectoria_id": "DUEL_DRE", "ordre": 1, "pilota_id": "B_DRE", "posseidor_inicial": "A_DRE", "accio": "passada_inicial", "posseidor_final": "P_DRE"},
+            {"trajectoria_id": "DUEL_DRE", "ordre": 2, "pilota_id": "B_DRE", "posseidor_inicial": "P_DRE", "accio": "devolucio", "posseidor_final": "A_DRE"}
           ],
           "decisions": [
-            {"id": "D_1X1", "condicio": "resposta_del_defensor_de_zona", "caracter": "disponible", "opcions": ["superacio_cap_a_un_costat", "superacio_cap_a_laltre_costat"]}
+            {"id": "D_1X1_ESQ", "condicio": "resposta_de_D_ESQ", "caracter": "disponible", "opcions": ["superacio_cap_a_un_costat_dins_Z_ESQ", "superacio_cap_a_laltre_costat_dins_Z_ESQ"]},
+            {"id": "D_1X1_CE", "condicio": "resposta_de_D_CE", "caracter": "disponible", "opcions": ["superacio_cap_a_un_costat_dins_Z_CE", "superacio_cap_a_laltre_costat_dins_Z_CE"]},
+            {"id": "D_1X1_DRE", "condicio": "resposta_de_D_DRE", "caracter": "disponible", "opcions": ["superacio_cap_a_un_costat_dins_Z_DRE", "superacio_cap_a_laltre_costat_dins_Z_DRE"]}
           ]
         }
       ],
       "invariants": [
         "les tres zones no exigeixen intervals defensius fixos",
+        "les tres zones estan delimitades i els tres duels s'executen simultàniament",
+        "l'única pilota dibuixada a la font és un exemple replicable amb una pilota a cada zona",
+        "cada atacant fa passada i devolució amb el passador de la seva zona abans del duel",
         "cada duel conserva oposició real",
         "no es permet el bot"
       ],
@@ -1121,6 +1180,9 @@
       ],
       "validacions_entrenador": [
         "tres_sectors_esquerre_central_dret",
+        "tres_duels_simultanis_amb_tres_pilotes",
+        "quatre_limits_que_delimiten_les_tres_zones",
+        "passada_devolucio_abans_del_1x1",
         "sense_intervals_fixos",
         "sense_bot"
       ]
