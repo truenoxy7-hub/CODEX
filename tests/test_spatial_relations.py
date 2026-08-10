@@ -797,8 +797,18 @@ def test_uvof009_preserves_permutation_positions_and_three_ball_flows() -> None:
         )
         for flow in document["fluxos_pilota"]
     }
+    cylinder = next(node for node in document["nodes"] if node["id"] == "CIL_RESTRINGIT")
+    restricted_space = next(
+        space for space in document["espais"] if space["id"] == "ESPAI_RESTRINGIT_PV"
+    )
 
     assert positions == {"CE": "POS_LATERAL", "L": "POS_CENTRAL"}
+    assert cylinder["estat_coneixement"] == "validat"
+    assert restricted_space["estat_coneixement"] == "validat"
+    assert restricted_space["definicio"] == {
+        "operador": "proper_a",
+        "arguments": ["CIL_RESTRINGIT"],
+    }
     assert flows == {
         ("PERMUTA_CE_L", 1, "B1", "L", "EXT_1"),
         ("PERMUTA_CE_L", 2, "B1", "EXT_1", "CE"),

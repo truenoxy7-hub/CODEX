@@ -3,7 +3,7 @@
     "format": "TRACA_relacions_espacials",
     "versio_contracte": "0.2.0",
     "versio_instancia": "0.2.0",
-    "estat": "derivat_amb_punts_oberts",
+    "estat": "derivat_semantica_validada",
     "separacio_capes": {
       "semantica_tactica": "referenciada_no_duplicada",
       "relacions_espacials": "incloses",
@@ -26,7 +26,7 @@
     {"id": "D1", "classe": "participant", "referencia_semantica": "participants/D1", "rol": "primer_defensor_del_2x1_exterior", "estat_coneixement": "validat"},
     {"id": "BANC_EXTERIOR", "classe": "material", "referencia_semantica": "materials/BANC_EXTERIOR", "funcio": "substitut_oposicional_actiu_del_1x1_de_CE", "estat_coneixement": "condicio_tasca"},
     {"id": "BANC_CENTRAL", "classe": "material", "referencia_semantica": "materials/BANC_CENTRAL", "funcio": "base_de_trepitjada_per_al_llancament_exterior_de_L", "estat_coneixement": "condicio_tasca"},
-    {"id": "CIL_RESTRINGIT", "classe": "material", "referencia_semantica": "materials/CIL_RESTRINGIT", "funcio": "referencia_de_lespai_restringit_del_pivot", "estat_coneixement": "provisional"},
+    {"id": "CIL_RESTRINGIT", "classe": "material", "referencia_semantica": "materials/CIL_RESTRINGIT", "funcio": "referencia_de_lespai_restringit_del_pivot", "estat_coneixement": "validat"},
     {"id": "B1", "classe": "pilota", "referencia_semantica": "pilotes/B1", "funcio": "pilota_del_flux_L_EXT1_CE", "estat_coneixement": "validat"},
     {"id": "B2", "classe": "pilota", "referencia_semantica": "pilotes/B2", "funcio": "pilota_del_flux_PV_L", "estat_coneixement": "validat"},
     {"id": "B3", "classe": "pilota", "referencia_semantica": "pilotes/B3", "funcio": "pilota_del_flux_EXT2_PV", "estat_coneixement": "validat"},
@@ -87,7 +87,7 @@
       "definicio": {"operador": "proper_a", "arguments": ["CIL_RESTRINGIT"]},
       "restriccions": [{"operador": "interior_de", "arguments": ["AREA_6M"]}],
       "fases_actives": ["F2"],
-      "estat_coneixement": "provisional"
+      "estat_coneixement": "validat"
     },
     {
       "id": "ZONA_FINAL_6M",

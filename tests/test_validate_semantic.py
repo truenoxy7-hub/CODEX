@@ -577,6 +577,24 @@ def test_corpus_rejects_wrong_first_holder_in_uvof009(valid_corpus, corpus_schem
     ]
 
 
+def test_corpus_rejects_provisional_restricted_space_cylinder_in_uvof009(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-009")
+    cylinder = next(
+        material
+        for material in exercise["materials"]
+        if material["id"] == "CIL_RESTRINGIT"
+    )
+    cylinder["estat_coneixement"] = "provisional"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF009_ORDERED_THREE_FLOWS" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
 def test_corpus_rejects_geometry(valid_corpus, corpus_schema):
     exercise = _corpus_exercise(valid_corpus, "TR-UVOF-015")
     exercise["coordenades"] = [{"x": 1, "y": 2}]

@@ -3,7 +3,7 @@
   "meta": {
     "format": "TRACA_corpus_semantic",
     "versio_llenguatge": "1.1.0",
-    "versio_corpus": "1.4.0",
+    "versio_corpus": "1.4.1",
     "estat": "validat_i_viu",
     "separacio_capes": {
       "semantica_tactica": "inclosa",
@@ -685,7 +685,7 @@
       "materials": [
         {"id": "BANC_EXTERIOR", "tipus": "banc", "funcio": "substitut_oposicional_actiu_del_1x1_de_CE"},
         {"id": "BANC_CENTRAL", "tipus": "banc", "funcio": "base_de_trepitjada_per_al_llancament_exterior_de_L"},
-        {"id": "CIL_RESTRINGIT", "tipus": "cilindre", "funcio": "referencia_provisional_de_lespai_restringit_del_pivot", "estat_coneixement": "provisional"}
+        {"id": "CIL_RESTRINGIT", "tipus": "cilindre", "funcio": "referencia_de_lespai_restringit_del_pivot", "estat_coneixement": "validat"}
       ],
       "files": [
         {"id": "FILA_EXTREMS", "rol": "extrem", "ordre_activacio": ["EXT_1", "EXT_2"]}
@@ -743,7 +743,8 @@
         "ordre_L_EXT_CE_abans_i_despres_de_la_permuta",
         "L_rep_de_PV_i_llanca_des_del_banc_central",
         "CE_1x1_banc_exterior_i_2x1_amb_EXT_1_contra_D1",
-        "EXT_2_passa_a_PV_que_llisca"
+        "EXT_2_passa_a_PV_que_llisca",
+        "cilindre_com_a_referencia_de_lespai_restringit_del_pivot"
       ]
     },
     {

@@ -975,9 +975,14 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
         material.get("id"): material.get("funcio")
         for material in uvof_009.get("materials", [])
     }
+    material_states_009 = {
+        material.get("id"): material.get("estat_coneixement")
+        for material in uvof_009.get("materials", [])
+    }
     required_materials_009 = {
         "BANC_EXTERIOR": "substitut_oposicional_actiu_del_1x1_de_CE",
         "BANC_CENTRAL": "base_de_trepitjada_per_al_llancament_exterior_de_L",
+        "CIL_RESTRINGIT": "referencia_de_lespai_restringit_del_pivot",
     }
     actions_009 = {
         action.get("accio")
@@ -996,6 +1001,7 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
         balls_009 != {"B1": "L", "B2": "PV", "B3": "EXT_2"}
         or flows_009 != expected_flows_009
         or not required_materials_009.items() <= materials_009.items()
+        or material_states_009.get("CIL_RESTRINGIT") != "validat"
         or not required_actions_009 <= actions_009
     ):
         errors.append(
@@ -1005,7 +1011,8 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
                 "message": (
                     "TR-UVOF-009 ha de conservar L-EXT_1-CE, PV-L i "
                     "EXT_2-PV com a tres fluxos ordenats, amb un banc per al "
-                    "1x1 de CE i un banc central per al llançament de L."
+                    "1x1 de CE, un banc central per al llançament de L i el "
+                    "cilindre validat com a referència de l'espai restringit."
                 ),
             }
         )

@@ -6,7 +6,7 @@ El contracte converteix la semàntica tàctica validada en un graf qualitatiu qu
 un futur motor espacial podrà resoldre. Defineix **què ha de quedar relacionat**
 sense decidir encara **a quines coordenades** s'ha de dibuixar.
 
-Les instàncies executables actuals són les de `TR-UVOF-001` a `TR-UVOF-006`;
+Les instàncies executables actuals són les de `TR-UVOF-001` a `TR-UVOF-009`;
 totes compleixen
 `schema/traca.spatial-relations.schema.v0.2.json`.
 
@@ -246,7 +246,7 @@ La novena instància representa:
 - flux `B2`: `PV → L`, amb llançament trepitjant `BANC_CENTRAL`;
 - 1x1 de `CE` contra `BANC_EXTERIOR` i 2x1 amb `EXT_1` contra `D1`;
 - flux `B3`: `EXT_2 → PV`, després del lliscament del pivot;
-- el cilindre de l'espai restringit com a única referència provisional.
+- el cilindre com a referència validada de l'espai restringit del pivot.
 
 ## Validacions executables
 

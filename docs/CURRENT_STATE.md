@@ -24,6 +24,7 @@
 - Classificació executable de qualsevol relació 6x6 com a `situacio_partit`.
 - Ordre d'activació de dos extrems, concentració defensiva completa en 5:1 i
   primera permuta central–lateral amb tres fluxos de pilota independents.
+- Cilindre d'UVOF009 validat com a referència de l'espai restringit del pivot.
 - Validacions de referències, contigüitats, continuïtat i decisions obertes.
 
 ## No completat

@@ -162,8 +162,7 @@ centre, rep de `PV` i llença trepitjant `BANC_CENTRAL`. Abans, `L` passa a
 `EXT_1`. `CE` fa l'1x1 contra `BANC_EXTERIOR` i resol el 2x1 amb `EXT_1` contra
 `D1`. Després `EXT_2`, el següent extrem de la fila, passa a `PV`, que llisca i
 finalitza des de l'espai restringit. Els tres fluxos de pilota són independents.
-La funció exacta del cilindre que referencia l'espai restringit continua
-provisional.
+El cilindre referencia l'espai restringit de finalització del pivot.
 
 ## Flux de treball obligatori
 
