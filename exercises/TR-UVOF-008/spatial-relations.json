@@ -1,0 +1,194 @@
+{
+  "meta": {
+    "format": "TRACA_relacions_espacials",
+    "versio_contracte": "0.2.0",
+    "versio_instancia": "0.2.0",
+    "estat": "derivat_semantica_validada",
+    "separacio_capes": {
+      "semantica_tactica": "referenciada_no_duplicada",
+      "relacions_espacials": "incloses",
+      "geometria_resolta": "no_inclosa",
+      "renderitzat": "no_generat"
+    }
+  },
+  "font_semantica": {
+    "exercici_id": "TR-UVOF-008",
+    "fitxers": ["corpus/uvof.semantic.json"],
+    "plantilla": "situacio_partit_6x6_contra_51_amb_concentracio_defensiva",
+    "simetria": "reflectible"
+  },
+  "nodes": [
+    {"id": "EXT_LOCAL", "classe": "participant", "referencia_semantica": "participants/EXT_LOCAL", "rol": "extrem_banda_concentracio", "estat_coneixement": "validat"},
+    {"id": "L_LOCAL", "classe": "participant", "referencia_semantica": "participants/L_LOCAL", "rol": "lateral_banda_concentracio", "estat_coneixement": "validat"},
+    {"id": "CE", "classe": "participant", "referencia_semantica": "participants/CE", "rol": "central_organitzador", "estat_coneixement": "validat"},
+    {"id": "L_OPOSAT", "classe": "participant", "referencia_semantica": "participants/L_OPOSAT", "rol": "lateral_iniciador_a_lespai_alliberat", "estat_coneixement": "validat"},
+    {"id": "EXT_OPOSAT", "classe": "participant", "referencia_semantica": "participants/EXT_OPOSAT", "rol": "extrem_banda_alliberada", "estat_coneixement": "validat"},
+    {"id": "PV", "classe": "participant", "referencia_semantica": "participants/PV", "rol": "pivot_colocat_per_concentrar_la_defensa", "estat_coneixement": "validat"},
+    {"id": "D1_LOCAL", "classe": "participant", "referencia_semantica": "participants/D1_LOCAL", "rol": "primer_defensor_banda_concentracio", "estat_coneixement": "validat"},
+    {"id": "D2_LOCAL", "classe": "participant", "referencia_semantica": "participants/D2_LOCAL", "rol": "segon_defensor_banda_concentracio", "estat_coneixement": "validat"},
+    {"id": "D3_CENTRAL", "classe": "participant", "referencia_semantica": "participants/D3_CENTRAL", "rol": "tercer_o_central_defensiu", "estat_coneixement": "validat"},
+    {"id": "D2_OPOSAT", "classe": "participant", "referencia_semantica": "participants/D2_OPOSAT", "rol": "segon_defensor_banda_alliberada", "estat_coneixement": "validat"},
+    {"id": "D1_OPOSAT", "classe": "participant", "referencia_semantica": "participants/D1_OPOSAT", "rol": "primer_defensor_banda_alliberada", "estat_coneixement": "validat"},
+    {"id": "DAV", "classe": "participant", "referencia_semantica": "participants/DAV", "rol": "avancat_mobilitzat_sense_intervenir_sobre_PV", "estat_coneixement": "validat"},
+    {"id": "LINIA_FONS", "classe": "referencia_reglamentaria", "referencia_semantica": "linia_de_fons", "funcio": "limit_dels_espais_exteriors", "estat_coneixement": "validat"},
+    {"id": "AREA_6M", "classe": "referencia_reglamentaria", "referencia_semantica": "area_de_6_metres", "funcio": "referencia_de_la_primera_linia_defensiva", "estat_coneixement": "validat"},
+    {"id": "PORTERIA_ADVERSARIA", "classe": "referencia_reglamentaria", "referencia_semantica": "porteria_adversaria", "funcio": "orientacio_general_de_latac", "estat_coneixement": "validat"},
+    {"id": "EIX_CENTRAL", "classe": "referencia_funcional", "referencia_semantica": "centre_de_la_pista", "funcio": "referencia_central", "estat_coneixement": "validat"}
+  ],
+  "espais": [
+    {
+      "id": "ESPAI_EXT_LOCAL",
+      "classe": "espai_finalitzacio_extrem",
+      "nom_canonic": "espai_finalitzacio_extrem_banda_concentracio",
+      "definicio": {"operador": "entre", "arguments": ["LINIA_FONS", "D1_LOCAL"]},
+      "restriccions": [{"operador": "interior_de", "arguments": ["AREA_6M"]}],
+      "fases_actives": ["F1"],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "INT_23_LOCAL",
+      "classe": "interval",
+      "nom_canonic": "interval_2-3_banda_concentracio",
+      "definicio": {"operador": "entre", "arguments": ["D2_LOCAL", "D3_CENTRAL"]},
+      "contiguitats": [{"espai": "INT_23_OPOSAT", "referent_compartit": "D3_CENTRAL"}],
+      "fases_actives": ["F1"],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "INT_23_OPOSAT",
+      "classe": "interval",
+      "nom_canonic": "interval_2-3_banda_alliberada",
+      "definicio": {"operador": "entre", "arguments": ["D3_CENTRAL", "D2_OPOSAT"]},
+      "contiguitats": [
+        {"espai": "INT_23_LOCAL", "referent_compartit": "D3_CENTRAL"},
+        {"espai": "INT_12_OPOSAT", "referent_compartit": "D2_OPOSAT"}
+      ],
+      "fases_actives": ["F1"],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "INT_12_OPOSAT",
+      "classe": "interval",
+      "nom_canonic": "interval_1-2_banda_alliberada",
+      "alies": ["carril_banda_alliberada"],
+      "definicio": {"operador": "entre", "arguments": ["D2_OPOSAT", "D1_OPOSAT"]},
+      "contiguitats": [
+        {"espai": "INT_23_OPOSAT", "referent_compartit": "D2_OPOSAT"},
+        {"espai": "ESPAI_EXT_OPOSAT", "referent_compartit": "D1_OPOSAT"}
+      ],
+      "fases_actives": ["F1"],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "ESPAI_EXT_OPOSAT",
+      "classe": "espai_finalitzacio_extrem",
+      "nom_canonic": "espai_finalitzacio_extrem_banda_alliberada",
+      "definicio": {"operador": "entre", "arguments": ["D1_OPOSAT", "LINIA_FONS"]},
+      "restriccions": [{"operador": "interior_de", "arguments": ["AREA_6M"]}],
+      "contiguitats": [{"espai": "INT_12_OPOSAT", "referent_compartit": "D1_OPOSAT"}],
+      "fases_actives": ["F1"],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "ZONA_CONCENTRACIO",
+      "classe": "posicio_funcional",
+      "nom_canonic": "zona_compartida_de_concentracio_pivot_avancat",
+      "definicio": {"operador": "proper_a", "arguments": ["PV"]},
+      "fases_actives": ["F1"],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "ZONA_FINAL_6M",
+      "classe": "zona_resolucio",
+      "nom_canonic": "zona_de_finalitzacio_a_6_metres",
+      "definicio": {"operador": "interior_de", "arguments": ["AREA_6M"]},
+      "fases_actives": ["F1"],
+      "estat_coneixement": "validat"
+    }
+  ],
+  "estats": [
+    {
+      "id": "S_ESTRUCTURA_51",
+      "fase_ref": "F1",
+      "moment": "inici",
+      "relacions": [
+        {"subjecte": "D1_LOCAL", "predicat": "proper_a", "objectes": ["AREA_6M"], "caracter": "obligatori", "estat_coneixement": "validat"},
+        {"subjecte": "D3_CENTRAL", "predicat": "proper_a", "objectes": ["AREA_6M", "EIX_CENTRAL"], "caracter": "obligatori", "estat_coneixement": "validat"},
+        {"subjecte": "DAV", "predicat": "per_davant_de", "objectes": ["D3_CENTRAL"], "caracter": "obligatori", "estat_coneixement": "validat"},
+        {"subjecte": "EXT_LOCAL", "predicat": "mante_amplitud_a", "objectes": ["ESPAI_EXT_LOCAL"], "caracter": "obligatori", "estat_coneixement": "validat"},
+        {"subjecte": "EXT_OPOSAT", "predicat": "mante_amplitud_a", "objectes": ["ESPAI_EXT_OPOSAT"], "caracter": "obligatori", "estat_coneixement": "validat"}
+      ]
+    },
+    {
+      "id": "S_CONCENTRACIO",
+      "fase_ref": "F1",
+      "moment": "preparacio",
+      "relacions": [
+        {"subjecte": "PV", "predicat": "ocupa", "objectes": ["ZONA_CONCENTRACIO"], "caracter": "obligatori", "estat_coneixement": "validat"},
+        {"subjecte": "DAV", "predicat": "proper_a", "objectes": ["ZONA_CONCENTRACIO", "PV"], "caracter": "obligatori", "estat_coneixement": "validat"},
+        {"subjecte": "CE", "predicat": "orientat_cap_a", "objectes": ["PORTERIA_ADVERSARIA"], "caracter": "obligatori", "estat_coneixement": "validat"}
+      ]
+    },
+    {
+      "id": "S_1X1_AFAVORIT",
+      "fase_ref": "F1",
+      "moment": "desenvolupament",
+      "relacions": [
+        {"subjecte": "L_OPOSAT", "predicat": "ataca", "objectes": ["INT_12_OPOSAT", "INT_23_OPOSAT"], "caracter": "disponible", "estat_coneixement": "validat"},
+        {"subjecte": "L_OPOSAT", "predicat": "orientat_cap_a", "objectes": ["PORTERIA_ADVERSARIA"], "caracter": "obligatori", "estat_coneixement": "validat"}
+      ]
+    },
+    {
+      "id": "S_CONTINUITAT",
+      "fase_ref": "F1",
+      "moment": "resolucio",
+      "relacions": [
+        {"subjecte": "PV", "predicat": "disponible_per_rebre_a", "objectes": ["INT_23_LOCAL"], "caracter": "disponible", "estat_coneixement": "validat"},
+        {"subjecte": "EXT_OPOSAT", "predicat": "disponible_per_rebre_a", "objectes": ["ESPAI_EXT_OPOSAT"], "caracter": "disponible", "estat_coneixement": "validat"},
+        {"subjecte": "CE", "predicat": "disponible_per_rebre_a", "objectes": ["INT_23_LOCAL", "INT_23_OPOSAT"], "caracter": "disponible", "estat_coneixement": "validat"}
+      ]
+    }
+  ],
+  "transicions": [
+    {"id": "T_PV_COLOCA", "fase_ref": "F1", "ordre": 1, "trajectoria_id": "CONCENTRACIO", "actor": "PV", "tipus": "ajust_sense_pilota", "cap_a": "ZONA_CONCENTRACIO", "accio_semantica_ref": "fases/F1/accions/0", "estat_coneixement": "validat"},
+    {"id": "T_DAV_MOBILITZA", "fase_ref": "F1", "ordre": 1, "trajectoria_id": "CONCENTRACIO", "actor": "DAV", "tipus": "ajust_sense_pilota", "cap_a": "ZONA_CONCENTRACIO", "accio_semantica_ref": "fases/F1/accions/1", "qualificadors": ["mateixa_zona_que_PV", "sense_intervenir_sobre_PV"], "estat_coneixement": "validat"},
+    {"id": "T_L_OP_ATACA_12", "fase_ref": "F1", "ordre": 1, "trajectoria_id": "ATAC_12_ALLIBERAT", "actor": "L_OPOSAT", "tipus": "atac_espai", "cap_a": "INT_12_OPOSAT", "referencia_oposicional": "D2_OPOSAT", "accio_semantica_ref": "fases/F1/accions/2", "estat_coneixement": "validat"},
+    {"id": "T_L_OP_ATACA_23", "fase_ref": "F1", "ordre": 1, "trajectoria_id": "ATAC_23_ALLIBERAT", "actor": "L_OPOSAT", "tipus": "atac_espai", "cap_a": "INT_23_OPOSAT", "referencia_oposicional": "D2_OPOSAT", "accio_semantica_ref": "fases/F1/accions/2", "estat_coneixement": "validat"},
+    {"id": "T_L_OP_FINAL", "fase_ref": "F1", "ordre": 1, "trajectoria_id": "FINAL_DIRECTE", "actor": "L_OPOSAT", "tipus": "resolucio", "cap_a": "ZONA_FINAL_6M", "estat_coneixement": "validat"},
+    {"id": "T_CE_ENCREUA", "fase_ref": "F1", "ordre": 1, "trajectoria_id": "ENCREUAMENT_POST_1X1", "actor": "CE", "tipus": "encreuament", "cap_a": "INT_23_OPOSAT", "qualificadors": ["buscar_superar"], "estat_coneixement": "validat"}
+  ],
+  "fluxos_pilota": [],
+  "branques_decisionals": [
+    {
+      "id": "BR_POST_1X1",
+      "fase_ref": "F1",
+      "decisio_semantica_ref": "fases/F1/decisions/D_POST_1X1",
+      "caracter": "disponible",
+      "resolucio": "no_predeterminada",
+      "alternatives": [
+        {"id": "A_FINALITZA", "condicio": "L_OPOSAT_supera_i_te_espai", "efectes_espacials": [
+          {"subjecte": "L_OPOSAT", "predicat": "ataca", "objectes": ["ZONA_FINAL_6M"], "caracter": "disponible", "estat_coneixement": "validat"}
+        ]},
+        {"id": "A_CONTINUITAT", "condicio": "la_resposta_defensiva_habilita_un_company", "efectes_espacials": [
+          {"subjecte": "PV", "predicat": "disponible_per_rebre_a", "objectes": ["INT_23_LOCAL"], "caracter": "disponible", "estat_coneixement": "validat"},
+          {"subjecte": "EXT_OPOSAT", "predicat": "disponible_per_rebre_a", "objectes": ["ESPAI_EXT_OPOSAT"], "caracter": "disponible", "estat_coneixement": "validat"}
+        ]},
+        {"id": "A_ENCREUAMENT", "condicio": "L_OPOSAT_no_supera_i_conserva_continuitat", "efectes_espacials": [
+          {"subjecte": "CE", "predicat": "darrere_de", "objectes": ["L_OPOSAT"], "caracter": "obligatori", "estat_coneixement": "validat"},
+          {"subjecte": "CE", "predicat": "ataca", "objectes": ["INT_23_OPOSAT"], "caracter": "disponible", "estat_coneixement": "validat"}
+        ]}
+      ]
+    }
+  ],
+  "invariants": [
+    {"code": "SP-UVOF008-NO-COORD", "operador": "sense_coordenades", "subjectes": ["CE", "PV", "DAV", "L_OPOSAT"], "ambit": "document", "missatge": "La concentració defensiva i l'espai alliberat es mantenen qualitatius."},
+    {"code": "SP-UVOF008-ID", "operador": "identitat_persistent", "subjectes": ["EXT_LOCAL", "L_LOCAL", "CE", "L_OPOSAT", "EXT_OPOSAT", "PV", "D1_LOCAL", "D2_LOCAL", "D3_CENTRAL", "D2_OPOSAT", "D1_OPOSAT", "DAV"], "ambit": "F1", "missatge": "Els dotze participants del 6x6 mantenen identitat i rol inicial."},
+    {"code": "SP-UVOF008-DEC", "operador": "decisio_no_predeterminada", "subjectes": ["L_OPOSAT", "CE", "PV", "EXT_OPOSAT"], "ambit": "BR_POST_1X1", "missatge": "La resposta posterior al 1x1 continua oberta."},
+    {"code": "SP-UVOF008-AMPLITUD", "operador": "mantenir_amplitud", "subjectes": ["EXT_LOCAL", "EXT_OPOSAT"], "ambit": "F1", "missatge": "Els dos extrems conserven amplitud durant la concentració defensiva."}
+  ],
+  "governanca": {
+    "autoritat": "semantica_validada_per_entrenador",
+    "politica_inferencia": "tota_inferencia_no_validada_es_provisional",
+    "sortida_permesa": "graf_relacional_sense_coordenades"
+  }
+}

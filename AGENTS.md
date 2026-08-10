@@ -142,6 +142,29 @@ pivot. Sense superació, encreuen central o extrem segons l'interval final i cad
 receptor busca superar. Si la cadena no crea avantatge, el canvi de banda és
 preferent, mai obligatori.
 
+## TR-UVOF-007
+
+Dos extrems diferents s'activen en ordre. `CIL_D2` simula el segon defensor.
+`EXT_1` encreua amb `L` i resol el primer 2x1 amb `CE` contra `D3`; després `L`
+recupera i `EXT_2` resol el segon 2x1 amb `L` contra `D1`.
+
+## TR-UVOF-008
+
+És un `6x6` complet contra `5:1`. `CE` col·loca `PV` i mobilitza `DAV` cap a la
+mateixa zona sense que l'avançat intervingui sobre el pivot. Aquesta
+concentració afavoreix el 1x1 de `L_OPOSAT` a la banda alliberada. La
+continuïtat posterior és oberta.
+
+## TR-UVOF-009
+
+En la permuta central–lateral, `CE` va a lateral i rep d'`EXT_1`; `L` ocupa el
+centre, rep de `PV` i llença trepitjant `BANC_CENTRAL`. Abans, `L` passa a
+`EXT_1`. `CE` fa l'1x1 contra `BANC_EXTERIOR` i resol el 2x1 amb `EXT_1` contra
+`D1`. Després `EXT_2`, el següent extrem de la fila, passa a `PV`, que llisca i
+finalitza des de l'espai restringit. Els tres fluxos de pilota són independents.
+La funció exacta del cilindre que referencia l'espai restringit continua
+provisional.
+
 ## Flux de treball obligatori
 
 Abans de tocar codi:

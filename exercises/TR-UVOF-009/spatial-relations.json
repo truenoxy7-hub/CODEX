@@ -1,0 +1,215 @@
+{
+  "meta": {
+    "format": "TRACA_relacions_espacials",
+    "versio_contracte": "0.2.0",
+    "versio_instancia": "0.2.0",
+    "estat": "derivat_amb_punts_oberts",
+    "separacio_capes": {
+      "semantica_tactica": "referenciada_no_duplicada",
+      "relacions_espacials": "incloses",
+      "geometria_resolta": "no_inclosa",
+      "renderitzat": "no_generat"
+    }
+  },
+  "font_semantica": {
+    "exercici_id": "TR-UVOF-009",
+    "fitxers": ["corpus/uvof.semantic.json"],
+    "plantilla": "permuta_central_lateral_amb_tres_fluxos_i_dos_bancs",
+    "simetria": "reflectible"
+  },
+  "nodes": [
+    {"id": "CE", "classe": "participant", "referencia_semantica": "participants/CE", "rol": "primer_jugador_de_la_permuta_i_receptor_a_lateral", "estat_coneixement": "validat"},
+    {"id": "L", "classe": "participant", "referencia_semantica": "participants/L", "rol": "segon_jugador_de_la_permuta_i_receptor_al_centre", "estat_coneixement": "validat"},
+    {"id": "PV", "classe": "participant", "referencia_semantica": "participants/PV", "rol": "passador_de_L_i_receptor_despres_del_lliscament", "estat_coneixement": "validat"},
+    {"id": "EXT_1", "classe": "participant", "referencia_semantica": "participants/EXT_1", "rol": "primer_extrem_passador_de_CE_i_company_del_2x1", "estat_coneixement": "validat"},
+    {"id": "EXT_2", "classe": "participant", "referencia_semantica": "participants/EXT_2", "rol": "seguent_extrem_passador_de_PV", "estat_coneixement": "validat"},
+    {"id": "D1", "classe": "participant", "referencia_semantica": "participants/D1", "rol": "primer_defensor_del_2x1_exterior", "estat_coneixement": "validat"},
+    {"id": "BANC_EXTERIOR", "classe": "material", "referencia_semantica": "materials/BANC_EXTERIOR", "funcio": "substitut_oposicional_actiu_del_1x1_de_CE", "estat_coneixement": "condicio_tasca"},
+    {"id": "BANC_CENTRAL", "classe": "material", "referencia_semantica": "materials/BANC_CENTRAL", "funcio": "base_de_trepitjada_per_al_llancament_exterior_de_L", "estat_coneixement": "condicio_tasca"},
+    {"id": "CIL_RESTRINGIT", "classe": "material", "referencia_semantica": "materials/CIL_RESTRINGIT", "funcio": "referencia_de_lespai_restringit_del_pivot", "estat_coneixement": "provisional"},
+    {"id": "B1", "classe": "pilota", "referencia_semantica": "pilotes/B1", "funcio": "pilota_del_flux_L_EXT1_CE", "estat_coneixement": "validat"},
+    {"id": "B2", "classe": "pilota", "referencia_semantica": "pilotes/B2", "funcio": "pilota_del_flux_PV_L", "estat_coneixement": "validat"},
+    {"id": "B3", "classe": "pilota", "referencia_semantica": "pilotes/B3", "funcio": "pilota_del_flux_EXT2_PV", "estat_coneixement": "validat"},
+    {"id": "LINIA_FONS", "classe": "referencia_reglamentaria", "referencia_semantica": "linia_de_fons", "funcio": "limit_de_lespai_exterior", "estat_coneixement": "validat"},
+    {"id": "AREA_6M", "classe": "referencia_reglamentaria", "referencia_semantica": "area_de_6_metres", "funcio": "zona_de_finalitzacio", "estat_coneixement": "validat"},
+    {"id": "PORTERIA_ADVERSARIA", "classe": "referencia_reglamentaria", "referencia_semantica": "porteria_adversaria", "funcio": "orientacio_general_de_latac", "estat_coneixement": "validat"},
+    {"id": "EIX_CENTRAL", "classe": "referencia_funcional", "referencia_semantica": "centre_de_la_pista", "funcio": "posicio_central_de_L_despres_de_la_permuta", "estat_coneixement": "validat"}
+  ],
+  "espais": [
+    {
+      "id": "POS_LATERAL",
+      "classe": "posicio_funcional",
+      "nom_canonic": "posicio_lateral_despres_de_la_permuta",
+      "definicio": {"operador": "proper_a", "arguments": ["BANC_EXTERIOR"]},
+      "fases_actives": ["F1"],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "POS_CENTRAL",
+      "classe": "posicio_funcional",
+      "nom_canonic": "posicio_central_despres_de_la_permuta",
+      "definicio": {"operador": "proper_a", "arguments": ["EIX_CENTRAL"]},
+      "fases_actives": ["F1"],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "ESPAI_EXT",
+      "classe": "espai_finalitzacio_extrem",
+      "nom_canonic": "espai_finalitzacio_extrem",
+      "definicio": {"operador": "entre", "arguments": ["LINIA_FONS", "D1"]},
+      "restriccions": [{"operador": "interior_de", "arguments": ["AREA_6M"]}],
+      "contiguitats": [{"espai": "INT_12_BANC", "referent_compartit": "D1"}],
+      "fases_actives": ["F1", "F2"],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "INT_12_BANC",
+      "classe": "interval",
+      "nom_canonic": "interval_1-2_amb_segon_simulat_pel_banc",
+      "alies": ["carril_condicionat_pel_banc"],
+      "definicio": {"operador": "entre", "arguments": ["D1", "BANC_EXTERIOR"]},
+      "contiguitats": [{"espai": "ESPAI_EXT", "referent_compartit": "D1"}],
+      "fases_actives": ["F1"],
+      "estat_coneixement": "condicio_tasca"
+    },
+    {
+      "id": "ZONA_BANC_CENTRAL",
+      "classe": "posicio_funcional",
+      "nom_canonic": "zona_de_trepitjada_del_banc_central",
+      "definicio": {"operador": "proper_a", "arguments": ["BANC_CENTRAL"]},
+      "fases_actives": ["F1"],
+      "estat_coneixement": "condicio_tasca"
+    },
+    {
+      "id": "ESPAI_RESTRINGIT_PV",
+      "classe": "zona_resolucio",
+      "nom_canonic": "espai_restringit_de_finalitzacio_del_pivot",
+      "definicio": {"operador": "proper_a", "arguments": ["CIL_RESTRINGIT"]},
+      "restriccions": [{"operador": "interior_de", "arguments": ["AREA_6M"]}],
+      "fases_actives": ["F2"],
+      "estat_coneixement": "provisional"
+    },
+    {
+      "id": "ZONA_FINAL_6M",
+      "classe": "zona_resolucio",
+      "nom_canonic": "zona_de_finalitzacio_a_6_metres",
+      "definicio": {"operador": "interior_de", "arguments": ["AREA_6M"]},
+      "fases_actives": ["F1", "F2"],
+      "estat_coneixement": "validat"
+    }
+  ],
+  "estats": [
+    {
+      "id": "S_INICI",
+      "fase_ref": "F1",
+      "moment": "inici",
+      "relacions": [
+        {"subjecte": "L", "predicat": "orientat_cap_a", "objectes": ["EXT_1"], "caracter": "obligatori", "estat_coneixement": "validat"},
+        {"subjecte": "EXT_1", "predicat": "mante_amplitud_a", "objectes": ["ESPAI_EXT"], "caracter": "obligatori", "estat_coneixement": "validat"},
+        {"subjecte": "EXT_2", "predicat": "mante_amplitud_a", "objectes": ["ESPAI_EXT"], "caracter": "obligatori", "estat_coneixement": "validat"}
+      ]
+    },
+    {
+      "id": "S_PERMUTA",
+      "fase_ref": "F1",
+      "moment": "preparacio",
+      "relacions": [
+        {"subjecte": "CE", "predicat": "ocupa", "objectes": ["POS_LATERAL"], "caracter": "obligatori", "estat_coneixement": "validat"},
+        {"subjecte": "L", "predicat": "ocupa", "objectes": ["POS_CENTRAL"], "caracter": "obligatori", "estat_coneixement": "validat"}
+      ]
+    },
+    {
+      "id": "S_RECEPCIONS_POST_PERMUTA",
+      "fase_ref": "F1",
+      "moment": "recepcio",
+      "relacions": [
+        {"subjecte": "CE", "predicat": "disponible_per_rebre_a", "objectes": ["POS_LATERAL"], "caracter": "obligatori", "estat_coneixement": "validat"},
+        {"subjecte": "L", "predicat": "disponible_per_rebre_a", "objectes": ["POS_CENTRAL"], "caracter": "obligatori", "estat_coneixement": "validat"}
+      ]
+    },
+    {
+      "id": "S_1X1_CE",
+      "fase_ref": "F1",
+      "moment": "desenvolupament",
+      "relacions": [
+        {"subjecte": "CE", "predicat": "ataca", "objectes": ["INT_12_BANC"], "caracter": "obligatori", "estat_coneixement": "validat"},
+        {"subjecte": "CE", "predicat": "orientat_cap_a", "objectes": ["PORTERIA_ADVERSARIA"], "caracter": "obligatori", "estat_coneixement": "validat"}
+      ]
+    },
+    {
+      "id": "S_2X1_EXT",
+      "fase_ref": "F1",
+      "moment": "superacio",
+      "relacions": [
+        {"subjecte": "CE", "predicat": "relacionat_en_2x1_amb", "objectes": ["EXT_1", "D1"], "caracter": "obligatori", "estat_coneixement": "validat"},
+        {"subjecte": "EXT_1", "predicat": "disponible_per_rebre_a", "objectes": ["ESPAI_EXT"], "caracter": "disponible", "estat_coneixement": "validat"}
+      ]
+    },
+    {
+      "id": "S_FINAL_L",
+      "fase_ref": "F1",
+      "moment": "resolucio",
+      "relacions": [
+        {"subjecte": "L", "predicat": "ocupa", "objectes": ["ZONA_BANC_CENTRAL"], "caracter": "obligatori", "estat_coneixement": "condicio_tasca"},
+        {"subjecte": "L", "predicat": "orientat_cap_a", "objectes": ["PORTERIA_ADVERSARIA"], "caracter": "obligatori", "estat_coneixement": "validat"}
+      ]
+    },
+    {
+      "id": "S_LLISCAMENT_PV",
+      "fase_ref": "F2",
+      "moment": "resolucio",
+      "relacions": [
+        {"subjecte": "PV", "predicat": "disponible_per_rebre_a", "objectes": ["ESPAI_RESTRINGIT_PV"], "caracter": "obligatori", "estat_coneixement": "validat"},
+        {"subjecte": "PV", "predicat": "ataca", "objectes": ["ZONA_FINAL_6M"], "caracter": "obligatori", "estat_coneixement": "condicio_tasca"}
+      ]
+    }
+  ],
+  "transicions": [
+    {"id": "T_CE_PERMUTA", "fase_ref": "F1", "ordre": 1, "trajectoria_id": "PERMUTA_CE_L", "actor": "CE", "tipus": "ajust_sense_pilota", "des_de": "POS_CENTRAL", "cap_a": "POS_LATERAL", "accio_semantica_ref": "fases/F1/accions/1", "qualificadors": ["permuta", "primer_jugador", "canvia_a_la_posicio_de_L"], "estat_coneixement": "validat"},
+    {"id": "T_CE_REP_EXT", "fase_ref": "F1", "ordre": 2, "trajectoria_id": "PERMUTA_CE_L", "actor": "CE", "tipus": "recepcio", "des_de": "POS_LATERAL", "cap_a": "POS_LATERAL", "accio_semantica_ref": "fases/F1/accions/2", "qualificadors": ["rep_de_EXT_1_despres_de_la_permuta"], "estat_coneixement": "validat"},
+    {"id": "T_CE_1X1", "fase_ref": "F1", "ordre": 3, "trajectoria_id": "PERMUTA_CE_L", "actor": "CE", "tipus": "atac_espai", "des_de": "POS_LATERAL", "cap_a": "INT_12_BANC", "referencia_oposicional": "BANC_EXTERIOR", "accio_semantica_ref": "fases/F1/accions/4", "estat_coneixement": "validat"},
+    {"id": "T_CE_RESOL", "fase_ref": "F1", "ordre": 4, "trajectoria_id": "PERMUTA_CE_L", "actor": "CE", "tipus": "resolucio", "des_de": "INT_12_BANC", "cap_a": "ZONA_FINAL_6M", "referencia_oposicional": "D1", "accio_semantica_ref": "fases/F1/accions/5", "estat_coneixement": "validat"},
+    {"id": "T_L_PERMUTA", "fase_ref": "F1", "ordre": 1, "trajectoria_id": "FINAL_L_CENTRAL", "actor": "L", "tipus": "ajust_sense_pilota", "des_de": "POS_LATERAL", "cap_a": "POS_CENTRAL", "accio_semantica_ref": "fases/F1/accions/1", "qualificadors": ["permuta", "segon_jugador", "ocupa_lespai_de_CE"], "estat_coneixement": "validat"},
+    {"id": "T_L_REP_PV", "fase_ref": "F1", "ordre": 2, "trajectoria_id": "FINAL_L_CENTRAL", "actor": "L", "tipus": "recepcio", "des_de": "POS_CENTRAL", "cap_a": "ZONA_BANC_CENTRAL", "accio_semantica_ref": "fases/F1/accions/3", "qualificadors": ["rep_de_PV"], "estat_coneixement": "validat"},
+    {"id": "T_L_LLANCAMENT", "fase_ref": "F1", "ordre": 3, "trajectoria_id": "FINAL_L_CENTRAL", "actor": "L", "tipus": "resolucio", "des_de": "ZONA_BANC_CENTRAL", "cap_a": "ZONA_FINAL_6M", "referencia_oposicional": "BANC_CENTRAL", "qualificadors": ["trepitja_el_banc_central", "llancament_exterior"], "estat_coneixement": "validat"},
+    {"id": "T_PV_LLISCA", "fase_ref": "F2", "ordre": 1, "trajectoria_id": "LLISCAMENT_PV", "actor": "PV", "tipus": "ajust_sense_pilota", "cap_a": "ESPAI_RESTRINGIT_PV", "accio_semantica_ref": "fases/F2/accions/1", "estat_coneixement": "validat"},
+    {"id": "T_PV_FINAL", "fase_ref": "F2", "ordre": 2, "trajectoria_id": "LLISCAMENT_PV", "actor": "PV", "tipus": "resolucio", "des_de": "ESPAI_RESTRINGIT_PV", "cap_a": "ZONA_FINAL_6M", "accio_semantica_ref": "fases/F2/accions/2", "qualificadors": ["finalitzacio_des_de_lespai_restringit"], "estat_coneixement": "validat"}
+  ],
+  "fluxos_pilota": [
+    {"id": "FP_L_EXT1", "fase_ref": "F1", "trajectoria_id": "PERMUTA_CE_L", "ordre": 1, "pilota_id": "B1", "posseidor_inicial": "L", "accio": "passada_inicial", "posseidor_final": "EXT_1", "estat_coneixement": "validat"},
+    {"id": "FP_EXT1_CE", "fase_ref": "F1", "trajectoria_id": "PERMUTA_CE_L", "ordre": 2, "pilota_id": "B1", "posseidor_inicial": "EXT_1", "accio": "passada_encreuament", "posseidor_final": "CE", "qualificadors": ["recepcio_despres_de_la_permuta"], "estat_coneixement": "validat"},
+    {"id": "FP_PV_L", "fase_ref": "F1", "trajectoria_id": "FINAL_L_CENTRAL", "ordre": 1, "pilota_id": "B2", "posseidor_inicial": "PV", "accio": "passada", "posseidor_final": "L", "qualificadors": ["recepcio_a_posicio_central"], "estat_coneixement": "validat"},
+    {"id": "FP_EXT2_PV", "fase_ref": "F2", "trajectoria_id": "LLISCAMENT_PV", "ordre": 1, "pilota_id": "B3", "posseidor_inicial": "EXT_2", "accio": "passada", "posseidor_final": "PV", "qualificadors": ["seguent_extrem_de_la_filera"], "estat_coneixement": "validat"}
+  ],
+  "branques_decisionals": [
+    {
+      "id": "BR_2X1_EXT",
+      "fase_ref": "F1",
+      "decisio_semantica_ref": "fases/F1/decisions/D_2X1_EXT",
+      "caracter": "disponible",
+      "resolucio": "no_predeterminada",
+      "alternatives": [
+        {"id": "A_CE_FINALITZA", "condicio": "D1_no_tanca_CE", "efectes_espacials": [
+          {"subjecte": "CE", "predicat": "ataca", "objectes": ["ZONA_FINAL_6M"], "caracter": "disponible", "estat_coneixement": "validat"}
+        ]},
+        {"id": "A_CE_PASSA_EXT1", "condicio": "D1_tanca_i_queda_compromes", "efectes_espacials": [
+          {"subjecte": "EXT_1", "predicat": "disponible_per_rebre_a", "objectes": ["ESPAI_EXT"], "caracter": "obligatori", "estat_coneixement": "validat"},
+          {"subjecte": "EXT_1", "predicat": "salta_cap_a", "objectes": ["PORTERIA_ADVERSARIA"], "caracter": "obligatori", "estat_coneixement": "validat"}
+        ]}
+      ]
+    }
+  ],
+  "invariants": [
+    {"code": "SP-UVOF009-NO-COORD", "operador": "sense_coordenades", "subjectes": ["CE", "L", "PV", "BANC_EXTERIOR", "BANC_CENTRAL"], "ambit": "document", "missatge": "La permuta, els bancs i els fluxos es conserven sense coordenades."},
+    {"code": "SP-UVOF009-ID", "operador": "identitat_persistent", "subjectes": ["CE", "L", "PV", "EXT_1", "EXT_2", "D1"], "ambit": "F1-F2", "missatge": "CE i L canvien de posició sense perdre la identitat inicial."},
+    {"code": "SP-UVOF009-DEC", "operador": "decisio_no_predeterminada", "subjectes": ["CE", "EXT_1", "D1"], "ambit": "BR_2X1_EXT", "missatge": "La resolució del 2x1 contra D1 depèn de la seva resposta."},
+    {"code": "SP-UVOF009-FLUX", "operador": "flux_pilota_coherent", "subjectes": ["B1", "B2", "B3", "L", "EXT_1", "CE", "PV", "EXT_2"], "ambit": "F1-F2", "missatge": "Els tres fluxos comencen amb L, PV i EXT_2 i no es barregen."},
+    {"code": "SP-UVOF009-PERMUTA", "operador": "transicio_connectada", "subjectes": ["CE", "L"], "ambit": "F1", "missatge": "CE va a lateral i rep d'EXT_1; L va al centre i rep de PV."},
+    {"code": "SP-UVOF009-AMPLITUD", "operador": "mantenir_amplitud", "subjectes": ["EXT_1", "EXT_2"], "ambit": "F1-F2", "missatge": "Els extrems conserven amplitud i ordre de filera."}
+  ],
+  "governanca": {
+    "autoritat": "semantica_validada_per_entrenador",
+    "politica_inferencia": "tota_inferencia_no_validada_es_provisional",
+    "sortida_permesa": "graf_relacional_sense_coordenades"
+  }
+}

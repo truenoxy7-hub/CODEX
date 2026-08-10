@@ -854,17 +854,159 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
             }
         )
 
+    uvof_007 = _corpus_exercise(document, "TR-UVOF-007")
+    defenders_007 = {
+        participant.get("id")
+        for participant in uvof_007.get("participants", [])
+        if participant.get("equip") == "defensa"
+    }
+    materials_007 = {
+        material.get("id"): material.get("funcio")
+        for material in uvof_007.get("materials", [])
+    }
+    files_007 = {
+        file.get("id"): file.get("ordre_activacio")
+        for file in uvof_007.get("files", [])
+    }
+    actions_007 = {
+        action.get("accio")
+        for phase in uvof_007.get("fases", [])
+        for action in phase.get("accions", [])
+    }
+    if (
+        defenders_007 != {"D1", "D3"}
+        or materials_007
+        != {"CIL_D2": "substitut_actiu_del_segon_defensor"}
+        or files_007.get("FILA_EXTREMS") != ["EXT_1", "EXT_2"]
+        or "jugar_2x1_amb_central_contra_D3" not in actions_007
+        or "jugar_2x1_amb_lateral_que_recupera_contra_D1" not in actions_007
+    ):
+        errors.append(
+            {
+                "code": "UVOF007_ORDERED_2X1",
+                "path": "TR-UVOF-007",
+                "message": (
+                    "TR-UVOF-007 ha d'activar EXT_1 amb CE contra D3 i "
+                    "després EXT_2 amb L contra D1, amb CIL_D2 com a segon "
+                    "defensor simulat."
+                ),
+            }
+        )
+
+    uvof_008 = _corpus_exercise(document, "TR-UVOF-008")
+    attackers_008 = {
+        participant.get("id")
+        for participant in uvof_008.get("participants", [])
+        if participant.get("equip") == "atac"
+    }
+    defenders_008 = {
+        participant.get("id")
+        for participant in uvof_008.get("participants", [])
+        if participant.get("equip") == "defensa"
+    }
+    expected_attackers_008 = {
+        "EXT_LOCAL",
+        "L_LOCAL",
+        "CE",
+        "L_OPOSAT",
+        "EXT_OPOSAT",
+        "PV",
+    }
+    expected_defenders_008 = {
+        "D1_LOCAL",
+        "D2_LOCAL",
+        "D3_CENTRAL",
+        "D2_OPOSAT",
+        "D1_OPOSAT",
+        "DAV",
+    }
+    actions_008 = {
+        (action.get("actor"), action.get("accio"))
+        for phase in uvof_008.get("fases", [])
+        for action in phase.get("accions", [])
+    }
+    if (
+        attackers_008 != expected_attackers_008
+        or defenders_008 != expected_defenders_008
+        or uvof_008.get("tipus_exercici") != "situacio_partit"
+        or uvof_008.get("organitzacio", {}).get("relacio") != "6x6"
+        or uvof_008.get("organitzacio", {}).get("defensa") != "5:1"
+        or (
+            "CE",
+            "mobilitzar_avancat_cap_a_la_mateixa_zona_del_pivot",
+        )
+        not in actions_008
+        or ("L_OPOSAT", "iniciar_1x1_a_lespai_afavorit") not in actions_008
+    ):
+        errors.append(
+            {
+                "code": "UVOF008_FULL_6X6_51",
+                "path": "TR-UVOF-008",
+                "message": (
+                    "TR-UVOF-008 ha de conservar el 6x6 complet contra 5:1, "
+                    "amb CE concentrant PV i DAV per alliberar L_OPOSAT."
+                ),
+            }
+        )
+
     uvof_009 = _corpus_exercise(document, "TR-UVOF-009")
     balls_009 = {
         ball.get("id"): ball.get("posseidor_inicial")
         for ball in uvof_009.get("pilotes", [])
     }
-    if balls_009 != {"B1": "PV", "B2": "EXT_2"}:
+    flows_009 = {
+        (
+            flow.get("trajectoria_id"),
+            flow.get("ordre"),
+            flow.get("pilota_id"),
+            flow.get("posseidor_inicial"),
+            flow.get("posseidor_final"),
+            flow.get("accio"),
+        )
+        for flow in _corpus_ball_flows(uvof_009)
+    }
+    expected_flows_009 = {
+        ("PERMUTA_CE_L", 1, "B1", "L", "EXT_1", "passada_inicial"),
+        ("PERMUTA_CE_L", 2, "B1", "EXT_1", "CE", "passada_post_permuta"),
+        ("FINAL_L_CENTRAL", 1, "B2", "PV", "L", "passada"),
+        ("LLISCAMENT_PV", 1, "B3", "EXT_2", "PV", "passada"),
+    }
+    materials_009 = {
+        material.get("id"): material.get("funcio")
+        for material in uvof_009.get("materials", [])
+    }
+    required_materials_009 = {
+        "BANC_EXTERIOR": "substitut_oposicional_actiu_del_1x1_de_CE",
+        "BANC_CENTRAL": "base_de_trepitjada_per_al_llancament_exterior_de_L",
+    }
+    actions_009 = {
+        action.get("accio")
+        for phase in uvof_009.get("fases", [])
+        for action in phase.get("accions", [])
+    }
+    required_actions_009 = {
+        "ocupar_posicio_lateral_i_rebre_de_EXT_1",
+        "ocupar_posicio_central_rebre_de_PV_i_llancar_trepitjant_BANC_CENTRAL",
+        "1x1_contra_BANC_EXTERIOR",
+        "jugar_2x1_amb_EXT_1_contra_D1",
+        "passar_al_pivot_des_de_la_filera",
+        "lliscar",
+    }
+    if (
+        balls_009 != {"B1": "L", "B2": "PV", "B3": "EXT_2"}
+        or flows_009 != expected_flows_009
+        or not required_materials_009.items() <= materials_009.items()
+        or not required_actions_009 <= actions_009
+    ):
         errors.append(
             {
-                "code": "UVOF009_TWO_BALLS",
-                "path": "TR-UVOF-009/pilotes",
-                "message": "TR-UVOF-009 ha de declarar B1 amb PV i B2 amb EXT_2.",
+                "code": "UVOF009_ORDERED_THREE_FLOWS",
+                "path": "TR-UVOF-009",
+                "message": (
+                    "TR-UVOF-009 ha de conservar L-EXT_1-CE, PV-L i "
+                    "EXT_2-PV com a tres fluxos ordenats, amb un banc per al "
+                    "1x1 de CE i un banc central per al llançament de L."
+                ),
             }
         )
 

@@ -217,6 +217,37 @@ La sisena instància representa:
 - retorn al jugador que ocupa temporalment el centre;
 - canvi de banda preferent i no obligatori.
 
+## Instància TR-UVOF-007
+
+La setena instància representa:
+
+- `CIL_D2` com a substitut actiu del segon defensor;
+- `EXT_1` activat primer per resoldre amb `CE` contra `D3`;
+- recuperació de `L` abans de la segona activació;
+- `EXT_2` activat després per resoldre amb `L` contra `D1`;
+- identitats i decisions separades per als dos extrems de la fila.
+
+## Instància TR-UVOF-008
+
+La vuitena instància representa:
+
+- els sis atacants i els sis defensors d'un `5:1` complet;
+- `CE` col·locant `PV` i mobilitzant `DAV` cap a la mateixa zona;
+- `DAV` sense intervenir sobre el pivot;
+- l'espai afavorit per al 1x1 de `L_OPOSAT`;
+- finalització, continuïtat o encreuament com a alternatives obertes.
+
+## Instància TR-UVOF-009
+
+La novena instància representa:
+
+- permuta central–lateral amb `CE` a lateral i `L` al centre;
+- flux `B1`: `L → EXT_1 → CE`;
+- flux `B2`: `PV → L`, amb llançament trepitjant `BANC_CENTRAL`;
+- 1x1 de `CE` contra `BANC_EXTERIOR` i 2x1 amb `EXT_1` contra `D1`;
+- flux `B3`: `EXT_2 → PV`, després del lliscament del pivot;
+- el cilindre de l'espai restringit com a única referència provisional.
+
 ## Validacions executables
 
 El validador comprova:
@@ -254,10 +285,10 @@ Sortida futura:
 
 ## Abast i pendents de v0.2
 
-La versió 0.2 valida l'arquitectura amb `TR-UVOF-001`–`TR-UVOF-006`; encara no
+La versió 0.2 valida l'arquitectura amb `TR-UVOF-001`–`TR-UVOF-009`; encara no
 és un motor. Abans de congelar-ne el vocabulari cal:
 
-- provar-lo amb exercicis de permuta i situació de partit;
+- provar-lo amb més permutes i opcions de resolució tancades;
 - definir com canvien els intervals quan els defensors es desplacen entre
   estats;
 - especificar la normalització de costat i la reflexió de les dues bandes;

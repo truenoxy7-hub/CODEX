@@ -546,9 +546,51 @@ def test_uvof003_rejects_disconnected_change_of_side_flow(
                 "relational_error_count": 0,
             },
         ),
+        (
+            "TR-UVOF-007",
+            {
+                "node_count": 11,
+                "space_count": 5,
+                "state_count": 4,
+                "transition_count": 5,
+                "ball_flow_count": 0,
+                "branch_count": 2,
+                "error_count": 0,
+                "structural_error_count": 0,
+                "relational_error_count": 0,
+            },
+        ),
+        (
+            "TR-UVOF-008",
+            {
+                "node_count": 16,
+                "space_count": 7,
+                "state_count": 4,
+                "transition_count": 6,
+                "ball_flow_count": 0,
+                "branch_count": 1,
+                "error_count": 0,
+                "structural_error_count": 0,
+                "relational_error_count": 0,
+            },
+        ),
+        (
+            "TR-UVOF-009",
+            {
+                "node_count": 16,
+                "space_count": 7,
+                "state_count": 7,
+                "transition_count": 9,
+                "ball_flow_count": 4,
+                "branch_count": 1,
+                "error_count": 0,
+                "structural_error_count": 0,
+                "relational_error_count": 0,
+            },
+        ),
     ],
 )
-def test_uvof004_to_006_spatial_contracts_pass(
+def test_uvof004_to_009_spatial_contracts_pass(
     exercise_id,
     expected_summary,
     spatial_schema,
@@ -668,3 +710,98 @@ def test_uvof006_keeps_both_cylinders_as_defender_handicaps() -> None:
         for defender_id in ("D1_LOCAL", "D2_LOCAL", "D3_LOCAL", "D3_OPOSAT")
     )
     assert switch_branch["caracter"] == "preferent"
+
+
+def test_uvof007_keeps_extreme_order_and_defensive_references() -> None:
+    document = json.loads(
+        (
+            ROOT / "exercises" / "TR-UVOF-007" / "spatial-relations.json"
+        ).read_text(encoding="utf-8")
+    )
+    relations = [
+        relation
+        for state in document["estats"]
+        for relation in state["relacions"]
+        if relation["predicat"] == "relacionat_en_2x1_amb"
+    ]
+    cylinder = next(node for node in document["nodes"] if node["id"] == "CIL_D2")
+
+    assert cylinder["classe"] == "material"
+    assert cylinder["funcio"] == "substitut_oposicional_actiu_del_segon_defensor"
+    assert {
+        (relation["subjecte"], tuple(relation["objectes"]))
+        for relation in relations
+    } == {
+        ("EXT_1", ("CE", "D3")),
+        ("EXT_2", ("L", "D1")),
+    }
+
+
+def test_uvof008_represents_full_51_and_defensive_concentration() -> None:
+    document = json.loads(
+        (
+            ROOT / "exercises" / "TR-UVOF-008" / "spatial-relations.json"
+        ).read_text(encoding="utf-8")
+    )
+    participants = {
+        node["id"]
+        for node in document["nodes"]
+        if node["classe"] == "participant"
+    }
+    concentration = next(
+        state for state in document["estats"] if state["id"] == "S_CONCENTRACIO"
+    )
+
+    assert participants == {
+        "EXT_LOCAL",
+        "L_LOCAL",
+        "CE",
+        "L_OPOSAT",
+        "EXT_OPOSAT",
+        "PV",
+        "D1_LOCAL",
+        "D2_LOCAL",
+        "D3_CENTRAL",
+        "D2_OPOSAT",
+        "D1_OPOSAT",
+        "DAV",
+    }
+    assert any(
+        relation["subjecte"] == "DAV"
+        and relation["predicat"] == "proper_a"
+        and relation["objectes"] == ["ZONA_CONCENTRACIO", "PV"]
+        for relation in concentration["relacions"]
+    )
+
+
+def test_uvof009_preserves_permutation_positions_and_three_ball_flows() -> None:
+    document = json.loads(
+        (
+            ROOT / "exercises" / "TR-UVOF-009" / "spatial-relations.json"
+        ).read_text(encoding="utf-8")
+    )
+    permutation = next(
+        state for state in document["estats"] if state["id"] == "S_PERMUTA"
+    )
+    positions = {
+        relation["subjecte"]: relation["objectes"][0]
+        for relation in permutation["relacions"]
+    }
+    flows = {
+        (
+            flow["trajectoria_id"],
+            flow["ordre"],
+            flow["pilota_id"],
+            flow["posseidor_inicial"],
+            flow["posseidor_final"],
+        )
+        for flow in document["fluxos_pilota"]
+    }
+
+    assert positions == {"CE": "POS_LATERAL", "L": "POS_CENTRAL"}
+    assert flows == {
+        ("PERMUTA_CE_L", 1, "B1", "L", "EXT_1"),
+        ("PERMUTA_CE_L", 2, "B1", "EXT_1", "CE"),
+        ("FINAL_L_CENTRAL", 1, "B2", "PV", "L"),
+        ("LLISCAMENT_PV", 1, "B3", "EXT_2", "PV"),
+    }

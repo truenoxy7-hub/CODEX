@@ -301,6 +301,16 @@ Quan una tasca utilitza més d'una pilota, cada pilota ha de declarar el seu
 posseïdor inicial i el seu flux. No es pot heretar automàticament la possessió
 d'una acció anterior ni inferir el passador quan la font no l'especifica.
 
+Quan diverses accions es desencadenen després d'una permuta, l'ordre de les
+passades i les posicions temporals s'han de conservar separadament. Una mateixa
+permuta pot activar simultàniament el receptor que s'obre, el jugador que ocupa
+el centre i una continuïtat posterior del pivot, sense fusionar les pilotes ni
+canviar la identitat inicial dels jugadors.
+
+Dos materials del mateix tipus no comparteixen automàticament funció. Un banc
+pot substituir l'oposició d'un 1x1 i un altre pot ser només una base de
+trepitjada per a un llançament; el model els ha d'identificar per separat.
+
 ## Coneixement encara obert
 
 El vocabulari continuarà creixent amb nous exercicis. Encara cal aprofundir en:
