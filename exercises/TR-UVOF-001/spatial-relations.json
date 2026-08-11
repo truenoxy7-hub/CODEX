@@ -840,16 +840,16 @@
   },
   "semantic_source": {
     "exercise_id": "TR-UVOF-001",
-    "status": "conflict",
+    "status": "canonical",
     "candidates": [
       {
         "id": "detailed",
         "artifact": "exercises/TR-UVOF-001/semantic.json",
         "selector": "",
         "version": "1.1.0",
-        "digest": "sha256:99cfab277c29d5ed70fb18b68b08749a5e533c532d3a30ee8b8c45d3811cef12",
-        "canonical": false,
-        "validation_status": "partially_validated"
+        "digest": "sha256:a4790148885aff93a5c43def79ac1d9edd57be5944602a8984b2025a78f328af",
+        "canonical": true,
+        "validation_status": "validated"
       },
       {
         "id": "corpus",
@@ -860,8 +860,7 @@
         "canonical": false,
         "validation_status": "validated"
       }
-    ],
-    "conflict_code": "SEMANTIC_SOURCE_CONFLICT"
+    ]
   },
   "fluxos_pilota": [
     {
@@ -1387,7 +1386,8 @@
       "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/materials/3",
       "instance_function": "referencia_posicional_passiva",
       "capabilities": [
-        "instance_function:referencia_posicional_passiva"
+        "instance_function:referencia_posicional_passiva",
+        "delimita_espai:SA2"
       ],
       "knowledge_status": "validat"
     }
@@ -1661,17 +1661,7 @@
     "identity_mapping": [],
     "required_for_preflight": false
   },
-  "unresolved_items": [
-    {
-      "code": "SEMANTIC_SOURCE_CONFLICT",
-      "impact": "blocked",
-      "entity_refs": [
-        "TR-UVOF-001"
-      ],
-      "message": "El model detallat i el corpus discrepen; no hi ha mapping aprovat.",
-      "requires_trainer": true
-    }
-  ],
+  "unresolved_items": [],
   "compatibility": {
     "migrated_from": "0.2.0",
     "v02_status": "historical_read_only",
@@ -1681,56 +1671,75 @@
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/participants/0",
       "kind": "participant",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:node:CE"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/participants/1",
       "kind": "participant",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:node:L"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/participants/2",
       "kind": "participant",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:node:PV"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/participants/3",
       "kind": "participant",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:node:EXT"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/participants/4",
       "kind": "participant",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:node:D_Z2"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/participants/5",
       "kind": "participant",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:node:D_Z1"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/materials/0",
       "kind": "material",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:node:BANC"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/materials/1",
       "kind": "material",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:node:C1",
+        "traca:TR-UVOF-001:node:C2"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/materials/2",
       "kind": "material",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:node:C3"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/pilotes/0",
@@ -1751,20 +1760,26 @@
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/0/accions/0",
       "kind": "action",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:transition:T_SA1_RECEPCIO"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/0/accions/1",
       "kind": "action",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:transition:T_SA1_FINTA"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/0/accions/2",
       "kind": "action",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:transition:T_SA1_FINTA"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/0/fluxos_pilota/0",
@@ -1777,38 +1792,50 @@
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/0/decisions/0",
       "kind": "decision",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:branch:BRANCA_SA1_2X1_PIVOT"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/0/decisions/0/opcions/0",
       "kind": "decision_option",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:alternative:SA1_FINALITZA_L"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/0/decisions/0/opcions/1",
       "kind": "decision_option",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:alternative:SA1_PASSADA_PV"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/1/accions/0",
       "kind": "action",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:transition:T_SA2_RECUPERACIO"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/1/accions/1",
       "kind": "action",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:state:SA2_RECEPCIO"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/1/accions/2",
       "kind": "action",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:transition:T_SA2_ATAC"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/1/fluxos_pilota/0",
@@ -1821,20 +1848,26 @@
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/1/decisions/0",
       "kind": "decision",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:branch:BRANCA_SA2_2X1_EXTREM"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/1/decisions/0/opcions/0",
       "kind": "decision_option",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:alternative:SA2_FINALITZA_L"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/1/decisions/0/opcions/1",
       "kind": "decision_option",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-001:alternative:SA2_PASSADA_EXT"
+      ]
     },
     {
       "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/0",
@@ -1973,6 +2006,6 @@
   ],
   "integrity": {
     "algorithm": "sha256",
-    "spatial_digest": "sha256:d1ab701c77b663b0ae65a9844cd222f2e1eed54dc08f4cac1717f5807650e612"
+    "spatial_digest": "sha256:f47663894e7e128257a8b0f8bbac358846ee483481839adc69246cb190bd91fc"
   }
 }

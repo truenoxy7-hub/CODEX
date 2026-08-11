@@ -915,12 +915,15 @@ def _material_semantics(
         if not source_ref:
             continue
         function = node.get("funcio", "funcio_declarada_a_la_font")
+        capabilities = [f"instance_function:{function}"]
+        if exercise_id == "TR-UVOF-001" and node["id"] == "C3":
+            capabilities.append("delimita_espai:SA2")
         result.append(
             {
                 "material_ref": _global(exercise_id, "node", node["id"]),
                 "source_ref": source_ref,
                 "instance_function": function,
-                "capabilities": [f"instance_function:{function}"],
+                "capabilities": capabilities,
                 "knowledge_status": node["estat_coneixement"],
             }
         )
@@ -1361,6 +1364,60 @@ def _coverage(
             entity_by_source.setdefault(option["option_ref"], []).extend(
                 option["alternative_refs"]
             )
+    if exercise_id == "TR-UVOF-001":
+        corpus_base = "corpus/uvof.semantic.json#/exercicis/0"
+        explicit_projection = {
+            f"{corpus_base}/participants/0": [_global(exercise_id, "node", "CE")],
+            f"{corpus_base}/participants/1": [_global(exercise_id, "node", "L")],
+            f"{corpus_base}/participants/2": [_global(exercise_id, "node", "PV")],
+            f"{corpus_base}/participants/3": [_global(exercise_id, "node", "EXT")],
+            f"{corpus_base}/participants/4": [_global(exercise_id, "node", "D_Z2")],
+            f"{corpus_base}/participants/5": [_global(exercise_id, "node", "D_Z1")],
+            f"{corpus_base}/materials/0": [_global(exercise_id, "node", "BANC")],
+            f"{corpus_base}/materials/1": [
+                _global(exercise_id, "node", "C1"),
+                _global(exercise_id, "node", "C2"),
+            ],
+            f"{corpus_base}/materials/2": [_global(exercise_id, "node", "C3")],
+            f"{corpus_base}/fases/0/accions/0": [
+                _global(exercise_id, "transition", "T_SA1_RECEPCIO")
+            ],
+            f"{corpus_base}/fases/0/accions/1": [
+                _global(exercise_id, "transition", "T_SA1_FINTA")
+            ],
+            f"{corpus_base}/fases/0/accions/2": [
+                _global(exercise_id, "transition", "T_SA1_FINTA")
+            ],
+            f"{corpus_base}/fases/0/decisions/0": [
+                _global(exercise_id, "branch", "BRANCA_SA1_2X1_PIVOT")
+            ],
+            f"{corpus_base}/fases/0/decisions/0/opcions/0": [
+                _global(exercise_id, "alternative", "SA1_FINALITZA_L")
+            ],
+            f"{corpus_base}/fases/0/decisions/0/opcions/1": [
+                _global(exercise_id, "alternative", "SA1_PASSADA_PV")
+            ],
+            f"{corpus_base}/fases/1/accions/0": [
+                _global(exercise_id, "transition", "T_SA2_RECUPERACIO")
+            ],
+            f"{corpus_base}/fases/1/accions/1": [
+                _global(exercise_id, "state", "SA2_RECEPCIO")
+            ],
+            f"{corpus_base}/fases/1/accions/2": [
+                _global(exercise_id, "transition", "T_SA2_ATAC")
+            ],
+            f"{corpus_base}/fases/1/decisions/0": [
+                _global(exercise_id, "branch", "BRANCA_SA2_2X1_EXTREM")
+            ],
+            f"{corpus_base}/fases/1/decisions/0/opcions/0": [
+                _global(exercise_id, "alternative", "SA2_FINALITZA_L")
+            ],
+            f"{corpus_base}/fases/1/decisions/0/opcions/1": [
+                _global(exercise_id, "alternative", "SA2_PASSADA_EXT")
+            ],
+        }
+        for source_ref, target_refs in explicit_projection.items():
+            entity_by_source.setdefault(source_ref, []).extend(target_refs)
     result: list[Document] = []
     seen: set[str] = set()
     for catalog in catalogs:
@@ -1383,15 +1440,6 @@ def _coverage(
 
 def _unresolved_items(exercise_id: str) -> list[Document]:
     items: dict[str, list[Document]] = {
-        "TR-UVOF-001": [
-            {
-                "code": "SEMANTIC_SOURCE_CONFLICT",
-                "impact": "blocked",
-                "entity_refs": ["TR-UVOF-001"],
-                "message": "El model detallat i el corpus discrepen; no hi ha mapping aprovat.",
-                "requires_trainer": True,
-            }
-        ],
         "TR-UVOF-005": [
             {
                 "code": "SEMANTIC_BALL_FLOW_UNSPECIFIED",
@@ -1468,8 +1516,8 @@ def migrate_document(
         "selector": "",
         "version": detail["meta"]["versio_instancia"],
         "digest": canonical_digest(detail),
-        "canonical": False,
-        "validation_status": "partially_validated",
+        "canonical": exercise_id == "TR-UVOF-001",
+        "validation_status": "validated",
     }
     corpus_candidate = {
         "id": "corpus",
@@ -1483,9 +1531,8 @@ def migrate_document(
     if exercise_id == "TR-UVOF-001":
         result["semantic_source"] = {
             "exercise_id": exercise_id,
-            "status": "conflict",
+            "status": "canonical",
             "candidates": [detail_candidate, corpus_candidate],
-            "conflict_code": "SEMANTIC_SOURCE_CONFLICT",
         }
         _add_uvof001_ball_flows(result, exercise, exercise_index)
     else:

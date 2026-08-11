@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = ROOT / "schema" / "traca.spatial-relations.schema.v0.3.json"
 
 EXPECTED_STATUSES = {
-    "TR-UVOF-001": "blocked",
+    "TR-UVOF-001": "ready",
     "TR-UVOF-002": "ready",
     "TR-UVOF-003": "ready",
     "TR-UVOF-004": "ready",
@@ -128,20 +128,51 @@ def test_canonical_source_requires_exactly_one_candidate() -> None:
 
     assert "SEMANTIC_CANONICAL_SOURCE_CARDINALITY" in _codes(result)
 
+    conflict = _load("TR-UVOF-001")
+    conflict["semantic_source"]["status"] = "conflict"
+    conflict["semantic_source"]["conflict_code"] = "SEMANTIC_SOURCE_CONFLICT"
+    for candidate in conflict["semantic_source"]["candidates"]:
+        candidate["canonical"] = False
+    _refresh_digest(conflict)
 
-def test_uvof001_preserves_source_conflict_and_both_ball_flows() -> None:
+    conflict_result = preflight_document(conflict)
+    assert conflict_result["status"] == "blocked"
+    assert "SEMANTIC_SOURCE_CONFLICT" in _codes(conflict_result)
+
+
+def test_uvof001_uses_detailed_source_with_mapped_corpus_projection() -> None:
     document = _load("TR-UVOF-001")
     result = preflight_document(document)
 
-    assert result["status"] == "blocked"
-    assert "SEMANTIC_SOURCE_CONFLICT" in _codes(result)
-    assert {item["canonical"] for item in document["semantic_source"]["candidates"]} == {False}
+    assert result["status"] == "ready"
+    assert "SEMANTIC_SOURCE_CONFLICT" not in _codes(result)
+    candidates = {
+        item["id"]: item for item in document["semantic_source"]["candidates"]
+    }
+    assert candidates["detailed"]["canonical"] is True
+    assert candidates["corpus"]["canonical"] is False
     assert {
         node["id"] for node in document["nodes"] if node["classe"] == "pilota"
     } >= {"B1", "B2"}
     assert {
         flow["pilota_id"] for flow in document["fluxos_pilota"]
     } == {"B1", "B2"}
+    coverage = {item["source_ref"]: item for item in document["semantic_coverage"]}
+    assert coverage["corpus/uvof.semantic.json#/exercicis/0/participants/4"][
+        "spatial_refs"
+    ] == ["traca:TR-UVOF-001:node:D_Z2"]
+    assert coverage["corpus/uvof.semantic.json#/exercicis/0/participants/5"][
+        "spatial_refs"
+    ] == ["traca:TR-UVOF-001:node:D_Z1"]
+    assert coverage["corpus/uvof.semantic.json#/exercicis/0/materials/1"][
+        "spatial_refs"
+    ] == ["traca:TR-UVOF-001:node:C1", "traca:TR-UVOF-001:node:C2"]
+    c3 = next(
+        item
+        for item in document["material_semantics"]
+        if item["material_ref"] == "traca:TR-UVOF-001:node:C3"
+    )
+    assert "delimita_espai:SA2" in c3["capabilities"]
 
 
 def test_unresolved_and_wrong_type_references_block() -> None:

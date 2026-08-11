@@ -55,7 +55,7 @@ Una corba suau sense canvi de direcció no és una finta.
 
 ## TR-UVOF-001
 
-El primer exercici validat parcialment té dues bandes simètriques i dues subaccions:
+El primer exercici validat té dues bandes simètriques i dues subaccions:
 
 - `SA1`: central passa al lateral; lateral rep en carrera a l'interval `1–2`,
   supera el segon defensor simulat pel banc mitjançant una finta cap a `2–3`
@@ -67,8 +67,8 @@ El primer exercici validat parcialment té dues bandes simètriques i dues subac
 
 El banc representa activament el segon defensor i s'ubica semànticament entorn
 de 9 m. `C1` i `C2` delimiten l'espai de `SA1`; `C3` representa passivament el
-segon defensor absent de `SA2`. L'extrem manté amplitud al seu espai de
-finalització.
+segon defensor absent i també delimita l'espai de `SA2`. L'extrem manté
+amplitud al seu espai de finalització.
 
 ## TR-UVOF-002
 

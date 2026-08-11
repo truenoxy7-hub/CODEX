@@ -29,17 +29,18 @@
 
 | Estat | Exercicis | Motiu principal |
 |---|---|---|
-| `ready` | 002, 003, 004, 006, 009, 012, 013 | Contracte i entrades suficients per al gate qualitatiu actual |
+| `ready` | 001, 002, 003, 004, 006, 009, 012, 013 | Contracte i entrades suficients per al gate qualitatiu actual |
 | `partial` | 005, 007, 014 | Flux/informació de pilota no especificat o opcions encara simbòliques |
-| `blocked` | 001, 008, 010, 011, 015 | Conflicte de font, cicle no ancorat, cardinalitat o espai contigu absent |
+| `blocked` | 008, 010, 011, 015 | Cicle no ancorat, cardinalitat o espai contigu absent |
 
 `valid: true` al validador significa que l'artefacte compleix el contracte. No
 converteix un resultat `partial` o `blocked` en resoluble.
 
-## Bloquejos conservats deliberadament
+## Estats conservats deliberadament
 
-- UVOF001 conserva dues fonts divergents, cap de les quals s'ha declarat
-  canònica. B1, B2 i els seus dos fluxos no es perden.
+- UVOF001 declara el model detallat com a font canònica i conserva el corpus
+  com a projecció resumida amb mappings explícits. B1, B2 i els seus dos
+  fluxos no es perden.
 - UVOF005, UVOF007 i UVOF008 no reben pilotes, posseïdors ni passades
   inventades.
 - UVOF008 i UVOF010 conserven i diagnostiquen els cicles no ancorats.
@@ -52,7 +53,6 @@ converteix un resultat `partial` o `blocked` en resoluble.
 
 ## No completat
 
-- Decisió de l'entrenador sobre la font canònica i els mappings d'UVOF001.
 - Dades tàctiques pendents enumerades a `docs/OPEN_QUESTIONS.md`.
 - Perfil reglamentari de pista versionat.
 - Resolutor espacial o geomètric.

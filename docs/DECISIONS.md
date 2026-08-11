@@ -212,9 +212,9 @@ dos dels tres duels simultanis especificats per la tasca.
 
 **Decisió tècnica:** cada instància v0.3 declara candidats de font, versió,
 selector JSON Pointer i fingerprint determinista. Un exercici ordinari exigeix
-exactament un candidat canònic. Si les fonts discrepen, com a UVOF001, el
-contracte declara `conflict`, cap candidat esdevé canònic i el preflight
-retorna `SEMANTIC_SOURCE_CONFLICT`.
+exactament un candidat canònic. Si les fonts discrepen sense una decisió de
+l'entrenador, el contracte declara `conflict`, cap candidat esdevé canònic i el
+preflight retorna `SEMANTIC_SOURCE_CONFLICT`.
 
 **Decisió tècnica:** el validador no pot seleccionar el `semantic.json` germà
 per la seva mera existència. La font executable és únicament la declarada i
@@ -248,3 +248,19 @@ compostos. La funció i les capabilities del material es declaren per instància
 **Decisió tècnica:** una simetria només pot donar-se per resolta amb mapping
 explícit d'identitats. No es dupliquen participants, materials o pilotes per
 inferència.
+
+## D-031 — Font canònica i mapping validat d'UVOF001
+
+**Decisió de l'entrenador:** el model detallat
+`exercises/TR-UVOF-001/semantic.json` és la font canònica. L'entrada del corpus
+és una projecció resumida i no una autoritat alternativa. Les dues fonts es
+vinculen mitjançant `semantic_coverage`, compartint les mateixes identitats
+globals per a participants, materials, pilotes, accions i decisions.
+
+**Mapping validat:** `D_Z1 ↔ D3`, `D_Z2 ↔ D1` i els materials separats `C1` i
+`C2` corresponen a l'agregat `C1_C2` del corpus. `B1` i `B2` mantenen fluxos
+independents. `C3` representa passivament el segon defensor absent i també
+delimita l'espai d'execució i resolució de `SA2`.
+
+**Efecte tècnic:** s'elimina `SEMANTIC_SOURCE_CONFLICT` d'UVOF001 i el
+preflight passa de `blocked` a `ready`, sense introduir geometria.

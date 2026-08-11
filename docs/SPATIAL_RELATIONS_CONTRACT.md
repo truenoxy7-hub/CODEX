@@ -176,10 +176,12 @@ endavant quina succeirà.
 
 ## Instància TR-UVOF-001
 
-La primera instància conserva explícitament el conflicte entre el model
-detallat i el corpus. Cap candidat és canònic fins que l'entrenador aprovi un
-mapping. A més de les relacions següents, v0.3 incorpora B1 i B2 amb els seus
-dos fluxos del corpus perquè la divergència de fonts no provoqui pèrdua:
+La primera instància declara el model detallat com a font canònica després de
+la validació de l'entrenador. El corpus es conserva com a projecció resumida i
+els dos candidats queden vinculats a les mateixes identitats globals mitjançant
+`semantic_coverage`. La correspondència inclou `D_Z1 ↔ D3`, `D_Z2 ↔ D1` i
+`C1 + C2 ↔ C1_C2`. A més de les relacions següents, v0.3 incorpora B1 i B2 amb
+els seus dos fluxos independents:
 
 - `INT_1` entre el primer defensor implícit i el banc;
 - `INT_2` entre el banc i el tercer defensor;
@@ -187,6 +189,8 @@ dos fluxos del corpus perquè la divergència de fonts no provoqui pèrdua:
 - la recepció, finta, superació i resolució de `SA1`;
 - la recuperació de `L` per darrere del banc;
 - la recepció orientada i l'atac directe d'`INT_3` a `INT_4`;
+- `C3` com a referència passiva del segon defensor absent i delimitador de
+  l'espai d'execució i resolució de `SA2`;
 - l'amplitud permanent de l'extrem;
 - les dues resolucions 2x1 com a branques obertes.
 
