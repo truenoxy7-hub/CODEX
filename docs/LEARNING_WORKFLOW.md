@@ -52,11 +52,16 @@ La descripció té un fingerprint. Interpretació, model semàntic, model espaci
 - validar un cas no modifica coneixement canònic;
 - el coneixement local reutilitzable sempre conserva evidència.
 
-## Paquet portable 0.4
+## Paquet portable 0.5
 
 L’exportació conserva cas i identitat durable, text, interpretació, models, estat del resolutor, derivacions i fingerprints, preguntes i respostes, resultat del compositor, geometries, gramàtica, correccions, observacions, validació, alternatives i biblioteca.
 
-Les versions `0.2.0` i `0.3.0` s’importen i migren. Els registres antics no validats que vivien a `validated_cases` passen a `drafts`; s’afegeixen identitat durable i estat de derivació. L’exportació següent sempre és `0.4.0`.
+Les versions `0.2.0`, `0.3.0` i `0.4.0` s’importen. En les dues primeres, els registres antics no validats que vivien a `validated_cases` passen a `drafts`; s’afegeixen identitat durable i estat de derivació. L’exportació següent sempre és `0.5.0` i pot conservar el `CompositionPlan` auditable.
+
+El coneixement validat pot omplir un slot obligatori del compositor quan
+declara abast compatible, autoritat operacional i fonts. Un candidat només es
+mostra com a `suggested_answer`; no altera el pla fins que l’entrenador el
+confirma explícitament.
 
 ## UVOF015
 

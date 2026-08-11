@@ -125,12 +125,14 @@ preserva totes les alternatives. Les coordenades de lectura viuen només a
 `geometry.json` i poden revisar-se sense canviar el significat tàctic. El
 contracte es documenta a [`GEOMETRY_CONTRACT.md`](GEOMETRY_CONTRACT.md).
 
-La interfície MVP accepta text arbitrari, però no afirma entendre’l completament
-ni genera geometria general. `KnowledgeResolver` retorna coneixement validat,
-provisional, desconegut, candidat i no resolt. `RepresentationComposer` pot
-construir geometria provisional a partir d'una composició de primitives
-conegudes, actualment una passada entre rols identificats i la recepció en
-carrera. Això no equival a un resolver tàctic universal.
+La interfície MVP accepta text arbitrari, però no afirma entendre’l completament.
+`KnowledgeResolver` retorna coneixement validat, provisional, desconegut,
+candidat i no resolt. La capa d’interpretació produeix un `TacticalIR`
+estructurat; `RepresentationComposer` només consumeix aquest contracte i pot
+compondre moviment, bot, passada, recepció, llançament, finta/1x1, bloqueig,
+relacions numèriques, permuta, encreuament i lliscament de pivot. Composició
+completa no implica geometria completa: si falten posicions o relacions
+resolubles, la geometria queda `needs_input` o `partial`.
 
 Sense resolver, l’entrenador pot crear una `coach_reference_geometry`. Aquest
 artefacte és una referència del cas, no geometria derivada, i conserva
@@ -237,3 +239,22 @@ són sinònims.
 Cada capa derivada conserva el fingerprint del text font. Un canvi de text posa
 en `stale` les capes que eren `current`. Cap representació obsoleta es pot
 validar ni guardar.
+
+## 14. TacticalIR, ActionInstance i CompositionPlan
+
+Una `ActionInstance` és una ocurrència concreta d’una acció, no el seu nom de
+vocabulari. Declara identitat, tipus, actor o actors, objectius, oposició,
+espais, fase, dependències temporals, autoritat i fonts. Les relacions
+`after`, `before` i `simultaneous_with` formen un graf; no es pressuposa que
+una llista incidental sigui l’ordre tàctic.
+
+`TacticalIR` agrupa participants, estats, pilotes, materials, espais,
+`ActionInstance`, decisions, fases, fluxos i relacions tipades. El compositor
+el transforma en `CompositionPlan`: accions compostes o pendents, estats
+persistents, flux de pilota, constraints, primitives visuals, preguntes,
+cobertura i traçabilitat. Cap coordenada és obligatòria en el pla.
+
+Una relació pot estar composta sense glif propi. El `2x1` és dos atacants, una
+referència defensiva i les seves accions; un espai és una relació entre
+delimitadors; una alternativa pot quedar només a la semàntica. El renderer no
+reinterpreta cap d’aquests conceptes.

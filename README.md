@@ -106,7 +106,7 @@ make interface
 
 La interfície queda disponible a `http://localhost:8000` i també es pot obrir
 directament. L’estat s’emmagatzema només a `localStorage` i es pot
-exportar/importar com un paquet JSON v0.4, amb migració de 0.2 i 0.3. L’abast es documenta a
+exportar/importar com un paquet JSON v0.5, acceptant 0.2, 0.3 i 0.4. L’abast es documenta a
 [`docs/MVP.md`](docs/MVP.md) i
 [`docs/UNIVERSAL_CASE_WORKFLOW.md`](docs/UNIVERSAL_CASE_WORKFLOW.md).
 

@@ -94,12 +94,22 @@
     if (snapshot.currentCase.case_type !== "canonical_specimen") {
       const composition = window.TRACA_REPRESENTATION_COMPOSER.compose({
         currentCase: snapshot.currentCase,
+        tacticalIR: snapshot.interpretation.tactical_ir,
         interpretation: snapshot.interpretation,
         answers: snapshot.clarificationAnswers,
         courtProfile: window.TRACA_COURT_PROFILE
       });
-      store.setCompositionResult(composition, "primitive_composer");
-      toast(composition.status === "ready" ? "Representació generada amb primitives conegudes." : composition.status === "needs_input" ? "Em falta una resposta directa per completar el gràfic." : "He interpretat el cas, però encara no tinc primitives suficients per dibuixar-lo.");
+      store.setCompositionResult(composition, "global_composition_pipeline");
+      const message = composition.composition_status === "blocked"
+        ? "Hi ha una contradicció entre relacions validades. Cal revisar-la abans de continuar."
+        : composition.composition_status === "needs_input"
+          ? "He compost el que sé. Em falta una resposta directa per continuar."
+          : composition.composition_status === "partial"
+            ? `Representació parcial: ${composition.coverage.label} accions compostes.`
+            : composition.geometry_status === "ready"
+              ? "Representació generada a partir de relacions resoltes."
+              : "He compost totes les accions, però em falta informació espacial per dibuixar-les sense inventar.";
+      toast(message);
     } else {
       toast("Exemple canònic carregat per comprovar regressions.");
     }
@@ -119,17 +129,26 @@
 
   function renderUnderstanding(snapshot) {
     const concepts = snapshot.interpretation.concepts || [];
+    const coverage = snapshot.composition.coverage;
+    const coverageCopy = coverage ? `<p class="composition-coverage"><strong>${escape(coverage.label)} accions compostes</strong>${coverage.actions_unsupported ? ` · ${coverage.actions_unsupported} encara no suportada${coverage.actions_unsupported === 1 ? "" : "s"}` : ""}${snapshot.composition.geometry_status && snapshot.composition.geometry_status !== "ready" ? ` · geometria: ${escape(snapshot.composition.geometry_status)}` : ""}</p>` : "";
     elements.understood.innerHTML = concepts.length
-      ? `<div class="understood-grid">${concepts.map((item) => `<span class="understood-item ${item.knowledge_state === "validated" ? "" : "is-provisional"}">${escape(item.label)}${item.source === "coach_validated_local_knowledge" ? " · après" : ""}</span>`).join("")}</div>`
+      ? `<div class="understood-grid">${concepts.map((item) => `<span class="understood-item ${item.knowledge_state === "validated" ? "" : "is-provisional"}">${escape(item.label)}${item.source === "coach_validated_local_knowledge" ? " · après" : ""}</span>`).join("")}</div>${coverageCopy}`
       : '<p class="empty-copy">Encara no hi ha cap concepte resolt.</p>';
     const questions = snapshot.composition.questions || [];
     const unresolved = [...(snapshot.interpretation.unknown_concepts || []), ...(snapshot.interpretation.unresolved || [])];
     elements.questionCount.textContent = String(questions.length + unresolved.length);
-    const questionMarkup = questions.map((question) => `<article class="question-card"><strong>${escape(question.label)}</strong><div class="answer-options">${question.options.map((option) => `<button class="button button-secondary" type="button" data-answer-question="${escape(question.id)}" data-answer-value="${escape(option.value)}">${escape(option.label)}</button>`).join("")}</div></article>`).join("");
+    const questionMarkup = questions.map((question) => `<article class="question-card"><strong>${escape(question.label)}</strong>${question.multiple ? `<span class="empty-copy">Tria ${question.required_count} opcions.</span>` : ""}<div class="answer-options">${question.options.map((option) => `<button class="button button-secondary" type="button" data-answer-question="${escape(question.id)}" data-answer-value="${escape(option.value)}" data-answer-multiple="${question.multiple ? "true" : "false"}" data-answer-limit="${question.maximum_count || 1}">${escape(option.label)}</button>`).join("")}</div></article>`).join("");
     const unresolvedMarkup = unresolved.map((item) => `<article class="question-card"><strong>${escape(item.label || item.reason || "Concepte pendent")}</strong><span class="empty-copy">Es conserva com a no resolt; no s’ha inventat cap regla.</span></article>`).join("");
     elements.questions.innerHTML = questionMarkup || unresolvedMarkup || '<p class="empty-copy">Cap pregunta pendent.</p>';
     elements.questions.querySelectorAll("[data-answer-question]").forEach((button) => button.addEventListener("click", () => {
-      store.setClarificationAnswer(button.dataset.answerQuestion, button.dataset.answerValue);
+      const questionId = button.dataset.answerQuestion;
+      if (button.dataset.answerMultiple === "true") {
+        const current = store.snapshot().clarificationAnswers[questionId];
+        const selected = Array.isArray(current) ? current.slice() : current ? [current] : [];
+        const value = button.dataset.answerValue;
+        const next = selected.includes(value) ? selected.filter((item) => item !== value) : [...selected, value].slice(-(Number(button.dataset.answerLimit) || 1));
+        store.setClarificationAnswer(questionId, next);
+      } else store.setClarificationAnswer(questionId, button.dataset.answerValue);
       generateCurrentCase();
     }));
     const suggestions = snapshot.interpretation.suggestions || [];
@@ -213,8 +232,10 @@
     elements.manualTools.hidden = !snapshot.coachReferenceGeometry;
     $("#start-manual-layout").disabled = Boolean(snapshot.generatedGeometry);
     elements.resolverMessage.textContent = snapshot.generatedGeometry
-      ? `Resolutor: ${snapshot.geometryState.resolver || "compositor"}.`
-      : snapshot.coachReferenceGeometry ? "Referència manual de l’entrenador. No és generatedGeometry." : "No hi ha resolutor per a aquest cas; es pot completar manualment sense fingir una interpretació.";
+      ? `Compositor global + geometria resolta (${snapshot.geometryState.resolver || "pipeline"}).`
+      : snapshot.composition.plan
+        ? `Composició ${snapshot.composition.composition_status}; geometria ${snapshot.composition.geometry_status}. TRAÇA no inventarà les relacions espacials pendents.`
+        : snapshot.coachReferenceGeometry ? "Referència manual de l’entrenador. No és generatedGeometry." : "Encara no hi ha un pla de composició per a aquest cas.";
     elements.branches.innerHTML = "";
     ((snapshot.workingGeometry && snapshot.workingGeometry.branches) || []).forEach((branch, index) => {
       const label = document.createElement("label");

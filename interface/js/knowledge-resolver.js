@@ -94,6 +94,35 @@
     return [...merged.values()];
   }
 
+  function compositionKnowledge(library) {
+    const validated = ((library && library.coach_validated_local_knowledge) || []).flatMap((entry) => {
+      if (entry.status !== "validated" || entry.authority !== "coach_validated") return [];
+      return Object.entries(entry.slot_defaults || {}).map(([slot, value], index) => ({
+        id: `${entry.id}:slot:${slot}:${index + 1}`,
+        operator: entry.operator || entry.semantic_ref || null,
+        slot,
+        value: utils.deepClone(value),
+        scope_ref: entry.scope_ref || null,
+        status: "validated",
+        authority: "validated_local_knowledge",
+        source_refs: utils.deepClone(entry.evidence_refs || [])
+      }));
+    });
+    const candidates = Object.entries(library || {}).filter(([key]) => key.endsWith("_candidates")).flatMap(([, entries]) => entries || []).flatMap((entry) => {
+      return Object.entries(entry.slot_defaults || {}).map(([slot, value], index) => ({
+        id: `${entry.id}:candidate-slot:${slot}:${index + 1}`,
+        operator: entry.operator || null,
+        slot,
+        value: utils.deepClone(value),
+        label: entry.title || entry.id,
+        status: "candidate",
+        authority: "candidate",
+        source_refs: [entry.id]
+      }));
+    });
+    return [...validated, ...candidates];
+  }
+
   function resolve(currentCase, options) {
     const configuration = options || {};
     const canonical = interpretationApi.canonicalCaseProvider(currentCase, configuration.canonicalCases || []);
@@ -103,6 +132,7 @@
         ...canonical,
         providers: ["canonical_case_provider", "visual_functional_dictionary"],
         visual_rules: visualRules,
+        composition_knowledge: compositionKnowledge(configuration.library || {}),
         suggestions: [],
         authority_summary: { validated: canonical.concepts.length, provisional: 0, candidate: 0 }
       };
@@ -123,6 +153,8 @@
       suggested_tags: interpretationApi.suggestedTags(currentCase.description, concepts),
       unknown_concepts: base.unknown_concepts,
       unresolved,
+      tactical_ir: utils.deepClone(base.tactical_ir),
+      composition_knowledge: compositionKnowledge(configuration.library || {}),
       suggestions,
       visual_rules: visualRules,
       authority_summary: {
@@ -134,5 +166,5 @@
     };
   }
 
-  return { AUTHORITY, authorityRank, activeVisualRules, localValidatedMatches, candidateMatches, mergeConcepts, resolve };
+  return { AUTHORITY, authorityRank, activeVisualRules, localValidatedMatches, candidateMatches, mergeConcepts, compositionKnowledge, resolve };
 });

@@ -18,6 +18,13 @@ def test_universal_workspace_files_exist() -> None:
         "js/change-explainer.js",
         "js/interpretation-provider.js",
         "js/knowledge-resolver.js",
+        "js/composition-graph.js",
+        "js/state-registry.js",
+        "js/ball-flow.js",
+        "js/spatial-constraints.js",
+        "js/composition-operators.js",
+        "js/composition-preflight.js",
+        "js/generic-geometry-resolver.js",
         "js/representation-composer.js",
         "js/manual-geometry.js",
         "js/promotion.js",
@@ -49,6 +56,10 @@ def test_interface_exposes_the_universal_supervised_loop() -> None:
     assert "TR-UVOF-015" in html
     assert 'src="js/interpretation-provider.js"' in html
     assert 'src="js/knowledge-resolver.js"' in html
+    assert 'src="js/composition-graph.js"' in html
+    assert 'src="js/composition-operators.js"' in html
+    assert 'src="js/composition-preflight.js"' in html
+    assert 'src="js/generic-geometry-resolver.js"' in html
     assert 'src="js/representation-composer.js"' in html
     assert 'src="data/handball-knowledge.js"' in html
     assert 'id="case-origin"' not in html
@@ -119,7 +130,7 @@ def test_interface_states_honest_resolver_and_knowledge_limits() -> None:
     app = (INTERFACE / "js/app.js").read_text(encoding="utf-8")
     provider = (INTERFACE / "js/interpretation-provider.js").read_text(encoding="utf-8")
 
-    assert "No hi ha resolutor per a aquest cas" in app
+    assert "Encara no hi ha un pla de composició per a aquest cas" in app
     assert "No és generatedGeometry" in app
     assert "Coincidències lèxiques locals; no són una interpretació tàctica validada" in provider
     assert 'currentCase.case_type === "canonical_specimen"' in provider

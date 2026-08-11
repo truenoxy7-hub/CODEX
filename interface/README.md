@@ -20,7 +20,7 @@ escriure → generar amb allò justificable → respondre si falta una dada
 - `js/workspace-preflight.js`: diagnòstics explicables;
 - `js/promotion.js`: candidats explícits;
 - `js/visual-grammar.js`, `renderer.js`, `editor.js`: representació i edició;
-- `js/import-export.js` i `persistence.js`: paquet v0.4, migració i estat local;
+- `js/import-export.js` i `persistence.js`: paquet v0.5, compatibilitat i estat local;
 - `js/app.js`: coordinació de la interfície.
 
 UVOF015 és l’exemple canònic amb resolver. Un text nou no hereta la seva

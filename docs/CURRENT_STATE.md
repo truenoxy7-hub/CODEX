@@ -20,7 +20,7 @@
 - Cada recepció en carrera és un únic estat compartit: la cursa i la passada hi
   acaben, i la trajectòria posterior comença exactament des del mateix punt.
 
-### MVP funcional v0.4
+### MVP funcional v0.5
 
 - La pantalla inicial és un cas en blanc amb el flux `ESCRIURE → GENERAR → CORREGIR → GUARDAR`.
 - Cada cas té `case_uid` durable i un codi curt; esborranys i casos validats viuen en col·leccions diferents.
@@ -37,14 +37,22 @@
   `coach_reference_geometry` explícitament no generada.
 - Correccions amb canvi principal, efectes derivats, diff, explicació
   automàtica i motiu de l’entrenador.
-- Compositor genèric de primitives per a passada identificada i recepció en
-  carrera; si falten emissor o receptor, pregunta i no inventa.
+- Pipeline general `TacticalIR → CompositionGraph → operator registry →
+  CompositionPlan → constraints → preflight → geometry`.
+- Operadors de moviment, bot, passada, recepció, llançament, finta/1x1,
+  bloqueig, relació numèrica, permuta, encreuament i lliscament de pivot.
+- Estat de recepció compartit, màquina d’estats de pilota, preguntes de slots,
+  cobertura per acció i traçabilitat fins a la font.
+- `composition_status` separat de `geometry_status`; el compositor pot quedar
+  complet encara que la geometria necessiti dades.
 - Vistes neta, d'edició, comparada i original.
 - Preflight amb errors bloquejants, warnings i informació accionable.
 - Promotion Builder per tipus, abast i subconjunt seleccionat de correccions.
 - Biblioteca inspectable i resum «Què ha après TRAÇA?».
-- Diccionari visual-funcional estructurat i projectat a la gramàtica del renderer.
-- Persistència local i paquet portable `0.4.0`, compatible amb importacions `0.2.0` i `0.3.0`.
+- Diccionari visual-funcional amb les 103 evidències de l’inventari i 13
+  evidències normatives de la llegenda, projectat a la gramàtica del renderer.
+- Persistència local i paquet portable `0.5.0`, compatible amb importacions
+  `0.2.0`, `0.3.0` i `0.4.0`.
 - Fingerprint del text i estat `stale`: cap geometria anterior es pot guardar després de canviar la font.
 - `validation` i `completeness` són independents: el snapshot pot estar validat i conservar semàntica o espai parcials.
 
@@ -58,10 +66,32 @@
 El preflight del workspace és un gate posterior i diferent: comprova el cas de
 treball, la seva geometria disponible, identitats, fonts i correccions pendents.
 
-## FUTUR / NO IMPLEMENTAT
+## PARTIAL
+
+- La cobertura estructural del corpus és 164/203 unitats (80,79%); el detall
+  per exercici és a [`COMPOSER_COVERAGE.md`](COMPOSER_COVERAGE.md).
+- Finta, bloqueig, permuta i lliscament poden obtenir geometria quan les
+  posicions necessàries són explícites. No tenen encara resolució universal.
+- L’encreuament es compon a nivell funcional però deixa la geometria sense
+  resoldre.
+- L’intèrpret local produeix TacticalIR per formulacions explícites comunes;
+  no és un intèrpret lingüístic general.
+
+## UNRESOLVED
+
+- Tipar `resolucio` del corpus com a passada, llançament o moviment abans de
+  compondre-la.
+- Traduir totes les relacions qualitatives v0.3 a posicions sense defaults.
+- Resoldre geometria general d’encreuament i coexistència de trajectòries en
+  lliscaments de pivot.
+- Decidir a la interpretació els actors/espais que falten en diversos casos;
+  el compositor pregunta i s’atura.
+
+## FUTURE
 
 - interpretació tàctica general, LLM o embeddings;
-- resolutor tàctic o geomètric general per a text nou;
+- resolutor lingüístic general per a text nou;
+- ampliar la geometria genèrica a més relacions validades;
 - backend, base de dades remota, comptes o col·laboració;
 - promoció canònica i modificació del corpus des del navegador;
 - exportació PNG.
@@ -78,7 +108,7 @@ override visual del cas ≠ regla visual global
 
 ## Pròxima fita
 
-Validar amb l’entrenador el compositor de passada simple sobre casos nous i
-incorporar l'inventari de 103 evidències i la llegenda gràfica quan es rebin els
-fitxers font. Després, ampliar primitives una a una amb evidència, sense
-hardcodejar exercicis.
+Validar manualment el pipeline amb cinc casos nous: cadena
+passada–recepció–finta–2x1, dades absents, conflicte de pilota, permuta i
+encreuament sense geometria. Després, prioritzar els buits publicats a
+`COMPOSER_COVERAGE.md` sense hardcodejar exercicis.

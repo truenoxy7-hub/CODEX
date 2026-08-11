@@ -38,8 +38,11 @@
     if (!snapshot.currentCase || !String(snapshot.currentCase.description || "").trim()) {
       diagnostics.push(diagnostic("error", "CASE_DESCRIPTION_REQUIRED", "El cas no té descripció. Afegeix el text que l’entrenador vol treballar."));
     }
-    if (snapshot.composition && snapshot.composition.status === "needs_input") {
+    if (snapshot.composition && (snapshot.composition.composition_status === "needs_input" || snapshot.composition.status === "needs_input")) {
       diagnostics.push(diagnostic("error", "COMPOSITION_ANSWER_REQUIRED", "Falta una resposta directa per poder representar l’acció sense inventar-la.", { actions: ["Respondre la pregunta"] }));
+    }
+    if (snapshot.composition && (snapshot.composition.composition_status === "blocked" || snapshot.composition.status === "blocked")) {
+      diagnostics.push(diagnostic("error", "COMPOSITION_BLOCKED", "La composició conté una contradicció estructural. Cal resoldre-la abans de validar el cas.", { actions: ["Revisar el diagnòstic de composició"] }));
     }
     const geometry = snapshot.workingGeometry || snapshot.coachReferenceGeometry;
     if (geometry && geometry.court) {

@@ -31,7 +31,7 @@ const profile={court:{width_m:20,half_length_m:20},goal:{width_m:3,height_m:2},m
 """
 
 
-def test_visual_dictionary_is_evidence_backed_and_does_not_invent_missing_inventory() -> None:
+def test_visual_dictionary_is_evidence_backed_and_imports_the_complete_inventory() -> None:
     document = json.loads((ROOT / "knowledge/visual-functional-dictionary.v0.1.json").read_text(encoding="utf-8"))
     schema = json.loads((ROOT / "schema/traca.visual-functional-dictionary.schema.v0.1.json").read_text(encoding="utf-8"))
     try:
@@ -44,8 +44,10 @@ def test_visual_dictionary_is_evidence_backed_and_does_not_invent_missing_invent
     evidence = {item["id"] for item in document["evidence"]}
     assert all(entry["evidence_refs"] and set(entry["evidence_refs"]) <= evidence for entry in document["entries"])
     assert document["meta"]["reported_inventory_evidence_count"] == 103
-    assert document["meta"]["imported_inventory_evidence_count"] == 0
-    assert "no s'han rebut" in document["meta"]["limitation"]
+    assert document["meta"]["imported_inventory_evidence_count"] == 103
+    assert sum(item["source_ref"] == "SRC_INVENTORY_REPRESENTATIONS_V0_1" for item in document["evidence"]) == 103
+    assert sum(item["source_ref"] == "SRC_COACH_GRAPHIC_LEGEND" for item in document["evidence"]) == 13
+    assert "no poden omplir slots obligatoris" in document["meta"]["limitation"]
     two_v_one = next(entry for entry in document["entries"] if entry["concept"] == "two_v_one")
     assert two_v_one["type"] == "no_specific_glyph"
     assert two_v_one["visual"]["dedicated_glyph"] is False
@@ -97,18 +99,17 @@ const dictionary=require('./interface/data/visual-functional-dictionary.js');
 const currentCase={id:'CASE-A',description:'Central passa al lateral i el lateral rep en carrera'};
 const interpretation=Resolver.resolve(currentCase,{canonicalKnowledge:knowledge,dictionary,library:{}});
 const composed=Composer.compose({currentCase,interpretation,answers:{},courtProfile:profile});
-const movement=composed.geometry.common_paths.find(path=>path.kind==='movement_without_ball');
-const pass=composed.geometry.common_paths.find(path=>path.kind==='pass');
-process.stdout.write(JSON.stringify({status:composed.status,relation:composed.relation,movementTarget:movement.to_state_ref,passTarget:pass.to_state_ref,passReceiver:pass.to_participant_ref,spaces:composed.geometry.spaces,zones:composed.geometry.zones,primitives:composed.used_primitives}));
+const movement=composed.plan.visual_primitives.find(item=>item.type==='movement_path');
+const pass=composed.plan.visual_primitives.find(item=>item.type==='pass_path');
+process.stdout.write(JSON.stringify({status:composed.status,geometryStatus:composed.geometry_status,movementTarget:movement.to_state_ref,passTarget:pass.to_state_ref,passReceiver:pass.to_participant_ref,geometry:composed.geometry,primitives:composed.used_primitives}));
 """)
 
     assert result["status"] == "ready"
-    assert result["relation"]["from_role"] == "role.central"
-    assert result["relation"]["to_role"] == "role.lateral"
+    assert result["geometryStatus"] == "needs_input"
     assert result["movementTarget"] == result["passTarget"]
-    assert result["passReceiver"] == "A_LATERAL"
-    assert result["spaces"] == []
-    assert result["zones"] == []
+    assert result["passReceiver"] == "L"
+    assert result["geometry"] is None
+    assert set(result["primitives"]) == {"movement_path", "pass_path"}
 
 
 def test_composer_asks_direct_questions_instead_of_guessing_pass_identities() -> None:
@@ -123,7 +124,11 @@ const composed=Composer.compose({currentCase,interpretation,answers:{},courtProf
 process.stdout.write(JSON.stringify({status:composed.status,geometry:composed.geometry,questions:composed.questions.map(q=>q.id)}));
 """)
 
-    assert result == {"status": "needs_input", "geometry": None, "questions": ["pass_from", "pass_to"]}
+    assert result == {
+        "status": "needs_input",
+        "geometry": None,
+        "questions": ["A001:actor_ref", "A001:receiver_ref", "A002:actor_ref"],
+    }
 
 
 def test_validated_coach_knowledge_is_reused_but_case_only_and_candidates_are_not() -> None:
@@ -165,8 +170,8 @@ process.stdout.write(JSON.stringify({statuses:Object.fromEntries(Object.entries(
 
     assert result["statuses"]["interpretation"] == "stale"
     assert result["statuses"]["semantic"] == "stale"
-    assert result["statuses"]["geometry"] == "stale"
-    assert result["geometryState"] == "stale"
+    assert result["statuses"]["geometry"] == "unavailable"
+    assert result["geometryState"] == "unavailable"
     assert result["canValidate"] is False
     assert "SOURCE_DERIVATION_STALE" in result["codes"]
 
@@ -183,7 +188,7 @@ process.stdout.write(JSON.stringify({uid,sameUid:uid===afterValidation.currentCa
 
 
 @pytest.mark.parametrize("legacy_version", ["0.2.0", "0.3.0"])
-def test_legacy_packages_migrate_to_v04(legacy_version: str) -> None:
+def test_legacy_packages_migrate_to_v05(legacy_version: str) -> None:
     result = _run_node(f"""
 const Store=require('./interface/js/store.js');const Visual=require('./interface/js/visual-grammar.js');const IO=require('./interface/js/import-export.js');
 const legacy={{format:'TRACA_training_case',version:'{legacy_version}',metadata:{{exported_at:'2026-08-11T00:00:00.000Z',application:'TRAÇA',canonical_promotion:false}},case:{{id:'OLD',name:'Old',description:'old'}},description:'old',source_refs:[],interpretation:{{status:'unknown',concepts:[],unknown_concepts:[],unresolved:[]}},semantic_model:{{status:'unknown',participants:[],materials:[],spaces:[],actions:[],decisions:[],phases:[],annotations:[]}},spatial_model:{{status:'unknown',relations:[],annotations:[]}},geometry_state:{{status:'unavailable',resolver:null}},generated_geometry:null,coach_reference_geometry:null,working_geometry:null,base_visual_grammar:Visual.createVisualGrammar(),case_visual_overrides:[],corrections:[],coach_observations:[],validated_geometry:null,validated_visual_grammar:null,selected_alternatives:{{}},validation:{{status:'pending',correction_count:0,counts_by_layer:{{}},preflight:null}},knowledge_library:{{validated_cases:[{{id:'DRAFT',name:'Legacy draft',status:'in_construction'}}]}}}};
@@ -191,4 +196,4 @@ const store=Store.createWorkspaceStore({{initialCase:{{id:'N',name:'N',descripti
 process.stdout.write(JSON.stringify({{uid:snapshot.currentCase.case_uid,drafts:snapshot.knowledgeLibrary.drafts.length,validated:snapshot.knowledgeLibrary.validated_cases.length,version:exported.version,hasDerivations:Boolean(exported.derivations),hasComposition:Boolean(exported.composition)}}));
 """)
 
-    assert result == {"uid": "CASE-migrated", "drafts": 1, "validated": 0, "version": "0.4.0", "hasDerivations": True, "hasComposition": True}
+    assert result == {"uid": "CASE-migrated", "drafts": 1, "validated": 0, "version": "0.5.0", "hasDerivations": True, "hasComposition": True}

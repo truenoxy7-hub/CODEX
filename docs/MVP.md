@@ -15,15 +15,17 @@ La pantalla normal no demana origen, etiquetes, coordenades, capes ni tipus d'au
 - conserva qualsevol text i crea `case_uid` durable;
 - calcula origen i etiquetes sense demanar-los a l'entrenador;
 - resol conceptes per ordre d'autoritat i conserva evidència;
-- compon una passada entre rols identificats i una recepció en carrera;
-- pregunta qui inicia i qui rep quan la frase no ho determina;
+- transforma una interpretació estructurada en un graf i un pla de composició;
+- compon moviment, bot, passada, recepció, llançament, finta/1x1, bloqueig,
+  relacions numèriques, permuta, encreuament i lliscament de pivot;
+- pregunta els actors, oponents o espais obligatoris quan no estan determinats;
 - representa posicions futures vinculades i manté un únic destí per a moviment i passada;
 - permet corregir directament arrossegant;
 - demana si la correcció és només del cas o criteri reutilitzable;
 - executa preflight, validació i guardat amb una sola acció;
 - separa `drafts` de `validated_cases`;
 - reutilitza coneixement local només després de validació explícita;
-- persisteix i exporta/importa paquets `0.4.0`, migrant `0.2.0` i `0.3.0`;
+- persisteix i exporta/importa paquets `0.5.0`, acceptant `0.2.0`, `0.3.0` i `0.4.0`;
 - conserva UVOF015 com a exemple explícit i prova de regressió.
 
 ## Mode avançat
@@ -34,7 +36,11 @@ Una referència manual és `coach_reference_geometry`, mai `generatedGeometry`. 
 
 ## Arquitectura honesta
 
-El `KnowledgeResolver` no és un LLM i el `RepresentationComposer` no és un resolutor tàctic universal. El primer aplica fonts locals auditables; el segon combina primitives conegudes. Qualsevol acció no suportada es conserva com a interpretació parcial o es completa manualment.
+El `KnowledgeResolver` no és un LLM i el `RepresentationComposer` no és un
+intèrpret de text. El primer aplica fonts locals auditables i la interpretació
+produeix `TacticalIR`; el segon combina operadors i constraints. Pot completar
+la composició sense completar la geometria. Qualsevol acció no suportada es
+conserva com a parcial o es completa manualment.
 
 Canviar la descripció invalida interpretació, models i geometria que derivaven de la revisió anterior. La interfície oculta el gràfic obsolet i el preflight bloqueja el guardat fins a regenerar.
 
@@ -43,7 +49,7 @@ Canviar la descripció invalida interpretació, models i geometria que derivaven
 - backend, comptes o base de dades remota;
 - LLM API, embeddings o cerca vectorial;
 - resolutor universal de qualsevol situació d'handbol;
-- inferir encreuaments, bloqueigs, duels o sistemes complets sense relacions explícites;
+- inferir actors, encreuaments, bloqueigs, duels o sistemes complets sense relacions explícites;
 - modificar automàticament el corpus canònic;
 - activar candidats sense validació;
 - exportació PNG.

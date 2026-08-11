@@ -4,7 +4,12 @@
 
 La font operativa és [`knowledge/visual-functional-dictionary.v0.1.json`](../knowledge/visual-functional-dictionary.v0.1.json). Cada entrada declara definició, tipus, autoritat, estat, fonts, evidències, projecció visual i referències semàntiques. El renderer no conté convencions tàctiques independents: `visual-grammar.js` projecta el diccionari a estils executables.
 
-L’ordre de treball cita un inventari de 103 evidències i una llegenda gràfica, però aquests fitxers no s’han rebut. El diccionari registra `reported_inventory_evidence_count: 103` i `imported_inventory_evidence_count: 0`. Només s’han activat les convencions confirmades explícitament; no s’han reconstruït evidències absents.
+L’inventari consolidat i la llegenda gràfica s’han rebut i importat. El
+diccionari conserva exactament 103 evidències UVOF: 10 confirmades per ambdues
+fonts, 16 per l’entrenador, 30 observacions repetides, 13 candidates, 26
+ambigües i 8 superades. També conserva 13 evidències normatives de la
+llegenda. Les candidates, ambigües o superades són auditables, però no poden
+omplir slots obligatoris ni activar geometria.
 
 ## Convencions actives
 

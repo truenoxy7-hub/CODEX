@@ -33,6 +33,12 @@ No converteixis una proposta geomètrica o una inferència en coneixement tàcti
 - Les situacions decisionals descriuen opcions, no una solució gràfica obligatòria.
 - Qualsevol dada inferida ha de portar estat `provisional` o equivalent.
 - L'entrenador és l'única autoritat que pot aprovar una interpretació tàctica.
+- El compositor rep `TacticalIR` estructurat: no rellegeix text lliure ni usa
+  l’identificador UVOF per triar operadors, fluxos, posicions o geometria.
+- Composició i geometria tenen estats independents. Un pla tàctic pot estar
+  complet i la geometria continuar `needs_input` o `partial`.
+- Només fonts validades poden omplir slots obligatoris. Els candidats només
+  suggereixen i no decideixen.
 
 ## Definició canònica actual: 1x1 / finta
 

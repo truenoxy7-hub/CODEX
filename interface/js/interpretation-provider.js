@@ -70,6 +70,216 @@
     return tags.slice(0, 8);
   }
 
+  const ROLE_DEFINITIONS = [
+    { id: "CE", role: "central", label: "CE", pattern: "central|ce" },
+    { id: "L", role: "lateral", label: "L", pattern: "lateral|laterals" },
+    { id: "PV", role: "pivot", label: "PV", pattern: "pivot|pv" },
+    { id: "EXT", role: "extrem", label: "EXT", pattern: "extrem|extrems" },
+    { id: "P", role: "passer", label: "P", pattern: "passador|passadora" }
+  ];
+  const DEFENDER_DEFINITIONS = [
+    { id: "D1", role: "first", label: "D1", pattern: "d1|primer defensor|1r defensor" },
+    { id: "D2", role: "second", label: "D2", pattern: "d2|segon defensor|2n defensor" },
+    { id: "D3", role: "third", label: "D3", pattern: "d3|tercer defensor|3r defensor" },
+    { id: "DAV", role: "advanced", label: "DAV", pattern: "dav|avancat defensiu|avancat" }
+  ];
+
+  function roleRegex(definitions) {
+    return definitions.map((item) => `(?:${item.pattern})`).join("|");
+  }
+
+  function definitionForMention(value, definitions) {
+    const mention = normalize(value).trim();
+    return definitions.find((item) => new RegExp(`^(?:${item.pattern})$`).test(mention)) || null;
+  }
+
+  function nearestRole(text, index, definitions) {
+    const prefix = text.slice(Math.max(0, index - 120), index);
+    let best = null;
+    definitions.forEach((definition) => {
+      const matches = [...prefix.matchAll(new RegExp(`\\b(?:${definition.pattern})\\b`, "g"))];
+      const last = matches.at(-1);
+      if (last && (!best || last.index > best.index)) best = { definition, index: last.index };
+    });
+    return best && best.definition || null;
+  }
+
+  function buildTacticalIR(description, concepts, options) {
+    const text = normalize(description);
+    const caseId = options && options.case_id || "CASE";
+    const sourceRevision = utils.fingerprint(description);
+    const participants = new Map();
+    const actions = [];
+    const spaces = [];
+    const rolePattern = roleRegex(ROLE_DEFINITIONS);
+    const defenderPattern = roleRegex(DEFENDER_DEFINITIONS);
+
+    function addParticipant(definition, team, sourceRef) {
+      if (!definition || participants.has(definition.id)) return;
+      participants.set(definition.id, {
+        id: definition.id, label: definition.label, role: definition.role,
+        kind: team === "defense" ? "defender" : "attacker", team,
+        authority: "coach_explicit_input", status: "explicit",
+        source_refs: [sourceRef || "coach_input"]
+      });
+    }
+
+    [...ROLE_DEFINITIONS, ...DEFENDER_DEFINITIONS].forEach((definition) => {
+      const match = text.match(new RegExp(`\\b(?:${definition.pattern})\\b`));
+      if (match) addParticipant(definition, DEFENDER_DEFINITIONS.includes(definition) ? "defense" : "attack", `coach_input:span:${match.index}-${match.index + match[0].length}`);
+    });
+
+    const explicitSpaces = [
+      { id: "INT_12", label: "Interval 1–2", token: /\b(?:1\s*[-–]\s*2|12)\b/g, delimiter_refs: ["D1", "D2"] },
+      { id: "INT_23", label: "Interval 2–3", token: /\b(?:2\s*[-–]\s*3|23)\b/g, delimiter_refs: ["D2", "D3"] },
+      { id: "INT_33", label: "Interval 3–3", token: /\b(?:3\s*[-–]\s*3|33)\b/g, delimiter_refs: ["D3_LOCAL", "D3_OPOSAT"] }
+    ];
+    explicitSpaces.forEach((space) => {
+      const match = space.token.exec(text);
+      if (match) spaces.push({
+        id: space.id, label: space.label, type: "interval", relation: { type: "between", delimiter_refs: space.delimiter_refs.slice() },
+        delimiter_refs: space.delimiter_refs.slice(), authority: "canonical_spatial", status: "validated",
+        source_refs: [`coach_input:span:${match.index}-${match.index + match[0].length}`, "docs/DOMAIN_MODEL.md#3-espais-i-intervals"]
+      });
+      space.token.lastIndex = 0;
+    });
+
+    function addAction(index, type, payload, endIndex) {
+      actions.push({
+        _index: index, _end: endIndex || index + 1, type, ...payload,
+        authority: "coach_explicit_input", status: "explicit",
+        source_refs: [`coach_input:span:${index}-${endIndex || index + 1}`]
+      });
+    }
+
+    const passRegex = new RegExp(`\\b(${rolePattern})\\b\\s+(?:passa|passada\\s+(?:a|cap a)|passar\\s+(?:a|cap a))\\s+(?:a\\s+|al\\s+|a la\\s+|a l['’])?\\b(${rolePattern})\\b`, "g");
+    for (const match of text.matchAll(passRegex)) {
+      const sender = definitionForMention(match[1], ROLE_DEFINITIONS), receiver = definitionForMention(match[2], ROLE_DEFINITIONS);
+      if (!sender || !receiver) continue;
+      addParticipant(sender, "attack", `coach_input:span:${match.index}-${match.index + match[1].length}`);
+      addParticipant(receiver, "attack", `coach_input:span:${match.index}-${match.index + match[0].length}`);
+      addAction(match.index, "pass", { actor_ref: sender.id, receiver_ref: receiver.id, ball_ref: "B1" }, match.index + match[0].length);
+    }
+    if (!actions.some((action) => action.type === "pass")) {
+      const genericPass = text.match(/\b(?:passada|passa|passar)\b/);
+      if (genericPass) addAction(genericPass.index, "pass", { ball_ref: "B1" }, genericPass.index + genericPass[0].length);
+    }
+
+    const receptionRegex = new RegExp(`(?:\\b(${rolePattern})\\b\\s+|\\bque\\s+)(?:rep|rebre|recepcio)\\b`, "g");
+    for (const match of text.matchAll(receptionRegex)) {
+      const explicit = match[1] && definitionForMention(match[1], ROLE_DEFINITIONS);
+      const priorPass = actions.filter((action) => action.type === "pass" && action._index < match.index).sort((a, b) => b._index - a._index)[0];
+      const actor = explicit && explicit.id || priorPass && priorPass.receiver_ref;
+      if (!actor) continue;
+      const movingSlice = text.slice(match.index, Math.min(text.length, match.index + 90));
+      addAction(match.index, "reception", { actor_ref: actor, mode: /en carrera|en moviment|orientad/.test(movingSlice) ? "in_motion" : "stationary" }, match.index + match[0].length);
+    }
+    if (!actions.some((action) => action.type === "reception")) {
+      const genericReception = text.match(/\b(?:recepcio|rebre|rep)\b/);
+      if (genericReception) addAction(genericReception.index, "reception", { mode: /en carrera|en moviment|orientad/.test(text.slice(genericReception.index, genericReception.index + 90)) ? "in_motion" : "stationary" }, genericReception.index + genericReception[0].length);
+    }
+
+    for (const match of text.matchAll(/\b(?:fa\s+|realitza\s+)?(?:una\s+)?finta\b/g)) {
+      const actor = nearestRole(text, match.index, ROLE_DEFINITIONS) || (() => {
+        const prior = actions.filter((action) => action._index < match.index && (action.receiver_ref || action.actor_ref)).sort((a, b) => b._index - a._index)[0];
+        return prior && ROLE_DEFINITIONS.find((item) => item.id === (prior.receiver_ref || prior.actor_ref));
+      })();
+      const tail = text.slice(match.index, Math.min(text.length, match.index + 180));
+      const defenderMatch = tail.match(new RegExp(`\\b(${defenderPattern})\\b`));
+      const opponent = defenderMatch && definitionForMention(defenderMatch[1], DEFENDER_DEFINITIONS);
+      if (opponent) addParticipant(opponent, "defense", `coach_input:span:${match.index + defenderMatch.index}-${match.index + defenderMatch.index + defenderMatch[0].length}`);
+      const foundSpaces = explicitSpaces.filter((space) => { space.token.lastIndex = 0; const found = space.token.test(tail); space.token.lastIndex = 0; return found; });
+      addAction(match.index, "feint", {
+        actor_ref: actor && actor.id, opponent_ref: opponent && opponent.id,
+        initial_space_ref: foundSpaces[0] && foundSpaces[0].id,
+        target_space_ref: foundSpaces[1] && foundSpaces[1].id
+      }, match.index + match[0].length);
+    }
+
+    for (const match of text.matchAll(/\b(2\s*[xv]\s*1|2\s+contra\s+1)\b/g)) {
+      const prior = actions.filter((action) => action._index < match.index).sort((a, b) => b._index - a._index)[0];
+      const actor = prior && (prior.actor_ref || prior.receiver_ref);
+      const tail = text.slice(match.index, Math.min(text.length, match.index + 150));
+      const partnerMatch = tail.match(new RegExp(`\\bamb\\s+(?:el\\s+|la\\s+)?(${rolePattern})\\b`));
+      const defenderMatch = tail.match(new RegExp(`\\bcontra\\s+(?:el\\s+|la\\s+)?(${defenderPattern})\\b`));
+      const partner = partnerMatch && definitionForMention(partnerMatch[1], ROLE_DEFINITIONS);
+      const defender = defenderMatch && definitionForMention(defenderMatch[1], DEFENDER_DEFINITIONS);
+      if (partner) addParticipant(partner, "attack", `coach_input:span:${match.index + partnerMatch.index}-${match.index + partnerMatch.index + partnerMatch[0].length}`);
+      if (defender) addParticipant(defender, "defense", `coach_input:span:${match.index + defenderMatch.index}-${match.index + defenderMatch.index + defenderMatch[0].length}`);
+      addAction(match.index, "numerical_relation", { subtype: "2x1", attacker_refs: [actor, partner && partner.id].filter(Boolean), defender_refs: [defender && defender.id].filter(Boolean) }, match.index + match[0].length);
+    }
+
+    const blockRegex = new RegExp(`\\b(${rolePattern})\\b\\s+(?:bloqueja|fa\\s+(?:un\\s+)?bloqueig\\s+(?:a|sobre))\\s+(?:el\\s+|la\\s+)?(${defenderPattern})\\b`, "g");
+    for (const match of text.matchAll(blockRegex)) {
+      const blocker = definitionForMention(match[1], ROLE_DEFINITIONS), defender = definitionForMention(match[2], DEFENDER_DEFINITIONS);
+      addParticipant(blocker, "attack", `coach_input:span:${match.index}-${match.index + match[1].length}`); addParticipant(defender, "defense", `coach_input:span:${match.index}-${match.index + match[0].length}`);
+      addAction(match.index, "block", { actor_ref: blocker.id, blocked_defender_ref: defender.id }, match.index + match[0].length);
+    }
+
+    for (const match of text.matchAll(/\bpermuta\s+(central|lateral)\s*[-–]\s*(central|lateral)\b/g)) {
+      const first = definitionForMention(match[1], ROLE_DEFINITIONS), second = definitionForMention(match[2], ROLE_DEFINITIONS);
+      addParticipant(first, "attack", `coach_input:span:${match.index}-${match.index + match[1].length}`); addParticipant(second, "attack", `coach_input:span:${match.index}-${match.index + match[0].length}`);
+      addAction(match.index, "permutation", { participant_refs: [first.id, second.id], notation: `${first.role}-${second.role}` }, match.index + match[0].length);
+    }
+
+    const crossRegex = new RegExp(`\\b(${rolePattern})\\b\\s+(?:encreua|fa\\s+(?:un\\s+)?encreuament)\\s+(?:amb\\s+)?(?:el\\s+|la\\s+)?(${rolePattern})\\b`, "g");
+    for (const match of text.matchAll(crossRegex)) {
+      const first = definitionForMention(match[1], ROLE_DEFINITIONS), second = definitionForMention(match[2], ROLE_DEFINITIONS);
+      const tail = text.slice(match.index, Math.min(text.length, match.index + 150));
+      const foundSpaces = explicitSpaces.filter((space) => { space.token.lastIndex = 0; const found = space.token.test(tail); space.token.lastIndex = 0; return found; });
+      addParticipant(first, "attack", `coach_input:span:${match.index}-${match.index + match[1].length}`); addParticipant(second, "attack", `coach_input:span:${match.index}-${match.index + match[0].length}`);
+      addAction(match.index, "cross", { actor_refs: [first.id, second.id], initial_attack_relation: foundSpaces[0] && foundSpaces[0].id, target_space_ref: foundSpaces[1] && foundSpaces[1].id }, match.index + match[0].length);
+    }
+
+    const slideRegex = new RegExp(`\\b(${rolePattern})\\b\\s+(?:llisca|fa\\s+(?:un\\s+)?lliscament)\\b`, "g");
+    for (const match of text.matchAll(slideRegex)) {
+      const actor = definitionForMention(match[1], ROLE_DEFINITIONS); addParticipant(actor, "attack", `coach_input:span:${match.index}-${match.index + match[1].length}`);
+      addAction(match.index, "pivot_slide", { actor_ref: actor.id }, match.index + match[0].length);
+    }
+
+    const shotRegex = new RegExp(`\\b(${rolePattern})\\b\\s+(?:llanca|finalitza|fa\\s+(?:un\\s+)?llancament)\\b`, "g");
+    for (const match of text.matchAll(shotRegex)) {
+      const actor = definitionForMention(match[1], ROLE_DEFINITIONS); addParticipant(actor, "attack", `coach_input:span:${match.index}-${match.index + match[1].length}`);
+      addAction(match.index, "shot", { actor_ref: actor.id, ball_ref: "B1", target_goal_ref: "COURT_GOAL" }, match.index + match[0].length);
+    }
+
+    const dribbleRegex = new RegExp(`\\b(${rolePattern})\\b[^.;]{0,50}\\b(?:en bot|botant)\\b`, "g");
+    for (const match of text.matchAll(dribbleRegex)) {
+      const actor = definitionForMention(match[1], ROLE_DEFINITIONS); addParticipant(actor, "attack", `coach_input:span:${match.index}-${match.index + match[1].length}`);
+      addAction(match.index, "dribble", { actor_ref: actor.id, ball_ref: "B1" }, match.index + match[0].length);
+    }
+
+    actions.sort((left, right) => left._index - right._index || left.type.localeCompare(right.type));
+    actions.forEach((action, index) => { action.id = `A${String(index + 1).padStart(3, "0")}`; });
+    actions.forEach((action, index) => {
+      if (!index) return;
+      const previous = actions[index - 1];
+      const connector = text.slice(previous._end, action._index);
+      if (/\b(?:despres|tot seguit|aleshores|que|i)\b|[,;]/.test(connector)) action.after = [previous.id];
+    });
+    actions.filter((action) => action.type === "reception").forEach((reception) => {
+      const pass = actions.filter((action) => action.type === "pass" && action._index < reception._index && action.receiver_ref === reception.actor_ref).at(-1);
+      if (pass) reception.after = [...new Set([...(reception.after || []), pass.id])];
+    });
+    actions.forEach((action) => { delete action._index; delete action._end; });
+
+    const relations = [];
+    actions.forEach((action) => {
+      if (action.actor_ref) relations.push({ id: `REL_${action.id}_PERFORMS`, type: "performs", from_ref: action.actor_ref, to_ref: action.id, authority: action.authority, status: action.status, source_refs: action.source_refs });
+      if (action.receiver_ref) relations.push({ id: `REL_${action.id}_PASSES_TO`, type: "passes_to", from_ref: action.actor_ref, to_ref: action.receiver_ref, authority: action.authority, status: action.status, source_refs: action.source_refs });
+      if (action.opponent_ref) relations.push({ id: `REL_${action.id}_OPPOSES`, type: "opposes", from_ref: action.actor_ref, to_ref: action.opponent_ref, authority: action.authority, status: action.status, source_refs: action.source_refs });
+      (action.after || []).forEach((ref, index) => relations.push({ id: `REL_${action.id}_FOLLOWS_${index + 1}`, type: "follows", from_ref: ref, to_ref: action.id, authority: action.authority, status: action.status, source_refs: action.source_refs }));
+    });
+    const firstBallAction = actions.find((action) => ["pass", "dribble", "shot"].includes(action.type) && action.actor_ref);
+    const balls = firstBallAction ? [{ id: "B1", holder_ref: firstBallAction.actor_ref, authority: "derived_from_validated_rule", status: "validated", source_refs: firstBallAction.source_refs }] : [];
+    return {
+      meta: { format: "TRACA_tactical_ir", version: "0.1.0", case_id: caseId, source_revision: sourceRevision, knowledge_version: options && options.knowledge_version || null },
+      participants: [...participants.values()].sort((left, right) => left.id.localeCompare(right.id)),
+      participant_states: [], balls, materials: [], spaces, actions,
+      decisions: [], phases: [], ball_flow: [], relations
+    };
+  }
+
   function canonicalCaseProvider(currentCase, canonicalCases) {
     const match = (canonicalCases || []).find((item) => item.id === currentCase.id && currentCase.case_type === "canonical_specimen");
     if (!match) return null;
@@ -80,6 +290,7 @@
       suggested_tags: suggestedTags(currentCase.description, match.canonical_concepts || []),
       unknown_concepts: [],
       unresolved: [],
+      tactical_ir: match.tactical_ir ? utils.deepClone(match.tactical_ir) : null,
       notes: ["Interpretació recuperada d’un cas canònic validat."]
     };
   }
@@ -88,7 +299,7 @@
     const matched = matchLocalKnowledge(currentCase.description, knowledge);
     const unresolved = [];
     if (!matched.concepts.length) unresolved.push({ id: "UNRESOLVED-001", label: "No s’ha reconegut cap concepte canònic.", knowledge_state: "unresolved" });
-    unresolved.push({ id: "UNRESOLVED-SEQUENCE", label: "Seqüència temporal completa pendent de confirmació.", knowledge_state: "unresolved" });
+    matched.unknownConcepts.forEach((concept) => unresolved.push({ id: `UNRESOLVED-${concept.id}`, label: `Cal definir «${concept.label}» abans d’utilitzar-ho com a coneixement.`, knowledge_state: "unresolved", concept_ref: concept.id }));
     return {
       provider: "local_rule_provider",
       status: "provisional",
@@ -96,6 +307,7 @@
       suggested_tags: suggestedTags(currentCase.description, matched.concepts),
       unknown_concepts: matched.unknownConcepts,
       unresolved,
+      tactical_ir: buildTacticalIR(currentCase.description, matched.concepts, { case_id: currentCase.id, knowledge_version: knowledge.version || null }),
       notes: ["Coincidències lèxiques locals; no són una interpretació tàctica validada."]
     };
   }
@@ -111,5 +323,9 @@
     };
   }
 
-  return { normalize, matchLocalKnowledge, suggestedTags, canonicalCaseProvider, localRuleProvider, interpret };
+  return {
+    ROLE_DEFINITIONS, DEFENDER_DEFINITIONS,
+    normalize, matchLocalKnowledge, suggestedTags, buildTacticalIR,
+    canonicalCaseProvider, localRuleProvider, interpret
+  };
 });

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://traca.local/schema/traca.tactical-ir.schema.v0.1.json",
+  "title": "TRAÇA tactical intermediate representation v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "meta", "participants", "participant_states", "balls", "materials", "spaces",
+    "actions", "decisions", "phases", "ball_flow", "relations"
+  ],
+  "$defs": {
+    "provenance": {
+      "type": "object",
+      "required": ["authority", "source_refs"],
+      "properties": {
+        "authority": { "type": "string", "minLength": 1 },
+        "status": { "type": "string" },
+        "source_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "node": {
+      "allOf": [
+        { "$ref": "#/$defs/provenance" },
+        {
+          "type": "object",
+          "required": ["id"],
+          "properties": { "id": { "type": "string", "minLength": 1 } }
+        }
+      ]
+    }
+  },
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["format", "version"],
+      "properties": {
+        "format": { "const": "TRACA_tactical_ir" },
+        "version": { "const": "0.1.0" },
+        "case_id": { "type": ["string", "null"] },
+        "source_revision": { "type": ["string", "null"] },
+        "knowledge_version": { "type": ["string", "null"] }
+      }
+    },
+    "participants": { "type": "array", "items": { "$ref": "#/$defs/node" } },
+    "participant_states": { "type": "array", "items": { "$ref": "#/$defs/node" } },
+    "balls": { "type": "array", "items": { "$ref": "#/$defs/node" } },
+    "materials": { "type": "array", "items": { "$ref": "#/$defs/node" } },
+    "spaces": { "type": "array", "items": { "$ref": "#/$defs/node" } },
+    "actions": { "type": "array", "items": { "$ref": "#/$defs/node" } },
+    "decisions": { "type": "array", "items": { "$ref": "#/$defs/node" } },
+    "phases": { "type": "array", "items": { "$ref": "#/$defs/node" } },
+    "ball_flow": { "type": "array", "items": { "$ref": "#/$defs/node" } },
+    "relations": { "type": "array", "items": { "$ref": "#/$defs/node" } }
+  }
+}

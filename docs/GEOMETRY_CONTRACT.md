@@ -2,14 +2,16 @@
 
 ## Propòsit
 
-Aquesta capa converteix un contracte espacial `ready` en metres de pista sense
-modificar la semàntica ni les relacions d'origen. La primera plantilla
-suportada és `TR-UVOF-015`.
+Aquesta capa converteix constraints espacials resolubles en metres de pista
+sense modificar la semàntica ni les relacions d'origen. UVOF015 continua sent
+el primer resolver canònic complet; el compositor global incorpora un resolver
+genèric conservador per als casos amb posicions o àncores explícites.
 
 ```text
 semàntica validada
-  → relacions espacials v0.3
-  → preflight ready
+  → TacticalIR / relacions espacials v0.3
+  → CompositionPlan + constraints
+  → composition preflight ready
   → geometria derivada v0.2
   → renderer SVG literal
 ```
@@ -29,6 +31,11 @@ i 4 m.
 - les dotze alternatives d'UVOF015 es resolen separadament;
 - cada entitat, estat i trajectòria apunta a la font que la justifica;
 - la política visual provisional es declara explícitament.
+- `composition_status` i `geometry_status` es calculen separadament;
+- el resolver genèric no distribueix participants en una graella per rol,
+  índex o exercici;
+- si una relació qualitativa no determina una posició, retorna `needs_input`
+  o `partial` i conserva la composició.
 
 ## Espais relacionals i límits físics
 
@@ -79,6 +86,13 @@ Les coordenades de cons, participants i amplades de zona són una política de
 lectura simètrica per a l'MVP. No són coneixement tàctic validat. El resolver
 pot revisar-les sempre que preservi relacions, límits físics, contigüitats,
 línies defensives i alternatives. El renderer no pot inventar geometria.
+
+El resolver genèric actual resol línies entre estats posicionats, punts
+derivats d’àncores explícites i centres d’intervals amb dos delimitadors ja
+posicionats. L’encreuament no té geometria universal; la finta necessita
+waypoints que preservin aproximació, trencament i sortida; el lliscament de
+pivot necessita un destí explícit. Un pla `ready` pot, per tant, tenir
+geometria `partial` o `needs_input`.
 
 ## Còpia de treball editable
 

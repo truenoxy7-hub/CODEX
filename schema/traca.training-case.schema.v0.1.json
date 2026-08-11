@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://traca.local/schema/traca.training-case.schema.v0.1.json",
-  "title": "TRAÇA portable training case v0.4",
+  "title": "TRAÇA portable training case v0.5",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -15,7 +15,7 @@
   ],
   "properties": {
     "format": { "const": "TRACA_training_case" },
-    "version": { "const": "0.4.0" },
+    "version": { "const": "0.5.0" },
     "metadata": {
       "type": "object",
       "additionalProperties": false,
@@ -50,7 +50,26 @@
     },
     "derivations": { "type": "object" },
     "clarification_answers": { "type": "object" },
-    "composition": { "type": "object" },
+    "composition": {
+      "type": "object",
+      "required": ["status", "questions", "used_primitives", "unresolved"],
+      "properties": {
+        "status": { "type": "string" },
+        "composition_status": { "type": "string" },
+        "geometry_status": { "type": "string" },
+        "questions": { "type": "array" },
+        "used_primitives": { "type": "array", "items": { "type": "string" } },
+        "unresolved": { "type": "array" },
+        "coverage": { "type": ["object", "null"] },
+        "plan": {
+          "oneOf": [
+            { "$ref": "traca.composition-plan.schema.v0.1.json" },
+            { "type": "null" }
+          ]
+        },
+        "preflight": { "type": ["object", "null"] }
+      }
+    },
     "completeness": { "type": "object" },
     "generated_geometry": { "type": ["object", "null"] },
     "coach_reference_geometry": { "type": ["object", "null"] },

@@ -12,7 +12,7 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function (utils, correctionsApi, dependenciesApi, manualApi, promotionApi, preflightApi) {
   "use strict";
 
-  const WORKSPACE_VERSION = "0.4.0";
+  const WORKSPACE_VERSION = "0.5.0";
 
   function emptyInterpretation() {
     return { provider: null, providers: [], status: "unknown", concepts: [], unknown_concepts: [], unresolved: [], notes: [] };
@@ -105,7 +105,7 @@
       redoStack: [],
       coachObservations: [],
       clarificationAnswers: {},
-      composition: { status: generatedGeometry ? "canonical" : "not_started", questions: [], used_primitives: [], unresolved: [] },
+      composition: { status: generatedGeometry ? "canonical" : "not_started", composition_status: generatedGeometry ? "canonical" : "not_started", geometry_status: generatedGeometry ? "ready" : "unavailable", questions: [], used_primitives: [], unresolved: [], coverage: null, plan: null },
       completeness: { semantic: "unknown", spatial: "unknown", geometry: generatedGeometry ? "available" : "unavailable", visual_validation: "not_reviewed" },
       derivations: derivationState(preparedInitialCase.description, Boolean(generatedGeometry)),
       selectedElement: null,
@@ -215,7 +215,7 @@
       state.redoStack = [];
       state.coachObservations = [];
       state.clarificationAnswers = {};
-      state.composition = { status: geometry ? "canonical" : "not_started", questions: [], used_primitives: [], unresolved: [] };
+      state.composition = { status: geometry ? "canonical" : "not_started", composition_status: geometry ? "canonical" : "not_started", geometry_status: geometry ? "ready" : "unavailable", questions: [], used_primitives: [], unresolved: [], coverage: null, plan: null };
       state.completeness = { semantic: "unknown", spatial: "unknown", geometry: geometry ? "available" : "unavailable", visual_validation: "not_reviewed" };
       state.derivations = derivationState(state.currentCase.description, Boolean(geometry));
       state.selectedElement = null;
@@ -298,9 +298,14 @@
       const revision = utils.fingerprint(state.currentCase.description);
       state.composition = {
         status: result.status,
+        composition_status: result.composition_status || result.status,
+        geometry_status: result.geometry_status || (result.geometry ? "ready" : "unavailable"),
         questions: utils.deepClone(result.questions || []),
         used_primitives: utils.deepClone(result.used_primitives || []),
         unresolved: utils.deepClone(result.unresolved || []),
+        coverage: utils.deepClone(result.coverage || null),
+        plan: utils.deepClone(result.plan || null),
+        preflight: utils.deepClone(result.preflight || null),
         relation: utils.deepClone(result.relation || null)
       };
       if (result.geometry) {
@@ -586,7 +591,7 @@
       state.redoStack = [];
       state.coachObservations = utils.deepClone(record.coach_observations || []);
       state.clarificationAnswers = utils.deepClone(record.clarification_answers || {});
-      state.composition = utils.deepClone(record.composition || { status: generatedGeometry ? "generated" : coachReferenceGeometry ? "manual_reference" : "not_started", questions: [], used_primitives: [], unresolved: [] });
+      state.composition = utils.deepClone(record.composition || { status: generatedGeometry ? "generated" : coachReferenceGeometry ? "manual_reference" : "not_started", composition_status: generatedGeometry ? "ready" : "not_started", geometry_status: generatedGeometry || coachReferenceGeometry ? "ready" : "unavailable", questions: [], used_primitives: [], unresolved: [], coverage: null, plan: null });
       state.completeness = utils.deepClone(record.completeness || { semantic: "unknown", spatial: "unknown", geometry: generatedGeometry || coachReferenceGeometry ? "available" : "unavailable", visual_validation: "not_reviewed" });
       state.derivations = utils.deepClone(record.derivations || derivationState(state.currentCase.description, Boolean(generatedGeometry || coachReferenceGeometry)));
       state.geometryState = utils.deepClone(record.geometry_state || { status: generatedGeometry ? "generated" : coachReferenceGeometry ? "coach_reference" : "unavailable", resolver: null });
@@ -699,7 +704,7 @@
     }
 
     function restorePackage(payload) {
-      if (!payload || payload.format !== "TRACA_training_case" || !["0.2.0", "0.3.0", "0.4.0"].includes(payload.version)) throw new Error("TRAINING_CASE_PACKAGE_INVALID");
+      if (!payload || payload.format !== "TRACA_training_case" || !["0.2.0", "0.3.0", "0.4.0", "0.5.0"].includes(payload.version)) throw new Error("TRAINING_CASE_PACKAGE_INVALID");
       generatedGeometry = payload.generated_geometry ? utils.deepFreeze(utils.deepClone(payload.generated_geometry)) : null;
       coachReferenceGeometry = utils.deepClone(payload.coach_reference_geometry || null);
       baseVisualGrammar = utils.deepFreeze(utils.deepClone(payload.base_visual_grammar || payload.generated_visual_grammar || options.visualGrammar));
@@ -715,7 +720,7 @@
       state.redoStack = [];
       state.coachObservations = utils.deepClone(payload.coach_observations || []);
       const importedLibrary = { ...defaultLibrary(), ...utils.deepClone(payload.knowledge_library || {}) };
-      if (payload.version !== "0.4.0") {
+      if (["0.2.0", "0.3.0"].includes(payload.version)) {
         const validated = [];
         (importedLibrary.validated_cases || []).forEach((record) => {
           if (record.status === "validated" || record.status === "validated_case" || record.validation && record.validation.status === "validated_case") validated.push(record);
@@ -727,7 +732,7 @@
       state.selectedAlternatives = utils.deepClone(payload.selected_alternatives || defaultAlternatives(generatedGeometry));
       state.geometryState = utils.deepClone(payload.geometry_state || { status: geometryStatus(generatedGeometry, coachReferenceGeometry, state.corrections, false), resolver: generatedGeometry ? "imported" : null });
       state.clarificationAnswers = utils.deepClone(payload.clarification_answers || {});
-      state.composition = utils.deepClone(payload.composition || { status: generatedGeometry ? "imported" : coachReferenceGeometry ? "manual_reference" : "not_started", questions: [], used_primitives: [], unresolved: [] });
+      state.composition = utils.deepClone(payload.composition || { status: generatedGeometry ? "imported" : coachReferenceGeometry ? "manual_reference" : "not_started", composition_status: generatedGeometry ? "ready" : "not_started", geometry_status: generatedGeometry || coachReferenceGeometry ? "ready" : "unavailable", questions: [], used_primitives: [], unresolved: [], coverage: null, plan: null });
       state.completeness = utils.deepClone(payload.completeness || { semantic: "unknown", spatial: "unknown", geometry: generatedGeometry || coachReferenceGeometry ? "available" : "unavailable", visual_validation: "not_reviewed" });
       state.derivations = utils.deepClone(payload.derivations || derivationState(state.currentCase.description, Boolean(generatedGeometry || coachReferenceGeometry)));
       correctionSequence = state.corrections.length;
