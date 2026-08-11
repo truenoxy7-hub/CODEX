@@ -115,10 +115,16 @@ preserva totes les alternatives. Les coordenades de lectura viuen només a
 `geometry.json` i poden revisar-se sense canviar el significat tàctic. El
 contracte es documenta a [`GEOMETRY_CONTRACT.md`](GEOMETRY_CONTRACT.md).
 
-La interfície MVP no genera encara geometria des de text arbitrari. Carrega la
-derivació reproduïble d'UVOF015 i en separa dues versions: la generada i la de
-treball. La correcció gràfica només modifica la segona i sempre queda vinculada
-a un esdeveniment traçable.
+La interfície MVP accepta text arbitrari, però no afirma entendre’l completament
+ni genera geometria general. Un `InterpretationProvider` retorna coneixement
+validat, provisional, desconegut i no resolt. UVOF015 disposa d’una derivació
+reproduïble; la resta de casos només tindran `generatedGeometry` quan existeixi
+un resolver identificat.
+
+Sense resolver, l’entrenador pot crear una `coach_reference_geometry`. Aquest
+artefacte és una referència del cas, no geometria derivada, i conserva
+`canonical_promotion: false`. La correcció gràfica només modifica la versió de
+treball i queda vinculada a un esdeveniment traçable.
 
 ## 8. Correcció supervisada
 
@@ -131,6 +137,14 @@ altera automàticament el corpus, el contracte espacial ni les regles generals.
 La reutilització exigeix una promoció explícita i produeix primer un candidat.
 El model complet es documenta a
 [`CORRECTION_MODEL.md`](CORRECTION_MODEL.md).
+
+## 8.1. Model semàntic parcial
+
+Un cas universal pot contenir participants, materials, espais, accions,
+decisions i fases amb estats diferents d’autoritat. Una coincidència del
+vocabulari local és `provisional`; una confirmació de l’entrenador pot ser
+`validated`; una expressió sense definició es conserva com `unknown`. El buit
+no s’omple mitjançant una equivalència inventada.
 
 ## 9. Corpus d'exercicis
 

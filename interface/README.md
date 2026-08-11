@@ -1,32 +1,28 @@
-# Espai de treball MVP de TRAÇA
+# Workspace universal de TRAÇA
 
-Primera vertical supervisada del cicle:
+Aplicació estàtica del cicle supervisat:
 
 ```text
-descriure → interpretar → generar → revisar → corregir
-          → validar → guardar → reutilitzar
+descriure → interpretar parcialment → completar → representar si és possible
+          → corregir → preflight → validar → guardar → promocionar opcionalment
 ```
-
-UVOF015 és el cas executable real. La interfície carrega la seva semàntica
-resumida, les relacions espacials referenciades i la geometria derivada. El
-text es pot inspeccionar, però el motor actual no interpreta text arbitrari i
-no genera un exercici inventat quan la descripció canvia.
 
 ## Arquitectura
 
-- `data/`: paquets estàtics del cas, la pista i la geometria;
-- `js/store.js`: estat central i transicions del cas;
-- `js/corrections.js`: model i aplicació dels esdeveniments;
-- `js/visual-grammar.js`: diccionari visual estructurat;
-- `js/renderer.js`: SVG determinista i sense política semàntica;
-- `js/editor.js`: selecció i arrossegament;
-- `js/import-export.js`: paquet portable del cas;
-- `js/persistence.js`: persistència local;
-- `js/knowledge-library.js`: vistes de casos, candidats i diccionaris;
+- `data/handball-knowledge.js`: vocabulari local auditable;
+- `js/interpretation-provider.js`: providers canònic i local;
+- `js/store.js`: estat universal, models, geometries i biblioteca;
+- `js/manual-geometry.js`: referència manual no generada;
+- `js/corrections.js` i `js/change-explainer.js`: events i explicacions;
+- `js/workspace-preflight.js`: diagnòstics explicables;
+- `js/promotion.js`: candidats explícits;
+- `js/visual-grammar.js`, `renderer.js`, `editor.js`: representació i edició;
+- `js/import-export.js` i `persistence.js`: paquet v0.3 i estat local;
 - `js/app.js`: coordinació de la interfície.
 
-S'utilitzen scripts clàssics perquè l'aplicació també es pugui obrir amb
-`file://`; no hi ha backend ni dependències frontend.
+UVOF015 és l’exemple canònic amb resolver. Un text nou no hereta la seva
+geometria. Sense resolver, el cas es pot guardar i pot contenir una
+`coach_reference_geometry` de l’entrenador.
 
 ## Execució
 
@@ -34,9 +30,6 @@ S'utilitzen scripts clàssics perquè l'aplicació també es pugui obrir amb
 make interface
 ```
 
-Obre `http://localhost:8000` o `interface/index.html` directament. L'estat es
-guarda al navegador amb la clau `traca.workspace.v0.2`.
-
-Les correccions sempre afecten la versió de treball. «Reiniciar» reconstrueix
-el cas des de la geometria generada; «validar» crea una instantània local i no
-promou res al corpus.
+Obre `http://localhost:8000` o `interface/index.html`. No hi ha backend ni
+dependències frontend. L’estat usa la clau `traca.workspace.v0.3` i validar no
+promociona automàticament cap coneixement.

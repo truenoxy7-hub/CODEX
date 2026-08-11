@@ -9,29 +9,26 @@
   function exportPackage(snapshot, clock) {
     return {
       format: "TRACA_training_case",
-      version: "0.2.0",
-      metadata: {
-        exported_at: (clock || (() => new Date().toISOString()))(),
-        application: "TRAÇA MVP",
-        canonical_promotion: false
-      },
+      version: "0.3.0",
+      metadata: { exported_at: (clock || (() => new Date().toISOString()))(), application: "TRAÇA universal workspace", canonical_promotion: false },
       case: utils.deepClone(snapshot.currentCase),
       description: snapshot.currentCase.description,
       source_refs: utils.deepClone(snapshot.currentCase.source_refs || []),
-      semantic_ref: snapshot.currentCase.semantic_ref,
-      spatial_ref: snapshot.currentCase.spatial_ref,
+      interpretation: utils.deepClone(snapshot.interpretation),
+      semantic_model: utils.deepClone(snapshot.semanticModel),
+      spatial_model: utils.deepClone(snapshot.spatialModel),
+      geometry_state: utils.deepClone(snapshot.geometryState),
       generated_geometry: utils.deepClone(snapshot.generatedGeometry),
-      generated_visual_grammar: utils.deepClone(snapshot.generatedVisualGrammar),
+      coach_reference_geometry: utils.deepClone(snapshot.coachReferenceGeometry),
+      working_geometry: utils.deepClone(snapshot.workingGeometry),
+      base_visual_grammar: utils.deepClone(snapshot.baseVisualGrammar),
+      case_visual_overrides: utils.deepClone(snapshot.caseVisualOverrides),
       corrections: utils.deepClone(snapshot.corrections),
+      coach_observations: utils.deepClone(snapshot.coachObservations),
       validated_geometry: utils.deepClone(snapshot.validatedGeometry),
       validated_visual_grammar: utils.deepClone(snapshot.validatedVisualGrammar),
-      visual_decisions: utils.deepClone(snapshot.workingVisualGrammar),
       selected_alternatives: utils.deepClone(snapshot.selectedAlternatives),
       validation: utils.deepClone(snapshot.validation),
-      promotion_candidates: {
-        patterns: utils.deepClone(snapshot.knowledgeLibrary.pattern_candidates),
-        general_rules: utils.deepClone(snapshot.knowledgeLibrary.general_rule_candidates)
-      },
       knowledge_library: utils.deepClone(snapshot.knowledgeLibrary)
     };
   }
@@ -39,11 +36,12 @@
   function validatePackage(payload) {
     const errors = [];
     if (!payload || payload.format !== "TRACA_training_case") errors.push("format");
-    if (!payload || payload.version !== "0.2.0") errors.push("version");
-    ["case", "generated_geometry", "generated_visual_grammar", "corrections"].forEach((key) => {
+    if (!payload || !["0.2.0", "0.3.0"].includes(payload.version)) errors.push("version");
+    ["case", "corrections", "validation", "knowledge_library"].forEach((key) => {
       if (!payload || payload[key] === undefined || payload[key] === null) errors.push(key);
     });
     if (payload && !Array.isArray(payload.corrections)) errors.push("corrections_type");
+    if (payload && payload.version === "0.3.0" && payload.generated_geometry && payload.geometry_state && payload.geometry_state.status === "coach_reference") errors.push("generated_geometry_conflicts_with_coach_reference");
     return { valid: errors.length === 0, errors };
   }
 

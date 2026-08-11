@@ -14,10 +14,13 @@ decideix com; el renderer només executa.
 | `defender` | participant defensiu real |
 | `passer` | suport de passada |
 | `pivot` | pivot atacant |
+| `goalkeeper` | porter o portera |
+| `generic_participant` | participant encara no canonitzat |
 | `ball` | pilota i possessió visible |
 | `cone` | límit, handicap o referència segons la semàntica del cas |
 | `bench` | banc com a material funcional |
 | `cylinder` | cilindre o handicap defensiu |
+| `generic_material` | material encara no canonitzat |
 
 El color no defineix el rol canònic: és una decisió visual editable.
 
@@ -31,6 +34,7 @@ El color no defineix el rol canònic: és una decisió visual editable.
 | `shot` | línia contínua destacada amb fletxa |
 | `feint` | polilínia contínua; preserva tots els vèrtexs |
 | `future_position` | referència discontínua sense confondre-la amb passada |
+| `generic_action` | trajectòria provisional encara no canonitzada |
 
 Els tipus geomètrics actuals es mapen amb àlies: `initial_pass` i
 `return_pass` són `pass`; `run_without_ball` és `movement_without_ball`; i
@@ -55,8 +59,23 @@ superació. Per això:
 - un ajust de vèrtex crea una correcció geomètrica explícita;
 - cap funció de suavitzat pot alterar la lectura funcional.
 
-## Vista neta i vista de control
+## Capes d’autoritat visual
 
-La vista neta mostra la representació destinada a lectura de pista. La vista
-de control afegeix zones, espais, identificadors, línies defensives, selecció i
-tiradors de trajectòria. Canviar de vista no modifica el cas.
+1. `baseVisualGrammar`: diccionari base immutable durant el cas;
+2. `caseVisualOverrides`: correccions que afecten només el cas actual;
+3. `visual_rule_candidates`: propostes explícites de reutilització;
+4. `validated_visual_dictionary`: convencions globals aprovades fora d’aquest
+   flux.
+
+Un override individual no canvia la gramàtica base i una validació de cas no
+el converteix en regla global.
+
+## Vistes
+
+- **Generat:** proposta original del resolver, read-only.
+- **Corregit:** geometria de treball amb correccions del cas.
+- **Comparar:** original en ghost blanc i resultat corregit sòlid, read-only.
+- **Control:** afegeix zones, espais, identificadors, línies defensives i
+  tiradors de trajectòria.
+
+Canviar de vista no modifica el cas.

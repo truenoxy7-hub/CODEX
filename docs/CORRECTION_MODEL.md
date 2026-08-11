@@ -3,61 +3,39 @@
 ## Esdeveniment
 
 Cada correcció compleix
-`schema/traca.correction-event.schema.v0.1.json` i conserva:
+`schema/traca.correction-event.schema.v0.1.json`. A més del canvi tècnic
+(`before`, `after`, operació i objectiu), conserva:
 
-```json
-{
-  "id": "CORR-TR-UVOF-015-0001",
-  "timestamp": "2026-08-11T10:00:00.000Z",
-  "target": {
-    "layer": "geometry",
-    "ref": "geometry:entity:A_ESQ",
-    "property": "position"
-  },
-  "operation": "move",
-  "before": [4.175, 14.1],
-  "after": [3.9, 13.8],
-  "author": "coach",
-  "scope": "case",
-  "status": "draft",
-  "reason": "Reposicionament manual a la pista",
-  "source_refs": ["exercises/TR-UVOF-015/spatial-relations.json#/nodes/0"]
-}
-```
+- `machine_diff` i `machine_explanation`, calculats pel sistema;
+- `coach_explanation`, redactada i editable per l’entrenador;
+- `concept_refs` i `context_refs`, preparats per comparar casos futurs;
+- `correction_type`, `target_role` i `target_relation`;
+- autor, abast, estat, fonts i marca temporal.
 
-## Capes
+## Classificació
 
-- `semantic`: corregeix o anota el significat; no muta el corpus a l'MVP;
-- `spatial`: corregeix una relació qualitativa; no muta el contracte espacial;
-- `geometry`: modifica la versió geomètrica de treball;
-- `visual`: modifica la gramàtica visual de treball.
+- canviar què significa una trajectòria o acció és `semantic`;
+- canviar interval, zona, contigüitat o relació és `spatial`;
+- moure una posició o un vèrtex és `geometry`;
+- canviar color, símbol, traç o convenció és `visual`.
 
-## Abast i estat
-
-L'abast inicial és `case`. `pattern_candidate` i
-`general_rule_candidate` només apareixen després d'una promoció explícita.
-L'estat passa de `draft` a `validated` quan l'entrenador valida la versió del
-cas. Aquest canvi no converteix l'esdeveniment en una regla.
+Un moviment no es converteix en regla tàctica pel fet d’haver estat validat.
 
 ## Reconstrucció
 
-`workingGeometry` es calcula aplicant l'historial ordenat a una còpia de
-`generatedGeometry`. Desfer elimina l'últim esdeveniment actiu; refer el torna
-a aplicar; reiniciar buida historial i pila de refer. Aquesta estratègia evita
-acumulacions opaques i permet verificar qualsevol estat.
+Les correccions semàntiques i espacials es reprodueixen sobre els models de
+treball. Les geomètriques s’apliquen a una còpia de `generatedGeometry` o de
+`coach_reference_geometry`; les visuals, a una còpia de `baseVisualGrammar`.
+Desfer, refer i reiniciar tornen a calcular l’estat, sense sobreescriure cap
+font.
 
-Les anotacions semàntiques i espacials queden a l'historial, però el reductor
-no les aplica a la geometria. Les correccions visuals s'apliquen a una còpia de
-la gramàtica generada.
+## Validació i similitud futura
 
-## Validació i promoció
+El preflight s’executa abans de validar. Els events passen de `draft` a
+`validated` només per al cas. Els camps de concepte, context, rol i relació
+permetran cercar correccions semblants més endavant sense necessitat
+d’embeddings en aquest MVP.
 
-La validació crea una instantània de la geometria i la gramàtica visuals de
-treball. Després hi ha tres accions independents:
-
-1. guardar només el cas validat;
-2. crear un candidat de patró reutilitzable;
-3. proposar una regla general candidata.
-
-Cap de les tres modifica els JSON canònics del repositori. La incorporació
-canònica requerirà un flux de revisió posterior.
+La generalització està documentada a
+[`KNOWLEDGE_PROMOTION.md`](KNOWLEDGE_PROMOTION.md). Cap esdeveniment entra
+automàticament en un candidat.

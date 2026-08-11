@@ -1,10 +1,15 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://traca.local/schema/traca.correction-event.schema.v0.1.json",
-  "title": "TRAÇA correction event v0.1",
+  "title": "TRAÇA correction event v0.2",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "timestamp", "target", "operation", "before", "after", "author", "scope", "status", "reason", "source_refs"],
+  "required": [
+    "id", "timestamp", "target", "operation", "before", "after", "author",
+    "scope", "status", "reason", "source_refs", "machine_diff",
+    "machine_explanation", "coach_explanation", "concept_refs", "context_refs",
+    "correction_type", "target_role", "target_relation"
+  ],
   "properties": {
     "id": { "type": "string", "pattern": "^CORR-[A-Za-z0-9_-]+-[0-9]{4}$" },
     "timestamp": { "type": "string", "format": "date-time" },
@@ -25,6 +30,24 @@
     "scope": { "enum": ["case", "pattern_candidate", "general_rule_candidate"] },
     "status": { "enum": ["draft", "validated"] },
     "reason": { "type": "string", "minLength": 1 },
-    "source_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+    "source_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "machine_diff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "property", "before", "after"],
+      "properties": {
+        "operation": { "type": "string" },
+        "property": { "type": "string" },
+        "before": true,
+        "after": true
+      }
+    },
+    "machine_explanation": { "type": "string", "minLength": 1 },
+    "coach_explanation": { "type": "string" },
+    "concept_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "context_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "correction_type": { "type": "string", "minLength": 1 },
+    "target_role": { "type": ["string", "null"] },
+    "target_relation": { "type": ["string", "null"] }
   }
 }

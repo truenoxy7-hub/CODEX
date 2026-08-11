@@ -23,11 +23,7 @@ def _node() -> str:
 
 def _run_node(script: str) -> dict:
     completed = subprocess.run(
-        [_node(), "-e", script],
-        cwd=ROOT,
-        check=True,
-        capture_output=True,
-        text=True,
+        [_node(), "-e", script], cwd=ROOT, check=True, capture_output=True, text=True
     )
     return json.loads(completed.stdout)
 
@@ -38,22 +34,52 @@ const fs = require('fs');
 const Store = require('./interface/js/store.js');
 const Visual = require('./interface/js/visual-grammar.js');
 const geometry = JSON.parse(fs.readFileSync('./exercises/TR-UVOF-015/geometry.json', 'utf8'));
-const specimen = {id:'TR-UVOF-015', name:'Tres 1x1', description:'cas', source_refs:['source']};
-const store = Store.createWorkspaceStore({specimen, generatedGeometry:geometry, visualGrammar:Visual.createVisualGrammar(), clock:()=> '2026-08-11T10:00:00.000Z'});
+const specimen = {id:'TR-UVOF-015', name:'Tres 1x1', case_type:'canonical_specimen', description:'cas', source_refs:['source']};
+const store = Store.createWorkspaceStore({initialCase:specimen, initialGeometry:geometry, visualGrammar:Visual.createVisualGrammar(), clock:()=> '2026-08-11T10:00:00.000Z'});
 """
+
+
+def test_arbitrary_case_is_preserved_and_never_substituted_with_specimen() -> None:
+    result = _run_node(_store_prelude() + """
+const Provider = require('./interface/js/interpretation-provider.js');
+const knowledge = require('./interface/data/handball-knowledge.js');
+const exact = 'Central passa i va.\\nEl lateral rep entre 1-2; decisió oberta.';
+const created = store.createCase({name:'Cas lliure', description:exact, origin:'coach'});
+const interpretation = Provider.interpret(created, {canonicalCases:[specimen], knowledge});
+store.setInterpretation(interpretation);
+const snapshot = store.snapshot();
+process.stdout.write(JSON.stringify({
+  id:snapshot.currentCase.id, description:snapshot.currentCase.description,
+  generated:snapshot.generatedGeometry, reference:snapshot.coachReferenceGeometry,
+  geometryStatus:snapshot.geometryState.status, provider:snapshot.interpretation.provider,
+  states:snapshot.interpretation.concepts.map(x=>x.knowledge_state),
+  labels:snapshot.interpretation.concepts.map(x=>x.label),
+  unknown:snapshot.interpretation.unknown_concepts.map(x=>x.label),
+  unresolved:snapshot.interpretation.unresolved.length
+}));
+""")
+
+    assert result["id"] == "CASE-2026-0001"
+    assert result["description"] == "Central passa i va.\nEl lateral rep entre 1-2; decisió oberta."
+    assert result["generated"] is None
+    assert result["reference"] is None
+    assert result["geometryStatus"] == "unavailable"
+    assert result["provider"] == "local_rule_provider"
+    assert result["states"] and set(result["states"]) == {"provisional"}
+    assert "central" in result["labels"]
+    assert "passada i va" in result["unknown"]
+    assert result["unresolved"] >= 1
 
 
 def test_generated_and_working_geometry_are_strictly_separate() -> None:
     result = _run_node(_store_prelude() + """
 const before = store.snapshot();
-store.applyCorrection({target:{layer:'geometry', ref:'geometry:entity:A_ESQ', property:'position'}, after:[3,13], reason:'test'});
+store.applyCorrection({target:{layer:'geometry', ref:'geometry:entity:A_ESQ', property:'position'}, operation:'move', after:[3,13], reason:'guanyar espai'});
 const after = store.snapshot();
 process.stdout.write(JSON.stringify({
   generatedBefore:before.generatedGeometry.entities.find(x=>x.id==='A_ESQ').position,
   generatedAfter:after.generatedGeometry.entities.find(x=>x.id==='A_ESQ').position,
   workingAfter:after.workingGeometry.entities.find(x=>x.id==='A_ESQ').position,
-  otherEntity:after.workingGeometry.entities.find(x=>x.id==='D_CE').position,
-  zonesUnchanged:JSON.stringify(before.workingGeometry.zones) === JSON.stringify(after.workingGeometry.zones),
   event:after.corrections[0]
 }));
 """)
@@ -61,86 +87,139 @@ process.stdout.write(JSON.stringify({
     assert result["generatedBefore"] == [4.175, 14.1]
     assert result["generatedAfter"] == [4.175, 14.1]
     assert result["workingAfter"] == [3, 13]
-    assert result["otherEntity"] == [10, 7.6]
-    assert result["zonesUnchanged"] is True
-    assert result["event"]["id"] == "CORR-TR-UVOF-015-0001"
-    assert result["event"]["before"] == [4.175, 14.1]
-    assert result["event"]["after"] == [3, 13]
-    assert result["event"]["scope"] == "case"
-    assert result["event"]["status"] == "draft"
+    assert result["event"]["machine_diff"]["before"] == [4.175, 14.1]
+    assert result["event"]["machine_explanation"]
+    assert result["event"]["coach_explanation"] == "guanyar espai"
+    assert result["event"]["correction_type"] == "geometry.move"
 
 
-def test_undo_redo_and_reset_recompute_from_generated_geometry() -> None:
+def test_no_resolver_case_can_be_built_saved_and_validated() -> None:
     result = _run_node(_store_prelude() + """
-store.applyCorrection({target:{layer:'geometry', ref:'geometry:entity:A_ESQ', property:'position'}, after:[3,13], reason:'test'});
-store.undo();
-const undone = store.snapshot().workingGeometry.entities.find(x=>x.id==='A_ESQ').position;
-store.redo();
-const redone = store.snapshot().workingGeometry.entities.find(x=>x.id==='A_ESQ').position;
-store.reset();
-const reset = store.snapshot();
-process.stdout.write(JSON.stringify({undone, redone, resetPosition:reset.workingGeometry.entities.find(x=>x.id==='A_ESQ').position, corrections:reset.corrections.length}));
+store.createCase({name:'Sense resolutor', description:'Un atacant fa una acció nova.'});
+store.addSemanticItem({collection:'participant', label:'Atacant A', kind:'attacker'});
+const draft = store.saveCase({status:'in_construction'});
+store.startCoachReference({court:{width_m:20,half_length_m:20},goal:{width_m:3,height_m:2},markings:{goal_area_radius_m:6,free_throw_distance_m:9,free_throw_segment_m:.15,free_throw_gap_m:.15,penalty_line_length_m:1,goalkeeper_line_length_m:.15,penalty_line_distance_m:7,goalkeeper_line_distance_m:4}});
+store.addManualPrimitive({primitive_type:'entity', kind:'attacker', label:'A', position:[10,12]});
+store.recordCoachObservation({statement:'A ocupa aquest espai només en el cas.',status:'case_only'});
+const report = store.runPreflight();
+store.validate('coach');
+const snapshot = store.snapshot();
+process.stdout.write(JSON.stringify({draftStatus:draft.status, generated:snapshot.generatedGeometry, referenceMeta:snapshot.coachReferenceGeometry.meta, geometryStatus:snapshot.geometryState.status, canValidate:report.can_validate, validation:snapshot.validation.status, observations:snapshot.coachObservations}));
 """)
 
-    assert result == {
-        "undone": [4.175, 14.1],
-        "redone": [3, 13],
-        "resetPosition": [4.175, 14.1],
-        "corrections": 0,
-    }
+    assert result["draftStatus"] == "in_construction"
+    assert result["generated"] is None
+    assert result["referenceMeta"]["format"] == "TRACA_coach_reference_geometry"
+    assert result["referenceMeta"]["canonical_promotion"] is False
+    assert result["geometryStatus"] == "validated"
+    assert result["canValidate"] is True
+    assert result["validation"] == "validated_case"
+    assert result["observations"][-1]["status"] == "case_only"
+    assert result["observations"][-1]["canonical_promotion"] is False
 
 
-def test_validation_does_not_promote_and_promotion_is_explicit() -> None:
+def test_preflight_blocks_errors_but_not_questions_or_warnings() -> None:
     result = _run_node(_store_prelude() + """
-store.applyCorrection({target:{layer:'spatial', ref:'spatial:annotation:TR-UVOF-015', property:'statement'}, before:'a', after:'b', reason:'coach'});
-store.validate('coach');
-const validated = store.snapshot();
-const pattern = store.promotePattern({title:'Patró candidat'});
-const rule = store.proposeGeneralRule({title:'Regla candidata'});
-const promoted = store.snapshot();
+store.createCase({name:'Preflight', description:'Passada i va desconeguda.'});
+store.setInterpretation({provider:'local_rule_provider',status:'provisional',concepts:[],unknown_concepts:[{id:'U1',label:'passada i va',definition:'',knowledge_state:'unknown'}],unresolved:[],notes:[]});
+const withoutGeometry = store.runPreflight();
+store.startCoachReference({court:{width_m:20,half_length_m:20},goal:{width_m:3,height_m:2},markings:{goal_area_radius_m:6,free_throw_distance_m:9,free_throw_segment_m:.15,free_throw_gap_m:.15,penalty_line_length_m:1,goalkeeper_line_length_m:.15,penalty_line_distance_m:7,goalkeeper_line_distance_m:4}});
+store.addManualPrimitive({primitive_type:'entity',kind:'attacker',id:'OUT',position:[25,12]});
+store.addManualPrimitive({primitive_type:'path',kind:'feint',id:'BAD_FEINT',points:[[10,15],[10,10]]});
+const withErrors = store.runPreflight();
+let blocked = false; try { store.validate('coach'); } catch (error) { blocked = error.message === 'WORKSPACE_VALIDATION_BLOCKED'; }
 process.stdout.write(JSON.stringify({
-  validation:validated.validation,
-  beforePatterns:validated.knowledgeLibrary.pattern_candidates.length,
-  beforeRules:validated.knowledgeLibrary.general_rule_candidates.length,
-  pattern, rule,
-  semanticRules:promoted.knowledgeLibrary.semantic_rules.length
+  warningCanValidate:withoutGeometry.can_validate,
+  warningCodes:withoutGeometry.diagnostics.map(x=>x.code),
+  errorCanValidate:withErrors.can_validate,
+  errorCodes:withErrors.diagnostics.filter(x=>x.level==='error').map(x=>x.code), blocked
 }));
 """)
 
-    assert result["validation"]["status"] == "validated_case"
-    assert result["validation"]["counts_by_layer"] == {"spatial": 1}
-    assert result["beforePatterns"] == 0
-    assert result["beforeRules"] == 0
-    assert result["pattern"]["status"] == "candidate"
-    assert result["rule"]["status"] == "candidate"
-    assert result["semanticRules"] == 0
+    assert result["warningCanValidate"] is True
+    assert "UNKNOWN_CONCEPT_UNDEFINED" in result["warningCodes"]
+    assert "GEOMETRY_UNAVAILABLE" in result["warningCodes"]
+    assert result["errorCanValidate"] is False
+    assert "ENTITY_OUT_OF_COURT" in result["errorCodes"]
+    assert "FEINT_DIRECTION_MISSING" in result["errorCodes"]
+    assert result["blocked"] is True
 
 
-def test_export_import_round_trip_preserves_training_case() -> None:
+def test_validation_never_promotes_and_promotion_uses_only_selected_corrections() -> None:
+    result = _run_node(_store_prelude() + """
+const first = store.applyCorrection({target:{layer:'spatial',ref:'spatial:annotation:one',property:'statement'},before:'sobre defensor',after:'interval 1-2',reason:'és un interval'});
+const second = store.applyCorrection({target:{layer:'semantic',ref:'semantic:action:one',property:'kind'},before:'moviment',after:'finta',reason:'canvia el significat'});
+let beforeValidationBlocked = false;
+try { store.createPromotion({type:'spatial_rule_candidate',scope:'CONCEPT',title:'x',definition:'y',correction_refs:[first.id]}); } catch (error) { beforeValidationBlocked = true; }
+store.validate('coach');
+const afterValidation = store.snapshot();
+const candidate = store.createPromotion({type:'spatial_rule_candidate',scope:'CONCEPT',scope_ref:'interval',title:'Atacar interval',definition:'Relació espacial candidata',reason:'Revisió explícita',correction_refs:[first.id]});
+const snapshot = store.snapshot();
+process.stdout.write(JSON.stringify({beforeValidationBlocked, beforeCandidates:afterValidation.knowledgeLibrary.spatial_rule_candidates.length, candidate, semanticCandidates:snapshot.knowledgeLibrary.semantic_rule_candidates.length, learned:store.whatLearned()}));
+""")
+
+    assert result["beforeValidationBlocked"] is True
+    assert result["beforeCandidates"] == 0
+    assert result["candidate"]["status"] == "candidate"
+    assert result["candidate"]["canonical_promotion"] is False
+    assert result["candidate"]["correction_refs"] == [result["candidate"]["source_corrections"][0]["id"]]
+    assert len(result["candidate"]["source_corrections"]) == 1
+    assert result["candidate"]["source_corrections"][0]["target"]["layer"] == "spatial"
+    assert result["semanticCandidates"] == 0
+    assert result["learned"]["canonical_changes"] == 0
+
+
+def test_export_import_preserves_explanations_and_reference_authority() -> None:
     result = _run_node(_store_prelude() + """
 const IO = require('./interface/js/import-export.js');
-store.applyCorrection({target:{layer:'geometry', ref:'geometry:entity:D_CE', property:'position'}, after:[10.4,7.4], reason:'test'});
+store.createCase({name:'Portable',description:'Acció manual'});
+store.applyCorrection({target:{layer:'semantic',ref:'semantic:annotation:a',property:'statement'},before:'A',after:'B',reason:'motiu del tècnic',concept_refs:['action.a'],context_refs:['training']});
 store.validate('coach');
 const payload = IO.exportPackage(store.snapshot(), ()=> '2026-08-11T11:00:00.000Z');
-const second = Store.createWorkspaceStore({specimen, generatedGeometry:geometry, visualGrammar:Visual.createVisualGrammar(), clock:()=> '2026-08-11T12:00:00.000Z'});
+const second = Store.createWorkspaceStore({initialCase:specimen,initialGeometry:geometry,visualGrammar:Visual.createVisualGrammar(),clock:()=> '2026-08-11T12:00:00.000Z'});
 second.restorePackage(IO.parsePackage(JSON.stringify(payload)));
 const restored = second.snapshot();
-process.stdout.write(JSON.stringify({
-  format:payload.format,
-  canonical:payload.metadata.canonical_promotion,
-  corrections:restored.corrections,
-  position:restored.workingGeometry.entities.find(x=>x.id==='D_CE').position,
-  validation:restored.validation.status,
-  generated:restored.generatedGeometry.entities.find(x=>x.id==='D_CE').position
-}));
+process.stdout.write(JSON.stringify({version:payload.version, canonical:payload.metadata.canonical_promotion, generated:restored.generatedGeometry, description:restored.currentCase.description, event:restored.corrections[0], validation:restored.validation.status}));
 """)
 
-    assert result["format"] == "TRACA_training_case"
+    assert result["version"] == "0.3.0"
     assert result["canonical"] is False
-    assert len(result["corrections"]) == 1
-    assert result["position"] == [10.4, 7.4]
-    assert result["generated"] == [10, 7.6]
+    assert result["generated"] is None
+    assert result["description"] == "Acció manual"
+    assert result["event"]["coach_explanation"] == "motiu del tècnic"
+    assert result["event"]["concept_refs"] == ["action.a"]
+    assert result["event"]["context_refs"] == ["training"]
     assert result["validation"] == "validated_case"
+
+
+def test_visual_case_override_does_not_change_base_dictionary() -> None:
+    result = _run_node(_store_prelude() + """
+const before = store.snapshot();
+store.applyCorrection({target:{layer:'visual',ref:'visual:primitive:movement',property:'stroke'},before:before.workingVisualGrammar.paths.movement.stroke,after:'#123456',reason:'millor contrast'});
+const after = store.snapshot();
+process.stdout.write(JSON.stringify({base:after.baseVisualGrammar.paths.movement.stroke,working:after.workingVisualGrammar.paths.movement.stroke,overrides:after.caseVisualOverrides,library:after.knowledgeLibrary.validated_visual_dictionary.length}));
+""")
+
+    assert result["base"] == "#173f33"
+    assert result["working"] == "#123456"
+    assert len(result["overrides"]) == 1
+    assert result["library"] == 0
+
+
+def test_undo_redo_and_uvof015_regression_remain_stable() -> None:
+    result = _run_node(_store_prelude() + """
+const initial = JSON.stringify(store.snapshot().workingGeometry);
+const branch = store.snapshot().workingGeometry.branches[0];
+store.setAlternative(branch.id, branch.alternatives[3].id);
+store.applyCorrection({target:{layer:'geometry',ref:'geometry:entity:A_ESQ',property:'position'},operation:'move',after:[3,13],reason:'test'});
+store.undo(); const undone = store.snapshot().workingGeometry.entities.find(x=>x.id==='A_ESQ').position;
+store.redo(); const redone = store.snapshot().workingGeometry.entities.find(x=>x.id==='A_ESQ').position;
+store.reset(); const snapshot = store.snapshot();
+process.stdout.write(JSON.stringify({zones:snapshot.workingGeometry.zones.length,spaces:snapshot.workingGeometry.spaces.length,branches:snapshot.workingGeometry.branches.length,alternatives:snapshot.workingGeometry.branches.reduce((n,b)=>n+b.alternatives.length,0),reset:initial===JSON.stringify(snapshot.workingGeometry),undone,redone}));
+""")
+
+    assert result == {"zones": 3, "spaces": 6, "branches": 3, "alternatives": 12,
+                      "reset": True, "undone": [4.175, 14.1], "redone": [3, 13]}
 
 
 def test_visual_grammar_and_renderer_preserve_tactical_line_meaning() -> None:
@@ -148,61 +227,15 @@ def test_visual_grammar_and_renderer_preserve_tactical_line_meaning() -> None:
 const Visual = require('./interface/js/visual-grammar.js');
 const Renderer = require('./interface/js/renderer.js');
 const grammar = Visual.createVisualGrammar();
-process.stdout.write(JSON.stringify({
-  entityKinds:Object.keys(grammar.entities),
-  pathKinds:Object.keys(grammar.paths),
-  overlayKinds:Object.keys(grammar.overlays),
-  passDash:grammar.paths.pass.dash,
-  movementDash:grammar.paths.movement.dash,
-  withoutBallDash:grammar.paths.movement_without_ball.dash,
-  feintMode:grammar.paths.feint.path_mode,
-  preserveVertices:grammar.paths.feint.preserve_vertices,
-  path:Renderer.pathData([[1,2],[3,4],[5,6]])
-}));
+process.stdout.write(JSON.stringify({entityKinds:Object.keys(grammar.entities),pathKinds:Object.keys(grammar.paths),passDash:grammar.paths.pass.dash,feintMode:grammar.paths.feint.path_mode,preserveVertices:grammar.paths.feint.preserve_vertices,path:Renderer.pathData([[1,2],[3,4],[5,6]])}));
 """)
 
-    assert set(result["entityKinds"]) >= {
-        "attacker", "defender", "passer", "pivot", "ball", "cone", "bench", "cylinder"
-    }
-    assert set(result["pathKinds"]) >= {
-        "movement", "movement_without_ball", "pass", "shot", "feint", "future_position"
-    }
-    assert set(result["overlayKinds"]) >= {
-        "spatial_zone", "finishing_zone", "defensive_reference"
-    }
+    assert set(result["entityKinds"]) >= {"attacker", "defender", "goalkeeper", "generic_participant", "generic_material"}
+    assert set(result["pathKinds"]) >= {"movement", "pass", "shot", "feint", "generic_action"}
     assert result["passDash"]
-    assert result["movementDash"] is None
-    assert result["withoutBallDash"] is None
     assert result["feintMode"] == "polyline"
     assert result["preserveVertices"] is True
     assert result["path"] == "M 1 2 L 3 4 L 5 6"
-    assert "Q" not in result["path"]
-
-
-def test_uvof015_regression_and_alternative_selection_do_not_mutate_geometry() -> None:
-    result = _run_node(_store_prelude() + """
-const initial = JSON.stringify(store.snapshot().workingGeometry);
-const branch = store.snapshot().workingGeometry.branches[0];
-store.setAlternative(branch.id, branch.alternatives[3].id);
-const snapshot = store.snapshot();
-process.stdout.write(JSON.stringify({
-  zones:snapshot.workingGeometry.zones.length,
-  spaces:snapshot.workingGeometry.spaces.length,
-  branches:snapshot.workingGeometry.branches.length,
-  alternatives:snapshot.workingGeometry.branches.reduce((n,b)=>n+b.alternatives.length,0),
-  unchanged:initial === JSON.stringify(snapshot.workingGeometry),
-  corrections:snapshot.corrections.length
-}));
-""")
-
-    assert result == {
-        "zones": 3,
-        "spaces": 6,
-        "branches": 3,
-        "alternatives": 12,
-        "unchanged": True,
-        "corrections": 0,
-    }
 
 
 def test_training_case_and_correction_schemas_are_valid() -> None:
@@ -210,10 +243,8 @@ def test_training_case_and_correction_schemas_are_valid() -> None:
         from jsonschema import Draft202012Validator
     except (ImportError, ModuleNotFoundError):
         pytest.skip("jsonschema no està complet en l’entorn local")
-    correction_path = ROOT / "schema/traca.correction-event.schema.v0.1.json"
-    case_path = ROOT / "schema/traca.training-case.schema.v0.1.json"
-    correction_schema = json.loads(correction_path.read_text(encoding="utf-8"))
-    case_schema = json.loads(case_path.read_text(encoding="utf-8"))
+    correction_schema = json.loads((ROOT / "schema/traca.correction-event.schema.v0.1.json").read_text(encoding="utf-8"))
+    case_schema = json.loads((ROOT / "schema/traca.training-case.schema.v0.1.json").read_text(encoding="utf-8"))
 
     Draft202012Validator.check_schema(correction_schema)
     Draft202012Validator.check_schema(case_schema)

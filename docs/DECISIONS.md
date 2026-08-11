@@ -383,3 +383,38 @@ d'una gramàtica visual versionada.
 cursa sense pilota, és continu. La finta preserva els vèrtexs funcionals del
 canvi de direcció. Vista neta i vista de control comparteixen geometria i només
 difereixen en superposicions d'inspecció.
+
+## D-040 — Workspace universal amb UVOF015 com a espècimen
+
+**Decisió:** qualsevol text crea un cas nou independent. UVOF015 només activa el
+provider i el resolver canònics quan coincideixen identificador i
+`case_type: canonical_specimen`.
+
+## D-041 — Interpretació parcial i auditable
+
+**Decisió:** el matcher local pot reconèixer termes explícits, però els marca
+provisionals i conserva evidència, font i referència. Els desconeguts i els
+punts no resolts no s’eliminen ni s’assimilen automàticament.
+
+## D-042 — Referència geomètrica de l’entrenador
+
+**Decisió:** un cas sense resolver pot tenir `coach_reference_geometry`. No és
+`generatedGeometry`, no prova cap invariant tàctic i no es promociona.
+
+## D-043 — Preflight explicable per severitat
+
+**Decisió:** els errors estructurals o les contradiccions bloquegen la
+validació. Els warnings i les preguntes demanen revisió però poden quedar dins
+un cas validat. Cada diagnòstic ofereix missatge, objectiu i accions possibles.
+
+## D-044 — Promoció construïda des d’evidència seleccionada
+
+**Decisió:** només un cas validat pot obrir una promoció. El candidat conserva
+tipus, abast, cas font i únicament les correccions seleccionades; sempre neix
+`candidate` i no canònic.
+
+## D-045 — Quatre nivells de gramàtica visual
+
+**Decisió:** gramàtica base, override del cas, candidat visual i diccionari
+validat són nivells separats. Corregir un color o traç no modifica cap convenció
+global.

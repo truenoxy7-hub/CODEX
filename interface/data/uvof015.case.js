@@ -4,7 +4,7 @@ window.TRACA_UVOF015_CASE = {
   status: "validated_coach",
   exercise_type: "duels_per_zones",
   description: "Tres zones delimitades on es juguen simultàniament tres duels 1x1. A cada zona, l’atacant amb pilota passa al passador, inicia la cursa sense pilota, rep orientat i resol amb llibertat absoluta. Pot continuar per l’espai inicial si obté avantatge o fer una finta cap a l’espai contigu si el defensor tanca. Sense bot.",
-  engine_notice: "El motor executable actual carrega UVOF015 validat. Encara no interpreta text nou arbitrari en producció.",
+  engine_notice: "UVOF015 disposa d’un provider i un resolutor canònics. Els textos nous passen pel provider parcial i no hereten aquesta geometria.",
   semantic_ref: "corpus/uvof.semantic.json#/exercicis/14",
   spatial_ref: "exercises/TR-UVOF-015/spatial-relations.json",
   geometry_ref: "exercises/TR-UVOF-015/geometry.json",
@@ -53,5 +53,13 @@ window.TRACA_UVOF015_CASE = {
     "pivot i extrem",
     "passada, finta, 2x1 i recuperació",
     "subaccions i simetria"
+  ],
+  canonical_concepts: [
+    { id: "action.one_v_one", label: "1x1", category: "action", knowledge_state: "validated", source: "canonical_case_provider", canonical_concept_ref: "docs/DOMAIN_MODEL.md#1x1--finta" },
+    { id: "action.pass", label: "passada", category: "action", knowledge_state: "validated", source: "canonical_case_provider", canonical_concept_ref: "docs/DOMAIN_MODEL.md#6-flux-de-pilota" },
+    { id: "action.reception", label: "recepció orientada", category: "action", knowledge_state: "validated", source: "canonical_case_provider", canonical_concept_ref: "corpus/uvof.semantic.json#/exercicis/14/fases/0" },
+    { id: "action.feint", label: "finta", category: "action", knowledge_state: "validated", source: "canonical_case_provider", canonical_concept_ref: "docs/DOMAIN_MODEL.md#1x1--finta" },
+    { id: "role.passer", label: "passador", category: "participant_role", knowledge_state: "validated", source: "canonical_case_provider", canonical_concept_ref: "corpus/uvof.semantic.json#/exercicis/14/participants" },
+    { id: "material.cone", label: "con", category: "material", knowledge_state: "validated", source: "canonical_case_provider", canonical_concept_ref: "corpus/uvof.semantic.json#/exercicis/14/materials" }
   ]
 };

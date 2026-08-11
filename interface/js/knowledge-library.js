@@ -6,29 +6,29 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function (utils) {
   "use strict";
 
-  function countSections(library, grammar) {
-    return {
-      validated_cases: (library.validated_cases || []).length,
-      pattern_candidates: (library.pattern_candidates || []).length,
-      semantic_rules: (library.semantic_rules || []).length,
-      spatial_rules: (library.spatial_rules || []).length,
-      geometry_rules: (library.geometry_rules || []).length,
-      visual_dictionary: Object.keys((grammar && grammar.paths) || {}).length + Object.keys((grammar && grammar.entities) || {}).length,
-      general_rule_candidates: (library.general_rule_candidates || []).length
-    };
+  const SECTIONS = [
+    ["validated_cases", "Casos guardats"],
+    ["tactical_pattern_candidates", "Patrons tàctics candidats"],
+    ["semantic_rule_candidates", "Regles semàntiques candidates"],
+    ["spatial_rule_candidates", "Regles espacials candidates"],
+    ["geometry_rule_candidates", "Regles geomètriques candidates"],
+    ["visual_rule_candidates", "Regles visuals candidates"],
+    ["vocabulary_concept_candidates", "Conceptes de vocabulari candidats"],
+    ["validated_visual_dictionary", "Diccionari visual validat"],
+    ["unresolved_knowledge", "Coneixement no resolt"]
+  ];
+
+  function countSections(library) {
+    return Object.fromEntries(SECTIONS.map(([key]) => [key, (library[key] || []).length]));
+  }
+
+  function inspectableItems(library) {
+    return SECTIONS.map(([key, label]) => ({ key, label, items: utils.deepClone(library[key] || []) }));
   }
 
   function structuredLibrary(snapshot) {
-    return {
-      sections: countSections(snapshot.knowledgeLibrary, snapshot.workingVisualGrammar),
-      validated_cases: utils.deepClone(snapshot.knowledgeLibrary.validated_cases),
-      candidates: {
-        patterns: utils.deepClone(snapshot.knowledgeLibrary.pattern_candidates),
-        general_rules: utils.deepClone(snapshot.knowledgeLibrary.general_rule_candidates)
-      },
-      visual_dictionary: utils.deepClone(snapshot.workingVisualGrammar)
-    };
+    return { sections: countSections(snapshot.knowledgeLibrary), groups: inspectableItems(snapshot.knowledgeLibrary) };
   }
 
-  return { countSections, structuredLibrary };
+  return { SECTIONS, countSections, inspectableItems, structuredLibrary };
 });

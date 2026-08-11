@@ -224,20 +224,24 @@ amplades de zona i les distàncies de lectura dels participants són política
 visual provisional i no coneixement tàctic validat. Qualsevol canvi geomètric
 ha de mantenir la traçabilitat definida a `docs/GEOMETRY_CONTRACT.md`.
 
-## Espai de treball MVP
+## Workspace universal MVP
 
-El corpus UVOF és coneixement de referència i conjunt de regressió, no una
-llista tancada que defineixi el futur producte. Tot i això, l'espai de treball
-executable actual utilitza UVOF015 com a espècimen real i declara honestament
-que encara no interpreta text nou arbitrari. No s'ha de presentar una
-adaptació d'UVOF015 com si fos geometria derivada d'un text nou.
+El corpus UVOF és coneixement de referència i regressió, no un catàleg tancat.
+Qualsevol descripció nova crea un cas independent i conserva el text exacte.
+El matcher local només produeix coincidències provisionals; conceptes
+desconeguts i preguntes s’han de preservar. El provider canònic d’UVOF015 només
+pot activar-se amb identificador i `case_type: canonical_specimen` explícits.
 
-La interfície manté `generatedGeometry` separada de `workingGeometry`. Qualsevol
-moviment o canvi visual crea un esdeveniment de correcció de cas; desfer, refer
-i reiniciar reconstrueixen des de l'original. Una validació de cas no muta el
-corpus, i una generalització només pot néixer com a candidat després d'una
-promoció explícita. Els contractes viuen a `docs/LEARNING_WORKFLOW.md`,
-`docs/CORRECTION_MODEL.md` i `docs/VISUAL_GRAMMAR.md`.
+Sense resolver, el cas pot continuar i guardar-se. Una referència gràfica
+manual porta autoritat `coach_reference` i mai no és `generatedGeometry`.
+Correccions semàntiques, espacials, geomètriques i visuals conserven explicació
+de màquina i motiu de l’entrenador. Validar no muta el corpus; generalitzar
+requereix un Promotion Builder posterior amb correccions seleccionades.
+
+Llegeix també `docs/UNIVERSAL_CASE_WORKFLOW.md`,
+`docs/INTERPRETATION_PROVIDER.md`, `docs/KNOWLEDGE_PROMOTION.md`,
+`docs/LEARNING_WORKFLOW.md`, `docs/CORRECTION_MODEL.md` i
+`docs/VISUAL_GRAMMAR.md`.
 
 ## Regla general de permuta
 

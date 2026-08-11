@@ -1,55 +1,42 @@
-# Flux d'aprenentatge supervisat
-
-## Propòsit
-
-TRAÇA aprèn mitjançant contrast explícit amb l'entrenador. Una correcció no és
-una ordre opaca sobre un SVG: és un esdeveniment traçable vinculat al cas, a la
-capa afectada i a les fonts que el van originar.
+# Flux d’aprenentatge supervisat
 
 ## Cicle
 
-1. **Descriure.** Es conserva el text i l'origen.
-2. **Interpretar.** S'exposen fets, condicions i buits. A l'MVP, aquesta lectura
-   ja està validada per UVOF015; el text arbitrari encara no s'executa.
-3. **Generar.** El resolutor produeix `generatedGeometry` des d'una entrada
-   espacial `ready`.
-4. **Revisar.** L'entrenador contrasta vista neta, vista de control i fonts.
-5. **Corregir.** Cada canvi s'aplica només a `workingGeometry` o a la gramàtica
-   visual de treball i crea un esdeveniment.
-6. **Validar.** Es congela `validatedGeometry` i es validen els esdeveniments
-   actuals com a decisions d'aquest cas.
-7. **Guardar.** El cas validat s'incorpora a la biblioteca local.
-8. **Reutilitzar.** Només una acció explícita crea un candidat de patró o de
-   regla general.
+1. **Descriure.** Es conserva el text exacte, l’origen, les etiquetes i notes.
+2. **Interpretar.** Els providers locals separen coneixement validat,
+   coincidències provisionals, desconeguts i punts no resolts.
+3. **Completar.** L’entrenador afegeix o confirma elements del model semàntic.
+4. **Representar.** Un resolutor identificat pot aportar geometria. Sense
+   resolutor es pot continuar i crear una referència manual.
+5. **Corregir.** Cada canvi produeix un esdeveniment traçable i reversible.
+6. **Preflight.** Es comproven límits, identitats, fonts i contradiccions
+   tàctico-geomètriques amb severitat humana.
+7. **Validar.** Només els errors bloquegen. La validació congela el cas, no una
+   regla universal.
+8. **Guardar i aprendre.** El cas i els seus punts no resolts entren a la
+   biblioteca local. Una promoció separada pot crear un candidat.
 
 ## Garanties
 
-- l'original generat no es muta;
-- desfer i refer reprodueixen l'historial;
-- reiniciar elimina les correccions i recalcula des de l'original;
-- canviar l'alternativa visible no crea cap correcció;
-- validar un cas no altera la semàntica ni les relacions espacials canòniques;
-- una regla general sempre neix amb estat `candidate`;
-- la promoció canònica queda fora de l'MVP i requereix revisió humana.
+- l’entrada arbitrària no es reemplaça per un UVOF;
+- `generatedGeometry` no es muta;
+- `coach_reference_geometry` mai no es presenta com a generada;
+- desfer i refer reprodueixen l’historial;
+- validar no canvia corpus, contractes ni gramàtica global;
+- warnings i desconeguts són visibles i poden quedar dins el cas;
+- tota generalització neix com a candidat i requereix una decisió explícita.
 
-## Persistència i portabilitat
+## Paquet portable 0.3
 
-La sessió es desa a `localStorage`. El paquet exportat conserva:
+L’exportació conserva cas, text, interpretació, models semàntic i espacial,
+estat del resolutor, geometria generada o referència del tècnic, geometria de
+treball, gramàtica base, overrides del cas, correccions, explicacions,
+observacions, validació, alternatives i biblioteca. Les metadades declaren
+sempre `canonical_promotion: false`.
 
-- descripció i referències d'origen;
-- referències semàntiques i espacials;
-- geometria i gramàtica visual generades;
-- correccions i estat de validació;
-- geometria i gramàtica visual validades, si existeixen;
-- decisions visuals i alternatives visibles;
-- casos desats i candidats de promoció;
-- metadades que declaren `canonical_promotion: false`.
+## UVOF015
 
-La importació valida la forma mínima del paquet abans de restaurar l'estat.
-
-## Evolució prevista amb UVOF001
-
-El mateix model d'estat està preparat per afegir múltiples estats temporals,
-posicions futures, bancs i cons, rols de pivot i extrem, passades, fintes, 2x1,
-recuperacions, dues subaccions i simetria. Aquesta extensió s'ha de fer sobre el
-model; no mitjançant catorze resolutors independents dins la interfície.
+UVOF015 continua preservant tres zones, sis espais, tres branques i dotze
+alternatives. Carregar-lo explícitament activa el provider canònic i el resolver
+existent. No compartir-ne l’identificador i el tipus `canonical_specimen` evita
+qualsevol activació accidental.

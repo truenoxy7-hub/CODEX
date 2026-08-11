@@ -149,14 +149,17 @@
     });
     const x = entity.position[0];
     const y = entity.position[1];
-    if (style.shape === "triangle") {
+    if (style.shape === "text") {
+      const text = append(documentObject, group, "text", { x, y, "text-anchor": "middle", fill: style.text, "font-size": 0.34, "font-weight": 750 });
+      text.textContent = entity.label || entity.id;
+    } else if (style.shape === "triangle") {
       append(documentObject, group, "polygon", { points: `${x},${y - 0.3} ${x - 0.27},${y + 0.24} ${x + 0.27},${y + 0.24}`, fill: style.fill, stroke: style.stroke, "stroke-width": 0.045 });
     } else if (style.shape === "rect") {
       append(documentObject, group, "rect", { x: x - style.radius, y: y - 0.24, width: style.radius * 2, height: 0.48, rx: 0.05, fill: style.fill, stroke: style.stroke, "stroke-width": 0.045 });
     } else {
       append(documentObject, group, "circle", { cx: x, cy: y, r: style.radius, fill: style.fill, stroke: style.stroke, "stroke-width": 0.055 });
     }
-    if (entity.label) {
+    if (entity.label && style.shape !== "text") {
       const label = append(documentObject, group, "text", { x, y: y + 0.11, "text-anchor": "middle", fill: style.text, "font-size": 0.31, "font-weight": 850, "pointer-events": "none" });
       label.textContent = entity.label;
     }
@@ -167,6 +170,15 @@
       const selectedId = selectionMap[branch.id] || (branch.alternatives[0] && branch.alternatives[0].id);
       return (branch.alternatives || []).find((item) => item.id === selectedId) || branch.alternatives[0];
     }).filter(Boolean);
+  }
+
+  function addGhostGeometry(documentObject, svg, geometry, selectedMap) {
+    if (!geometry) return;
+    const group = append(documentObject, svg, "g", { class: "comparison-ghost", opacity: 0.42, "pointer-events": "none" });
+    (geometry.zones || []).forEach((zone) => append(documentObject, group, "polygon", { points: pointString(zone.polygon), fill: "none", stroke: "#ffffff", "stroke-width": 0.08, "stroke-dasharray": "0.18 0.14" }));
+    const paths = [...(geometry.common_paths || []), ...selectedAlternatives(geometry, selectedMap || {})];
+    paths.forEach((path) => append(documentObject, group, "path", { d: pathData(path.points), fill: "none", stroke: "#ffffff", "stroke-width": 0.12, "stroke-dasharray": "0.18 0.12" }));
+    (geometry.entities || []).forEach((entity) => append(documentObject, group, "circle", { cx: entity.position[0], cy: entity.position[1], r: 0.42, fill: "none", stroke: "#ffffff", "stroke-width": 0.1 }));
   }
 
   function render(container, options) {
@@ -182,6 +194,7 @@
       role: "img", "aria-label": `Representació editable de ${geometry.meta.exercise_id}`
     });
     addCourt(documentObject, svg, geometry.court);
+    if (options.comparisonGeometry) addGhostGeometry(documentObject, svg, options.comparisonGeometry, options.selectedAlternatives || {});
     if (view === "control") addControlOverlays(documentObject, svg, geometry, grammar, selection);
     (geometry.common_paths || []).forEach((path) => addPath(documentObject, svg, path, "common_path", grammar, selection, view));
     alternatives.forEach((alternative) => {

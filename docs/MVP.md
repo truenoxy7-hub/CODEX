@@ -2,76 +2,61 @@
 
 ## Resultat de producte
 
-L'MVP és el primer espai de treball supervisat on l'entrenador pot seguir el
-cicle complet d'un cas sense confondre una correcció local amb coneixement
-canònic:
+L’MVP és un workspace universal d’aprenentatge supervisat on l’entrenador pot
+introduir qualsevol situació d’handbol i completar aquest cicle:
 
 ```text
-DESCRIURE → INTERPRETAR → GENERAR → REVISAR → CORREGIR
-          → VALIDAR → GUARDAR → REUTILITZAR
+DESCRIURE → INTERPRETAR FINS ON SABEM → REPRESENTAR SI ÉS POSSIBLE
+          → CORREGIR → PREFLIGHT → VALIDAR → GUARDAR → PROMOCIONAR OPCIONALMENT
 ```
 
-La primera vertical real és `TR-UVOF-015`. El text, el contracte espacial i la
-geometria provenen dels artefactes validats del repositori. La interfície no
-simula encara una interpretació de text arbitrari: si el text canvia, el motor
-n'informa honestament i no inventa cap gràfic.
+`TR-UVOF-015` continua sent el primer cas executable canònic i la regressió del
+resolver. No és una plantilla que es substitueixi sota textos nous.
+
+## Capacitat funcional
+
+- crea casos locals amb text exacte, origen, etiquetes i notes;
+- mostra coneixement validat, coincidències provisionals, conceptes desconeguts
+  i punts no resolts;
+- ofereix un constructor assistit per participants, materials, espais, accions,
+  decisions i fases;
+- admet casos sense resolutor, guardat en construcció i referència geomètrica
+  manual amb autoritat de l’entrenador;
+- separa vistes generada, corregida, comparada i de control;
+- registra correccions amb diff, explicació de màquina i explicació humana;
+- executa un preflight amb errors bloquejants, warnings i informació;
+- valida casos sense promocionar coneixement;
+- crea candidats només des del Promotion Builder i només amb les correccions
+  escollides;
+- persisteix localment i exporta/importa paquets `0.3.0`.
+
+## Arquitectura honesta
+
+L’MVP implementa providers locals i un matcher lèxic auditable. No inclou un
+LLM, embeddings ni un resolutor general. Una coincidència coneguda és
+provisional fins que l’entrenador la valida; un concepte desconegut es preserva.
+Si no hi ha geometria resolta, la interfície ho declara i no n’inventa cap.
 
 ## Espai de treball
 
-- columna esquerra: cas, descripció, interpretació, branques, correcció,
-  validació i promoció;
-- centre: pista reglamentària IHF, vista neta o de control i editor SVG;
-- columna dreta: inspector de propietats, fonts i anotacions conceptuals;
-- franja inferior: historial, validació, biblioteca i traçabilitat;
-- mòbil: els mateixos quatre espais com a panells navegables.
+- esquerra: descripció, interpretació, representació, correcció, validació i
+  aprenentatge;
+- centre: pista IHF i les quatre vistes gràfiques;
+- dreta: inspector i classificació de discrepàncies;
+- franja inferior: historial, preflight, biblioteca, coneixement après i
+  traçabilitat;
+- mòbil: navegació entre els mateixos panells.
 
-## Capacitat funcional assolida
+## Fora d’abast
 
-- UVOF015 conserva tres zones, sis espais, setze entitats, tres branques i
-  dotze alternatives;
-- la selecció d'una alternativa és només estat de visualització;
-- participants, pilotes i cons es poden reposicionar;
-- els vèrtexs d'una trajectòria es poden arrossegar en vista de control;
-- el tipus de trajectòria i la seva convenció visual es poden corregir
-  explícitament;
-- desfer, refer i reiniciar reconstrueixen el treball des de la geometria
-  generada, que mai se sobreescriu;
-- cada canvi crea un esdeveniment amb capa, referència, propietat, abans,
-  després, autor, abast, estat, motiu i fonts;
-- les anotacions semàntiques i espacials no muten els artefactes canònics;
-- la validació congela una versió del cas, no una regla general;
-- després de validar hi ha tres decisions separades: guardar el cas, crear un
-  candidat de patró o proposar una regla general candidata;
-- l'estat es conserva a `localStorage` i es pot exportar/importar com a paquet
-  JSON estructurat.
+- backend, comptes o base de dades remota;
+- LLM API, embeddings o vector database;
+- resolutor geomètric general o catorze resolutors hardcoded;
+- modificació automàtica del corpus;
+- promoció canònica automàtica;
+- exportació PNG.
 
-## Gramàtica visual mínima
-
-La gramàtica visual és dades versionades, no condicionals escampats pel
-renderer. Distingeix atacant, defensor, passador, pivot, pilota, con, banc i
-cilindre; moviment, cursa sense pilota, passada, llançament, finta i posició
-futura; zona espacial, zona de finalització i referència defensiva.
-
-La passada és discontínua. El moviment del jugador, inclosa la cursa sense
-pilota, és continu. La finta és una polilínia que preserva el canvi funcional
-de direcció. El renderer no suavitza ni inventa punts.
-
-## Límits actuals
-
-- no hi ha interpretació general de text nou en producció;
-- no hi ha resolutor geomètric general per als altres catorze exercicis;
-- UVOF001 informa l'arquitectura futura, però encara no té editor executable;
-- no hi ha backend, comptes, col·laboració remota ni publicació de casos;
-- la biblioteca i les promocions són locals i candidates;
-- no hi ha exportació PNG ni selecció tàctica automàtica.
-
-## Criteri de validació
-
-L'entrenador ha de poder identificar sense ajuda:
-
-1. quina informació és font i quina és derivada;
-2. quina geometria és generada i quina és la versió de treball;
-3. què ha canviat, on, per què i qui ho ha canviat;
-4. com desfer o reiniciar sense perdre l'original;
-5. què valida només el cas i què requereix una promoció posterior;
-6. que una proposta general continua sent candidata.
+Els contractes detallats són
+[`UNIVERSAL_CASE_WORKFLOW.md`](UNIVERSAL_CASE_WORKFLOW.md),
+[`INTERPRETATION_PROVIDER.md`](INTERPRETATION_PROVIDER.md) i
+[`KNOWLEDGE_PROMOTION.md`](KNOWLEDGE_PROMOTION.md).

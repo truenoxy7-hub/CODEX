@@ -81,26 +81,27 @@ python scripts/validate_semantic.py
 python -m pytest -q
 ```
 
-## Primera interfície de l'MVP
+## Workspace universal de l’MVP
 
-La interfície és un espai de treball supervisat per a UVOF015. Permet revisar
-la interpretació validada, mostrar les dotze alternatives, editar entitats i
-trajectòries, desfer/refer, validar una versió i decidir explícitament si es
-guarda com a cas o com a candidat reutilitzable. La geometria generada queda
-sempre separada de la versió de treball.
+La interfície accepta qualsevol descripció nova i avança fins on arriba el
+coneixement local. Separa conceptes validats, coincidències provisionals,
+desconeguts i preguntes; permet completar el model, guardar casos sense
+resolver i crear una referència manual que mai es confon amb geometria
+generada. UVOF015 continua sent l’espècimen executable i la regressió canònica.
 
-El motor actual no interpreta text nou arbitrari en producció. La descripció
-es pot contrastar, però si canvia la interfície no inventa geometria ni presenta
-una adaptació d'UVOF015 com si fos una interpretació nova.
+El matcher actual és local i auditable; no és un intèrpret tàctic general. El
+workspace no inventa geometria ni presenta una adaptació d’UVOF015 com si fos
+un cas nou. Validar un cas tampoc promociona cap regla.
 
 ```bash
 make interface
 ```
 
 La interfície queda disponible a `http://localhost:8000` i també es pot obrir
-directament. L'estat s'emmagatzema només a `localStorage` i es pot
-exportar/importar com un paquet JSON. L'abast es documenta a
-[`docs/MVP.md`](docs/MVP.md).
+directament. L’estat s’emmagatzema només a `localStorage` i es pot
+exportar/importar com un paquet JSON v0.3. L’abast es documenta a
+[`docs/MVP.md`](docs/MVP.md) i
+[`docs/UNIVERSAL_CASE_WORKFLOW.md`](docs/UNIVERSAL_CASE_WORKFLOW.md).
 
 Per veure exclusivament la matriu read-only del preflight:
 

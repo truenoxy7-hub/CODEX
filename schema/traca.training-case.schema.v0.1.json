@@ -1,47 +1,73 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://traca.local/schema/traca.training-case.schema.v0.1.json",
-  "title": "TRAÇA portable training case v0.2",
+  "title": "TRAÇA portable training case v0.3",
   "type": "object",
+  "additionalProperties": false,
   "required": [
     "format", "version", "metadata", "case", "description", "source_refs",
-    "generated_geometry", "generated_visual_grammar", "corrections", "visual_decisions",
-    "selected_alternatives", "validation", "promotion_candidates", "knowledge_library"
+    "interpretation", "semantic_model", "spatial_model", "geometry_state",
+    "generated_geometry", "coach_reference_geometry", "working_geometry",
+    "base_visual_grammar", "case_visual_overrides", "corrections",
+    "coach_observations", "validated_geometry", "validated_visual_grammar",
+    "selected_alternatives", "validation", "knowledge_library"
   ],
   "properties": {
     "format": { "const": "TRACA_training_case" },
-    "version": { "const": "0.2.0" },
+    "version": { "const": "0.3.0" },
     "metadata": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["exported_at", "application", "canonical_promotion"],
       "properties": {
         "exported_at": { "type": "string", "format": "date-time" },
-        "application": { "type": "string" },
+        "application": { "type": "string", "minLength": 1 },
         "canonical_promotion": { "const": false }
       }
     },
-    "case": { "type": "object", "required": ["id", "name", "description"] },
+    "case": {
+      "type": "object",
+      "required": ["id", "name", "description"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" }
+      }
+    },
     "description": { "type": "string" },
-    "source_refs": { "type": "array", "items": { "type": "string" } },
-    "semantic_ref": { "type": ["string", "null"] },
-    "spatial_ref": { "type": ["string", "null"] },
-    "generated_geometry": { "type": "object" },
-    "generated_visual_grammar": { "type": "object" },
+    "source_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "interpretation": { "type": "object" },
+    "semantic_model": { "type": "object" },
+    "spatial_model": { "type": "object" },
+    "geometry_state": {
+      "type": "object",
+      "required": ["status", "resolver"],
+      "properties": {
+        "status": { "enum": ["unavailable", "generated", "coach_reference", "corrected", "validated"] },
+        "resolver": { "type": ["string", "null"] }
+      }
+    },
+    "generated_geometry": { "type": ["object", "null"] },
+    "coach_reference_geometry": { "type": ["object", "null"] },
+    "working_geometry": { "type": ["object", "null"] },
+    "base_visual_grammar": { "type": "object" },
+    "case_visual_overrides": { "type": "array" },
     "corrections": {
       "type": "array",
       "items": { "$ref": "traca.correction-event.schema.v0.1.json" }
     },
+    "coach_observations": { "type": "array" },
     "validated_geometry": { "type": ["object", "null"] },
     "validated_visual_grammar": { "type": ["object", "null"] },
-    "visual_decisions": { "type": "object" },
     "selected_alternatives": { "type": "object", "additionalProperties": { "type": "string" } },
-    "validation": { "type": "object", "required": ["status", "correction_count", "counts_by_layer"] },
-    "promotion_candidates": {
+    "validation": {
       "type": "object",
-      "required": ["patterns", "general_rules"],
+      "required": ["status", "correction_count", "counts_by_layer", "preflight"],
       "properties": {
-        "patterns": { "type": "array" },
-        "general_rules": { "type": "array" }
+        "status": { "enum": ["pending", "changes_pending", "blocked", "validated_case"] },
+        "correction_count": { "type": "integer", "minimum": 0 },
+        "counts_by_layer": { "type": "object" },
+        "preflight": { "type": ["object", "null"] }
       }
     },
     "knowledge_library": { "type": "object" }

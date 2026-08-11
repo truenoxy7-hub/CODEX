@@ -4,7 +4,7 @@
   root.TRACA_PERSISTENCE = api;
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
-  const STORAGE_KEY = "traca.workspace.v0.2";
+  const STORAGE_KEY = "traca.workspace.v0.3";
 
   function load(storage) {
     try {

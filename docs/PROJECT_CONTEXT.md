@@ -85,9 +85,12 @@ superioritats consecutives, un 6x6 complet i tres duels simultanis delimitats.
 Cap d'aquestes capes canòniques conté coordenades ni render. Com a capa
 posterior separada, l'MVP ja deriva `geometry.json` i SVG per a UVOF015 a partir
 del contracte v0.3 `ready`, conservant les dotze alternatives i una política de
-disposició explícitament provisional. La interfície és ara un espai de treball
-supervisat sobre UVOF015: manté separades la geometria generada i la còpia de
-treball, registra les correccions, permet desfer/refer, valida versions de cas i
-només crea patrons o regles com a candidats després d'una decisió explícita.
-Encara no interpreta text nou arbitrari en producció i ho declara a l'usuari en
-lloc d'inventar una geometria.
+disposició explícitament provisional. La interfície és ara un workspace
+universal supervisat. Qualsevol text crea un cas independent i passa per
+providers que separen coincidències provisionals, conceptes desconeguts i
+buits. L’entrenador pot completar el model i continuar sense resolver, inclosa
+una referència manual explícitament diferent de `generatedGeometry`. UVOF015
+continua sent l’espècimen canònic i la prova de regressió. El sistema registra i
+explica correccions, executa un preflight, valida casos i només crea coneixement
+reutilitzable com a candidat després d’una promoció explícita. No hi ha encara
+interpretació tàctica ni resolució geomètrica generals.
