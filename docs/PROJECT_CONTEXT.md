@@ -67,13 +67,14 @@ formen el primer corpus complet de la família.
 - Resol un 2x1 amb pivot dins Z1.
 - El mateix lateral recupera sense pilota per darrere del banc.
 - Rep una passada curta de l'extrem, orientat a porteria i sense necessitat de bot.
-- Ataca l'interval entre el defensor exterior i el con.
+- Ataca l'interval entre el defensor exterior i `C3`, que representa
+  passivament el segon defensor absent i també delimita l'espai de `SA2`.
 - Resol un 2x1 amb extrem dins Z2.
 
 ## Estat actual
 
 S'ha creat un JSON detallat de `TR-UVOF-001`, un corpus semàntic v1.1 amb els
-quinze exercicis UVOF i un contracte de relacions espacials v0.2 aplicat a
+quinze exercicis UVOF i un contracte de relacions espacials v0.3 aplicat a
 `TR-UVOF-001`–`TR-UVOF-015`. Les instàncies incorporen trajectòries
 alternatives, flux independent de pilota, continuïtats, encreuaments, bloqueig
 estàtic, canvi de banda, una defensa 5:1 completa i materials de handicap

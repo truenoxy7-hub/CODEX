@@ -55,7 +55,7 @@ Una corba suau sense canvi de direcció no és una finta.
 
 ## TR-UVOF-001
 
-El primer exercici validat parcialment té dues bandes simètriques i dues subaccions:
+El primer exercici validat té dues bandes simètriques i dues subaccions:
 
 - `SA1`: central passa al lateral; lateral rep en carrera a l'interval `1–2`,
   supera el segon defensor simulat pel banc mitjançant una finta cap a `2–3`
@@ -67,8 +67,8 @@ El primer exercici validat parcialment té dues bandes simètriques i dues subac
 
 El banc representa activament el segon defensor i s'ubica semànticament entorn
 de 9 m. `C1` i `C2` delimiten l'espai de `SA1`; `C3` representa passivament el
-segon defensor absent de `SA2`. L'extrem manté amplitud al seu espai de
-finalització.
+segon defensor absent i també delimita l'espai de `SA2`. L'extrem manté
+amplitud al seu espai de finalització.
 
 ## TR-UVOF-002
 
@@ -150,10 +150,11 @@ recupera i `EXT_2` resol el segon 2x1 amb `L` contra `D1`.
 
 ## TR-UVOF-008
 
-És un `6x6` complet contra `5:1`. `CE` col·loca `PV` i mobilitza `DAV` cap a la
-mateixa zona sense que l'avançat intervingui sobre el pivot. Aquesta
-concentració afavoreix el 1x1 de `L_OPOSAT` a la banda alliberada. La
-continuïtat posterior és oberta.
+És un `6x6` complet contra `5:1`. `PV` ocupa el `2–3` local i `CE`, que inicia
+amb pilota, mobilitza `DAV` cap a aquesta mateixa zona sense que l'avançat
+intervingui sobre el pivot. Després `CE` passa a `L_OPOSAT`: el lateral pot
+atacar lliurement `1–2` o `2–3` a la banda alliberada i resoldre amb
+finalització, continuïtat o encreuament.
 
 ## TR-UVOF-009
 
@@ -163,6 +164,27 @@ centre, rep de `PV` i llença trepitjant `BANC_CENTRAL`. Abans, `L` passa a
 `D1`. Després `EXT_2`, el següent extrem de la fila, passa a `PV`, que llisca i
 finalitza des de l'espai restringit. Els tres fluxos de pilota són independents.
 El cilindre referencia l'espai restringit de finalització del pivot.
+
+## TR-UVOF-010
+
+Després de la permuta lateral–central, la segona acció només s'activa si `L`
+no ha participat en la continuïtat de la primera. `PV` parteix de `CON_PV`, que
+delimita l'espai oposat a la trajectòria de `L`; lateral i pivot no poden ocupar
+ni atacar el mateix espai. Si `D3` queda pla, `L` llança des de fora. Només si
+`D3` puja, `PV` abandona el con, llisca cap a l'espai lliure i rep de `L`.
+
+## TR-UVOF-011
+
+És una situació de partit reduïda `4x4`. Els atacants reals són `EXT`, `L`,
+`CE` i `PV`; els defensors reals i actius són `D1_LOCAL`, `D2_LOCAL`,
+`D3_LOCAL` i `D3_OPOSAT`. No s'ha de representar la defensa amb un participant
+abstracte `DEF_4`.
+
+El flux específic és `L → EXT → L`: `L` passa abans de la permuta, ocupa
+temporalment el centre, rep d'`EXT` i inicia l'1x1. `D1_LOCAL` delimita l'espai
+exterior de l'extrem. La continuació del 4x4 manté obertes la finalització, la
+continuïtat i l'encreuament segons la resposta dels quatre defensors, sense
+forçar un emparellament directe no validat.
 
 ## TR-UVOF-013
 
@@ -184,7 +206,11 @@ Són tres 1x1 simultanis en tres zones delimitades per quatre cons. Cada zona t�
 atacant, passador de suport, defensor real i pilota propis. L'atacant passa,
 inicia en carrera, rep orientat i resol sense bot dins els límits de la seva
 zona. La pilota única del gràfic és un exemple visual que es replica a les tres
-zones; no s'ha de reduir el model a un sol duel.
+zones; no s'ha de reduir el model a un sol duel. A cada zona hi ha dos espais
+contigus, un a cada costat del defensor, i l'atacant té llibertat absoluta per
+escollir el primer. Si obté avantatge, continua pel mateix espai; si el defensor
+el tanca, canvia direcció i ritme cap al contigu. La superació es produeix quan
+l'atacant travessa la línia defensiva marcada pel defensor de la seva zona.
 
 ## Regla general de permuta
 

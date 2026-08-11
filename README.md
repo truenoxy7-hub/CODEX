@@ -4,9 +4,15 @@ TRAÇA és un projecte per construir un llenguatge canònic i una base de coneix
 
 ## Estat actual
 
-El projecte es troba en la fase de **modelatge semàntic**. La primera família
-completa és `MITJANS 1V1 OFENSIUS`, amb `TR-UVOF-001` a `TR-UVOF-015`
-interpretats i validats amb l'entrenador.
+El projecte es troba en la fase de **modelatge semàntic i preflight espacial**.
+La primera família completa és `MITJANS 1V1 OFENSIUS`, amb `TR-UVOF-001` a
+`TR-UVOF-015` interpretats i validats amb l'entrenador.
+
+Els quinze artefactes qualitatius han migrat al contracte
+`spatial-relations` v0.3. El preflight comprova traçabilitat, preservació i
+resolubilitat de l'entrada, però no implementa cap resolutor ni genera
+geometria. Un artefacte pot ser estructuralment vàlid i continuar `partial` o
+`blocked`.
 
 La geometria i el renderer anteriors es consideren prototips descartables. No s'han de reprendre com a font de veritat. La font actual és:
 
@@ -29,7 +35,9 @@ La geometria i el renderer anteriors es consideren prototips descartables. No s'
 - `exercises/TR-UVOF-013/spatial-relations.json`
 - `exercises/TR-UVOF-014/spatial-relations.json`
 - `exercises/TR-UVOF-015/spatial-relations.json`
-- `schema/traca.spatial-relations.schema.v0.2.json`
+- `schema/traca.spatial-relations.schema.v0.3.json`
+- `schema/traca.spatial-relations.schema.v0.2.json` (històric, read-only)
+- `scripts/spatial_preflight.py`
 - `docs/DOMAIN_MODEL.md`
 - `docs/SPATIAL_RELATIONS_CONTRACT.md`
 - `docs/DECISIONS.md`
@@ -76,6 +84,12 @@ make interface
 
 La interfície queda disponible a `http://localhost:8000`. L'abast i les
 iteracions següents es documenten a [`docs/MVP.md`](docs/MVP.md).
+
+Per veure exclusivament la matriu read-only del preflight:
+
+```bash
+python scripts/spatial_preflight.py
+```
 
 ## Com començar amb Codex
 

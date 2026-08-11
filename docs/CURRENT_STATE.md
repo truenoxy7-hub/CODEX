@@ -2,47 +2,66 @@
 
 ## Completat
 
-- Estructura inicial del projecte.
-- Definició semàntica reutilitzable de `1x1_finta`.
-- Model semàntic inicial de `TR-UVOF-001`.
-- Esquema JSON v1.0.
-- Validador estructural local.
-- Validador semàntic executable dels 9 invariants declarats.
-- Tests positius i negatius del validador semàntic.
-- CI bàsica.
-- Corpus semàntic complet de `TR-UVOF-001` a `TR-UVOF-015`.
-- Esquema genèric de corpus v1.1.
-- Model explícit de fases, decisions, permutes, files i múltiples pilotes.
-- Vocabulari validat d'encreuament, permuta, bloqueig estàtic, lliscament,
-  situació de partit i punt fort/feble.
-- Contracte de relacions espacials v0.2 sense coordenades.
-- Instàncies relacionals executables de `TR-UVOF-001` a `TR-UVOF-015`.
-- Flux de pilota per trajectòria i encreuament explícit per darrere del portador.
-- Bloqueig estàtic del pivot, rols temporals i canvi de banda validats en 6x6.
-- Passada–devolució amb handicap de recorregut, defensa 5:1 completa i
-  handicaps defensius amb cilindres representats explícitament.
-- Classificació executable de qualsevol relació 6x6 com a `situacio_partit`.
-- Ordre d'activació de dos extrems, concentració defensiva completa en 5:1 i
-  primera permuta central–lateral amb tres fluxos de pilota independents.
-- Cilindre d'UVOF009 validat com a referència de l'espai restringit del pivot.
-- Topologia general de passada de les permutes i variant específica
-  `L → EXT → L` d'UVOF011 representades explícitament.
-- Activació condicional posterior d'UVOF010 i dues superioritats ordenades
-  d'UVOF012 amb defensors `D3` i `D1` diferenciats.
-- Atac de `2–3` i lliscament obligatori d'UVOF013, situació de partit 6x6
-  contra 6:0 d'UVOF014 i tres duels simultanis delimitats d'UVOF015.
-- Validacions de referències, contigüitats, continuïtat i decisions obertes.
+- Corpus semàntic `TR-UVOF-001`–`TR-UVOF-015` i coneixement tàctic viu.
+- Esquemes semàntics, corpus v1.1 i validació local amb proves positives i
+  negatives.
+- Contracte qualitatiu `spatial-relations` v0.3 per als quinze UVOF.
+- Esquema v0.2 conservat exclusivament com a versió històrica read-only; no hi
+  ha downgrade implícit de v0.3.
+- Fonts semàntiques versionades amb fingerprint SHA-256 determinista i
+  referències estables `artefacte#/json/pointer`.
+- Namespace global tipat, bindings d'actors genèrics, cardinalitats de grups,
+  semàntica per instància dels materials i capabilities explícites.
+- Separació explícita d'equip, rol canònic, costat, rol temporal i funció dels
+  participants. Els camps absents queden `unknown`; no es dedueixen de l'ID.
+- Papers tipats dels 2x1, condicions tipades, marcs d'operador, graf de
+  dependències i mapping individual de decisions i opcions.
+- Cobertura rastrejable de participants, materials, pilotes, accions, fluxos,
+  decisions i opcions de totes les fonts declarades.
+- Preflight pur i read-only que només retorna `ready`, `partial` o `blocked`,
+  amb diagnòstics estructurats i sense geometria.
+- Integració del preflight al validador sense seleccionar silenciosament el
+  `semantic.json` germà d'UVOF001.
+- Suite verda amb 114 proves: les 88 del baseline auditat i 26 proves noves de
+  contracte, preservació, integritat i mutacions destructives.
+
+## Matriu reproduïble del preflight
+
+| Estat | Exercicis | Motiu principal |
+|---|---|---|
+| `ready` | 001, 002, 003, 004, 006, 008, 009, 010, 011, 012, 013, 015 | Contracte i entrades suficients per al gate qualitatiu actual |
+| `partial` | 005, 007, 014 | Flux/informació de pilota no especificat o opcions encara simbòliques |
+
+`valid: true` al validador significa que l'artefacte compleix el contracte. No
+converteix un resultat `partial` o `blocked` en resoluble.
+
+## Estats conservats deliberadament
+
+- UVOF001 declara el model detallat com a font canònica i conserva el corpus
+  com a projecció resumida amb mappings explícits. B1, B2 i els seus dos
+  fluxos no es perden.
+- UVOF005 i UVOF007 no reben pilotes, posseïdors ni passades inventades.
+- UVOF011 identifica quatre defensors reals i actius: `D1_LOCAL`, `D2_LOCAL`,
+  `D3_LOCAL` i `D3_OPOSAT`; ja no existeix el participant abstracte `DEF_4`.
+- UVOF014 conserva les sis opcions individualment; `encreuament` continua
+  identificable encara que resti simbòlic.
+- UVOF015 conserva dos espais contigus per defensor, la llibertat d'elecció
+  inicial, la continuïtat si hi ha avantatge, la finta si el defensor tanca i
+  la superació en travessar la línia defensiva.
 
 ## No completat
 
-- Vocabulari complet per a totes les famílies d'exercicis.
-- Motor de resolució d'intervals.
-- JSON geomètric.
-- Renderer SVG nou.
+- Dades tàctiques pendents enumerades a `docs/OPEN_QUESTIONS.md`.
+- Perfil reglamentari de pista versionat.
+- Resolutor espacial o geomètric.
+- `geometry.json`, coordenades, punts, vectors o regions calculades.
+- Renderer, SVG i polítiques visuals.
 
 ## Risc principal
 
-Tornar a introduir coordenades abans d'haver estabilitzat el model tàctic.
+Confondre un JSON estructuralment vàlid amb una entrada `ready`, o introduir
+geometria per ocultar un diagnòstic `partial`/`blocked`. La geometria derivada
+de l'MVP no pot convertir-se en font de veritat tàctica.
 
 ## En curs
 
@@ -53,7 +72,6 @@ Tornar a introduir coordenades abans d'haver estabilitzat el model tàctic.
 
 ## Pròxima fita recomanada
 
-Definir un MVP que consumeixi el corpus relacional UVOF complet sense perdre la
-traçabilitat semàntica. La següent decisió tècnica és l'abast mínim del
-resolutor espacial i de la seva sortida, encara sense reintroduir coordenades
-com a font de veritat.
+Resoldre amb l'entrenador els tres parcials que encara requereixen autoritat
+tàctica i especificar el perfil de pista i l'API del futur resolutor. El
+preflight v0.3 és el gate d'entrada; encara no resol ni dibuixa cap exercici.

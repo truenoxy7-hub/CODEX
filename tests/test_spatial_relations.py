@@ -30,7 +30,7 @@ def spatial_schema() -> dict:
         (
             ROOT
             / "schema"
-            / "traca.spatial-relations.schema.v0.2.json"
+            / "traca.spatial-relations.schema.v0.3.json"
         ).read_text(encoding="utf-8")
     )
 
@@ -68,11 +68,11 @@ def test_repository_spatial_contract_passes(
     assert report["valid"] is True
     assert report["errors"] == []
     assert report["summary"] == {
-        "node_count": 17,
+        "node_count": 19,
         "space_count": 9,
         "state_count": 7,
         "transition_count": 6,
-        "ball_flow_count": 0,
+        "ball_flow_count": 2,
         "branch_count": 2,
         "error_count": 0,
         "structural_error_count": 0,
@@ -339,7 +339,7 @@ def test_uvof002_rejects_disconnected_ball_flow(
     assert "SPATIAL_BALL_FLOW_DISCONNECTED" in _error_codes(report)
 
 
-def test_uvof002_rejects_unknown_semantic_decision(
+def test_uvof002_rejects_non_stable_semantic_decision_reference(
     spatial_document_002,
     spatial_schema,
     semantic_document_002,
@@ -355,7 +355,7 @@ def test_uvof002_rejects_unknown_semantic_decision(
         semantic_document_002,
     )
 
-    assert "SPATIAL_UNKNOWN_DECISION" in _error_codes(report)
+    assert "SCHEMA_ERROR" in _error_codes(report)
 
 
 @pytest.fixture
@@ -563,11 +563,11 @@ def test_uvof003_rejects_disconnected_change_of_side_flow(
         (
             "TR-UVOF-008",
             {
-                "node_count": 16,
+                "node_count": 17,
                 "space_count": 7,
                 "state_count": 4,
                 "transition_count": 6,
-                "ball_flow_count": 0,
+                "ball_flow_count": 1,
                 "branch_count": 1,
                 "error_count": 0,
                 "structural_error_count": 0,
@@ -591,7 +591,7 @@ def test_uvof003_rejects_disconnected_change_of_side_flow(
         (
             "TR-UVOF-010",
             {
-                "node_count": 12,
+                "node_count": 13,
                 "space_count": 5,
                 "state_count": 5,
                 "transition_count": 7,
@@ -605,7 +605,7 @@ def test_uvof003_rejects_disconnected_change_of_side_flow(
         (
             "TR-UVOF-011",
             {
-                "node_count": 11,
+                "node_count": 14,
                 "space_count": 5,
                 "state_count": 4,
                 "transition_count": 4,
@@ -662,9 +662,9 @@ def test_uvof003_rejects_disconnected_change_of_side_flow(
             "TR-UVOF-015",
             {
                 "node_count": 17,
-                "space_count": 3,
+                "space_count": 9,
                 "state_count": 3,
-                "transition_count": 12,
+                "transition_count": 18,
                 "ball_flow_count": 6,
                 "branch_count": 3,
                 "error_count": 0,
@@ -835,6 +835,11 @@ def test_uvof008_represents_full_51_and_defensive_concentration() -> None:
     concentration = next(
         state for state in document["estats"] if state["id"] == "S_CONCENTRACIO"
     )
+    concentration_space = next(
+        space
+        for space in document["espais"]
+        if space["id"] == "ZONA_CONCENTRACIO"
+    )
 
     assert participants == {
         "EXT_LOCAL",
@@ -856,6 +861,14 @@ def test_uvof008_represents_full_51_and_defensive_concentration() -> None:
         and relation["objectes"] == ["ZONA_CONCENTRACIO", "PV"]
         for relation in concentration["relacions"]
     )
+    assert concentration_space["definicio"] == {
+        "operador": "interior_de",
+        "arguments": ["INT_23_LOCAL"],
+    }
+    assert [
+        (flow["posseidor_inicial"], flow["posseidor_final"])
+        for flow in document["fluxos_pilota"]
+    ] == [("CE", "L_OPOSAT")]
 
 
 def test_uvof009_preserves_permutation_positions_and_three_ball_flows() -> None:
@@ -929,6 +942,14 @@ def test_uvof010_separates_permutation_from_conditional_second_ball() -> None:
         for branch in document["branques_decisionals"]
         if branch["id"] == "BR_2X1_TANCAT"
     )
+    pivot_space = next(
+        space for space in document["espais"] if space["id"] == "ESPAI_PV"
+    )
+    pivot_slide = next(
+        transition
+        for transition in document["transicions"]
+        if transition["id"] == "T_PV_LLISCA"
+    )
 
     assert positions == {"L": "POS_CENTRAL", "CE": "POS_LATERAL"}
     assert (
@@ -952,9 +973,20 @@ def test_uvof010_separates_permutation_from_conditional_second_ball() -> None:
         "A_D3_PLA",
         "A_D3_PUJA",
     }
+    assert pivot_space["definicio"] == {
+        "operador": "proper_a",
+        "arguments": ["CON_PV"],
+    }
+    assert pivot_slide["condicio"] == "D3_puja"
+    assert pivot_slide["tipus"] == "ajust_sense_pilota"
+    assert any(
+        invariant["code"] == "SP-UVOF010-COMPLEMENTARI"
+        and invariant["operador"] == "no_superposicio"
+        for invariant in document["invariants"]
+    )
 
 
-def test_uvof011_keeps_specific_l_ext_l_flow_and_four_attackers() -> None:
+def test_uvof011_keeps_specific_flow_and_eight_real_players() -> None:
     document = json.loads(
         (
             ROOT / "exercises" / "TR-UVOF-011" / "spatial-relations.json"
@@ -970,8 +1002,22 @@ def test_uvof011_keeps_specific_l_ext_l_flow_and_four_attackers() -> None:
         for flow in sorted(document["fluxos_pilota"], key=lambda item: item["ordre"])
     ]
 
-    assert {"EXT", "L", "CE", "PV"} <= participants
+    assert participants == {
+        "EXT",
+        "L",
+        "CE",
+        "PV",
+        "D1_LOCAL",
+        "D2_LOCAL",
+        "D3_LOCAL",
+        "D3_OPOSAT",
+    }
     assert flows == [("L", "EXT"), ("EXT", "L")]
+    assert document["participant_groups"] == []
+    assert document["unresolved_items"] == []
+    assert next(
+        space for space in document["espais"] if space["id"] == "ESPAI_EXT"
+    )["definicio"]["arguments"] == ["LINIA_FONS", "D1_LOCAL"]
 
 
 def test_uvof012_keeps_two_ordered_superiorities_and_defenders() -> None:
@@ -1091,6 +1137,11 @@ def test_uvof015_replicates_three_simultaneous_duels_by_zone() -> None:
         flows[flow["trajectoria_id"]].append(
             (flow["posseidor_inicial"], flow["posseidor_final"])
         )
+    duel_specs = {
+        "ESQ": ("LIM_0", "D_ESQ", "LIM_1"),
+        "CE": ("LIM_1", "D_CE", "LIM_2"),
+        "DRE": ("LIM_2", "D_DRE", "LIM_3"),
+    }
 
     assert balls == {"B_ESQ", "B_CE", "B_DRE"}
     assert zones["Z_ESQ"]["definicio"]["arguments"] == ["LIM_0", "LIM_1"]
@@ -1101,8 +1152,57 @@ def test_uvof015_replicates_three_simultaneous_duels_by_zone() -> None:
         "DUEL_CE": [("A_CE", "P_CE"), ("P_CE", "A_CE")],
         "DUEL_DRE": [("A_DRE", "P_DRE"), ("P_DRE", "A_DRE")],
     }
+    for suffix, (left_limit, defender, right_limit) in duel_specs.items():
+        space_a = zones[f"E_{suffix}_A"]
+        space_b = zones[f"E_{suffix}_B"]
+        assert space_a["definicio"] == {
+            "operador": "entre",
+            "arguments": [left_limit, defender],
+        }
+        assert space_b["definicio"] == {
+            "operador": "entre",
+            "arguments": [right_limit, defender],
+        }
+        assert space_a["contiguitats"] == [
+            {"espai": f"E_{suffix}_B", "referent_compartit": defender}
+        ]
+        assert space_b["contiguitats"] == [
+            {"espai": f"E_{suffix}_A", "referent_compartit": defender}
+        ]
+
+        duel_transitions = [
+            transition
+            for transition in document["transicions"]
+            if transition["actor"] == f"A_{suffix}"
+            and transition["tipus"] in {"finta", "resolucio"}
+        ]
+        assert len(duel_transitions) == 4
+        assert {
+            (transition["des_de"], transition["cap_a"])
+            for transition in duel_transitions
+        } == {
+            (f"E_{suffix}_A", f"E_{suffix}_A"),
+            (f"E_{suffix}_A", f"E_{suffix}_B"),
+            (f"E_{suffix}_B", f"E_{suffix}_B"),
+            (f"E_{suffix}_B", f"E_{suffix}_A"),
+        }
+        branch = next(
+            item
+            for item in document["branques_decisionals"]
+            if item["id"] == f"BR_DUEL_{suffix}"
+        )
+        assert len(branch["alternatives"]) == 4
+        assert all(
+            any(
+                effect["predicat"] == "travessa_linia_defensiva_de"
+                and effect["objectes"] == [defender]
+                for effect in alternative["efectes_espacials"]
+            )
+            for alternative in branch["alternatives"]
+        )
     assert all(
         "sense_bot" in transition.get("qualificadors", [])
         for transition in document["transicions"]
         if transition["tipus"] in {"finta", "resolucio"}
     )
+    assert document["unresolved_items"] == []

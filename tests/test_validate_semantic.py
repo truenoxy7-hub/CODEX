@@ -566,6 +566,17 @@ def test_corpus_rejects_incomplete_51_in_uvof008(valid_corpus, corpus_schema):
     ]
 
 
+def test_corpus_rejects_wrong_ball_flow_in_uvof008(valid_corpus, corpus_schema):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-008")
+    exercise["fases"][0]["fluxos_pilota"][0]["posseidor_final"] = "L_LOCAL"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF008_FULL_6X6_51" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
 def test_corpus_rejects_wrong_first_holder_in_uvof009(valid_corpus, corpus_schema):
     exercise = _corpus_exercise(valid_corpus, "TR-UVOF-009")
     exercise["pilotes"][0]["posseidor_inicial"] = "PV"
@@ -608,11 +619,45 @@ def test_corpus_rejects_wrong_opposite_lateral_passer_in_uvof010(
     ]
 
 
+def test_corpus_rejects_unvalidated_pivot_cone_in_uvof010(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-010")
+    cone = next(
+        material for material in exercise["materials"]
+        if material["id"] == "CON_PV"
+    )
+    cone["estat_coneixement"] = "provisional"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF010_ORDERED_CONDITIONAL_ACTION" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
 def test_corpus_rejects_broken_specific_l_ext_l_flow_in_uvof011(
     valid_corpus, corpus_schema
 ):
     exercise = _corpus_exercise(valid_corpus, "TR-UVOF-011")
     exercise["fases"][0]["fluxos_pilota"][1]["posseidor_final"] = "CE"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF011_SPECIFIC_L_EXT_L_FLOW" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_missing_real_defender_in_uvof011(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-011")
+    exercise["participants"] = [
+        participant
+        for participant in exercise["participants"]
+        if participant["id"] != "D3_OPOSAT"
+    ]
 
     report = validate_corpus_document(valid_corpus, corpus_schema)
 
@@ -666,6 +711,19 @@ def test_corpus_rejects_single_graphic_ball_as_only_ball_in_uvof015(
 ):
     exercise = _corpus_exercise(valid_corpus, "TR-UVOF-015")
     exercise["pilotes"] = exercise["pilotes"][:1]
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF015_THREE_SIMULTANEOUS_DUELS" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
+def test_corpus_rejects_locked_initial_space_in_uvof015(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-015")
+    exercise["organitzacio"]["llibertat_1x1"] = "espai_inicial_fix"
 
     report = validate_corpus_document(valid_corpus, corpus_schema)
 

@@ -19,7 +19,7 @@ SPATIAL_RELATIONS = (
     ROOT / "exercises" / "TR-UVOF-001" / "spatial-relations.json"
 )
 SPATIAL_RELATIONS_SCHEMA = (
-    ROOT / "schema" / "traca.spatial-relations.schema.v0.2.json"
+    ROOT / "schema" / "traca.spatial-relations.schema.v0.3.json"
 )
 SPATIAL_RELATIONS_OUTPUT = (
     ROOT / "exercises" / "TR-UVOF-001" / "spatial-relations.validation.json"
@@ -925,12 +925,27 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
         for phase in uvof_008.get("fases", [])
         for action in phase.get("accions", [])
     }
+    balls_008 = {
+        ball.get("id"): ball.get("posseidor_inicial")
+        for ball in uvof_008.get("pilotes", [])
+    }
+    flows_008 = {
+        (
+            flow.get("pilota_id"),
+            flow.get("posseidor_inicial"),
+            flow.get("posseidor_final"),
+            flow.get("accio"),
+        )
+        for flow in _corpus_ball_flows(uvof_008)
+    }
     if (
         attackers_008 != expected_attackers_008
         or defenders_008 != expected_defenders_008
         or uvof_008.get("tipus_exercici") != "situacio_partit"
         or uvof_008.get("organitzacio", {}).get("relacio") != "6x6"
         or uvof_008.get("organitzacio", {}).get("defensa") != "5:1"
+        or balls_008 != {"B1": "CE"}
+        or flows_008 != {("B1", "CE", "L_OPOSAT", "passada")}
         or (
             "CE",
             "mobilitzar_avancat_cap_a_la_mateixa_zona_del_pivot",
@@ -944,7 +959,7 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
                 "path": "TR-UVOF-008",
                 "message": (
                     "TR-UVOF-008 ha de conservar el 6x6 complet contra 5:1, "
-                    "amb CE concentrant PV i DAV per alliberar L_OPOSAT."
+                    "amb CE concentrant PV i DAV i passant a L_OPOSAT."
                 ),
             }
         )
@@ -1064,11 +1079,26 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
         (phase for phase in uvof_010.get("fases", []) if phase.get("id") == "F2"),
         {},
     )
+    materials_010 = {
+        material.get("id"): material.get("funcio")
+        for material in uvof_010.get("materials", [])
+    }
+    material_states_010 = {
+        material.get("id"): material.get("estat_coneixement")
+        for material in uvof_010.get("materials", [])
+    }
+    actions_010 = {
+        (action.get("actor"), action.get("accio"), action.get("estat_coneixement"))
+        for action in phase_2_010.get("accions", [])
+    }
     if (
         not {"L", "CE", "L_OPOSAT", "PV", "D3"} <= participants_010
         or uvof_010.get("organitzacio", {}).get("passador_permuta")
         != "L_OPOSAT"
         or balls_010 != {"B1": "L_OPOSAT", "B2": "PV"}
+        or materials_010.get("CON_PV")
+        != "delimita_espai_inicial_del_pivot_oposat_a_la_trajectoria_del_lateral"
+        or material_states_010.get("CON_PV") != "validat"
         or (
             "PERMUTA_L_CE",
             1,
@@ -1087,6 +1117,21 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
             "L_no_requerit_en_la_continuitat_posterior_de_F1",
         )
         not in flows_010
+        or (
+            "2X1_TANCAT",
+            2,
+            "B2",
+            "L",
+            "PV",
+            "D3_puja",
+        )
+        not in flows_010
+        or (
+            "PV",
+            "lliscar_des_del_con_cap_a_lespai_lliure_si_D3_puja",
+            "condicio_tasca",
+        )
+        not in actions_010
         or phase_2_010.get("condicio_activacio")
         != "L_no_requerit_en_la_continuitat_posterior_de_F1"
     ):
@@ -1097,7 +1142,8 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
                 "message": (
                     "TR-UVOF-010 ha de començar amb L_OPOSAT-L i només "
                     "activar PV-L després de F1 quan L no sigui necessari "
-                    "en la continuïtat."
+                    "en la continuïtat; PV parteix del con oposat i només "
+                    "llisca quan D3 puja."
                 ),
             }
         )
@@ -1107,6 +1153,11 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
         participant.get("id")
         for participant in uvof_011.get("participants", [])
         if participant.get("equip") == "atac"
+    }
+    defenders_011 = {
+        participant.get("id")
+        for participant in uvof_011.get("participants", [])
+        if participant.get("equip") == "defensa"
     }
     balls_011 = {
         ball.get("id"): ball.get("posseidor_inicial")
@@ -1124,8 +1175,12 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
     }
     if (
         attackers_011 != {"EXT", "L", "CE", "PV"}
+        or defenders_011
+        != {"D1_LOCAL", "D2_LOCAL", "D3_LOCAL", "D3_OPOSAT"}
         or balls_011 != {"B1": "L"}
         or uvof_011.get("organitzacio", {}).get("passador_permuta") != "EXT"
+        or uvof_011.get("organitzacio", {}).get("defensors_actius")
+        != ["D1_LOCAL", "D2_LOCAL", "D3_LOCAL", "D3_OPOSAT"]
         or flows_011
         != {
             ("PERMUTA_L_CE_ESPECIFICA", 1, "B1", "L", "EXT"),
@@ -1138,8 +1193,10 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
                 "path": "TR-UVOF-011",
                 "message": (
                     "TR-UVOF-011 ha de conservar els quatre atacants "
-                    "EXT-L-CE-PV i el flux específic L-EXT-L que inicia "
-                    "el 4x4 des de la posició central temporal."
+                    "EXT-L-CE-PV, els quatre defensors reals D1_LOCAL, "
+                    "D2_LOCAL, D3_LOCAL i D3_OPOSAT, i el flux específic "
+                    "L-EXT-L que inicia el 4x4 des de la posició central "
+                    "temporal."
                 ),
             }
         )
@@ -1336,10 +1393,27 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
         for flow in _corpus_ball_flows(uvof_015)
     }
     decisions_015 = {decision.get("id") for decision in _corpus_decisions(uvof_015)}
+    decision_options_015 = {
+        decision.get("id"): tuple(decision.get("opcions", []))
+        for decision in _corpus_decisions(uvof_015)
+    }
+    actions_015 = {
+        (
+            action.get("ordre"),
+            action.get("accio"),
+            action.get("estat_coneixement"),
+        )
+        for phase in uvof_015.get("fases", [])
+        for action in phase.get("accions", [])
+    }
     if (
         uvof_015.get("organitzacio", {}).get("zones") != 3
         or uvof_015.get("organitzacio", {}).get("execucio")
         != "simultania_i_replicada"
+        or uvof_015.get("organitzacio", {}).get("llibertat_1x1")
+        != "eleccio_lliure_de_lespai_inicial_i_resolucio_segons_resposta_defensiva"
+        or uvof_015.get("organitzacio", {}).get("criteri_superacio")
+        != "travessar_la_linia_defensiva_del_defensor_de_zona"
         or not {
             "A_ESQ",
             "A_CE",
@@ -1365,6 +1439,39 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
             ("DUEL_DRE", 2, "B_DRE", "P_DRE", "A_DRE"),
         }
         or decisions_015 != {"D_1X1_ESQ", "D_1X1_CE", "D_1X1_DRE"}
+        or decision_options_015
+        != {
+            "D_1X1_ESQ": (
+                "continuar_per_lespai_escollit_si_hi_ha_avantatge",
+                "canviar_cap_a_lespai_contigu_si_D_ESQ_tanca",
+            ),
+            "D_1X1_CE": (
+                "continuar_per_lespai_escollit_si_hi_ha_avantatge",
+                "canviar_cap_a_lespai_contigu_si_D_CE_tanca",
+            ),
+            "D_1X1_DRE": (
+                "continuar_per_lespai_escollit_si_hi_ha_avantatge",
+                "canviar_cap_a_lespai_contigu_si_D_DRE_tanca",
+            ),
+        }
+        or (
+            4,
+            "escollir_i_atacar_lliurement_un_dels_dos_espais_del_defensor",
+            "validat",
+        )
+        not in actions_015
+        or (
+            5,
+            "continuar_i_superar_per_lespai_escollit_si_hi_ha_avantatge",
+            "validat",
+        )
+        not in actions_015
+        or (
+            6,
+            "canviar_direccio_i_ritme_cap_a_lespai_contigu_si_el_defensor_tanca",
+            "validat",
+        )
+        not in actions_015
         or "bot_prohibit" not in uvof_015.get("condicions_tasca", [])
     ):
         errors.append(
@@ -1374,7 +1481,10 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
                 "message": (
                     "TR-UVOF-015 ha de replicar tres duels simultanis: "
                     "tres atacants, tres passadors, tres defensors, tres "
-                    "pilotes, quatre límits i passada-devolució per zona."
+                    "pilotes, quatre límits i passada-devolució per zona; "
+                    "cada atacant tria lliurement l'espai inicial, continua "
+                    "si hi ha avantatge o canvia al contigu si el defensor "
+                    "tanca, i supera en travessar la línia defensiva."
                 ),
             }
         )
@@ -1622,7 +1732,7 @@ def _spatial_custom_errors(
                 else f"restriccions/{definition_index - 1}"
             )
             for argument in definition.get("arguments", []):
-                if argument not in node_ids:
+                if argument not in node_ids and argument not in spaces_by_id:
                     errors.append(
                         {
                             "code": "SPATIAL_UNKNOWN_BOUNDARY",
@@ -1962,15 +2072,71 @@ def validate_spatial_relations_document(
         }
         for error in structural
     ]
+    preflight: Document | None = None
     if not structural:
-        errors.extend(_spatial_custom_errors(document, semantic_document))
+        if document.get("meta", {}).get("versio_contracte") == "0.3.0":
+            # v0.3 resolves its own declared, fingerprinted sources. Reusing a
+            # sibling semantic.json here would silently choose a source in the
+            # exact conflict that the contract must preserve.
+            try:
+                from scripts.spatial_preflight import preflight_document
+            except ModuleNotFoundError:  # direct execution: python scripts/...
+                from spatial_preflight import preflight_document
+
+            local_codes = {
+                "SPATIAL_NO_GEOMETRY",
+                "SPATIAL_SOURCE_EXERCISE",
+                "SPATIAL_DUPLICATE_ID",
+                "SPATIAL_UNKNOWN_BOUNDARY",
+                "SPATIAL_UNKNOWN_ADJACENT_SPACE",
+                "SPATIAL_ASYMMETRIC_ADJACENCY",
+                "SPATIAL_INVALID_SHARED_REFERENCE",
+                "SPATIAL_UNKNOWN_RELATION_SUBJECT",
+                "SPATIAL_UNKNOWN_RELATION_OBJECT",
+                "SPATIAL_UNKNOWN_TRANSITION_ACTOR",
+                "SPATIAL_UNKNOWN_TRANSITION_SPACE",
+                "SPATIAL_UNKNOWN_OPPOSITION_REFERENCE",
+                "SPATIAL_DISCONNECTED_TRANSITION",
+                "SPATIAL_UNKNOWN_BALL_HOLDER",
+                "SPATIAL_BALL_FLOW_DISCONNECTED",
+                "SPATIAL_REQUIRED_INVARIANT",
+            }
+            errors.extend(
+                error
+                for error in _spatial_custom_errors(document, semantic_document)
+                if error["code"] in local_codes
+            )
+            preflight = preflight_document(document)
+            expected_domain_diagnostics = {
+                "SEMANTIC_SOURCE_CONFLICT",
+                "SEMANTIC_BALL_FLOW_UNSPECIFIED",
+                "SEMANTIC_BALL_INFORMATION_UNSPECIFIED",
+                "SPATIAL_UNANCHORED_CYCLE",
+                "UNINSTANTIATED_PARTICIPANT_GROUP",
+                "SEMANTIC_OPTIONS_PRESERVED_SYMBOLICALLY",
+                "FINTA_ADJACENT_SPACE_MISSING",
+                "SPATIAL_FRAME_INSUFFICIENT",
+                "KNOWLEDGE_STATUS_PROPAGATED",
+            }
+            errors.extend(
+                {
+                    "code": diagnostic["code"],
+                    "path": diagnostic["entity_ref"],
+                    "message": diagnostic["message"],
+                }
+                for diagnostic in preflight["diagnostics"]
+                if diagnostic["code"] not in expected_domain_diagnostics
+            )
+        else:
+            errors.extend(_spatial_custom_errors(document, semantic_document))
 
     return {
         "exercise": document.get("font_semantica", {}).get("exercici_id"),
         "schema": schema.get("$id"),
         "valid": not errors,
         "errors": errors,
-        "warnings": [],
+        "warnings": preflight["diagnostics"] if preflight else [],
+        "preflight": preflight,
         "summary": {
             "node_count": len(document.get("nodes", [])),
             "space_count": len(document.get("espais", [])),
@@ -1995,7 +2161,12 @@ def validate_spatial_relations(
 ) -> Document:
     document = json.loads(spatial_path.read_text(encoding="utf-8"))
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
-    semantic_document = json.loads(semantic_path.read_text(encoding="utf-8"))
+    if document.get("meta", {}).get("versio_contracte") == "0.3.0":
+        semantic_document = {
+            "id": document.get("semantic_source", {}).get("exercise_id")
+        }
+    else:
+        semantic_document = json.loads(semantic_path.read_text(encoding="utf-8"))
     report = validate_spatial_relations_document(
         document,
         schema,
@@ -2055,13 +2226,18 @@ def validate_all_spatial_relations(
             )
         )
         exercise_id = document.get("font_semantica", {}).get("exercici_id")
-        sibling_semantic_path = spatial_path.with_name("semantic.json")
-        if sibling_semantic_path.exists():
-            semantic_document = json.loads(
-                sibling_semantic_path.read_text(encoding="utf-8")
-            )
+        if version == "0.3.0":
+            semantic_document = {
+                "id": document.get("semantic_source", {}).get("exercise_id")
+            }
         else:
-            semantic_document = _corpus_exercise(corpus_document, exercise_id)
+            sibling_semantic_path = spatial_path.with_name("semantic.json")
+            if sibling_semantic_path.exists():
+                semantic_document = json.loads(
+                    sibling_semantic_path.read_text(encoding="utf-8")
+                )
+            else:
+                semantic_document = _corpus_exercise(corpus_document, exercise_id)
 
         if not schema_path.exists():
             reports.append(
