@@ -52,6 +52,12 @@ pilota, emissor i receptor. Una posició futura es mostra sempre que sigui
 l’origen o el destí d’una trajectòria visible; reutilitza el mateix símbol del
 participant amb el farciment translúcid. Només és editable a Control.
 
+En una recepció en carrera, la cursa sense pilota, la passada que retorna la
+pilota i l'acció posterior comparteixen un únic `participant_state`: el
+moviment i la passada hi acaben, i la resolució hi comença. No es poden crear
+posicions futures diferents per representar aquests tres moments del mateix
+punt de recepció.
+
 `dependencies` declara quins símbols, moviments i passades depenen de cada
 estat. Moure un estat és una única correcció principal: el workspace recalcula
 els efectes derivats, els enumera a l'historial i no crea correccions noves.

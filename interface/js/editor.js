@@ -47,6 +47,12 @@
         if (object) break;
       }
     }
+    if (parsed.collection === "approach_path") {
+      for (const branch of geometry.branches || []) {
+        object = (branch.alternatives || []).map((item) => item.approach_path).find((item) => item && item.id === parsed.id);
+        if (object) break;
+      }
+    }
     return object ? { ...selection, parsed, object, source_refs: sourceRefsFor(object) } : null;
   }
 

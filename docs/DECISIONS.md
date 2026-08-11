@@ -467,3 +467,14 @@ participen en l’alternativa previsualitzada.
 pertanyin als participants declarats. Les fletxes es retallen al perímetre dels
 símbols; el preflight bloqueja una passada si l’estat d’origen no pertany a
 l’emissor o l’estat final no pertany al receptor.
+
+## D-052 — Recepció com a estat únic compartit
+
+**Decisió:** una recepció en carrera no es representa amb un final de cursa i
+un destí de passada diferents. La cursa sense pilota i la passada acaben al
+mateix `participant_state`, i l'acció posterior comença des d'aquest mateix
+estat.
+
+**Aplicació:** la cursa d'aproximació forma part de cada alternativa perquè el
+seu destí depèn de l'espai inicial escollit. El preflight bloqueja qualsevol
+alternativa que trenqui aquesta identitat compartida.

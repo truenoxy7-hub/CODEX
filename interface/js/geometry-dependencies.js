@@ -15,6 +15,7 @@
     ((geometry && geometry.branches) || []).forEach((branch) => {
       (branch.alternatives || []).forEach((alternative) => {
         paths.push(alternative);
+        if (alternative.approach_path) paths.push(alternative.approach_path);
         if (alternative.return_pass) paths.push(alternative.return_pass);
       });
     });
@@ -101,6 +102,7 @@
     ((geometry && geometry.branches) || []).forEach((branch) => {
       (branch.alternatives || []).filter((alternative) => selected.has(alternative.id)).forEach((alternative) => {
         visiblePaths.push(alternative);
+        if (alternative.approach_path) visiblePaths.push(alternative.approach_path);
         if (alternative.return_pass) visiblePaths.push(alternative.return_pass);
       });
     });

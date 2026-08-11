@@ -95,7 +95,7 @@ process.stdout.write(JSON.stringify({
     assert result["event"]["coach_explanation"] == "guanyar espai"
     assert result["event"]["correction_type"] == "geometry.move"
     assert result["event"]["change_role"] == "primary"
-    assert len(result["event"]["derived_effects"]) == 3
+    assert len(result["event"]["derived_effects"]) == 6
     assert result["event"]["target"]["ref"] == "geometry:participant_state:STATE_ESQ_A_CURRENT"
 
 
@@ -255,12 +255,13 @@ const before = store.snapshot().workingGeometry.participant_states.find(x=>x.id=
 const event = store.applyCorrection({target:{layer:'geometry',ref:`geometry:participant_state:${target}`,property:'position'},operation:'move',after:[2.9,10.4],reason:'ajust de recepció'});
 const snapshot = store.snapshot();
 const updated = snapshot.workingGeometry.branches[0].alternatives[0];
-process.stdout.write(JSON.stringify({count:snapshot.corrections.length,before,event,actionStart:updated.segments[0].start,passEnd:updated.return_pass.segments.at(-1).end,generatedStart:snapshot.generatedGeometry.branches[0].alternatives[0].segments[0].start}));
+process.stdout.write(JSON.stringify({count:snapshot.corrections.length,before,event,approachEnd:updated.approach_path.segments.at(-1).end,actionStart:updated.segments[0].start,passEnd:updated.return_pass.segments.at(-1).end,generatedStart:snapshot.generatedGeometry.branches[0].alternatives[0].segments[0].start}));
 """)
 
     assert result["count"] == 1
     assert result["event"]["change_role"] == "primary"
-    assert len(result["event"]["derived_effects"]) == 2
+    assert len(result["event"]["derived_effects"]) == 3
+    assert result["approachEnd"] == [2.9, 10.4]
     assert result["actionStart"] == [2.9, 10.4]
     assert result["passEnd"] == [2.9, 10.4]
     assert result["generatedStart"] == result["before"]
@@ -289,7 +290,7 @@ const fs = require('fs');
 const Renderer = require('./interface/js/renderer.js');
 const Visual = require('./interface/js/visual-grammar.js');
 const geometry = JSON.parse(fs.readFileSync('./exercises/TR-UVOF-015/geometry.json', 'utf8'));
-const path = geometry.common_paths.find(x=>x.kind==='run_without_ball');
+const path = geometry.branches[0].alternatives[0].approach_path;
 const display = Renderer.pathForDisplay(path, geometry, Visual.createVisualGrammar(), 'movement_without_ball');
 process.stdout.write(JSON.stringify({sourceStart:path.segments[0].start,displayStart:display.segments[0].start,sourceEnd:path.segments.at(-1).end,displayEnd:display.segments.at(-1).end}));
 """)
@@ -305,13 +306,13 @@ const Dependencies = require('./interface/js/geometry-dependencies.js');
 const geometry = JSON.parse(fs.readFileSync('./exercises/TR-UVOF-015/geometry.json', 'utf8'));
 const selected = Object.fromEntries(geometry.branches.map(branch=>[branch.id, branch.alternatives[0].id]));
 const paths = [...geometry.common_paths];
-geometry.branches.forEach(branch=>{ const alternative=branch.alternatives[0]; paths.push(alternative, alternative.return_pass); });
+geometry.branches.forEach(branch=>{ const alternative=branch.alternatives[0]; paths.push(alternative.approach_path, alternative.return_pass, alternative); });
 const connected = new Set(paths.flatMap(path=>[path.from_state_ref,path.to_state_ref]));
 const visible = Dependencies.visibleFutureStates(geometry, selected);
 process.stdout.write(JSON.stringify({ids:visible.map(state=>state.id),allConnected:visible.every(state=>connected.has(state.id)),futureCount:geometry.participant_states.filter(state=>state.status==='future').length}));
 """)
 
-    assert len(result["ids"]) == 9
+    assert len(result["ids"]) == 6
     assert result["allConnected"] is True
     assert result["futureCount"] > len(result["ids"])
 
@@ -330,6 +331,23 @@ process.stdout.write(JSON.stringify({canValidate:report.can_validate,codes:repor
 
     assert result["canValidate"] is False
     assert "PASS_IDENTITY_LINK_INVALID" in result["codes"]
+
+
+def test_preflight_rejects_distinct_run_and_pass_reception_states() -> None:
+    result = _run_node("""
+const fs = require('fs');
+const Store = require('./interface/js/store.js');
+const Visual = require('./interface/js/visual-grammar.js');
+const geometry = JSON.parse(fs.readFileSync('./exercises/TR-UVOF-015/geometry.json', 'utf8'));
+const alternative = geometry.branches[0].alternatives[0];
+alternative.approach_path.to_state_ref = alternative.to_state_ref;
+const store = Store.createWorkspaceStore({initialCase:{id:'TR-UVOF-015',name:'x',description:'x'},initialGeometry:geometry,visualGrammar:Visual.createVisualGrammar()});
+const report = store.runPreflight();
+process.stdout.write(JSON.stringify({canValidate:report.can_validate,codes:report.diagnostics.map(item=>item.code)}));
+""")
+
+    assert result["canValidate"] is False
+    assert "RECEPTION_STATE_NOT_SHARED" in result["codes"]
 
 
 def test_training_case_and_correction_schemas_are_valid() -> None:

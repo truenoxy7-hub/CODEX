@@ -15,6 +15,8 @@
 - Les posicions futures connectades a l’acció visible reutilitzen el símbol del
   participant amb farciment translúcid; passades i moviments queden ancorats al
   perímetre dels símbols d’origen i destí.
+- Cada recepció en carrera és un únic estat compartit: la cursa i la passada hi
+  acaben, i la trajectòria posterior comença exactament des del mateix punt.
 
 ## Workspace universal MVP
 

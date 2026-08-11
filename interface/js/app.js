@@ -185,7 +185,7 @@
       const style = snapshot.workingVisualGrammar.entities[resolved.object.kind];
       return style ? { ref: `visual:entity:${resolved.object.kind}`, style } : null;
     }
-    if (resolved.parsed.collection === "common_path" || resolved.parsed.collection === "alternative" || resolved.parsed.collection === "return_pass") {
+    if (resolved.parsed.collection === "common_path" || resolved.parsed.collection === "alternative" || resolved.parsed.collection === "approach_path" || resolved.parsed.collection === "return_pass") {
       const primitive = window.TRACA_VISUAL_GRAMMAR.primitiveForPath(resolved.object.kind, snapshot.workingVisualGrammar);
       const style = snapshot.workingVisualGrammar.paths[primitive];
       return style ? { ref: `visual:primitive:${primitive}`, style } : null;
@@ -203,7 +203,7 @@
     elements.selectedRef.textContent = resolved.ref;
     const isEntity = resolved.parsed.collection === "entity";
     const isState = resolved.parsed.collection === "participant_state";
-    const isPath = resolved.parsed.collection === "common_path" || resolved.parsed.collection === "alternative" || resolved.parsed.collection === "return_pass";
+    const isPath = resolved.parsed.collection === "common_path" || resolved.parsed.collection === "alternative" || resolved.parsed.collection === "approach_path" || resolved.parsed.collection === "return_pass";
     const linkedState = isEntity && resolved.object.state_ref ? (snapshot.workingGeometry.participant_states || []).find((state) => state.id === resolved.object.state_ref) : null;
     const positionObject = linkedState || (isEntity || isState ? resolved.object : null);
     elements.positionFields.hidden = !positionObject;
@@ -367,7 +367,7 @@
     const reason = elements.correctionReason.value.trim() || "Ajust del tècnic";
     const isEntity = resolved.parsed.collection === "entity";
     const isState = resolved.parsed.collection === "participant_state";
-    const isPath = resolved.parsed.collection === "common_path" || resolved.parsed.collection === "alternative" || resolved.parsed.collection === "return_pass";
+    const isPath = resolved.parsed.collection === "common_path" || resolved.parsed.collection === "alternative" || resolved.parsed.collection === "approach_path" || resolved.parsed.collection === "return_pass";
     let changes = 0;
     if (isEntity || isState) {
       const linkedState = isEntity && resolved.object.state_ref ? (snapshot.workingGeometry.participant_states || []).find((state) => state.id === resolved.object.state_ref) : null;

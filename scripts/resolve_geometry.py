@@ -264,12 +264,10 @@ def resolve_uvof015_geometry(
         current_attacker = f"STATE_{spec['suffix']}_A_CURRENT"
         current_passer = f"STATE_{spec['suffix']}_P_CURRENT"
         current_defender = f"STATE_{spec['suffix']}_D_CURRENT"
-        run_state = f"STATE_{spec['suffix']}_A_RUN"
         for state in (
             {"id": current_attacker, "participant_ref": spec["attacker"], "state_id": "current", "phase": "initial", "position": _point(defender_x, attacker_y), "status": "current", "visibility": "normal", "source_refs": [attacker_source]},
             {"id": current_passer, "participant_ref": spec["passer"], "state_id": "current", "phase": "initial", "position": _point(defender_x, passer_y), "status": "current", "visibility": "normal", "source_refs": [passer_source]},
             {"id": current_defender, "participant_ref": spec["defender"], "state_id": "current", "phase": "duel", "position": _point(defender_x, defender_y), "status": "current", "visibility": "normal", "source_refs": [defender_source]},
-            {"id": run_state, "participant_ref": spec["attacker"], "state_id": "run", "phase": "approach", "position": _point(defender_x, 11.05), "status": "future", "visibility": "control", "source_refs": [attacker_source]},
         ):
             participant_states.append(state)
             traceability.append({"geometry_ref": f"geometry:participant_state:{state['id']}", "source_refs": state["source_refs"]})
@@ -285,45 +283,27 @@ def resolve_uvof015_geometry(
         receive_transition_id = f"T_{spec['transition_prefix']}_REP"
         initial_transition_index, _ = transition_index[initial_transition_id]
         receive_transition_index, _ = transition_index[receive_transition_id]
-        common_paths.extend(
-            [
-                {
-                    "id": f"PATH_{spec['suffix']}_PASSADA_INICIAL",
-                    "kind": "initial_pass",
-                    "action_type": "pass",
-                    "ball_ref": spec["ball"],
-                    "from_participant_ref": spec["attacker"],
-                    "from_state_ref": current_attacker,
-                    "to_participant_ref": spec["passer"],
-                    "to_state_ref": current_passer,
-                    "anchor_mode": "symbol_perimeter",
-                    "segments": [
-                        _cubic(_point(defender_x, attacker_y), _point(defender_x + 0.62, 14.9), _point(defender_x + 0.62, 16.25), _point(defender_x, passer_y)),
-                    ],
-                    "functional_points": [],
-                    "source_refs": [
-                        _source_ref("transicions", initial_transition_index),
-                        _source_ref("nodes", attacker_index),
-                        _source_ref("nodes", passer_index),
-                    ],
-                },
-                {
-                    "id": f"PATH_{spec['suffix']}_CURSA_SENSE_PILOTA",
-                    "kind": "run_without_ball",
-                    "action_type": "movement",
-                    "actor_ref": spec["attacker"],
-                    "from_state_ref": current_attacker,
-                    "to_state_ref": run_state,
-                    "segments": [
-                        _cubic(_point(defender_x, attacker_y), _point(defender_x, 13.1), _point(defender_x, 12.0), _point(defender_x, 11.05)),
-                    ],
-                    "functional_points": [],
-                    "source_refs": [
-                        _source_ref("transicions", receive_transition_index),
-                        _source_ref("nodes", attacker_index),
-                    ],
-                },
-            ]
+        common_paths.append(
+            {
+                "id": f"PATH_{spec['suffix']}_PASSADA_INICIAL",
+                "kind": "initial_pass",
+                "action_type": "pass",
+                "ball_ref": spec["ball"],
+                "from_participant_ref": spec["attacker"],
+                "from_state_ref": current_attacker,
+                "to_participant_ref": spec["passer"],
+                "to_state_ref": current_passer,
+                "anchor_mode": "symbol_perimeter",
+                "segments": [
+                    _cubic(_point(defender_x, attacker_y), _point(defender_x + 0.62, 14.9), _point(defender_x + 0.62, 16.25), _point(defender_x, passer_y)),
+                ],
+                "functional_points": [],
+                "source_refs": [
+                    _source_ref("transicions", initial_transition_index),
+                    _source_ref("nodes", attacker_index),
+                    _source_ref("nodes", passer_index),
+                ],
+            }
         )
 
         branch_position, branch = branch_index[spec["branch"]]
@@ -372,6 +352,7 @@ def resolve_uvof015_geometry(
                     _cubic(_point(initial_x, 10.75), _point(initial_x, 9.55), _point(target_x, 7.05), _point(target_x, 5.75)),
                 ]
                 functional_points = []
+            approach_path_id = f"PATH_{alternative['id']}_CURSA_RECEPCIO"
             return_pass_id = f"PATH_{alternative['id']}_PASSADA_RETORN"
             geometry_alternatives.append(
                 {
@@ -387,6 +368,27 @@ def resolve_uvof015_geometry(
                     "target_space_ref": target_space,
                     "segments": segments,
                     "functional_points": functional_points,
+                    "approach_path": {
+                        "id": approach_path_id,
+                        "kind": "run_without_ball",
+                        "action_type": "movement",
+                        "actor_ref": spec["attacker"],
+                        "from_state_ref": current_attacker,
+                        "to_state_ref": receive_state,
+                        "segments": [
+                            _cubic(
+                                _point(defender_x, attacker_y),
+                                _point(defender_x, 13.05),
+                                _point((defender_x + initial_x) / 2, 11.75),
+                                _point(initial_x, 10.75),
+                            )
+                        ],
+                        "functional_points": [],
+                        "source_refs": [
+                            _source_ref("transicions", receive_transition_index),
+                            _source_ref("nodes", attacker_index),
+                        ],
+                    },
                     "return_pass": {
                         "id": return_pass_id,
                         "kind": "return_pass",
@@ -405,7 +407,7 @@ def resolve_uvof015_geometry(
                 }
             )
             for state_ref, effects in (
-                (receive_state, [f"geometry:alternative:{alternative['id']}", f"geometry:return_pass:{return_pass_id}"]),
+                (receive_state, [f"geometry:alternative:{alternative['id']}", f"geometry:approach_path:{approach_path_id}", f"geometry:return_pass:{return_pass_id}"]),
                 (final_state, [f"geometry:alternative:{alternative['id']}"]),
             ):
                 dependencies.append({"id": f"DEP_{state_ref}", "trigger_ref": f"geometry:participant_state:{state_ref}", "effect_refs": effects, "rule": "state_drives_geometry"})
@@ -427,10 +429,9 @@ def resolve_uvof015_geometry(
         )
         dependencies.extend(
             [
-                {"id": f"DEP_{current_attacker}", "trigger_ref": f"geometry:participant_state:{current_attacker}", "effect_refs": [f"geometry:entity:{spec['attacker']}", f"geometry:common_path:PATH_{spec['suffix']}_PASSADA_INICIAL", f"geometry:common_path:PATH_{spec['suffix']}_CURSA_SENSE_PILOTA"], "rule": "state_drives_geometry"},
+                {"id": f"DEP_{current_attacker}", "trigger_ref": f"geometry:participant_state:{current_attacker}", "effect_refs": [f"geometry:entity:{spec['attacker']}", f"geometry:common_path:PATH_{spec['suffix']}_PASSADA_INICIAL"] + [f"geometry:approach_path:PATH_{item['id']}_CURSA_RECEPCIO" for item in branch["alternatives"]], "rule": "state_drives_geometry"},
                 {"id": f"DEP_{current_passer}", "trigger_ref": f"geometry:participant_state:{current_passer}", "effect_refs": [f"geometry:entity:{spec['passer']}"] + [f"geometry:return_pass:PATH_{item['id']}_PASSADA_RETORN" for item in branch["alternatives"]], "rule": "state_drives_geometry"},
                 {"id": f"DEP_{current_defender}", "trigger_ref": f"geometry:participant_state:{current_defender}", "effect_refs": [f"geometry:entity:{spec['defender']}"], "rule": "state_drives_geometry"},
-                {"id": f"DEP_{run_state}", "trigger_ref": f"geometry:participant_state:{run_state}", "effect_refs": [f"geometry:common_path:PATH_{spec['suffix']}_CURSA_SENSE_PILOTA"], "rule": "state_drives_geometry"},
             ]
         )
 

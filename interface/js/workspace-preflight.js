@@ -45,7 +45,7 @@
         ...(geometry.spaces || []),
         ...(geometry.common_paths || []),
         ...(geometry.branches || []),
-        ...(geometry.branches || []).flatMap((branch) => (branch.alternatives || []).flatMap((alternative) => alternative.return_pass ? [alternative, alternative.return_pass] : [alternative]))
+        ...(geometry.branches || []).flatMap((branch) => (branch.alternatives || []).flatMap((alternative) => [alternative, alternative.approach_path, alternative.return_pass].filter(Boolean)))
       ];
       const identityCounts = identityItems.reduce((counts, item) => ({ ...counts, [item.id]: (counts[item.id] || 0) + 1 }), {});
       Object.entries(identityCounts).filter(([, count]) => count > 1).forEach(([id]) => diagnostics.push(diagnostic("error", "DUPLICATE_GEOMETRY_ID", `L’identificador ${id} està duplicat. Cada element gràfic necessita una identitat estable.`, { target_ref: `geometry:identity:${id}`, actions: ["Reanomenar un dels elements"] })));
@@ -65,7 +65,10 @@
       const zones = new Map((geometry.zones || []).map((zone) => [zone.id, zone]));
       const paths = [...(geometry.common_paths || [])];
       (geometry.branches || []).forEach((branch) => (branch.alternatives || []).forEach((alternative) => {
+        const receptionStateRefs = [alternative.from_state_ref, alternative.approach_path && alternative.approach_path.to_state_ref, alternative.return_pass && alternative.return_pass.to_state_ref];
+        if (receptionStateRefs.some((ref) => !ref) || new Set(receptionStateRefs).size !== 1) diagnostics.push(diagnostic("error", "RECEPTION_STATE_NOT_SHARED", `${alternative.id} no comparteix un únic destí entre cursa, passada i inici de l’acció.`, { target_ref: `geometry:alternative:${alternative.id}`, actions: ["Unificar l’estat de recepció"] }));
         paths.push({ ...alternative, zone_ref: branch.zone_ref });
+        if (alternative.approach_path) paths.push({ ...alternative.approach_path, zone_ref: branch.zone_ref });
         if (alternative.return_pass) paths.push({ ...alternative.return_pass, zone_ref: branch.zone_ref });
       }));
       paths.forEach((path) => {

@@ -56,6 +56,8 @@ Les posicions futures no són ajudes espacials: formen part de l’acció visibl
 Reutilitzen forma, color i etiqueta del participant, amb farciment translúcid,
 i apareixen sempre que una trajectòria visible hi comença o hi acaba. La
 trajectòria toca el perímetre del símbol, no un punt flotant ni el seu centre.
+Quan un jugador rep en carrera, el destí visual de la cursa i de la passada és
+la mateixa posició futura, que també és l'origen de l'acció següent.
 
 ## Finta i canvi de direcció
 

@@ -627,21 +627,6 @@
       ]
     },
     {
-      "id": "STATE_ESQ_A_RUN",
-      "participant_ref": "A_ESQ",
-      "state_id": "run",
-      "phase": "approach",
-      "position": [
-        4.175,
-        11.05
-      ],
-      "status": "future",
-      "visibility": "control",
-      "source_refs": [
-        "exercises/TR-UVOF-015/spatial-relations.json#/nodes/0"
-      ]
-    },
-    {
       "id": "STATE_ESQ_A_RECEIVE_CONTINUA-A",
       "participant_ref": "A_ESQ",
       "state_id": "receive_continua-a",
@@ -828,21 +813,6 @@
       "visibility": "normal",
       "source_refs": [
         "exercises/TR-UVOF-015/spatial-relations.json#/nodes/4"
-      ]
-    },
-    {
-      "id": "STATE_CE_A_RUN",
-      "participant_ref": "A_CE",
-      "state_id": "run",
-      "phase": "approach",
-      "position": [
-        10.0,
-        11.05
-      ],
-      "status": "future",
-      "visibility": "control",
-      "source_refs": [
-        "exercises/TR-UVOF-015/spatial-relations.json#/nodes/1"
       ]
     },
     {
@@ -1035,21 +1005,6 @@
       ]
     },
     {
-      "id": "STATE_DRE_A_RUN",
-      "participant_ref": "A_DRE",
-      "state_id": "run",
-      "phase": "approach",
-      "position": [
-        15.825,
-        11.05
-      ],
-      "status": "future",
-      "visibility": "control",
-      "source_refs": [
-        "exercises/TR-UVOF-015/spatial-relations.json#/nodes/2"
-      ]
-    },
-    {
       "id": "STATE_DRE_A_RECEIVE_CONTINUA-A",
       "participant_ref": "A_DRE",
       "state_id": "receive_continua-a",
@@ -1234,40 +1189,6 @@
       ]
     },
     {
-      "id": "PATH_ESQ_CURSA_SENSE_PILOTA",
-      "kind": "run_without_ball",
-      "action_type": "movement",
-      "actor_ref": "A_ESQ",
-      "from_state_ref": "STATE_ESQ_A_CURRENT",
-      "to_state_ref": "STATE_ESQ_A_RUN",
-      "segments": [
-        {
-          "type": "cubic",
-          "start": [
-            4.175,
-            14.1
-          ],
-          "control1": [
-            4.175,
-            13.1
-          ],
-          "control2": [
-            4.175,
-            12.0
-          ],
-          "end": [
-            4.175,
-            11.05
-          ]
-        }
-      ],
-      "functional_points": [],
-      "source_refs": [
-        "exercises/TR-UVOF-015/spatial-relations.json#/transicions/1",
-        "exercises/TR-UVOF-015/spatial-relations.json#/nodes/0"
-      ]
-    },
-    {
       "id": "PATH_CE_PASSADA_INICIAL",
       "kind": "initial_pass",
       "action_type": "pass",
@@ -1306,40 +1227,6 @@
       ]
     },
     {
-      "id": "PATH_CE_CURSA_SENSE_PILOTA",
-      "kind": "run_without_ball",
-      "action_type": "movement",
-      "actor_ref": "A_CE",
-      "from_state_ref": "STATE_CE_A_CURRENT",
-      "to_state_ref": "STATE_CE_A_RUN",
-      "segments": [
-        {
-          "type": "cubic",
-          "start": [
-            10.0,
-            14.1
-          ],
-          "control1": [
-            10.0,
-            13.1
-          ],
-          "control2": [
-            10.0,
-            12.0
-          ],
-          "end": [
-            10.0,
-            11.05
-          ]
-        }
-      ],
-      "functional_points": [],
-      "source_refs": [
-        "exercises/TR-UVOF-015/spatial-relations.json#/transicions/7",
-        "exercises/TR-UVOF-015/spatial-relations.json#/nodes/1"
-      ]
-    },
-    {
       "id": "PATH_DRE_PASSADA_INICIAL",
       "kind": "initial_pass",
       "action_type": "pass",
@@ -1375,40 +1262,6 @@
         "exercises/TR-UVOF-015/spatial-relations.json#/transicions/12",
         "exercises/TR-UVOF-015/spatial-relations.json#/nodes/2",
         "exercises/TR-UVOF-015/spatial-relations.json#/nodes/8"
-      ]
-    },
-    {
-      "id": "PATH_DRE_CURSA_SENSE_PILOTA",
-      "kind": "run_without_ball",
-      "action_type": "movement",
-      "actor_ref": "A_DRE",
-      "from_state_ref": "STATE_DRE_A_CURRENT",
-      "to_state_ref": "STATE_DRE_A_RUN",
-      "segments": [
-        {
-          "type": "cubic",
-          "start": [
-            15.825,
-            14.1
-          ],
-          "control1": [
-            15.825,
-            13.1
-          ],
-          "control2": [
-            15.825,
-            12.0
-          ],
-          "end": [
-            15.825,
-            11.05
-          ]
-        }
-      ],
-      "functional_points": [],
-      "source_refs": [
-        "exercises/TR-UVOF-015/spatial-relations.json#/transicions/13",
-        "exercises/TR-UVOF-015/spatial-relations.json#/nodes/2"
       ]
     }
   ],
@@ -1451,6 +1304,40 @@
             }
           ],
           "functional_points": [],
+          "approach_path": {
+            "id": "PATH_A_ESQ_CONTINUA_A_CURSA_RECEPCIO",
+            "kind": "run_without_ball",
+            "action_type": "movement",
+            "actor_ref": "A_ESQ",
+            "from_state_ref": "STATE_ESQ_A_CURRENT",
+            "to_state_ref": "STATE_ESQ_A_RECEIVE_CONTINUA-A",
+            "segments": [
+              {
+                "type": "cubic",
+                "start": [
+                  4.175,
+                  14.1
+                ],
+                "control1": [
+                  4.175,
+                  13.05
+                ],
+                "control2": [
+                  3.444,
+                  11.75
+                ],
+                "end": [
+                  2.712,
+                  10.75
+                ]
+              }
+            ],
+            "functional_points": [],
+            "source_refs": [
+              "exercises/TR-UVOF-015/spatial-relations.json#/transicions/1",
+              "exercises/TR-UVOF-015/spatial-relations.json#/nodes/0"
+            ]
+          },
           "return_pass": {
             "id": "PATH_A_ESQ_CONTINUA_A_PASSADA_RETORN",
             "kind": "return_pass",
@@ -1575,6 +1462,40 @@
               ]
             }
           ],
+          "approach_path": {
+            "id": "PATH_A_ESQ_FINTA_A_B_CURSA_RECEPCIO",
+            "kind": "run_without_ball",
+            "action_type": "movement",
+            "actor_ref": "A_ESQ",
+            "from_state_ref": "STATE_ESQ_A_CURRENT",
+            "to_state_ref": "STATE_ESQ_A_RECEIVE_FINTA-A-B",
+            "segments": [
+              {
+                "type": "cubic",
+                "start": [
+                  4.175,
+                  14.1
+                ],
+                "control1": [
+                  4.175,
+                  13.05
+                ],
+                "control2": [
+                  3.444,
+                  11.75
+                ],
+                "end": [
+                  2.712,
+                  10.75
+                ]
+              }
+            ],
+            "functional_points": [],
+            "source_refs": [
+              "exercises/TR-UVOF-015/spatial-relations.json#/transicions/1",
+              "exercises/TR-UVOF-015/spatial-relations.json#/nodes/0"
+            ]
+          },
           "return_pass": {
             "id": "PATH_A_ESQ_FINTA_A_B_PASSADA_RETORN",
             "kind": "return_pass",
@@ -1653,6 +1574,40 @@
             }
           ],
           "functional_points": [],
+          "approach_path": {
+            "id": "PATH_A_ESQ_CONTINUA_B_CURSA_RECEPCIO",
+            "kind": "run_without_ball",
+            "action_type": "movement",
+            "actor_ref": "A_ESQ",
+            "from_state_ref": "STATE_ESQ_A_CURRENT",
+            "to_state_ref": "STATE_ESQ_A_RECEIVE_CONTINUA-B",
+            "segments": [
+              {
+                "type": "cubic",
+                "start": [
+                  4.175,
+                  14.1
+                ],
+                "control1": [
+                  4.175,
+                  13.05
+                ],
+                "control2": [
+                  4.906,
+                  11.75
+                ],
+                "end": [
+                  5.637,
+                  10.75
+                ]
+              }
+            ],
+            "functional_points": [],
+            "source_refs": [
+              "exercises/TR-UVOF-015/spatial-relations.json#/transicions/1",
+              "exercises/TR-UVOF-015/spatial-relations.json#/nodes/0"
+            ]
+          },
           "return_pass": {
             "id": "PATH_A_ESQ_CONTINUA_B_PASSADA_RETORN",
             "kind": "return_pass",
@@ -1777,6 +1732,40 @@
               ]
             }
           ],
+          "approach_path": {
+            "id": "PATH_A_ESQ_FINTA_B_A_CURSA_RECEPCIO",
+            "kind": "run_without_ball",
+            "action_type": "movement",
+            "actor_ref": "A_ESQ",
+            "from_state_ref": "STATE_ESQ_A_CURRENT",
+            "to_state_ref": "STATE_ESQ_A_RECEIVE_FINTA-B-A",
+            "segments": [
+              {
+                "type": "cubic",
+                "start": [
+                  4.175,
+                  14.1
+                ],
+                "control1": [
+                  4.175,
+                  13.05
+                ],
+                "control2": [
+                  4.906,
+                  11.75
+                ],
+                "end": [
+                  5.637,
+                  10.75
+                ]
+              }
+            ],
+            "functional_points": [],
+            "source_refs": [
+              "exercises/TR-UVOF-015/spatial-relations.json#/transicions/1",
+              "exercises/TR-UVOF-015/spatial-relations.json#/nodes/0"
+            ]
+          },
           "return_pass": {
             "id": "PATH_A_ESQ_FINTA_B_A_PASSADA_RETORN",
             "kind": "return_pass",
@@ -1862,6 +1851,40 @@
             }
           ],
           "functional_points": [],
+          "approach_path": {
+            "id": "PATH_A_CE_CONTINUA_A_CURSA_RECEPCIO",
+            "kind": "run_without_ball",
+            "action_type": "movement",
+            "actor_ref": "A_CE",
+            "from_state_ref": "STATE_CE_A_CURRENT",
+            "to_state_ref": "STATE_CE_A_RECEIVE_CONTINUA-A",
+            "segments": [
+              {
+                "type": "cubic",
+                "start": [
+                  10.0,
+                  14.1
+                ],
+                "control1": [
+                  10.0,
+                  13.05
+                ],
+                "control2": [
+                  9.275,
+                  11.75
+                ],
+                "end": [
+                  8.55,
+                  10.75
+                ]
+              }
+            ],
+            "functional_points": [],
+            "source_refs": [
+              "exercises/TR-UVOF-015/spatial-relations.json#/transicions/7",
+              "exercises/TR-UVOF-015/spatial-relations.json#/nodes/1"
+            ]
+          },
           "return_pass": {
             "id": "PATH_A_CE_CONTINUA_A_PASSADA_RETORN",
             "kind": "return_pass",
@@ -1986,6 +2009,40 @@
               ]
             }
           ],
+          "approach_path": {
+            "id": "PATH_A_CE_FINTA_A_B_CURSA_RECEPCIO",
+            "kind": "run_without_ball",
+            "action_type": "movement",
+            "actor_ref": "A_CE",
+            "from_state_ref": "STATE_CE_A_CURRENT",
+            "to_state_ref": "STATE_CE_A_RECEIVE_FINTA-A-B",
+            "segments": [
+              {
+                "type": "cubic",
+                "start": [
+                  10.0,
+                  14.1
+                ],
+                "control1": [
+                  10.0,
+                  13.05
+                ],
+                "control2": [
+                  9.275,
+                  11.75
+                ],
+                "end": [
+                  8.55,
+                  10.75
+                ]
+              }
+            ],
+            "functional_points": [],
+            "source_refs": [
+              "exercises/TR-UVOF-015/spatial-relations.json#/transicions/7",
+              "exercises/TR-UVOF-015/spatial-relations.json#/nodes/1"
+            ]
+          },
           "return_pass": {
             "id": "PATH_A_CE_FINTA_A_B_PASSADA_RETORN",
             "kind": "return_pass",
@@ -2064,6 +2121,40 @@
             }
           ],
           "functional_points": [],
+          "approach_path": {
+            "id": "PATH_A_CE_CONTINUA_B_CURSA_RECEPCIO",
+            "kind": "run_without_ball",
+            "action_type": "movement",
+            "actor_ref": "A_CE",
+            "from_state_ref": "STATE_CE_A_CURRENT",
+            "to_state_ref": "STATE_CE_A_RECEIVE_CONTINUA-B",
+            "segments": [
+              {
+                "type": "cubic",
+                "start": [
+                  10.0,
+                  14.1
+                ],
+                "control1": [
+                  10.0,
+                  13.05
+                ],
+                "control2": [
+                  10.725,
+                  11.75
+                ],
+                "end": [
+                  11.45,
+                  10.75
+                ]
+              }
+            ],
+            "functional_points": [],
+            "source_refs": [
+              "exercises/TR-UVOF-015/spatial-relations.json#/transicions/7",
+              "exercises/TR-UVOF-015/spatial-relations.json#/nodes/1"
+            ]
+          },
           "return_pass": {
             "id": "PATH_A_CE_CONTINUA_B_PASSADA_RETORN",
             "kind": "return_pass",
@@ -2188,6 +2279,40 @@
               ]
             }
           ],
+          "approach_path": {
+            "id": "PATH_A_CE_FINTA_B_A_CURSA_RECEPCIO",
+            "kind": "run_without_ball",
+            "action_type": "movement",
+            "actor_ref": "A_CE",
+            "from_state_ref": "STATE_CE_A_CURRENT",
+            "to_state_ref": "STATE_CE_A_RECEIVE_FINTA-B-A",
+            "segments": [
+              {
+                "type": "cubic",
+                "start": [
+                  10.0,
+                  14.1
+                ],
+                "control1": [
+                  10.0,
+                  13.05
+                ],
+                "control2": [
+                  10.725,
+                  11.75
+                ],
+                "end": [
+                  11.45,
+                  10.75
+                ]
+              }
+            ],
+            "functional_points": [],
+            "source_refs": [
+              "exercises/TR-UVOF-015/spatial-relations.json#/transicions/7",
+              "exercises/TR-UVOF-015/spatial-relations.json#/nodes/1"
+            ]
+          },
           "return_pass": {
             "id": "PATH_A_CE_FINTA_B_A_PASSADA_RETORN",
             "kind": "return_pass",
@@ -2273,6 +2398,40 @@
             }
           ],
           "functional_points": [],
+          "approach_path": {
+            "id": "PATH_A_DRE_CONTINUA_A_CURSA_RECEPCIO",
+            "kind": "run_without_ball",
+            "action_type": "movement",
+            "actor_ref": "A_DRE",
+            "from_state_ref": "STATE_DRE_A_CURRENT",
+            "to_state_ref": "STATE_DRE_A_RECEIVE_CONTINUA-A",
+            "segments": [
+              {
+                "type": "cubic",
+                "start": [
+                  15.825,
+                  14.1
+                ],
+                "control1": [
+                  15.825,
+                  13.05
+                ],
+                "control2": [
+                  15.094,
+                  11.75
+                ],
+                "end": [
+                  14.363,
+                  10.75
+                ]
+              }
+            ],
+            "functional_points": [],
+            "source_refs": [
+              "exercises/TR-UVOF-015/spatial-relations.json#/transicions/13",
+              "exercises/TR-UVOF-015/spatial-relations.json#/nodes/2"
+            ]
+          },
           "return_pass": {
             "id": "PATH_A_DRE_CONTINUA_A_PASSADA_RETORN",
             "kind": "return_pass",
@@ -2397,6 +2556,40 @@
               ]
             }
           ],
+          "approach_path": {
+            "id": "PATH_A_DRE_FINTA_A_B_CURSA_RECEPCIO",
+            "kind": "run_without_ball",
+            "action_type": "movement",
+            "actor_ref": "A_DRE",
+            "from_state_ref": "STATE_DRE_A_CURRENT",
+            "to_state_ref": "STATE_DRE_A_RECEIVE_FINTA-A-B",
+            "segments": [
+              {
+                "type": "cubic",
+                "start": [
+                  15.825,
+                  14.1
+                ],
+                "control1": [
+                  15.825,
+                  13.05
+                ],
+                "control2": [
+                  15.094,
+                  11.75
+                ],
+                "end": [
+                  14.363,
+                  10.75
+                ]
+              }
+            ],
+            "functional_points": [],
+            "source_refs": [
+              "exercises/TR-UVOF-015/spatial-relations.json#/transicions/13",
+              "exercises/TR-UVOF-015/spatial-relations.json#/nodes/2"
+            ]
+          },
           "return_pass": {
             "id": "PATH_A_DRE_FINTA_A_B_PASSADA_RETORN",
             "kind": "return_pass",
@@ -2475,6 +2668,40 @@
             }
           ],
           "functional_points": [],
+          "approach_path": {
+            "id": "PATH_A_DRE_CONTINUA_B_CURSA_RECEPCIO",
+            "kind": "run_without_ball",
+            "action_type": "movement",
+            "actor_ref": "A_DRE",
+            "from_state_ref": "STATE_DRE_A_CURRENT",
+            "to_state_ref": "STATE_DRE_A_RECEIVE_CONTINUA-B",
+            "segments": [
+              {
+                "type": "cubic",
+                "start": [
+                  15.825,
+                  14.1
+                ],
+                "control1": [
+                  15.825,
+                  13.05
+                ],
+                "control2": [
+                  16.556,
+                  11.75
+                ],
+                "end": [
+                  17.288,
+                  10.75
+                ]
+              }
+            ],
+            "functional_points": [],
+            "source_refs": [
+              "exercises/TR-UVOF-015/spatial-relations.json#/transicions/13",
+              "exercises/TR-UVOF-015/spatial-relations.json#/nodes/2"
+            ]
+          },
           "return_pass": {
             "id": "PATH_A_DRE_CONTINUA_B_PASSADA_RETORN",
             "kind": "return_pass",
@@ -2599,6 +2826,40 @@
               ]
             }
           ],
+          "approach_path": {
+            "id": "PATH_A_DRE_FINTA_B_A_CURSA_RECEPCIO",
+            "kind": "run_without_ball",
+            "action_type": "movement",
+            "actor_ref": "A_DRE",
+            "from_state_ref": "STATE_DRE_A_CURRENT",
+            "to_state_ref": "STATE_DRE_A_RECEIVE_FINTA-B-A",
+            "segments": [
+              {
+                "type": "cubic",
+                "start": [
+                  15.825,
+                  14.1
+                ],
+                "control1": [
+                  15.825,
+                  13.05
+                ],
+                "control2": [
+                  16.556,
+                  11.75
+                ],
+                "end": [
+                  17.288,
+                  10.75
+                ]
+              }
+            ],
+            "functional_points": [],
+            "source_refs": [
+              "exercises/TR-UVOF-015/spatial-relations.json#/transicions/13",
+              "exercises/TR-UVOF-015/spatial-relations.json#/nodes/2"
+            ]
+          },
           "return_pass": {
             "id": "PATH_A_DRE_FINTA_B_A_PASSADA_RETORN",
             "kind": "return_pass",
@@ -2653,6 +2914,7 @@
       "trigger_ref": "geometry:participant_state:STATE_ESQ_A_RECEIVE_CONTINUA-A",
       "effect_refs": [
         "geometry:alternative:A_ESQ_CONTINUA_A",
+        "geometry:approach_path:PATH_A_ESQ_CONTINUA_A_CURSA_RECEPCIO",
         "geometry:return_pass:PATH_A_ESQ_CONTINUA_A_PASSADA_RETORN"
       ],
       "rule": "state_drives_geometry"
@@ -2670,6 +2932,7 @@
       "trigger_ref": "geometry:participant_state:STATE_ESQ_A_RECEIVE_FINTA-A-B",
       "effect_refs": [
         "geometry:alternative:A_ESQ_FINTA_A_B",
+        "geometry:approach_path:PATH_A_ESQ_FINTA_A_B_CURSA_RECEPCIO",
         "geometry:return_pass:PATH_A_ESQ_FINTA_A_B_PASSADA_RETORN"
       ],
       "rule": "state_drives_geometry"
@@ -2687,6 +2950,7 @@
       "trigger_ref": "geometry:participant_state:STATE_ESQ_A_RECEIVE_CONTINUA-B",
       "effect_refs": [
         "geometry:alternative:A_ESQ_CONTINUA_B",
+        "geometry:approach_path:PATH_A_ESQ_CONTINUA_B_CURSA_RECEPCIO",
         "geometry:return_pass:PATH_A_ESQ_CONTINUA_B_PASSADA_RETORN"
       ],
       "rule": "state_drives_geometry"
@@ -2704,6 +2968,7 @@
       "trigger_ref": "geometry:participant_state:STATE_ESQ_A_RECEIVE_FINTA-B-A",
       "effect_refs": [
         "geometry:alternative:A_ESQ_FINTA_B_A",
+        "geometry:approach_path:PATH_A_ESQ_FINTA_B_A_CURSA_RECEPCIO",
         "geometry:return_pass:PATH_A_ESQ_FINTA_B_A_PASSADA_RETORN"
       ],
       "rule": "state_drives_geometry"
@@ -2722,7 +2987,10 @@
       "effect_refs": [
         "geometry:entity:A_ESQ",
         "geometry:common_path:PATH_ESQ_PASSADA_INICIAL",
-        "geometry:common_path:PATH_ESQ_CURSA_SENSE_PILOTA"
+        "geometry:approach_path:PATH_A_ESQ_CONTINUA_A_CURSA_RECEPCIO",
+        "geometry:approach_path:PATH_A_ESQ_FINTA_A_B_CURSA_RECEPCIO",
+        "geometry:approach_path:PATH_A_ESQ_CONTINUA_B_CURSA_RECEPCIO",
+        "geometry:approach_path:PATH_A_ESQ_FINTA_B_A_CURSA_RECEPCIO"
       ],
       "rule": "state_drives_geometry"
     },
@@ -2747,18 +3015,11 @@
       "rule": "state_drives_geometry"
     },
     {
-      "id": "DEP_STATE_ESQ_A_RUN",
-      "trigger_ref": "geometry:participant_state:STATE_ESQ_A_RUN",
-      "effect_refs": [
-        "geometry:common_path:PATH_ESQ_CURSA_SENSE_PILOTA"
-      ],
-      "rule": "state_drives_geometry"
-    },
-    {
       "id": "DEP_STATE_CE_A_RECEIVE_CONTINUA-A",
       "trigger_ref": "geometry:participant_state:STATE_CE_A_RECEIVE_CONTINUA-A",
       "effect_refs": [
         "geometry:alternative:A_CE_CONTINUA_A",
+        "geometry:approach_path:PATH_A_CE_CONTINUA_A_CURSA_RECEPCIO",
         "geometry:return_pass:PATH_A_CE_CONTINUA_A_PASSADA_RETORN"
       ],
       "rule": "state_drives_geometry"
@@ -2776,6 +3037,7 @@
       "trigger_ref": "geometry:participant_state:STATE_CE_A_RECEIVE_FINTA-A-B",
       "effect_refs": [
         "geometry:alternative:A_CE_FINTA_A_B",
+        "geometry:approach_path:PATH_A_CE_FINTA_A_B_CURSA_RECEPCIO",
         "geometry:return_pass:PATH_A_CE_FINTA_A_B_PASSADA_RETORN"
       ],
       "rule": "state_drives_geometry"
@@ -2793,6 +3055,7 @@
       "trigger_ref": "geometry:participant_state:STATE_CE_A_RECEIVE_CONTINUA-B",
       "effect_refs": [
         "geometry:alternative:A_CE_CONTINUA_B",
+        "geometry:approach_path:PATH_A_CE_CONTINUA_B_CURSA_RECEPCIO",
         "geometry:return_pass:PATH_A_CE_CONTINUA_B_PASSADA_RETORN"
       ],
       "rule": "state_drives_geometry"
@@ -2810,6 +3073,7 @@
       "trigger_ref": "geometry:participant_state:STATE_CE_A_RECEIVE_FINTA-B-A",
       "effect_refs": [
         "geometry:alternative:A_CE_FINTA_B_A",
+        "geometry:approach_path:PATH_A_CE_FINTA_B_A_CURSA_RECEPCIO",
         "geometry:return_pass:PATH_A_CE_FINTA_B_A_PASSADA_RETORN"
       ],
       "rule": "state_drives_geometry"
@@ -2828,7 +3092,10 @@
       "effect_refs": [
         "geometry:entity:A_CE",
         "geometry:common_path:PATH_CE_PASSADA_INICIAL",
-        "geometry:common_path:PATH_CE_CURSA_SENSE_PILOTA"
+        "geometry:approach_path:PATH_A_CE_CONTINUA_A_CURSA_RECEPCIO",
+        "geometry:approach_path:PATH_A_CE_FINTA_A_B_CURSA_RECEPCIO",
+        "geometry:approach_path:PATH_A_CE_CONTINUA_B_CURSA_RECEPCIO",
+        "geometry:approach_path:PATH_A_CE_FINTA_B_A_CURSA_RECEPCIO"
       ],
       "rule": "state_drives_geometry"
     },
@@ -2853,18 +3120,11 @@
       "rule": "state_drives_geometry"
     },
     {
-      "id": "DEP_STATE_CE_A_RUN",
-      "trigger_ref": "geometry:participant_state:STATE_CE_A_RUN",
-      "effect_refs": [
-        "geometry:common_path:PATH_CE_CURSA_SENSE_PILOTA"
-      ],
-      "rule": "state_drives_geometry"
-    },
-    {
       "id": "DEP_STATE_DRE_A_RECEIVE_CONTINUA-A",
       "trigger_ref": "geometry:participant_state:STATE_DRE_A_RECEIVE_CONTINUA-A",
       "effect_refs": [
         "geometry:alternative:A_DRE_CONTINUA_A",
+        "geometry:approach_path:PATH_A_DRE_CONTINUA_A_CURSA_RECEPCIO",
         "geometry:return_pass:PATH_A_DRE_CONTINUA_A_PASSADA_RETORN"
       ],
       "rule": "state_drives_geometry"
@@ -2882,6 +3142,7 @@
       "trigger_ref": "geometry:participant_state:STATE_DRE_A_RECEIVE_FINTA-A-B",
       "effect_refs": [
         "geometry:alternative:A_DRE_FINTA_A_B",
+        "geometry:approach_path:PATH_A_DRE_FINTA_A_B_CURSA_RECEPCIO",
         "geometry:return_pass:PATH_A_DRE_FINTA_A_B_PASSADA_RETORN"
       ],
       "rule": "state_drives_geometry"
@@ -2899,6 +3160,7 @@
       "trigger_ref": "geometry:participant_state:STATE_DRE_A_RECEIVE_CONTINUA-B",
       "effect_refs": [
         "geometry:alternative:A_DRE_CONTINUA_B",
+        "geometry:approach_path:PATH_A_DRE_CONTINUA_B_CURSA_RECEPCIO",
         "geometry:return_pass:PATH_A_DRE_CONTINUA_B_PASSADA_RETORN"
       ],
       "rule": "state_drives_geometry"
@@ -2916,6 +3178,7 @@
       "trigger_ref": "geometry:participant_state:STATE_DRE_A_RECEIVE_FINTA-B-A",
       "effect_refs": [
         "geometry:alternative:A_DRE_FINTA_B_A",
+        "geometry:approach_path:PATH_A_DRE_FINTA_B_A_CURSA_RECEPCIO",
         "geometry:return_pass:PATH_A_DRE_FINTA_B_A_PASSADA_RETORN"
       ],
       "rule": "state_drives_geometry"
@@ -2934,7 +3197,10 @@
       "effect_refs": [
         "geometry:entity:A_DRE",
         "geometry:common_path:PATH_DRE_PASSADA_INICIAL",
-        "geometry:common_path:PATH_DRE_CURSA_SENSE_PILOTA"
+        "geometry:approach_path:PATH_A_DRE_CONTINUA_A_CURSA_RECEPCIO",
+        "geometry:approach_path:PATH_A_DRE_FINTA_A_B_CURSA_RECEPCIO",
+        "geometry:approach_path:PATH_A_DRE_CONTINUA_B_CURSA_RECEPCIO",
+        "geometry:approach_path:PATH_A_DRE_FINTA_B_A_CURSA_RECEPCIO"
       ],
       "rule": "state_drives_geometry"
     },
@@ -2955,14 +3221,6 @@
       "trigger_ref": "geometry:participant_state:STATE_DRE_D_CURRENT",
       "effect_refs": [
         "geometry:entity:D_DRE"
-      ],
-      "rule": "state_drives_geometry"
-    },
-    {
-      "id": "DEP_STATE_DRE_A_RUN",
-      "trigger_ref": "geometry:participant_state:STATE_DRE_A_RUN",
-      "effect_refs": [
-        "geometry:common_path:PATH_DRE_CURSA_SENSE_PILOTA"
       ],
       "rule": "state_drives_geometry"
     }
@@ -3026,12 +3284,6 @@
       "geometry_ref": "geometry:participant_state:STATE_ESQ_D_CURRENT",
       "source_refs": [
         "exercises/TR-UVOF-015/spatial-relations.json#/nodes/3"
-      ]
-    },
-    {
-      "geometry_ref": "geometry:participant_state:STATE_ESQ_A_RUN",
-      "source_refs": [
-        "exercises/TR-UVOF-015/spatial-relations.json#/nodes/0"
       ]
     },
     {
@@ -3123,12 +3375,6 @@
       ]
     },
     {
-      "geometry_ref": "geometry:participant_state:STATE_CE_A_RUN",
-      "source_refs": [
-        "exercises/TR-UVOF-015/spatial-relations.json#/nodes/1"
-      ]
-    },
-    {
       "geometry_ref": "geometry:entity:A_CE",
       "source_refs": [
         "exercises/TR-UVOF-015/spatial-relations.json#/nodes/1"
@@ -3214,12 +3460,6 @@
       "geometry_ref": "geometry:participant_state:STATE_DRE_D_CURRENT",
       "source_refs": [
         "exercises/TR-UVOF-015/spatial-relations.json#/nodes/5"
-      ]
-    },
-    {
-      "geometry_ref": "geometry:participant_state:STATE_DRE_A_RUN",
-      "source_refs": [
-        "exercises/TR-UVOF-015/spatial-relations.json#/nodes/2"
       ]
     },
     {

@@ -28,6 +28,8 @@ No converteixis una proposta geomètrica o una inferència en coneixement tàcti
 - El contracte espacial és un graf qualitatiu; no hi afegeixis coordenades,
   distàncies gràfiques ni una resolució única de decisions obertes.
 - El mateix jugador manté una identitat persistent al llarg de les fases.
+- En una recepció en carrera, cursa, passada i acció posterior comparteixen un
+  únic estat de recepció.
 - Les situacions decisionals descriuen opcions, no una solució gràfica obligatòria.
 - Qualsevol dada inferida ha de portar estat `provisional` o equivalent.
 - L'entrenador és l'única autoritat que pot aprovar una interpretació tàctica.

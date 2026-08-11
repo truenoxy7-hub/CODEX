@@ -28,6 +28,7 @@
       zone: "zones",
       space: "spaces",
       participant_state: "participant_states",
+      approach_path: "approach_paths",
       return_pass: "return_passes",
       primitive: "paths"
     }[name] || name;
@@ -46,6 +47,14 @@
       for (const branch of geometry.branches || []) {
         for (const alternative of branch.alternatives || []) {
           if (alternative.return_pass && alternative.return_pass.id === id) return alternative.return_pass;
+        }
+      }
+      return null;
+    }
+    if (key === "approach_paths") {
+      for (const branch of geometry.branches || []) {
+        for (const alternative of branch.alternatives || []) {
+          if (alternative.approach_path && alternative.approach_path.id === id) return alternative.approach_path;
         }
       }
       return null;

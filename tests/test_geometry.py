@@ -125,7 +125,13 @@ def test_paths_are_state_linked_functional_segments_and_feints_keep_the_break() 
         for alternative in branch["alternatives"]:
             assert alternative["from_state_ref"] in states
             assert alternative["to_state_ref"] in states
+            assert alternative["approach_path"]["to_state_ref"] == alternative["from_state_ref"]
             assert alternative["return_pass"]["to_state_ref"] == alternative["from_state_ref"]
+            assert alternative["approach_path"]["segments"][-1]["end"] == states[alternative["from_state_ref"]]["position"]
+            assert alternative["return_pass"]["segments"][-1]["end"] == states[alternative["from_state_ref"]]["position"]
+            assert alternative["segments"][0]["start"] == states[alternative["from_state_ref"]]["position"]
+            assert states[alternative["approach_path"]["from_state_ref"]]["participant_ref"] == alternative["approach_path"]["actor_ref"]
+            assert states[alternative["approach_path"]["to_state_ref"]]["participant_ref"] == alternative["approach_path"]["actor_ref"]
             assert states[alternative["return_pass"]["from_state_ref"]]["participant_ref"] == alternative["return_pass"]["from_participant_ref"]
             assert states[alternative["return_pass"]["to_state_ref"]]["participant_ref"] == alternative["return_pass"]["to_participant_ref"]
             if alternative["kind"] == "feint":

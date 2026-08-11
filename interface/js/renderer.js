@@ -247,6 +247,7 @@
     const group = append(documentObject, svg, "g", { class: "comparison-ghost", opacity: 0.42, "pointer-events": "none" });
     const paths = [...(geometry.common_paths || []), ...selectedAlternatives(geometry, selectedMap || {})];
     paths.forEach((path) => {
+      if (path.approach_path) append(documentObject, group, "path", { d: pathData(path.approach_path.segments ? path.approach_path : path.approach_path.points), fill: "none", stroke: "#ffffff", "stroke-width": 0.12, "stroke-dasharray": "0.18 0.12" });
       if (path.return_pass) append(documentObject, group, "path", { d: pathData(path.return_pass.segments ? path.return_pass : path.return_pass.points), fill: "none", stroke: "#ffffff", "stroke-width": 0.1, "stroke-dasharray": "0.18 0.12" });
       append(documentObject, group, "path", { d: pathData(path.segments ? path : path.points), fill: "none", stroke: "#ffffff", "stroke-width": 0.12, "stroke-dasharray": "0.18 0.12" });
     });
@@ -270,6 +271,9 @@
     if (view === "control") addControlOverlays(documentObject, svg, geometry, grammar, selection);
     (geometry.common_paths || []).forEach((path) => addPath(documentObject, svg, path, "common_path", grammar, selection, view, null, geometry));
     alternatives.forEach((alternative) => {
+      if (alternative.approach_path) {
+        addPath(documentObject, svg, alternative.approach_path, "approach_path", grammar, selection, view, "segments", geometry);
+      }
       if (alternative.return_pass) {
         addPath(documentObject, svg, alternative.return_pass, "return_pass", grammar, selection, view, "segments", geometry);
       } else if (alternative.return_ball_points && alternative.return_ball_points.length > 1) {
