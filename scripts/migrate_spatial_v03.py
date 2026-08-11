@@ -1051,6 +1051,297 @@ def _resolve_uvof011_defenders(
         ] + defender_ids
 
 
+def _resolve_uvof015_free_duels(
+    document: Document,
+    exercise_index: int,
+) -> None:
+    duel_specs = [
+        {
+            "suffix": "ESQ",
+            "transition_prefix": "AESQ",
+            "zone": "Z_ESQ",
+            "attacker": "A_ESQ",
+            "defender": "D_ESQ",
+            "left_limit": "LIM_0",
+            "right_limit": "LIM_1",
+            "branch": "BR_DUEL_ESQ",
+            "decision_index": 0,
+        },
+        {
+            "suffix": "CE",
+            "transition_prefix": "ACE",
+            "zone": "Z_CE",
+            "attacker": "A_CE",
+            "defender": "D_CE",
+            "left_limit": "LIM_1",
+            "right_limit": "LIM_2",
+            "branch": "BR_DUEL_CE",
+            "decision_index": 1,
+        },
+        {
+            "suffix": "DRE",
+            "transition_prefix": "ADRE",
+            "zone": "Z_DRE",
+            "attacker": "A_DRE",
+            "defender": "D_DRE",
+            "left_limit": "LIM_2",
+            "right_limit": "LIM_3",
+            "branch": "BR_DUEL_DRE",
+            "decision_index": 2,
+        },
+    ]
+
+    zones = {
+        space["id"]: deepcopy(space)
+        for space in document["espais"]
+        if space["id"] in {item["zone"] for item in duel_specs}
+    }
+    document["espais"] = [zones[item["zone"]] for item in duel_specs]
+    for spec in duel_specs:
+        space_a = f"E_{spec['suffix']}_A"
+        space_b = f"E_{spec['suffix']}_B"
+        for space_id, boundary, adjacent in (
+            (space_a, spec["left_limit"], space_b),
+            (space_b, spec["right_limit"], space_a),
+        ):
+            document["espais"].append(
+                {
+                    "id": space_id,
+                    "classe": "corredor",
+                    "nom_canonic": (
+                        f"espai_{space_id.rsplit('_', 1)[-1].lower()}_"
+                        f"del_duel_{spec['suffix'].lower()}"
+                    ),
+                    "definicio": {
+                        "operador": "entre",
+                        "arguments": [boundary, spec["defender"]],
+                    },
+                    "restriccions": [
+                        {
+                            "operador": "interior_de",
+                            "arguments": [spec["zone"]],
+                        }
+                    ],
+                    "contiguitats": [
+                        {
+                            "espai": adjacent,
+                            "referent_compartit": spec["defender"],
+                        }
+                    ],
+                    "fases_actives": ["F1"],
+                    "estat_coneixement": "validat",
+                }
+            )
+
+    duel_state = next(
+        state for state in document["estats"] if state["id"] == "S_TRES_DUELS"
+    )
+    duel_state["relacions"] = []
+    for spec in duel_specs:
+        for side in ("A", "B"):
+            duel_state["relacions"].append(
+                {
+                    "subjecte": spec["attacker"],
+                    "predicat": "ataca",
+                    "objectes": [f"E_{spec['suffix']}_{side}"],
+                    "caracter": "disponible",
+                    "estat_coneixement": "validat",
+                }
+            )
+
+    common_transitions: list[Document] = []
+    existing_transitions = {
+        transition["id"]: transition
+        for transition in document["transicions"]
+    }
+    for spec in duel_specs:
+        prefix = spec["transition_prefix"]
+        start = deepcopy(existing_transitions[f"T_{prefix}_INICIA"])
+        receive = deepcopy(existing_transitions[f"T_{prefix}_REP"])
+        start["accio_semantica_ref"] = _corpus_ref(
+            exercise_index, "fases/0/accions", 1
+        )
+        receive["accio_semantica_ref"] = _corpus_ref(
+            exercise_index, "fases/0/accions", 2
+        )
+        common_transitions.extend([start, receive])
+
+        space_a = f"E_{spec['suffix']}_A"
+        space_b = f"E_{spec['suffix']}_B"
+        base_qualifiers = [
+            "sense_bot",
+            "dins_limits_zona",
+            "superacio_en_travessar_linia_defensiva",
+        ]
+        transition_specs = [
+            (
+                f"T_{prefix}_CONTINUA_A",
+                f"DUEL_{spec['suffix']}_CONTINUA_A",
+                "resolucio",
+                space_a,
+                space_a,
+                4,
+                f"{spec['defender']}_no_tanca_i_hi_ha_avantatge_a_{space_a}",
+                base_qualifiers,
+            ),
+            (
+                f"T_{prefix}_FINTA_A_B",
+                f"DUEL_{spec['suffix']}_FINTA_A_B",
+                "finta",
+                space_a,
+                space_b,
+                5,
+                f"{spec['defender']}_tanca_{space_a}",
+                base_qualifiers + ["canvi_direccio_i_ritme_cap_al_contigu"],
+            ),
+            (
+                f"T_{prefix}_CONTINUA_B",
+                f"DUEL_{spec['suffix']}_CONTINUA_B",
+                "resolucio",
+                space_b,
+                space_b,
+                4,
+                f"{spec['defender']}_no_tanca_i_hi_ha_avantatge_a_{space_b}",
+                base_qualifiers,
+            ),
+            (
+                f"T_{prefix}_FINTA_B_A",
+                f"DUEL_{spec['suffix']}_FINTA_B_A",
+                "finta",
+                space_b,
+                space_a,
+                5,
+                f"{spec['defender']}_tanca_{space_b}",
+                base_qualifiers + ["canvi_direccio_i_ritme_cap_al_contigu"],
+            ),
+        ]
+        for (
+            transition_id,
+            trajectory_id,
+            transition_type,
+            origin,
+            target,
+            action_index,
+            condition,
+            qualifiers,
+        ) in transition_specs:
+            common_transitions.append(
+                {
+                    "id": transition_id,
+                    "fase_ref": "F1",
+                    "ordre": 3,
+                    "trajectoria_id": trajectory_id,
+                    "actor": spec["attacker"],
+                    "tipus": transition_type,
+                    "des_de": origin,
+                    "cap_a": target,
+                    "referencia_oposicional": spec["defender"],
+                    "accio_semantica_ref": _corpus_ref(
+                        exercise_index, "fases/0/accions", action_index
+                    ),
+                    "qualificadors": qualifiers,
+                    "condicio": condition,
+                    "estat_coneixement": "validat",
+                }
+            )
+    document["transicions"] = common_transitions
+
+    branch_by_id = {
+        branch["id"]: branch for branch in document["branques_decisionals"]
+    }
+    for spec in duel_specs:
+        suffix = spec["suffix"]
+        attacker = spec["attacker"]
+        defender = spec["defender"]
+        space_a = f"E_{suffix}_A"
+        space_b = f"E_{suffix}_B"
+
+        def effects(target: str) -> list[Document]:
+            return [
+                {
+                    "subjecte": attacker,
+                    "predicat": "ataca",
+                    "objectes": [target],
+                    "caracter": "disponible",
+                    "estat_coneixement": "validat",
+                },
+                {
+                    "subjecte": attacker,
+                    "predicat": "travessa_linia_defensiva_de",
+                    "objectes": [defender],
+                    "caracter": "disponible",
+                    "estat_coneixement": "validat",
+                },
+            ]
+
+        branch = branch_by_id[spec["branch"]]
+        branch["alternatives"] = [
+            {
+                "id": f"A_{suffix}_CONTINUA_A",
+                "condicio": f"{attacker}_escull_{space_a}_i_{defender}_no_tanca",
+                "efectes_espacials": effects(space_a),
+            },
+            {
+                "id": f"A_{suffix}_FINTA_A_B",
+                "condicio": f"{attacker}_escull_{space_a}_i_{defender}_tanca",
+                "efectes_espacials": effects(space_b),
+            },
+            {
+                "id": f"A_{suffix}_CONTINUA_B",
+                "condicio": f"{attacker}_escull_{space_b}_i_{defender}_no_tanca",
+                "efectes_espacials": effects(space_b),
+            },
+            {
+                "id": f"A_{suffix}_FINTA_B_A",
+                "condicio": f"{attacker}_escull_{space_b}_i_{defender}_tanca",
+                "efectes_espacials": effects(space_a),
+            },
+        ]
+        branch["decisio_semantica_ref"] = artifact_ref(
+            "corpus/uvof.semantic.json",
+            (
+                f"/exercicis/{exercise_index}/fases/0/decisions/"
+                f"{spec['decision_index']}"
+            ),
+        )
+
+    for invariant in document["invariants"]:
+        if invariant["code"] == "SP-UVOF015-DEC":
+            invariant["missatge"] = (
+                "Cada atacant tria lliurement l'espai inicial, continua si "
+                "hi ha avantatge o canvia al contigu si el defensor tanca."
+            )
+        if invariant["code"] == "SP-UVOF015-RECEP":
+            invariant["missatge"] = (
+                "Les tres devolucions permeten rebre orientat abans del 1x1."
+            )
+    contiguity_invariant = {
+        "code": "SP-UVOF015-CONTIG-DUELS",
+        "operador": "contiguitat_amb_referent_compartit",
+        "subjectes": [
+            "E_ESQ_A",
+            "D_ESQ",
+            "E_ESQ_B",
+            "E_CE_A",
+            "D_CE",
+            "E_CE_B",
+            "E_DRE_A",
+            "D_DRE",
+            "E_DRE_B",
+        ],
+        "ambit": "F1",
+        "missatge": (
+            "Cada zona ofereix dos espais contigus que comparteixen el seu "
+            "defensor real."
+        ),
+    }
+    document["invariants"] = [
+        invariant
+        for invariant in document["invariants"]
+        if invariant["code"] != contiguity_invariant["code"]
+    ] + [contiguity_invariant]
+
+
 def _namespace(document: Document, exercise_id: str) -> Document:
     entities: list[Document] = []
     node_kind = {
@@ -1357,7 +1648,6 @@ def _operator_frames(document: Document, exercise_id: str) -> list[Document]:
             operator = definition["operador"]
             if operator not in ambiguous:
                 continue
-            unresolved = exercise_id == "TR-UVOF-015" and operator == "delimitat_per"
             frames.append(
                 {
                     "id": f"FRAME_{space['id']}_{len(frames) + 1}",
@@ -1374,11 +1664,11 @@ def _operator_frames(document: Document, exercise_id: str) -> list[Document]:
                     "viewpoint": "attacking_team" if operator != "proper_a" else "subject_relative",
                     "distance_class": "functional" if operator == "proper_a" else "not_applicable",
                     "closure": (
-                        "unresolved" if unresolved else "semantic_boundary_set"
+                        "semantic_boundary_set"
                         if operator == "delimitat_per" else "referenced_boundary"
                         if operator == "interior_de" else "not_applicable"
                     ),
-                    "status": "unresolved" if unresolved else "complete",
+                    "status": "complete",
                 }
             )
     return frames
@@ -1419,6 +1709,17 @@ def _decision_mappings(
                     matched = [
                         item for item in alternatives if item["id"] == explicit_014[option]
                     ]
+                elif exercise_id == "TR-UVOF-015":
+                    expected_token = (
+                        "CONTINUA" if option.startswith("continuar_") else
+                        "FINTA" if option.startswith("canviar_") else None
+                    )
+                    if expected_token:
+                        matched = [
+                            item
+                            for item in alternatives
+                            if expected_token in item["id"]
+                        ]
                 else:
                     option_tokens = _normalize(option)
                     scored = [
@@ -1666,15 +1967,6 @@ def _unresolved_items(exercise_id: str) -> list[Document]:
                 "requires_trainer": True,
             }
         ],
-        "TR-UVOF-015": [
-            {
-                "code": "FINTA_ADJACENT_SPACE_MISSING",
-                "impact": "blocked",
-                "entity_refs": ["T_AESQ_FINTA", "T_ACE_FINTA", "T_ADRE_FINTA"],
-                "message": "Falten l'espai inicial, el contigu i el criteri de superació de cada duel.",
-                "requires_trainer": True,
-            }
-        ],
     }
     return items.get(exercise_id, [])
 
@@ -1728,6 +2020,8 @@ def migrate_document(
             _resolve_uvof010_pivot_anchor(result, exercise, exercise_index)
         if exercise_id == "TR-UVOF-011":
             _resolve_uvof011_defenders(result, exercise, exercise_index)
+        if exercise_id == "TR-UVOF-015":
+            _resolve_uvof015_free_duels(result, exercise_index)
     result["font_semantica"]["fitxers"] = [
         candidate["artifact"] for candidate in result["semantic_source"]["candidates"]
     ]

@@ -662,9 +662,9 @@ def test_uvof003_rejects_disconnected_change_of_side_flow(
             "TR-UVOF-015",
             {
                 "node_count": 17,
-                "space_count": 3,
+                "space_count": 9,
                 "state_count": 3,
-                "transition_count": 12,
+                "transition_count": 18,
                 "ball_flow_count": 6,
                 "branch_count": 3,
                 "error_count": 0,
@@ -1137,6 +1137,11 @@ def test_uvof015_replicates_three_simultaneous_duels_by_zone() -> None:
         flows[flow["trajectoria_id"]].append(
             (flow["posseidor_inicial"], flow["posseidor_final"])
         )
+    duel_specs = {
+        "ESQ": ("LIM_0", "D_ESQ", "LIM_1"),
+        "CE": ("LIM_1", "D_CE", "LIM_2"),
+        "DRE": ("LIM_2", "D_DRE", "LIM_3"),
+    }
 
     assert balls == {"B_ESQ", "B_CE", "B_DRE"}
     assert zones["Z_ESQ"]["definicio"]["arguments"] == ["LIM_0", "LIM_1"]
@@ -1147,8 +1152,57 @@ def test_uvof015_replicates_three_simultaneous_duels_by_zone() -> None:
         "DUEL_CE": [("A_CE", "P_CE"), ("P_CE", "A_CE")],
         "DUEL_DRE": [("A_DRE", "P_DRE"), ("P_DRE", "A_DRE")],
     }
+    for suffix, (left_limit, defender, right_limit) in duel_specs.items():
+        space_a = zones[f"E_{suffix}_A"]
+        space_b = zones[f"E_{suffix}_B"]
+        assert space_a["definicio"] == {
+            "operador": "entre",
+            "arguments": [left_limit, defender],
+        }
+        assert space_b["definicio"] == {
+            "operador": "entre",
+            "arguments": [right_limit, defender],
+        }
+        assert space_a["contiguitats"] == [
+            {"espai": f"E_{suffix}_B", "referent_compartit": defender}
+        ]
+        assert space_b["contiguitats"] == [
+            {"espai": f"E_{suffix}_A", "referent_compartit": defender}
+        ]
+
+        duel_transitions = [
+            transition
+            for transition in document["transicions"]
+            if transition["actor"] == f"A_{suffix}"
+            and transition["tipus"] in {"finta", "resolucio"}
+        ]
+        assert len(duel_transitions) == 4
+        assert {
+            (transition["des_de"], transition["cap_a"])
+            for transition in duel_transitions
+        } == {
+            (f"E_{suffix}_A", f"E_{suffix}_A"),
+            (f"E_{suffix}_A", f"E_{suffix}_B"),
+            (f"E_{suffix}_B", f"E_{suffix}_B"),
+            (f"E_{suffix}_B", f"E_{suffix}_A"),
+        }
+        branch = next(
+            item
+            for item in document["branques_decisionals"]
+            if item["id"] == f"BR_DUEL_{suffix}"
+        )
+        assert len(branch["alternatives"]) == 4
+        assert all(
+            any(
+                effect["predicat"] == "travessa_linia_defensiva_de"
+                and effect["objectes"] == [defender]
+                for effect in alternative["efectes_espacials"]
+            )
+            for alternative in branch["alternatives"]
+        )
     assert all(
         "sense_bot" in transition.get("qualificadors", [])
         for transition in document["transicions"]
         if transition["tipus"] in {"finta", "resolucio"}
     )
+    assert document["unresolved_items"] == []

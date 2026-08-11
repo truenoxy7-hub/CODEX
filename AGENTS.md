@@ -206,7 +206,11 @@ Són tres 1x1 simultanis en tres zones delimitades per quatre cons. Cada zona t�
 atacant, passador de suport, defensor real i pilota propis. L'atacant passa,
 inicia en carrera, rep orientat i resol sense bot dins els límits de la seva
 zona. La pilota única del gràfic és un exemple visual que es replica a les tres
-zones; no s'ha de reduir el model a un sol duel.
+zones; no s'ha de reduir el model a un sol duel. A cada zona hi ha dos espais
+contigus, un a cada costat del defensor, i l'atacant té llibertat absoluta per
+escollir el primer. Si obté avantatge, continua pel mateix espai; si el defensor
+el tanca, canvia direcció i ritme cap al contigu. La superació es produeix quan
+l'atacant travessa la línia defensiva marcada pel defensor de la seva zona.
 
 ## Regla general de permuta
 

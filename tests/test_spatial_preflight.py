@@ -36,7 +36,7 @@ EXPECTED_STATUSES = {
     "TR-UVOF-012": "ready",
     "TR-UVOF-013": "ready",
     "TR-UVOF-014": "partial",
-    "TR-UVOF-015": "blocked",
+    "TR-UVOF-015": "ready",
 }
 
 
@@ -438,12 +438,29 @@ def test_uvof008_preserves_validated_initial_ball_flow() -> None:
     ] == [("B1", "CE", "L_OPOSAT")]
 
 
-def test_uvof015_blocks_missing_adjacent_feint_space_and_incomplete_frames() -> None:
-    result = preflight_document(_load("TR-UVOF-015"))
+def test_uvof015_requires_adjacent_feint_spaces_and_complete_frames() -> None:
+    current = preflight_document(_load("TR-UVOF-015"))
+    assert current["status"] == "ready"
+    assert current["diagnostics"] == []
 
-    assert result["status"] == "blocked"
-    assert "FINTA_ADJACENT_SPACE_MISSING" in _codes(result)
-    assert "SPATIAL_FRAME_INSUFFICIENT" in _codes(result)
+    non_adjacent_feint = _load("TR-UVOF-015")
+    feint = next(
+        transition
+        for transition in non_adjacent_feint["transicions"]
+        if transition["id"] == "T_AESQ_FINTA_A_B"
+    )
+    feint["cap_a"] = feint["des_de"]
+    _refresh_digest(non_adjacent_feint)
+    assert "FINTA_ADJACENT_SPACE_MISSING" in _codes(
+        preflight_document(non_adjacent_feint)
+    )
+
+    incomplete_frame = _load("TR-UVOF-015")
+    incomplete_frame["operator_frames"][0]["status"] = "unresolved"
+    _refresh_digest(incomplete_frame)
+    assert "SPATIAL_FRAME_INSUFFICIENT" in _codes(
+        preflight_document(incomplete_frame)
+    )
 
 
 def test_semantic_coverage_is_exhaustive_for_all_declared_sources() -> None:

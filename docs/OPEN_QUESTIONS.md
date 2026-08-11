@@ -38,9 +38,7 @@ Aquest document evita que Codex resolgui per inferència decisions tàctiques en
 2. **UVOF014 — mapping:** validar l'alternativa espacial específica
    d'`encreuament` i qualsevol separació addicional entre les sis opcions que
    avui només es preserven simbòlicament.
-3. **UVOF015 — finta:** definir per a cada duel l'espai inicial, l'espai
-   contigu i el criteri de superació. No es deduiran dels límits de zona.
-4. **Simetria:** aprovar mappings d'identitat només als exercicis que realment
+3. **Simetria:** aprovar mappings d'identitat només als exercicis que realment
    els necessitin. `reflectible` o `dues_bandes_paraleles` no autoritzen a
    duplicar participants o pilotes.
 

@@ -719,6 +719,19 @@ def test_corpus_rejects_single_graphic_ball_as_only_ball_in_uvof015(
     ]
 
 
+def test_corpus_rejects_locked_initial_space_in_uvof015(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-015")
+    exercise["organitzacio"]["llibertat_1x1"] = "espai_inicial_fix"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF015_THREE_SIMULTANEOUS_DUELS" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
 def test_corpus_rejects_geometry(valid_corpus, corpus_schema):
     exercise = _corpus_exercise(valid_corpus, "TR-UVOF-015")
     exercise["coordenades"] = [{"x": 1, "y": 2}]

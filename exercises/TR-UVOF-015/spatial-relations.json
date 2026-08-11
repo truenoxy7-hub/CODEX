@@ -209,6 +209,186 @@
         "F1"
       ],
       "estat_coneixement": "validat"
+    },
+    {
+      "id": "E_ESQ_A",
+      "classe": "corredor",
+      "nom_canonic": "espai_a_del_duel_esq",
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "LIM_0",
+          "D_ESQ"
+        ]
+      },
+      "restriccions": [
+        {
+          "operador": "interior_de",
+          "arguments": [
+            "Z_ESQ"
+          ]
+        }
+      ],
+      "contiguitats": [
+        {
+          "espai": "E_ESQ_B",
+          "referent_compartit": "D_ESQ"
+        }
+      ],
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "E_ESQ_B",
+      "classe": "corredor",
+      "nom_canonic": "espai_b_del_duel_esq",
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "LIM_1",
+          "D_ESQ"
+        ]
+      },
+      "restriccions": [
+        {
+          "operador": "interior_de",
+          "arguments": [
+            "Z_ESQ"
+          ]
+        }
+      ],
+      "contiguitats": [
+        {
+          "espai": "E_ESQ_A",
+          "referent_compartit": "D_ESQ"
+        }
+      ],
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "E_CE_A",
+      "classe": "corredor",
+      "nom_canonic": "espai_a_del_duel_ce",
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "LIM_1",
+          "D_CE"
+        ]
+      },
+      "restriccions": [
+        {
+          "operador": "interior_de",
+          "arguments": [
+            "Z_CE"
+          ]
+        }
+      ],
+      "contiguitats": [
+        {
+          "espai": "E_CE_B",
+          "referent_compartit": "D_CE"
+        }
+      ],
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "E_CE_B",
+      "classe": "corredor",
+      "nom_canonic": "espai_b_del_duel_ce",
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "LIM_2",
+          "D_CE"
+        ]
+      },
+      "restriccions": [
+        {
+          "operador": "interior_de",
+          "arguments": [
+            "Z_CE"
+          ]
+        }
+      ],
+      "contiguitats": [
+        {
+          "espai": "E_CE_A",
+          "referent_compartit": "D_CE"
+        }
+      ],
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "E_DRE_A",
+      "classe": "corredor",
+      "nom_canonic": "espai_a_del_duel_dre",
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "LIM_2",
+          "D_DRE"
+        ]
+      },
+      "restriccions": [
+        {
+          "operador": "interior_de",
+          "arguments": [
+            "Z_DRE"
+          ]
+        }
+      ],
+      "contiguitats": [
+        {
+          "espai": "E_DRE_B",
+          "referent_compartit": "D_DRE"
+        }
+      ],
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "E_DRE_B",
+      "classe": "corredor",
+      "nom_canonic": "espai_b_del_duel_dre",
+      "definicio": {
+        "operador": "entre",
+        "arguments": [
+          "LIM_3",
+          "D_DRE"
+        ]
+      },
+      "restriccions": [
+        {
+          "operador": "interior_de",
+          "arguments": [
+            "Z_DRE"
+          ]
+        }
+      ],
+      "contiguitats": [
+        {
+          "espai": "E_DRE_A",
+          "referent_compartit": "D_DRE"
+        }
+      ],
+      "fases_actives": [
+        "F1"
+      ],
+      "estat_coneixement": "validat"
     }
   ],
   "estats": [
@@ -343,28 +523,55 @@
           "subjecte": "A_ESQ",
           "predicat": "ataca",
           "objectes": [
-            "Z_ESQ"
+            "E_ESQ_A"
           ],
-          "caracter": "obligatori",
-          "estat_coneixement": "condicio_tasca"
+          "caracter": "disponible",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "A_ESQ",
+          "predicat": "ataca",
+          "objectes": [
+            "E_ESQ_B"
+          ],
+          "caracter": "disponible",
+          "estat_coneixement": "validat"
         },
         {
           "subjecte": "A_CE",
           "predicat": "ataca",
           "objectes": [
-            "Z_CE"
+            "E_CE_A"
           ],
-          "caracter": "obligatori",
-          "estat_coneixement": "condicio_tasca"
+          "caracter": "disponible",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "A_CE",
+          "predicat": "ataca",
+          "objectes": [
+            "E_CE_B"
+          ],
+          "caracter": "disponible",
+          "estat_coneixement": "validat"
         },
         {
           "subjecte": "A_DRE",
           "predicat": "ataca",
           "objectes": [
-            "Z_DRE"
+            "E_DRE_A"
           ],
-          "caracter": "obligatori",
-          "estat_coneixement": "condicio_tasca"
+          "caracter": "disponible",
+          "estat_coneixement": "validat"
+        },
+        {
+          "subjecte": "A_DRE",
+          "predicat": "ataca",
+          "objectes": [
+            "E_DRE_B"
+          ],
+          "caracter": "disponible",
+          "estat_coneixement": "validat"
         }
       ]
     }
@@ -379,7 +586,7 @@
       "tipus": "recuperacio_sense_pilota",
       "des_de": "Z_ESQ",
       "cap_a": "Z_ESQ",
-      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/2",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/1",
       "estat_coneixement": "validat"
     },
     {
@@ -391,39 +598,86 @@
       "tipus": "recepcio",
       "des_de": "Z_ESQ",
       "cap_a": "Z_ESQ",
-      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/3",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/2",
       "estat_coneixement": "validat"
     },
     {
-      "id": "T_AESQ_FINTA",
+      "id": "T_AESQ_CONTINUA_A",
       "fase_ref": "F1",
       "ordre": 3,
-      "trajectoria_id": "DUEL_ESQ",
-      "actor": "A_ESQ",
-      "tipus": "finta",
-      "des_de": "Z_ESQ",
-      "cap_a": "Z_ESQ",
-      "referencia_oposicional": "D_ESQ",
-      "qualificadors": [
-        "sense_bot",
-        "dins_limits_zona"
-      ],
-      "estat_coneixement": "condicio_tasca"
-    },
-    {
-      "id": "T_AESQ_RESOL",
-      "fase_ref": "F1",
-      "ordre": 4,
-      "trajectoria_id": "DUEL_ESQ",
+      "trajectoria_id": "DUEL_ESQ_CONTINUA_A",
       "actor": "A_ESQ",
       "tipus": "resolucio",
-      "des_de": "Z_ESQ",
-      "cap_a": "Z_ESQ",
+      "des_de": "E_ESQ_A",
+      "cap_a": "E_ESQ_A",
       "referencia_oposicional": "D_ESQ",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/4",
       "qualificadors": [
-        "sense_bot"
+        "sense_bot",
+        "dins_limits_zona",
+        "superacio_en_travessar_linia_defensiva"
       ],
-      "estat_coneixement": "condicio_tasca"
+      "condicio": "D_ESQ_no_tanca_i_hi_ha_avantatge_a_E_ESQ_A",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_AESQ_FINTA_A_B",
+      "fase_ref": "F1",
+      "ordre": 3,
+      "trajectoria_id": "DUEL_ESQ_FINTA_A_B",
+      "actor": "A_ESQ",
+      "tipus": "finta",
+      "des_de": "E_ESQ_A",
+      "cap_a": "E_ESQ_B",
+      "referencia_oposicional": "D_ESQ",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/5",
+      "qualificadors": [
+        "sense_bot",
+        "dins_limits_zona",
+        "superacio_en_travessar_linia_defensiva",
+        "canvi_direccio_i_ritme_cap_al_contigu"
+      ],
+      "condicio": "D_ESQ_tanca_E_ESQ_A",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_AESQ_CONTINUA_B",
+      "fase_ref": "F1",
+      "ordre": 3,
+      "trajectoria_id": "DUEL_ESQ_CONTINUA_B",
+      "actor": "A_ESQ",
+      "tipus": "resolucio",
+      "des_de": "E_ESQ_B",
+      "cap_a": "E_ESQ_B",
+      "referencia_oposicional": "D_ESQ",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/4",
+      "qualificadors": [
+        "sense_bot",
+        "dins_limits_zona",
+        "superacio_en_travessar_linia_defensiva"
+      ],
+      "condicio": "D_ESQ_no_tanca_i_hi_ha_avantatge_a_E_ESQ_B",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_AESQ_FINTA_B_A",
+      "fase_ref": "F1",
+      "ordre": 3,
+      "trajectoria_id": "DUEL_ESQ_FINTA_B_A",
+      "actor": "A_ESQ",
+      "tipus": "finta",
+      "des_de": "E_ESQ_B",
+      "cap_a": "E_ESQ_A",
+      "referencia_oposicional": "D_ESQ",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/5",
+      "qualificadors": [
+        "sense_bot",
+        "dins_limits_zona",
+        "superacio_en_travessar_linia_defensiva",
+        "canvi_direccio_i_ritme_cap_al_contigu"
+      ],
+      "condicio": "D_ESQ_tanca_E_ESQ_B",
+      "estat_coneixement": "validat"
     },
     {
       "id": "T_ACE_INICIA",
@@ -434,7 +688,7 @@
       "tipus": "recuperacio_sense_pilota",
       "des_de": "Z_CE",
       "cap_a": "Z_CE",
-      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/2",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/1",
       "estat_coneixement": "validat"
     },
     {
@@ -446,39 +700,86 @@
       "tipus": "recepcio",
       "des_de": "Z_CE",
       "cap_a": "Z_CE",
-      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/3",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/2",
       "estat_coneixement": "validat"
     },
     {
-      "id": "T_ACE_FINTA",
+      "id": "T_ACE_CONTINUA_A",
       "fase_ref": "F1",
       "ordre": 3,
-      "trajectoria_id": "DUEL_CE",
-      "actor": "A_CE",
-      "tipus": "finta",
-      "des_de": "Z_CE",
-      "cap_a": "Z_CE",
-      "referencia_oposicional": "D_CE",
-      "qualificadors": [
-        "sense_bot",
-        "dins_limits_zona"
-      ],
-      "estat_coneixement": "condicio_tasca"
-    },
-    {
-      "id": "T_ACE_RESOL",
-      "fase_ref": "F1",
-      "ordre": 4,
-      "trajectoria_id": "DUEL_CE",
+      "trajectoria_id": "DUEL_CE_CONTINUA_A",
       "actor": "A_CE",
       "tipus": "resolucio",
-      "des_de": "Z_CE",
-      "cap_a": "Z_CE",
+      "des_de": "E_CE_A",
+      "cap_a": "E_CE_A",
       "referencia_oposicional": "D_CE",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/4",
       "qualificadors": [
-        "sense_bot"
+        "sense_bot",
+        "dins_limits_zona",
+        "superacio_en_travessar_linia_defensiva"
       ],
-      "estat_coneixement": "condicio_tasca"
+      "condicio": "D_CE_no_tanca_i_hi_ha_avantatge_a_E_CE_A",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_ACE_FINTA_A_B",
+      "fase_ref": "F1",
+      "ordre": 3,
+      "trajectoria_id": "DUEL_CE_FINTA_A_B",
+      "actor": "A_CE",
+      "tipus": "finta",
+      "des_de": "E_CE_A",
+      "cap_a": "E_CE_B",
+      "referencia_oposicional": "D_CE",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/5",
+      "qualificadors": [
+        "sense_bot",
+        "dins_limits_zona",
+        "superacio_en_travessar_linia_defensiva",
+        "canvi_direccio_i_ritme_cap_al_contigu"
+      ],
+      "condicio": "D_CE_tanca_E_CE_A",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_ACE_CONTINUA_B",
+      "fase_ref": "F1",
+      "ordre": 3,
+      "trajectoria_id": "DUEL_CE_CONTINUA_B",
+      "actor": "A_CE",
+      "tipus": "resolucio",
+      "des_de": "E_CE_B",
+      "cap_a": "E_CE_B",
+      "referencia_oposicional": "D_CE",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/4",
+      "qualificadors": [
+        "sense_bot",
+        "dins_limits_zona",
+        "superacio_en_travessar_linia_defensiva"
+      ],
+      "condicio": "D_CE_no_tanca_i_hi_ha_avantatge_a_E_CE_B",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_ACE_FINTA_B_A",
+      "fase_ref": "F1",
+      "ordre": 3,
+      "trajectoria_id": "DUEL_CE_FINTA_B_A",
+      "actor": "A_CE",
+      "tipus": "finta",
+      "des_de": "E_CE_B",
+      "cap_a": "E_CE_A",
+      "referencia_oposicional": "D_CE",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/5",
+      "qualificadors": [
+        "sense_bot",
+        "dins_limits_zona",
+        "superacio_en_travessar_linia_defensiva",
+        "canvi_direccio_i_ritme_cap_al_contigu"
+      ],
+      "condicio": "D_CE_tanca_E_CE_B",
+      "estat_coneixement": "validat"
     },
     {
       "id": "T_ADRE_INICIA",
@@ -489,7 +790,7 @@
       "tipus": "recuperacio_sense_pilota",
       "des_de": "Z_DRE",
       "cap_a": "Z_DRE",
-      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/2",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/1",
       "estat_coneixement": "validat"
     },
     {
@@ -501,39 +802,86 @@
       "tipus": "recepcio",
       "des_de": "Z_DRE",
       "cap_a": "Z_DRE",
-      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/3",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/2",
       "estat_coneixement": "validat"
     },
     {
-      "id": "T_ADRE_FINTA",
+      "id": "T_ADRE_CONTINUA_A",
       "fase_ref": "F1",
       "ordre": 3,
-      "trajectoria_id": "DUEL_DRE",
-      "actor": "A_DRE",
-      "tipus": "finta",
-      "des_de": "Z_DRE",
-      "cap_a": "Z_DRE",
-      "referencia_oposicional": "D_DRE",
-      "qualificadors": [
-        "sense_bot",
-        "dins_limits_zona"
-      ],
-      "estat_coneixement": "condicio_tasca"
-    },
-    {
-      "id": "T_ADRE_RESOL",
-      "fase_ref": "F1",
-      "ordre": 4,
-      "trajectoria_id": "DUEL_DRE",
+      "trajectoria_id": "DUEL_DRE_CONTINUA_A",
       "actor": "A_DRE",
       "tipus": "resolucio",
-      "des_de": "Z_DRE",
-      "cap_a": "Z_DRE",
+      "des_de": "E_DRE_A",
+      "cap_a": "E_DRE_A",
       "referencia_oposicional": "D_DRE",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/4",
       "qualificadors": [
-        "sense_bot"
+        "sense_bot",
+        "dins_limits_zona",
+        "superacio_en_travessar_linia_defensiva"
       ],
-      "estat_coneixement": "condicio_tasca"
+      "condicio": "D_DRE_no_tanca_i_hi_ha_avantatge_a_E_DRE_A",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_ADRE_FINTA_A_B",
+      "fase_ref": "F1",
+      "ordre": 3,
+      "trajectoria_id": "DUEL_DRE_FINTA_A_B",
+      "actor": "A_DRE",
+      "tipus": "finta",
+      "des_de": "E_DRE_A",
+      "cap_a": "E_DRE_B",
+      "referencia_oposicional": "D_DRE",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/5",
+      "qualificadors": [
+        "sense_bot",
+        "dins_limits_zona",
+        "superacio_en_travessar_linia_defensiva",
+        "canvi_direccio_i_ritme_cap_al_contigu"
+      ],
+      "condicio": "D_DRE_tanca_E_DRE_A",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_ADRE_CONTINUA_B",
+      "fase_ref": "F1",
+      "ordre": 3,
+      "trajectoria_id": "DUEL_DRE_CONTINUA_B",
+      "actor": "A_DRE",
+      "tipus": "resolucio",
+      "des_de": "E_DRE_B",
+      "cap_a": "E_DRE_B",
+      "referencia_oposicional": "D_DRE",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/4",
+      "qualificadors": [
+        "sense_bot",
+        "dins_limits_zona",
+        "superacio_en_travessar_linia_defensiva"
+      ],
+      "condicio": "D_DRE_no_tanca_i_hi_ha_avantatge_a_E_DRE_B",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "T_ADRE_FINTA_B_A",
+      "fase_ref": "F1",
+      "ordre": 3,
+      "trajectoria_id": "DUEL_DRE_FINTA_B_A",
+      "actor": "A_DRE",
+      "tipus": "finta",
+      "des_de": "E_DRE_B",
+      "cap_a": "E_DRE_A",
+      "referencia_oposicional": "D_DRE",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/5",
+      "qualificadors": [
+        "sense_bot",
+        "dins_limits_zona",
+        "superacio_en_travessar_linia_defensiva",
+        "canvi_direccio_i_ritme_cap_al_contigu"
+      ],
+      "condicio": "D_DRE_tanca_E_DRE_B",
+      "estat_coneixement": "validat"
     }
   ],
   "fluxos_pilota": [
@@ -627,14 +975,23 @@
       "resolucio": "no_predeterminada",
       "alternatives": [
         {
-          "id": "A_ESQ_COSTAT_1",
-          "condicio": "D_ESQ_allibera_un_costat",
+          "id": "A_ESQ_CONTINUA_A",
+          "condicio": "A_ESQ_escull_E_ESQ_A_i_D_ESQ_no_tanca",
           "efectes_espacials": [
             {
               "subjecte": "A_ESQ",
               "predicat": "ataca",
               "objectes": [
-                "Z_ESQ"
+                "E_ESQ_A"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "A_ESQ",
+              "predicat": "travessa_linia_defensiva_de",
+              "objectes": [
+                "D_ESQ"
               ],
               "caracter": "disponible",
               "estat_coneixement": "validat"
@@ -642,14 +999,71 @@
           ]
         },
         {
-          "id": "A_ESQ_COSTAT_2",
-          "condicio": "D_ESQ_allibera_laltre_costat",
+          "id": "A_ESQ_FINTA_A_B",
+          "condicio": "A_ESQ_escull_E_ESQ_A_i_D_ESQ_tanca",
           "efectes_espacials": [
             {
               "subjecte": "A_ESQ",
               "predicat": "ataca",
               "objectes": [
-                "Z_ESQ"
+                "E_ESQ_B"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "A_ESQ",
+              "predicat": "travessa_linia_defensiva_de",
+              "objectes": [
+                "D_ESQ"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "A_ESQ_CONTINUA_B",
+          "condicio": "A_ESQ_escull_E_ESQ_B_i_D_ESQ_no_tanca",
+          "efectes_espacials": [
+            {
+              "subjecte": "A_ESQ",
+              "predicat": "ataca",
+              "objectes": [
+                "E_ESQ_B"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "A_ESQ",
+              "predicat": "travessa_linia_defensiva_de",
+              "objectes": [
+                "D_ESQ"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "A_ESQ_FINTA_B_A",
+          "condicio": "A_ESQ_escull_E_ESQ_B_i_D_ESQ_tanca",
+          "efectes_espacials": [
+            {
+              "subjecte": "A_ESQ",
+              "predicat": "ataca",
+              "objectes": [
+                "E_ESQ_A"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "A_ESQ",
+              "predicat": "travessa_linia_defensiva_de",
+              "objectes": [
+                "D_ESQ"
               ],
               "caracter": "disponible",
               "estat_coneixement": "validat"
@@ -666,14 +1080,23 @@
       "resolucio": "no_predeterminada",
       "alternatives": [
         {
-          "id": "A_CE_COSTAT_1",
-          "condicio": "D_CE_allibera_un_costat",
+          "id": "A_CE_CONTINUA_A",
+          "condicio": "A_CE_escull_E_CE_A_i_D_CE_no_tanca",
           "efectes_espacials": [
             {
               "subjecte": "A_CE",
               "predicat": "ataca",
               "objectes": [
-                "Z_CE"
+                "E_CE_A"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "A_CE",
+              "predicat": "travessa_linia_defensiva_de",
+              "objectes": [
+                "D_CE"
               ],
               "caracter": "disponible",
               "estat_coneixement": "validat"
@@ -681,14 +1104,71 @@
           ]
         },
         {
-          "id": "A_CE_COSTAT_2",
-          "condicio": "D_CE_allibera_laltre_costat",
+          "id": "A_CE_FINTA_A_B",
+          "condicio": "A_CE_escull_E_CE_A_i_D_CE_tanca",
           "efectes_espacials": [
             {
               "subjecte": "A_CE",
               "predicat": "ataca",
               "objectes": [
-                "Z_CE"
+                "E_CE_B"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "A_CE",
+              "predicat": "travessa_linia_defensiva_de",
+              "objectes": [
+                "D_CE"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "A_CE_CONTINUA_B",
+          "condicio": "A_CE_escull_E_CE_B_i_D_CE_no_tanca",
+          "efectes_espacials": [
+            {
+              "subjecte": "A_CE",
+              "predicat": "ataca",
+              "objectes": [
+                "E_CE_B"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "A_CE",
+              "predicat": "travessa_linia_defensiva_de",
+              "objectes": [
+                "D_CE"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "A_CE_FINTA_B_A",
+          "condicio": "A_CE_escull_E_CE_B_i_D_CE_tanca",
+          "efectes_espacials": [
+            {
+              "subjecte": "A_CE",
+              "predicat": "ataca",
+              "objectes": [
+                "E_CE_A"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "A_CE",
+              "predicat": "travessa_linia_defensiva_de",
+              "objectes": [
+                "D_CE"
               ],
               "caracter": "disponible",
               "estat_coneixement": "validat"
@@ -705,14 +1185,23 @@
       "resolucio": "no_predeterminada",
       "alternatives": [
         {
-          "id": "A_DRE_COSTAT_1",
-          "condicio": "D_DRE_allibera_un_costat",
+          "id": "A_DRE_CONTINUA_A",
+          "condicio": "A_DRE_escull_E_DRE_A_i_D_DRE_no_tanca",
           "efectes_espacials": [
             {
               "subjecte": "A_DRE",
               "predicat": "ataca",
               "objectes": [
-                "Z_DRE"
+                "E_DRE_A"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "A_DRE",
+              "predicat": "travessa_linia_defensiva_de",
+              "objectes": [
+                "D_DRE"
               ],
               "caracter": "disponible",
               "estat_coneixement": "validat"
@@ -720,14 +1209,71 @@
           ]
         },
         {
-          "id": "A_DRE_COSTAT_2",
-          "condicio": "D_DRE_allibera_laltre_costat",
+          "id": "A_DRE_FINTA_A_B",
+          "condicio": "A_DRE_escull_E_DRE_A_i_D_DRE_tanca",
           "efectes_espacials": [
             {
               "subjecte": "A_DRE",
               "predicat": "ataca",
               "objectes": [
-                "Z_DRE"
+                "E_DRE_B"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "A_DRE",
+              "predicat": "travessa_linia_defensiva_de",
+              "objectes": [
+                "D_DRE"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "A_DRE_CONTINUA_B",
+          "condicio": "A_DRE_escull_E_DRE_B_i_D_DRE_no_tanca",
+          "efectes_espacials": [
+            {
+              "subjecte": "A_DRE",
+              "predicat": "ataca",
+              "objectes": [
+                "E_DRE_B"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "A_DRE",
+              "predicat": "travessa_linia_defensiva_de",
+              "objectes": [
+                "D_DRE"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "A_DRE_FINTA_B_A",
+          "condicio": "A_DRE_escull_E_DRE_B_i_D_DRE_tanca",
+          "efectes_espacials": [
+            {
+              "subjecte": "A_DRE",
+              "predicat": "ataca",
+              "objectes": [
+                "E_DRE_A"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "A_DRE",
+              "predicat": "travessa_linia_defensiva_de",
+              "objectes": [
+                "D_DRE"
               ],
               "caracter": "disponible",
               "estat_coneixement": "validat"
@@ -783,7 +1329,7 @@
         "D_DRE"
       ],
       "ambit": "BR_DUEL_ESQ-BR_DUEL_CE-BR_DUEL_DRE",
-      "missatge": "Cada atacant decideix com superar segons la resposta del seu defensor."
+      "missatge": "Cada atacant tria lliurement l'espai inicial, continua si hi ha avantatge o canvia al contigu si el defensor tanca."
     },
     {
       "code": "SP-UVOF015-CONTIG",
@@ -824,7 +1370,24 @@
         "A_DRE"
       ],
       "ambit": "F1",
-      "missatge": "Les tres devolucions permeten rebre orientat abans del canvi de direcció."
+      "missatge": "Les tres devolucions permeten rebre orientat abans del 1x1."
+    },
+    {
+      "code": "SP-UVOF015-CONTIG-DUELS",
+      "operador": "contiguitat_amb_referent_compartit",
+      "subjectes": [
+        "E_ESQ_A",
+        "D_ESQ",
+        "E_ESQ_B",
+        "E_CE_A",
+        "D_CE",
+        "E_CE_B",
+        "E_DRE_A",
+        "D_DRE",
+        "E_DRE_B"
+      ],
+      "ambit": "F1",
+      "missatge": "Cada zona ofereix dos espais contigus que comparteixen el seu defensor real."
     }
   ],
   "governanca": {
@@ -841,7 +1404,7 @@
         "artifact": "corpus/uvof.semantic.json",
         "selector": "/exercicis/14",
         "version": "1.6.0",
-        "digest": "sha256:c283679dd913c34fb16729c0b6bfd5abfa41f92c76cd3b699b6d612f3d0a17aa",
+        "digest": "sha256:ee07cdb29e25d3e1398cb631c0f2afd00128d8e6141ac0b1e4f9b11b3b1f66fb",
         "canonical": true,
         "validation_status": "validated"
       }
@@ -987,6 +1550,42 @@
         "knowledge_status": "validat"
       },
       {
+        "ref": "traca:TR-UVOF-015:space:E_ESQ_A",
+        "kind": "space",
+        "local_id": "E_ESQ_A",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-015:space:E_ESQ_B",
+        "kind": "space",
+        "local_id": "E_ESQ_B",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-015:space:E_CE_A",
+        "kind": "space",
+        "local_id": "E_CE_A",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-015:space:E_CE_B",
+        "kind": "space",
+        "local_id": "E_CE_B",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-015:space:E_DRE_A",
+        "kind": "space",
+        "local_id": "E_DRE_A",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-015:space:E_DRE_B",
+        "kind": "space",
+        "local_id": "E_DRE_B",
+        "knowledge_status": "validat"
+      },
+      {
         "ref": "traca:TR-UVOF-015:state:S_INICI_PARALLEL",
         "kind": "state",
         "local_id": "S_INICI_PARALLEL",
@@ -1017,15 +1616,27 @@
         "knowledge_status": "validat"
       },
       {
-        "ref": "traca:TR-UVOF-015:transition:T_AESQ_FINTA",
+        "ref": "traca:TR-UVOF-015:transition:T_AESQ_CONTINUA_A",
         "kind": "transition",
-        "local_id": "T_AESQ_FINTA",
+        "local_id": "T_AESQ_CONTINUA_A",
         "knowledge_status": "validat"
       },
       {
-        "ref": "traca:TR-UVOF-015:transition:T_AESQ_RESOL",
+        "ref": "traca:TR-UVOF-015:transition:T_AESQ_FINTA_A_B",
         "kind": "transition",
-        "local_id": "T_AESQ_RESOL",
+        "local_id": "T_AESQ_FINTA_A_B",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-015:transition:T_AESQ_CONTINUA_B",
+        "kind": "transition",
+        "local_id": "T_AESQ_CONTINUA_B",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-015:transition:T_AESQ_FINTA_B_A",
+        "kind": "transition",
+        "local_id": "T_AESQ_FINTA_B_A",
         "knowledge_status": "validat"
       },
       {
@@ -1041,15 +1652,27 @@
         "knowledge_status": "validat"
       },
       {
-        "ref": "traca:TR-UVOF-015:transition:T_ACE_FINTA",
+        "ref": "traca:TR-UVOF-015:transition:T_ACE_CONTINUA_A",
         "kind": "transition",
-        "local_id": "T_ACE_FINTA",
+        "local_id": "T_ACE_CONTINUA_A",
         "knowledge_status": "validat"
       },
       {
-        "ref": "traca:TR-UVOF-015:transition:T_ACE_RESOL",
+        "ref": "traca:TR-UVOF-015:transition:T_ACE_FINTA_A_B",
         "kind": "transition",
-        "local_id": "T_ACE_RESOL",
+        "local_id": "T_ACE_FINTA_A_B",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-015:transition:T_ACE_CONTINUA_B",
+        "kind": "transition",
+        "local_id": "T_ACE_CONTINUA_B",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-015:transition:T_ACE_FINTA_B_A",
+        "kind": "transition",
+        "local_id": "T_ACE_FINTA_B_A",
         "knowledge_status": "validat"
       },
       {
@@ -1065,15 +1688,27 @@
         "knowledge_status": "validat"
       },
       {
-        "ref": "traca:TR-UVOF-015:transition:T_ADRE_FINTA",
+        "ref": "traca:TR-UVOF-015:transition:T_ADRE_CONTINUA_A",
         "kind": "transition",
-        "local_id": "T_ADRE_FINTA",
+        "local_id": "T_ADRE_CONTINUA_A",
         "knowledge_status": "validat"
       },
       {
-        "ref": "traca:TR-UVOF-015:transition:T_ADRE_RESOL",
+        "ref": "traca:TR-UVOF-015:transition:T_ADRE_FINTA_A_B",
         "kind": "transition",
-        "local_id": "T_ADRE_RESOL",
+        "local_id": "T_ADRE_FINTA_A_B",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-015:transition:T_ADRE_CONTINUA_B",
+        "kind": "transition",
+        "local_id": "T_ADRE_CONTINUA_B",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-015:transition:T_ADRE_FINTA_B_A",
+        "kind": "transition",
+        "local_id": "T_ADRE_FINTA_B_A",
         "knowledge_status": "validat"
       },
       {
@@ -1119,15 +1754,27 @@
         "knowledge_status": "validat"
       },
       {
-        "ref": "traca:TR-UVOF-015:alternative:A_ESQ_COSTAT_1",
+        "ref": "traca:TR-UVOF-015:alternative:A_ESQ_CONTINUA_A",
         "kind": "decision_alternative",
-        "local_id": "A_ESQ_COSTAT_1",
+        "local_id": "A_ESQ_CONTINUA_A",
         "knowledge_status": "validat"
       },
       {
-        "ref": "traca:TR-UVOF-015:alternative:A_ESQ_COSTAT_2",
+        "ref": "traca:TR-UVOF-015:alternative:A_ESQ_FINTA_A_B",
         "kind": "decision_alternative",
-        "local_id": "A_ESQ_COSTAT_2",
+        "local_id": "A_ESQ_FINTA_A_B",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-015:alternative:A_ESQ_CONTINUA_B",
+        "kind": "decision_alternative",
+        "local_id": "A_ESQ_CONTINUA_B",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-015:alternative:A_ESQ_FINTA_B_A",
+        "kind": "decision_alternative",
+        "local_id": "A_ESQ_FINTA_B_A",
         "knowledge_status": "validat"
       },
       {
@@ -1137,15 +1784,27 @@
         "knowledge_status": "validat"
       },
       {
-        "ref": "traca:TR-UVOF-015:alternative:A_CE_COSTAT_1",
+        "ref": "traca:TR-UVOF-015:alternative:A_CE_CONTINUA_A",
         "kind": "decision_alternative",
-        "local_id": "A_CE_COSTAT_1",
+        "local_id": "A_CE_CONTINUA_A",
         "knowledge_status": "validat"
       },
       {
-        "ref": "traca:TR-UVOF-015:alternative:A_CE_COSTAT_2",
+        "ref": "traca:TR-UVOF-015:alternative:A_CE_FINTA_A_B",
         "kind": "decision_alternative",
-        "local_id": "A_CE_COSTAT_2",
+        "local_id": "A_CE_FINTA_A_B",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-015:alternative:A_CE_CONTINUA_B",
+        "kind": "decision_alternative",
+        "local_id": "A_CE_CONTINUA_B",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-015:alternative:A_CE_FINTA_B_A",
+        "kind": "decision_alternative",
+        "local_id": "A_CE_FINTA_B_A",
         "knowledge_status": "validat"
       },
       {
@@ -1155,15 +1814,27 @@
         "knowledge_status": "validat"
       },
       {
-        "ref": "traca:TR-UVOF-015:alternative:A_DRE_COSTAT_1",
+        "ref": "traca:TR-UVOF-015:alternative:A_DRE_CONTINUA_A",
         "kind": "decision_alternative",
-        "local_id": "A_DRE_COSTAT_1",
+        "local_id": "A_DRE_CONTINUA_A",
         "knowledge_status": "validat"
       },
       {
-        "ref": "traca:TR-UVOF-015:alternative:A_DRE_COSTAT_2",
+        "ref": "traca:TR-UVOF-015:alternative:A_DRE_FINTA_A_B",
         "kind": "decision_alternative",
-        "local_id": "A_DRE_COSTAT_2",
+        "local_id": "A_DRE_FINTA_A_B",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-015:alternative:A_DRE_CONTINUA_B",
+        "kind": "decision_alternative",
+        "local_id": "A_DRE_CONTINUA_B",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-015:alternative:A_DRE_FINTA_B_A",
+        "kind": "decision_alternative",
+        "local_id": "A_DRE_FINTA_B_A",
         "knowledge_status": "validat"
       }
     ]
@@ -1177,7 +1848,8 @@
         "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/1",
         "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/2",
         "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/3",
-        "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/4"
+        "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/4",
+        "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/5"
       ],
       "target_refs": [
         "traca:TR-UVOF-015:node:A_ESQ",
@@ -1450,43 +2122,169 @@
     {
       "id": "COND_1",
       "kind": "observation",
-      "expression": "D_ESQ_allibera_un_costat",
-      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/branques_decisionals/0/alternatives/0/condicio",
+      "expression": "D_ESQ_no_tanca_i_hi_ha_avantatge_a_E_ESQ_A",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/transicions/2/condicio",
       "status": "validated"
     },
     {
       "id": "COND_2",
       "kind": "observation",
-      "expression": "D_ESQ_allibera_laltre_costat",
-      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/branques_decisionals/0/alternatives/1/condicio",
+      "expression": "D_ESQ_tanca_E_ESQ_A",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/transicions/3/condicio",
       "status": "validated"
     },
     {
       "id": "COND_3",
       "kind": "observation",
-      "expression": "D_CE_allibera_un_costat",
-      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/branques_decisionals/1/alternatives/0/condicio",
+      "expression": "D_ESQ_no_tanca_i_hi_ha_avantatge_a_E_ESQ_B",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/transicions/4/condicio",
       "status": "validated"
     },
     {
       "id": "COND_4",
       "kind": "observation",
-      "expression": "D_CE_allibera_laltre_costat",
-      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/branques_decisionals/1/alternatives/1/condicio",
+      "expression": "D_ESQ_tanca_E_ESQ_B",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/transicions/5/condicio",
       "status": "validated"
     },
     {
       "id": "COND_5",
       "kind": "observation",
-      "expression": "D_DRE_allibera_un_costat",
-      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/branques_decisionals/2/alternatives/0/condicio",
+      "expression": "D_CE_no_tanca_i_hi_ha_avantatge_a_E_CE_A",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/transicions/8/condicio",
       "status": "validated"
     },
     {
       "id": "COND_6",
       "kind": "observation",
-      "expression": "D_DRE_allibera_laltre_costat",
+      "expression": "D_CE_tanca_E_CE_A",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/transicions/9/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_7",
+      "kind": "observation",
+      "expression": "D_CE_no_tanca_i_hi_ha_avantatge_a_E_CE_B",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/transicions/10/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_8",
+      "kind": "observation",
+      "expression": "D_CE_tanca_E_CE_B",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/transicions/11/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_9",
+      "kind": "observation",
+      "expression": "D_DRE_no_tanca_i_hi_ha_avantatge_a_E_DRE_A",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/transicions/14/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_10",
+      "kind": "observation",
+      "expression": "D_DRE_tanca_E_DRE_A",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/transicions/15/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_11",
+      "kind": "observation",
+      "expression": "D_DRE_no_tanca_i_hi_ha_avantatge_a_E_DRE_B",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/transicions/16/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_12",
+      "kind": "observation",
+      "expression": "D_DRE_tanca_E_DRE_B",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/transicions/17/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_13",
+      "kind": "observation",
+      "expression": "A_ESQ_escull_E_ESQ_A_i_D_ESQ_no_tanca",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/branques_decisionals/0/alternatives/0/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_14",
+      "kind": "observation",
+      "expression": "A_ESQ_escull_E_ESQ_A_i_D_ESQ_tanca",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/branques_decisionals/0/alternatives/1/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_15",
+      "kind": "observation",
+      "expression": "A_ESQ_escull_E_ESQ_B_i_D_ESQ_no_tanca",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/branques_decisionals/0/alternatives/2/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_16",
+      "kind": "observation",
+      "expression": "A_ESQ_escull_E_ESQ_B_i_D_ESQ_tanca",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/branques_decisionals/0/alternatives/3/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_17",
+      "kind": "observation",
+      "expression": "A_CE_escull_E_CE_A_i_D_CE_no_tanca",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/branques_decisionals/1/alternatives/0/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_18",
+      "kind": "observation",
+      "expression": "A_CE_escull_E_CE_A_i_D_CE_tanca",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/branques_decisionals/1/alternatives/1/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_19",
+      "kind": "observation",
+      "expression": "A_CE_escull_E_CE_B_i_D_CE_no_tanca",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/branques_decisionals/1/alternatives/2/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_20",
+      "kind": "observation",
+      "expression": "A_CE_escull_E_CE_B_i_D_CE_tanca",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/branques_decisionals/1/alternatives/3/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_21",
+      "kind": "observation",
+      "expression": "A_DRE_escull_E_DRE_A_i_D_DRE_no_tanca",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/branques_decisionals/2/alternatives/0/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_22",
+      "kind": "observation",
+      "expression": "A_DRE_escull_E_DRE_A_i_D_DRE_tanca",
       "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/branques_decisionals/2/alternatives/1/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_23",
+      "kind": "observation",
+      "expression": "A_DRE_escull_E_DRE_B_i_D_DRE_no_tanca",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/branques_decisionals/2/alternatives/2/condicio",
+      "status": "validated"
+    },
+    {
+      "id": "COND_24",
+      "kind": "observation",
+      "expression": "A_DRE_escull_E_DRE_B_i_D_DRE_tanca",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/branques_decisionals/2/alternatives/3/condicio",
       "status": "validated"
     }
   ],
@@ -1499,8 +2297,8 @@
       "axis": "relational",
       "viewpoint": "attacking_team",
       "distance_class": "not_applicable",
-      "closure": "unresolved",
-      "status": "unresolved"
+      "closure": "semantic_boundary_set",
+      "status": "complete"
     },
     {
       "id": "FRAME_Z_CE_2",
@@ -1510,8 +2308,8 @@
       "axis": "relational",
       "viewpoint": "attacking_team",
       "distance_class": "not_applicable",
-      "closure": "unresolved",
-      "status": "unresolved"
+      "closure": "semantic_boundary_set",
+      "status": "complete"
     },
     {
       "id": "FRAME_Z_DRE_3",
@@ -1521,8 +2319,74 @@
       "axis": "relational",
       "viewpoint": "attacking_team",
       "distance_class": "not_applicable",
-      "closure": "unresolved",
-      "status": "unresolved"
+      "closure": "semantic_boundary_set",
+      "status": "complete"
+    },
+    {
+      "id": "FRAME_E_ESQ_A_4",
+      "space_ref": "traca:TR-UVOF-015:space:E_ESQ_A",
+      "definition_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/3/restriccions/0",
+      "operator": "interior_de",
+      "axis": "attack_relative",
+      "viewpoint": "attacking_team",
+      "distance_class": "not_applicable",
+      "closure": "referenced_boundary",
+      "status": "complete"
+    },
+    {
+      "id": "FRAME_E_ESQ_B_5",
+      "space_ref": "traca:TR-UVOF-015:space:E_ESQ_B",
+      "definition_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/4/restriccions/0",
+      "operator": "interior_de",
+      "axis": "attack_relative",
+      "viewpoint": "attacking_team",
+      "distance_class": "not_applicable",
+      "closure": "referenced_boundary",
+      "status": "complete"
+    },
+    {
+      "id": "FRAME_E_CE_A_6",
+      "space_ref": "traca:TR-UVOF-015:space:E_CE_A",
+      "definition_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/5/restriccions/0",
+      "operator": "interior_de",
+      "axis": "attack_relative",
+      "viewpoint": "attacking_team",
+      "distance_class": "not_applicable",
+      "closure": "referenced_boundary",
+      "status": "complete"
+    },
+    {
+      "id": "FRAME_E_CE_B_7",
+      "space_ref": "traca:TR-UVOF-015:space:E_CE_B",
+      "definition_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/6/restriccions/0",
+      "operator": "interior_de",
+      "axis": "attack_relative",
+      "viewpoint": "attacking_team",
+      "distance_class": "not_applicable",
+      "closure": "referenced_boundary",
+      "status": "complete"
+    },
+    {
+      "id": "FRAME_E_DRE_A_8",
+      "space_ref": "traca:TR-UVOF-015:space:E_DRE_A",
+      "definition_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/7/restriccions/0",
+      "operator": "interior_de",
+      "axis": "attack_relative",
+      "viewpoint": "attacking_team",
+      "distance_class": "not_applicable",
+      "closure": "referenced_boundary",
+      "status": "complete"
+    },
+    {
+      "id": "FRAME_E_DRE_B_9",
+      "space_ref": "traca:TR-UVOF-015:space:E_DRE_B",
+      "definition_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/8/restriccions/0",
+      "operator": "interior_de",
+      "axis": "attack_relative",
+      "viewpoint": "attacking_team",
+      "distance_class": "not_applicable",
+      "closure": "referenced_boundary",
+      "status": "complete"
     }
   ],
   "decision_mappings": [
@@ -1535,14 +2399,16 @@
         {
           "option_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/decisions/0/opcions/0",
           "alternative_refs": [
-            "traca:TR-UVOF-015:alternative:A_ESQ_COSTAT_1"
+            "traca:TR-UVOF-015:alternative:A_ESQ_CONTINUA_A",
+            "traca:TR-UVOF-015:alternative:A_ESQ_CONTINUA_B"
           ],
           "status": "mapped"
         },
         {
           "option_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/decisions/0/opcions/1",
           "alternative_refs": [
-            "traca:TR-UVOF-015:alternative:A_ESQ_COSTAT_2"
+            "traca:TR-UVOF-015:alternative:A_ESQ_FINTA_A_B",
+            "traca:TR-UVOF-015:alternative:A_ESQ_FINTA_B_A"
           ],
           "status": "mapped"
         }
@@ -1557,14 +2423,16 @@
         {
           "option_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/decisions/1/opcions/0",
           "alternative_refs": [
-            "traca:TR-UVOF-015:alternative:A_CE_COSTAT_1"
+            "traca:TR-UVOF-015:alternative:A_CE_CONTINUA_A",
+            "traca:TR-UVOF-015:alternative:A_CE_CONTINUA_B"
           ],
           "status": "mapped"
         },
         {
           "option_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/decisions/1/opcions/1",
           "alternative_refs": [
-            "traca:TR-UVOF-015:alternative:A_CE_COSTAT_2"
+            "traca:TR-UVOF-015:alternative:A_CE_FINTA_A_B",
+            "traca:TR-UVOF-015:alternative:A_CE_FINTA_B_A"
           ],
           "status": "mapped"
         }
@@ -1579,14 +2447,16 @@
         {
           "option_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/decisions/2/opcions/0",
           "alternative_refs": [
-            "traca:TR-UVOF-015:alternative:A_DRE_COSTAT_1"
+            "traca:TR-UVOF-015:alternative:A_DRE_CONTINUA_A",
+            "traca:TR-UVOF-015:alternative:A_DRE_CONTINUA_B"
           ],
           "status": "mapped"
         },
         {
           "option_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/decisions/2/opcions/1",
           "alternative_refs": [
-            "traca:TR-UVOF-015:alternative:A_DRE_COSTAT_2"
+            "traca:TR-UVOF-015:alternative:A_DRE_FINTA_A_B",
+            "traca:TR-UVOF-015:alternative:A_DRE_FINTA_B_A"
           ],
           "status": "mapped"
         }
@@ -1631,6 +2501,114 @@
       "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/2/definicio"
     },
     {
+      "from_ref": "traca:TR-UVOF-015:space:E_ESQ_A",
+      "to_ref": "traca:TR-UVOF-015:node:LIM_0",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/3/definicio"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-015:space:E_ESQ_A",
+      "to_ref": "traca:TR-UVOF-015:node:D_ESQ",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/3/definicio"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-015:space:E_ESQ_A",
+      "to_ref": "traca:TR-UVOF-015:space:Z_ESQ",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/3/restriccions/0"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-015:space:E_ESQ_B",
+      "to_ref": "traca:TR-UVOF-015:node:LIM_1",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/4/definicio"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-015:space:E_ESQ_B",
+      "to_ref": "traca:TR-UVOF-015:node:D_ESQ",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/4/definicio"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-015:space:E_ESQ_B",
+      "to_ref": "traca:TR-UVOF-015:space:Z_ESQ",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/4/restriccions/0"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-015:space:E_CE_A",
+      "to_ref": "traca:TR-UVOF-015:node:LIM_1",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/5/definicio"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-015:space:E_CE_A",
+      "to_ref": "traca:TR-UVOF-015:node:D_CE",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/5/definicio"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-015:space:E_CE_A",
+      "to_ref": "traca:TR-UVOF-015:space:Z_CE",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/5/restriccions/0"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-015:space:E_CE_B",
+      "to_ref": "traca:TR-UVOF-015:node:LIM_2",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/6/definicio"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-015:space:E_CE_B",
+      "to_ref": "traca:TR-UVOF-015:node:D_CE",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/6/definicio"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-015:space:E_CE_B",
+      "to_ref": "traca:TR-UVOF-015:space:Z_CE",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/6/restriccions/0"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-015:space:E_DRE_A",
+      "to_ref": "traca:TR-UVOF-015:node:LIM_2",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/7/definicio"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-015:space:E_DRE_A",
+      "to_ref": "traca:TR-UVOF-015:node:D_DRE",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/7/definicio"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-015:space:E_DRE_A",
+      "to_ref": "traca:TR-UVOF-015:space:Z_DRE",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/7/restriccions/0"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-015:space:E_DRE_B",
+      "to_ref": "traca:TR-UVOF-015:node:LIM_3",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/8/definicio"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-015:space:E_DRE_B",
+      "to_ref": "traca:TR-UVOF-015:node:D_DRE",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/8/definicio"
+    },
+    {
+      "from_ref": "traca:TR-UVOF-015:space:E_DRE_B",
+      "to_ref": "traca:TR-UVOF-015:space:Z_DRE",
+      "kind": "defined_by",
+      "origin_ref": "exercises/TR-UVOF-015/spatial-relations.json#/espais/8/restriccions/0"
+    },
+    {
       "from_ref": "traca:TR-UVOF-015:node:A_ESQ",
       "to_ref": "traca:TR-UVOF-015:space:Z_ESQ",
       "kind": "relational_constraint",
@@ -1673,19 +2651,7 @@
     "identity_mapping": [],
     "required_for_preflight": false
   },
-  "unresolved_items": [
-    {
-      "code": "FINTA_ADJACENT_SPACE_MISSING",
-      "impact": "blocked",
-      "entity_refs": [
-        "T_AESQ_FINTA",
-        "T_ACE_FINTA",
-        "T_ADRE_FINTA"
-      ],
-      "message": "Falten l'espai inicial, el contigu i el criteri de superació de cada duel.",
-      "requires_trainer": true
-    }
-  ],
+  "unresolved_items": [],
   "compatibility": {
     "migrated_from": "0.2.0",
     "v02_status": "historical_read_only",
@@ -1829,12 +2795,6 @@
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/1",
       "kind": "action",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
-    },
-    {
-      "source_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/2",
-      "kind": "action",
       "preservation": "mapped",
       "spatial_refs": [
         "traca:TR-UVOF-015:transition:T_ACE_INICIA",
@@ -1843,7 +2803,7 @@
       ]
     },
     {
-      "source_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/3",
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/2",
       "kind": "action",
       "preservation": "mapped",
       "spatial_refs": [
@@ -1853,10 +2813,36 @@
       ]
     },
     {
-      "source_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/4",
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/3",
       "kind": "action",
       "preservation": "preserved_symbolically",
       "spatial_refs": []
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/4",
+      "kind": "action",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-015:transition:T_ACE_CONTINUA_A",
+        "traca:TR-UVOF-015:transition:T_ACE_CONTINUA_B",
+        "traca:TR-UVOF-015:transition:T_ADRE_CONTINUA_A",
+        "traca:TR-UVOF-015:transition:T_ADRE_CONTINUA_B",
+        "traca:TR-UVOF-015:transition:T_AESQ_CONTINUA_A",
+        "traca:TR-UVOF-015:transition:T_AESQ_CONTINUA_B"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/accions/5",
+      "kind": "action",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-015:transition:T_ACE_FINTA_A_B",
+        "traca:TR-UVOF-015:transition:T_ACE_FINTA_B_A",
+        "traca:TR-UVOF-015:transition:T_ADRE_FINTA_A_B",
+        "traca:TR-UVOF-015:transition:T_ADRE_FINTA_B_A",
+        "traca:TR-UVOF-015:transition:T_AESQ_FINTA_A_B",
+        "traca:TR-UVOF-015:transition:T_AESQ_FINTA_B_A"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/14/fases/0/fluxos_pilota/0",
@@ -1919,7 +2905,8 @@
       "kind": "decision_option",
       "preservation": "mapped",
       "spatial_refs": [
-        "traca:TR-UVOF-015:alternative:A_ESQ_COSTAT_1"
+        "traca:TR-UVOF-015:alternative:A_ESQ_CONTINUA_A",
+        "traca:TR-UVOF-015:alternative:A_ESQ_CONTINUA_B"
       ]
     },
     {
@@ -1927,7 +2914,8 @@
       "kind": "decision_option",
       "preservation": "mapped",
       "spatial_refs": [
-        "traca:TR-UVOF-015:alternative:A_ESQ_COSTAT_2"
+        "traca:TR-UVOF-015:alternative:A_ESQ_FINTA_A_B",
+        "traca:TR-UVOF-015:alternative:A_ESQ_FINTA_B_A"
       ]
     },
     {
@@ -1943,7 +2931,8 @@
       "kind": "decision_option",
       "preservation": "mapped",
       "spatial_refs": [
-        "traca:TR-UVOF-015:alternative:A_CE_COSTAT_1"
+        "traca:TR-UVOF-015:alternative:A_CE_CONTINUA_A",
+        "traca:TR-UVOF-015:alternative:A_CE_CONTINUA_B"
       ]
     },
     {
@@ -1951,7 +2940,8 @@
       "kind": "decision_option",
       "preservation": "mapped",
       "spatial_refs": [
-        "traca:TR-UVOF-015:alternative:A_CE_COSTAT_2"
+        "traca:TR-UVOF-015:alternative:A_CE_FINTA_A_B",
+        "traca:TR-UVOF-015:alternative:A_CE_FINTA_B_A"
       ]
     },
     {
@@ -1967,7 +2957,8 @@
       "kind": "decision_option",
       "preservation": "mapped",
       "spatial_refs": [
-        "traca:TR-UVOF-015:alternative:A_DRE_COSTAT_1"
+        "traca:TR-UVOF-015:alternative:A_DRE_CONTINUA_A",
+        "traca:TR-UVOF-015:alternative:A_DRE_CONTINUA_B"
       ]
     },
     {
@@ -1975,12 +2966,13 @@
       "kind": "decision_option",
       "preservation": "mapped",
       "spatial_refs": [
-        "traca:TR-UVOF-015:alternative:A_DRE_COSTAT_2"
+        "traca:TR-UVOF-015:alternative:A_DRE_FINTA_A_B",
+        "traca:TR-UVOF-015:alternative:A_DRE_FINTA_B_A"
       ]
     }
   ],
   "integrity": {
     "algorithm": "sha256",
-    "spatial_digest": "sha256:1060ff0db3bc16ac58b0b3ac5b53837edd1fdace828f0141375c6283c164ee43"
+    "spatial_digest": "sha256:9717a4dc2b1c532f4b74aca97d0ca15aefcbbd21daa1df4a6caf22f6ca4e717d"
   }
 }

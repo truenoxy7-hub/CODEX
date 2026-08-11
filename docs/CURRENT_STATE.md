@@ -22,16 +22,15 @@
   amb diagnòstics estructurats i sense geometria.
 - Integració del preflight al validador sense seleccionar silenciosament el
   `semantic.json` germà d'UVOF001.
-- Suite verda amb 113 proves: les 88 del baseline auditat i 25 proves noves de
+- Suite verda amb 114 proves: les 88 del baseline auditat i 26 proves noves de
   contracte, preservació, integritat i mutacions destructives.
 
 ## Matriu reproduïble del preflight
 
 | Estat | Exercicis | Motiu principal |
 |---|---|---|
-| `ready` | 001, 002, 003, 004, 006, 008, 009, 010, 011, 012, 013 | Contracte i entrades suficients per al gate qualitatiu actual |
+| `ready` | 001, 002, 003, 004, 006, 008, 009, 010, 011, 012, 013, 015 | Contracte i entrades suficients per al gate qualitatiu actual |
 | `partial` | 005, 007, 014 | Flux/informació de pilota no especificat o opcions encara simbòliques |
-| `blocked` | 015 | Espai inicial i contigu de la finta absents |
 
 `valid: true` al validador significa que l'artefacte compleix el contracte. No
 converteix un resultat `partial` o `blocked` en resoluble.
@@ -46,8 +45,9 @@ converteix un resultat `partial` o `blocked` en resoluble.
   `D3_LOCAL` i `D3_OPOSAT`; ja no existeix el participant abstracte `DEF_4`.
 - UVOF014 conserva les sis opcions individualment; `encreuament` continua
   identificable encara que resti simbòlic.
-- UVOF015 no inventa l'espai inicial, l'espai contigu ni el criteri de
-  superació dels tres duels.
+- UVOF015 conserva dos espais contigus per defensor, la llibertat d'elecció
+  inicial, la continuïtat si hi ha avantatge, la finta si el defensor tanca i
+  la superació en travessar la línia defensiva.
 
 ## No completat
 
@@ -64,6 +64,6 @@ geometria per ocultar un diagnòstic `partial`/`blocked`.
 
 ## Pròxima fita recomanada
 
-Resoldre amb l'entrenador els bloquejos que requereixen autoritat tàctica i,
-només després, especificar el perfil de pista i l'API del futur resolutor. El
+Resoldre amb l'entrenador els tres parcials que encara requereixen autoritat
+tàctica i especificar el perfil de pista i l'API del futur resolutor. El
 preflight v0.3 és el gate d'entrada; encara no resol ni dibuixa cap exercici.

@@ -1393,10 +1393,27 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
         for flow in _corpus_ball_flows(uvof_015)
     }
     decisions_015 = {decision.get("id") for decision in _corpus_decisions(uvof_015)}
+    decision_options_015 = {
+        decision.get("id"): tuple(decision.get("opcions", []))
+        for decision in _corpus_decisions(uvof_015)
+    }
+    actions_015 = {
+        (
+            action.get("ordre"),
+            action.get("accio"),
+            action.get("estat_coneixement"),
+        )
+        for phase in uvof_015.get("fases", [])
+        for action in phase.get("accions", [])
+    }
     if (
         uvof_015.get("organitzacio", {}).get("zones") != 3
         or uvof_015.get("organitzacio", {}).get("execucio")
         != "simultania_i_replicada"
+        or uvof_015.get("organitzacio", {}).get("llibertat_1x1")
+        != "eleccio_lliure_de_lespai_inicial_i_resolucio_segons_resposta_defensiva"
+        or uvof_015.get("organitzacio", {}).get("criteri_superacio")
+        != "travessar_la_linia_defensiva_del_defensor_de_zona"
         or not {
             "A_ESQ",
             "A_CE",
@@ -1422,6 +1439,39 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
             ("DUEL_DRE", 2, "B_DRE", "P_DRE", "A_DRE"),
         }
         or decisions_015 != {"D_1X1_ESQ", "D_1X1_CE", "D_1X1_DRE"}
+        or decision_options_015
+        != {
+            "D_1X1_ESQ": (
+                "continuar_per_lespai_escollit_si_hi_ha_avantatge",
+                "canviar_cap_a_lespai_contigu_si_D_ESQ_tanca",
+            ),
+            "D_1X1_CE": (
+                "continuar_per_lespai_escollit_si_hi_ha_avantatge",
+                "canviar_cap_a_lespai_contigu_si_D_CE_tanca",
+            ),
+            "D_1X1_DRE": (
+                "continuar_per_lespai_escollit_si_hi_ha_avantatge",
+                "canviar_cap_a_lespai_contigu_si_D_DRE_tanca",
+            ),
+        }
+        or (
+            4,
+            "escollir_i_atacar_lliurement_un_dels_dos_espais_del_defensor",
+            "validat",
+        )
+        not in actions_015
+        or (
+            5,
+            "continuar_i_superar_per_lespai_escollit_si_hi_ha_avantatge",
+            "validat",
+        )
+        not in actions_015
+        or (
+            6,
+            "canviar_direccio_i_ritme_cap_a_lespai_contigu_si_el_defensor_tanca",
+            "validat",
+        )
+        not in actions_015
         or "bot_prohibit" not in uvof_015.get("condicions_tasca", [])
     ):
         errors.append(
@@ -1431,7 +1481,10 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
                 "message": (
                     "TR-UVOF-015 ha de replicar tres duels simultanis: "
                     "tres atacants, tres passadors, tres defensors, tres "
-                    "pilotes, quatre límits i passada-devolució per zona."
+                    "pilotes, quatre límits i passada-devolució per zona; "
+                    "cada atacant tria lliurement l'espai inicial, continua "
+                    "si hi ha avantatge o canvia al contigu si el defensor "
+                    "tanca, i supera en travessar la línia defensiva."
                 ),
             }
         )

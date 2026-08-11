@@ -384,13 +384,17 @@ La quinzena instància representa:
 - tres zones contigües definides per quatre cons delimitadors;
 - tres 1x1 simultanis, cadascun amb atacant, passador, defensor i pilota propis;
 - passada, desmarcatge, devolució orientada i duel sense bot a cada zona;
-- tres branques decisionals independents, una per defensor;
+- dos espais contigus a cada zona, un entre cada límit i el defensor;
+- tres branques decisionals independents amb quatre alternatives cadascuna:
+  continuar per qualsevol dels dos espais o fintar en qualsevol direcció;
+- superació definida en travessar la línia defensiva del defensor de zona;
 - la pilota única del gràfic font com a exemple visual replicable i no com a
   límit operatiu de la tasca.
 
-La font no diferencia l'espai inicial, l'espai contigu ni el criteri de
-superació de cada finta. Les transicions ho conserven sense inventar i el
-preflight retorna `FINTA_ADJACENT_SPACE_MISSING` amb estat `blocked`.
+L'atacant té llibertat absoluta per escollir l'espai inicial. Si té avantatge,
+continua; si el defensor tanca, canvia direcció i ritme cap a l'espai contigu.
+Els sis espais, les seves contigüitats, els marcs d'operador i el mapping de les
+alternatives són explícits, de manera que el preflight retorna `ready`.
 
 ## Validacions executables
 

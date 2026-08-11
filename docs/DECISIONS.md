@@ -306,3 +306,19 @@ a l'1x1 que `L` inicia des del centre temporal.
 individuals, la cobertura semàntica mapeja els quatre defensors i desapareix el
 grup no instanciat. El preflight d'UVOF011 passa de `blocked` a `ready` sense
 introduir coordenades.
+
+## D-035 — Llibertat bilateral dels tres duels d'UVOF015
+
+**Decisió de l'entrenador:** a cadascuna de les tres zones, l'atacant té
+llibertat absoluta per escollir inicialment qualsevol dels dos espais contigus
+al defensor. Si hi ha avantatge, continua i supera pel mateix espai; si el
+defensor el tanca, canvia direcció i ritme per atacar l'altre. L'acció es manté
+dins els límits de zona i sense bot.
+
+**Criteri de superació:** l'atacant supera quan travessa la línia defensiva
+marcada pel defensor real de la zona.
+
+**Efecte tècnic:** cada duel exposa les dues continuïtats i les dues fintes
+direccionals, les contigüitats comparteixen el defensor i totes les branques
+conserven el criteri de superació. Desapareixen els marcs incomplets i el
+preflight d'UVOF015 passa de `blocked` a `ready` sense introduir coordenades.
