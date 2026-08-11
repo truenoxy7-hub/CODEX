@@ -126,10 +126,11 @@ preserva totes les alternatives. Les coordenades de lectura viuen només a
 contracte es documenta a [`GEOMETRY_CONTRACT.md`](GEOMETRY_CONTRACT.md).
 
 La interfície MVP accepta text arbitrari, però no afirma entendre’l completament
-ni genera geometria general. Un `InterpretationProvider` retorna coneixement
-validat, provisional, desconegut i no resolt. UVOF015 disposa d’una derivació
-reproduïble; la resta de casos només tindran `generatedGeometry` quan existeixi
-un resolver identificat.
+ni genera geometria general. `KnowledgeResolver` retorna coneixement validat,
+provisional, desconegut, candidat i no resolt. `RepresentationComposer` pot
+construir geometria provisional a partir d'una composició de primitives
+conegudes, actualment una passada entre rols identificats i la recepció en
+carrera. Això no equival a un resolver tàctic universal.
 
 Sense resolver, l’entrenador pot crear una `coach_reference_geometry`. Aquest
 artefacte és una referència del cas, no geometria derivada, i conserva
@@ -148,7 +149,10 @@ independents.
 
 La validació d'un conjunt de correccions crea una versió validada del cas. No
 altera automàticament el corpus, el contracte espacial ni les regles generals.
-La reutilització exigeix una promoció explícita i produeix primer un candidat.
+La reutilització exigeix una decisió explícita. Un criteri local confirmat per
+l'entrenador, vinculat a un cas validat i a evidències, pot entrar a
+`coach_validated_local_knowledge` i ser consumit en casos futurs. Una promoció
+del Promotion Builder continua naixent com a candidat i només suggereix.
 El model complet es documenta a
 [`CORRECTION_MODEL.md`](CORRECTION_MODEL.md).
 
@@ -222,3 +226,14 @@ La v0.3 separa també el flux de pilota de les transicions dels participants.
 Cada trajectòria alternativa conserva la possessió entre passades i pot
 referenciar la condició tàctica que l'activa. Els encreuaments declaren el pas
 del receptor per darrere del portador i l'interval que ataca després de rebre.
+
+## 13. Identitat, completitud i derivació
+
+`case_uid` és la identitat durable; `short_code` és només una etiqueta humana.
+Un cas pot ser complet semànticament sense geometria, o tenir una composició
+provisional sense estar validat. Per això `complete`, `validated` i `saved` no
+són sinònims.
+
+Cada capa derivada conserva el fingerprint del text font. Un canvi de text posa
+en `stale` les capes que eren `current`. Cap representació obsoleta es pot
+validar ni guardar.

@@ -7,7 +7,7 @@
   "use strict";
 
   const ENTITY_KINDS = ["attacker", "defender", "passer", "pivot", "goalkeeper", "ball", "cone", "bench", "cylinder", "generic_participant", "generic_material", "text"];
-  const PATH_KINDS = ["movement", "movement_without_ball", "pass", "shot", "feint", "future_position", "generic_action"];
+  const PATH_KINDS = ["movement", "movement_without_ball", "dribble", "pass", "pass_feint", "shot", "shot_feint", "feint", "block", "defensive_block", "future_position", "generic_action"];
 
   function courtFromProfile(profile) {
     return {
@@ -74,5 +74,19 @@
     throw new Error("MANUAL_PRIMITIVE_TYPE_INVALID");
   }
 
-  return { ENTITY_KINDS, PATH_KINDS, createCoachReferenceGeometry, addPrimitive };
+  function removePrimitive(geometry, id) {
+    const next = utils.deepClone(geometry);
+    const before = (next.entities || []).length + (next.common_paths || []).length + (next.zones || []).length;
+    next.entities = (next.entities || []).filter((item) => item.id !== id);
+    next.participant_states = (next.participant_states || []).filter((item) => item.id !== id && item.participant_ref !== id);
+    next.common_paths = (next.common_paths || []).filter((item) => item.id !== id && item.actor_ref !== id && item.from_participant_ref !== id && item.to_participant_ref !== id);
+    next.zones = (next.zones || []).filter((item) => item.id !== id);
+    next.dependencies = (next.dependencies || []).filter((item) => !item.trigger_ref.endsWith(`:${id}`) && !(item.effect_refs || []).some((ref) => ref.endsWith(`:${id}`)));
+    next.traceability = (next.traceability || []).filter((item) => !item.geometry_ref.endsWith(`:${id}`));
+    const after = next.entities.length + next.common_paths.length + next.zones.length;
+    if (before === after) throw new Error("MANUAL_PRIMITIVE_NOT_FOUND");
+    return next;
+  }
+
+  return { ENTITY_KINDS, PATH_KINDS, createCoachReferenceGeometry, addPrimitive, removePrimitive };
 });

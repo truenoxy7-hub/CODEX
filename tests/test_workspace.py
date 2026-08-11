@@ -188,7 +188,7 @@ const restored = second.snapshot();
 process.stdout.write(JSON.stringify({version:payload.version, canonical:payload.metadata.canonical_promotion, generated:restored.generatedGeometry, description:restored.currentCase.description, event:restored.corrections[0], validation:restored.validation.status}));
 """)
 
-    assert result["version"] == "0.3.0"
+    assert result["version"] == "0.4.0"
     assert result["canonical"] is False
     assert result["generated"] is None
     assert result["description"] == "Acció manual"

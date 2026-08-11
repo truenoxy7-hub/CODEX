@@ -7,7 +7,10 @@
   "use strict";
 
   const SECTIONS = [
-    ["validated_cases", "Casos guardats"],
+    ["drafts", "Esborranys"],
+    ["validated_cases", "Casos validats"],
+    ["coach_validated_local_knowledge", "Coneixement local validat per l’entrenador"],
+    ["evidence_records", "Evidències locals"],
     ["tactical_pattern_candidates", "Patrons tàctics candidats"],
     ["semantic_rule_candidates", "Regles semàntiques candidates"],
     ["spatial_rule_candidates", "Regles espacials candidates"],

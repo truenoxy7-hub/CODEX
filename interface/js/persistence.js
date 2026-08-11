@@ -4,11 +4,14 @@
   root.TRACA_PERSISTENCE = api;
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
-  const STORAGE_KEY = "traca.workspace.v0.3";
+  const STORAGE_KEY = "traca.workspace.v0.4";
+  const LEGACY_KEYS = ["traca.workspace.v0.3", "traca.workspace.v0.2"];
 
   function load(storage) {
     try {
-      const raw = (storage || window.localStorage).getItem(STORAGE_KEY);
+      const target = storage || window.localStorage;
+      const key = [STORAGE_KEY, ...LEGACY_KEYS].find((candidate) => target.getItem(candidate));
+      const raw = key ? target.getItem(key) : null;
       return raw ? JSON.parse(raw) : null;
     } catch (_error) {
       return null;
@@ -26,12 +29,13 @@
 
   function clear(storage) {
     try {
-      (storage || window.localStorage).removeItem(STORAGE_KEY);
+      const target = storage || window.localStorage;
+      [STORAGE_KEY, ...LEGACY_KEYS].forEach((key) => target.removeItem(key));
       return true;
     } catch (_error) {
       return false;
     }
   }
 
-  return { STORAGE_KEY, load, save, clear };
+  return { STORAGE_KEY, LEGACY_KEYS, load, save, clear };
 });

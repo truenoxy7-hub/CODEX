@@ -1,12 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://traca.local/schema/traca.training-case.schema.v0.1.json",
-  "title": "TRAÇA portable training case v0.3",
+  "title": "TRAÇA portable training case v0.4",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "format", "version", "metadata", "case", "description", "source_refs",
-    "interpretation", "semantic_model", "spatial_model", "geometry_state",
+    "interpretation", "semantic_model", "spatial_model", "geometry_state", "derivations",
+    "clarification_answers", "composition", "completeness",
     "generated_geometry", "coach_reference_geometry", "working_geometry",
     "base_visual_grammar", "case_visual_overrides", "corrections",
     "coach_observations", "validated_geometry", "validated_visual_grammar",
@@ -14,7 +15,7 @@
   ],
   "properties": {
     "format": { "const": "TRACA_training_case" },
-    "version": { "const": "0.3.0" },
+    "version": { "const": "0.4.0" },
     "metadata": {
       "type": "object",
       "additionalProperties": false,
@@ -43,10 +44,14 @@
       "type": "object",
       "required": ["status", "resolver"],
       "properties": {
-        "status": { "enum": ["unavailable", "generated", "coach_reference", "corrected", "validated"] },
+        "status": { "enum": ["unavailable", "generated", "coach_reference", "corrected", "validated", "stale"] },
         "resolver": { "type": ["string", "null"] }
       }
     },
+    "derivations": { "type": "object" },
+    "clarification_answers": { "type": "object" },
+    "composition": { "type": "object" },
+    "completeness": { "type": "object" },
     "generated_geometry": { "type": ["object", "null"] },
     "coach_reference_geometry": { "type": ["object", "null"] },
     "working_geometry": { "type": ["object", "null"] },

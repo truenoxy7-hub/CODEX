@@ -62,5 +62,23 @@
       .replace(/^-|-$/g, "");
   }
 
-  return { deepClone, deepFreeze, sameValue, readPath, writePath, escapeHtml, slug };
+  function fingerprint(value) {
+    const text = String(value || "");
+    let hash = 2166136261;
+    for (let index = 0; index < text.length; index += 1) {
+      hash ^= text.charCodeAt(index);
+      hash = Math.imul(hash, 16777619);
+    }
+    return `fnv1a:${(hash >>> 0).toString(16).padStart(8, "0")}`;
+  }
+
+  function durableId(prefix) {
+    const cryptoObject = typeof globalThis !== "undefined" && globalThis.crypto;
+    const token = cryptoObject && typeof cryptoObject.randomUUID === "function"
+      ? cryptoObject.randomUUID()
+      : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
+    return `${prefix || "ID"}-${token}`;
+  }
+
+  return { deepClone, deepFreeze, sameValue, readPath, writePath, escapeHtml, slug, fingerprint, durableId };
 });

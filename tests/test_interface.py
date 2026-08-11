@@ -14,8 +14,11 @@ def test_universal_workspace_files_exist() -> None:
         "data/handball-knowledge.js",
         "data/uvof015.case.js",
         "data/uvof015.geometry.js",
+        "data/visual-functional-dictionary.js",
         "js/change-explainer.js",
         "js/interpretation-provider.js",
+        "js/knowledge-resolver.js",
+        "js/representation-composer.js",
         "js/manual-geometry.js",
         "js/promotion.js",
         "js/workspace-preflight.js",
@@ -36,30 +39,35 @@ def test_universal_workspace_files_exist() -> None:
 def test_interface_exposes_the_universal_supervised_loop() -> None:
     html = (INTERFACE / "index.html").read_text(encoding="utf-8")
 
-    for label in ("Descriure", "Interpretar", "Representar", "Corregir", "Validar", "Aprendre"):
+    for label in ("ESCRIURE", "GENERAR", "CORREGIR", "GUARDAR"):
         assert label in html
     assert 'id="new-case"' in html
-    assert "Qualsevol situació" in html
-    assert "Analitzar fins on sabem" in html
+    assert "Què vols representar?" in html
+    assert "Generar representació" in html
+    assert "Guardar exercici" in html
     assert "Guardar en construcció" in html
     assert "TR-UVOF-015" in html
     assert 'src="js/interpretation-provider.js"' in html
+    assert 'src="js/knowledge-resolver.js"' in html
+    assert 'src="js/representation-composer.js"' in html
     assert 'src="data/handball-knowledge.js"' in html
     assert 'id="case-origin"' not in html
     assert 'id="case-tags"' not in html
     assert 'id="new-origin"' not in html
     assert 'id="new-tags"' not in html
-    assert "proposarà les etiquetes" in html
+    assert "etiquetes s’omplen automàticament" in html
+    assert 'class="workspace-panel inspector-panel advanced-zone"' in html
+    assert 'class="workspace-panel dock-panel advanced-zone"' in html
 
 
 def test_interface_has_three_part_workspace_and_mobile_panel_navigation() -> None:
     html = (INTERFACE / "index.html").read_text(encoding="utf-8")
     css = (INTERFACE / "styles.css").read_text(encoding="utf-8")
 
-    assert 'class="workspace-panel flow-panel"' in html
-    assert 'class="workspace-panel court-panel"' in html
-    assert 'class="workspace-panel inspector-panel"' in html
-    assert 'class="workspace-panel dock-panel"' in html
+    assert 'class="workspace-panel flow-panel is-mobile-active"' in html
+    assert 'class="workspace-panel court-panel is-mobile-active"' in html
+    assert 'class="workspace-panel inspector-panel advanced-zone"' in html
+    assert 'class="workspace-panel dock-panel advanced-zone"' in html
     assert 'data-mobile-panel="court"' in html
     assert "@media (max-width: 820px)" in css
 
@@ -90,11 +98,21 @@ def test_renderer_is_segment_driven_and_generated_compare_is_read_only() -> None
     assert "space.anchor" in renderer
     assert '"stroke-linejoin": "miter"' in renderer
     assert "comparison-ghost" in renderer
-    assert '"fill-opacity": 0.24' in renderer
+    assert 'fill: "none"' in renderer
+    assert "grammar.states && grammar.states.future" in renderer
     assert "dependenciesApi.visibleFutureStates" in renderer
     assert 'alternative.approach_path, "approach_path"' in renderer
     assert 'if (view === "control") dependenciesApi.visibleFutureStates' not in renderer
     assert 'snapshot.ui.view === "control" || snapshot.ui.view === "corrected"' in app
+
+
+def test_default_case_is_blank_and_example_is_only_explicit() -> None:
+    app = (INTERFACE / "js/app.js").read_text(encoding="utf-8")
+
+    assert 'description: ""' in app
+    assert "initialGeometry: null" in app
+    assert '$("#load-example").addEventListener' in app
+    assert "initialCase: initialExample.caseData" not in app
 
 
 def test_interface_states_honest_resolver_and_knowledge_limits() -> None:

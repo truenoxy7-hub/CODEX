@@ -9,7 +9,7 @@
   function exportPackage(snapshot, clock) {
     return {
       format: "TRACA_training_case",
-      version: "0.3.0",
+      version: "0.4.0",
       metadata: { exported_at: (clock || (() => new Date().toISOString()))(), application: "TRAÇA universal workspace", canonical_promotion: false },
       case: utils.deepClone(snapshot.currentCase),
       description: snapshot.currentCase.description,
@@ -18,6 +18,10 @@
       semantic_model: utils.deepClone(snapshot.semanticModel),
       spatial_model: utils.deepClone(snapshot.spatialModel),
       geometry_state: utils.deepClone(snapshot.geometryState),
+      derivations: utils.deepClone(snapshot.derivations),
+      clarification_answers: utils.deepClone(snapshot.clarificationAnswers),
+      composition: utils.deepClone(snapshot.composition),
+      completeness: utils.deepClone(snapshot.completeness),
       generated_geometry: utils.deepClone(snapshot.generatedGeometry),
       coach_reference_geometry: utils.deepClone(snapshot.coachReferenceGeometry),
       working_geometry: utils.deepClone(snapshot.workingGeometry),
@@ -36,12 +40,17 @@
   function validatePackage(payload) {
     const errors = [];
     if (!payload || payload.format !== "TRACA_training_case") errors.push("format");
-    if (!payload || !["0.2.0", "0.3.0"].includes(payload.version)) errors.push("version");
+    if (!payload || !["0.2.0", "0.3.0", "0.4.0"].includes(payload.version)) errors.push("version");
     ["case", "corrections", "validation", "knowledge_library"].forEach((key) => {
       if (!payload || payload[key] === undefined || payload[key] === null) errors.push(key);
     });
     if (payload && !Array.isArray(payload.corrections)) errors.push("corrections_type");
-    if (payload && payload.version === "0.3.0" && payload.generated_geometry && payload.geometry_state && payload.geometry_state.status === "coach_reference") errors.push("generated_geometry_conflicts_with_coach_reference");
+    if (payload && ["0.3.0", "0.4.0"].includes(payload.version) && payload.generated_geometry && payload.geometry_state && payload.geometry_state.status === "coach_reference") errors.push("generated_geometry_conflicts_with_coach_reference");
+    if (payload && payload.version === "0.4.0") {
+      ["derivations", "clarification_answers", "composition", "completeness"].forEach((key) => {
+        if (payload[key] === undefined || payload[key] === null) errors.push(key);
+      });
+    }
     return { valid: errors.length === 0, errors };
   }
 

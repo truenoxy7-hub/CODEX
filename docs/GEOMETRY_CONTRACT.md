@@ -50,7 +50,7 @@ visibles apunten al seu estat actual. Una trajectòria de moviment declara
 `actor_ref`, `from_state_ref` i `to_state_ref`; una passada declara també
 pilota, emissor i receptor. Una posició futura es mostra sempre que sigui
 l’origen o el destí d’una trajectòria visible; reutilitza el mateix símbol del
-participant amb el farciment translúcid. Només és editable a Control.
+participant sense farciment i amb contorn discontinu. Només és editable a Control.
 
 En una recepció en carrera, la cursa sense pilota, la passada que retorna la
 pilota i l'acció posterior comparteixen un únic `participant_state`: el

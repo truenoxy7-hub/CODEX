@@ -1,6 +1,6 @@
 # TRAÇA
 
-TRAÇA és un projecte per construir un llenguatge canònic i una base de coneixement d'exercicis d'handbol. L'objectiu és transformar exercicis descrits en text i gràfics originals en una representació semàntica verificable i, només després, generar-ne una geometria i un SVG deterministes.
+TRAÇA és un projecte per construir un llenguatge canònic i una base de coneixement d'exercicis d'handbol. L'objectiu és transformar una explicació de l'entrenador en una interpretació traçable, una representació corregible i, quan existeix coneixement suficient, geometria reproduïble.
 
 ## Estat actual
 
@@ -15,7 +15,7 @@ resolubilitat de l'entrada. UVOF015 disposa ja d'un primer resolutor geomètric
 canònic; un artefacte pot ser estructuralment vàlid i continuar `partial` o
 `blocked`.
 
-La geometria i el renderer anteriors es consideren prototips descartables. No s'han de reprendre com a font de veritat. La font actual és:
+La font actual inclou el corpus canònic, els contractes, el diccionari visual-funcional i el bucle local supervisat:
 
 - `exercises/TR-UVOF-001/semantic.json`
 - `corpus/uvof.semantic.json`
@@ -52,21 +52,25 @@ La geometria i el renderer anteriors es consideren prototips descartables. No s'
 - `docs/CORRECTION_MODEL.md`
 - `docs/DECISIONS.md`
 - `docs/OPEN_QUESTIONS.md`
+- `knowledge/visual-functional-dictionary.v0.1.json`
+- `docs/KNOWLEDGE_RESOLVER.md`
+- `docs/REPRESENTATION_COMPOSER.md`
 
 ## Principi de treball
 
 ```text
-text original + gràfic original
+text de l'entrenador o font original
 → fets explícits
 → interpretació semàntica provisional
-→ validació de l'entrenador
-→ model semàntic aprovat
-→ geometria derivada
+→ composició provisional amb primitives conegudes, si és possible
+→ preguntes directes per allò que falta
+→ correcció i validació de l'entrenador
+→ model i geometria del cas aprovats
 → SVG determinista
-→ contrast final
+→ guardat i aprenentatge explícit
 ```
 
-No es genera geometria ni gràfic abans de validar la semàntica.
+Una previsualització provisional no és un artefacte canònic. Canviar el text invalida totes les derivacions anteriors i obliga a regenerar abans de guardar.
 
 ## Validació local
 
@@ -84,15 +88,17 @@ python -m pytest -q
 
 ## Workspace universal de l’MVP
 
-La interfície accepta qualsevol descripció nova i avança fins on arriba el
-coneixement local. Separa conceptes validats, coincidències provisionals,
-desconeguts i preguntes; permet completar el model, guardar casos sense
-resolver i crear una referència manual que mai es confon amb geometria
-generada. UVOF015 continua sent l’espècimen executable i la regressió canònica.
+La interfície s'obre amb un cas en blanc i redueix el flux normal a `ESCRIURE →
+GENERAR → CORREGIR → GUARDAR`. Separa allò entès d'allò que falta, pregunta
+emissor i receptor quan no els pot justificar, i reserva inspector, preflight,
+constructor manual i Promotion Builder al mode avançat. UVOF015 només es carrega
+explícitament com a exemple i regressió.
 
-El matcher actual és local i auditable; no és un intèrpret tàctic general. El
-workspace no inventa geometria ni presenta una adaptació d’UVOF015 com si fos
-un cas nou. Validar un cas tampoc promociona cap regla.
+El `KnowledgeResolver` aplica autoritat explícita: cas canònic, coneixement
+local validat per l'entrenador, vocabulari provisional i candidats que només
+suggereixen. El `RepresentationComposer` compon una passada simple i la seva
+recepció en carrera amb primitives conegudes; no és un intèrpret o resolutor
+tàctic universal.
 
 ```bash
 make interface
@@ -100,7 +106,7 @@ make interface
 
 La interfície queda disponible a `http://localhost:8000` i també es pot obrir
 directament. L’estat s’emmagatzema només a `localStorage` i es pot
-exportar/importar com un paquet JSON v0.3. L’abast es documenta a
+exportar/importar com un paquet JSON v0.4, amb migració de 0.2 i 0.3. L’abast es documenta a
 [`docs/MVP.md`](docs/MVP.md) i
 [`docs/UNIVERSAL_CASE_WORKFLOW.md`](docs/UNIVERSAL_CASE_WORKFLOW.md).
 

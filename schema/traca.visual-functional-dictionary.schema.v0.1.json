@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://traca.local/schema/traca.visual-functional-dictionary.schema.v0.1.json",
+  "title": "TRAÇA visual-functional dictionary v0.1",
+  "type": "object",
+  "required": ["meta", "authority_order", "sources", "evidence", "theme", "entries"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "meta": {
+      "type": "object",
+      "required": ["id", "version", "status", "reported_inventory_evidence_count", "imported_inventory_evidence_count", "limitation"],
+      "properties": {
+        "id": { "type": "string" },
+        "version": { "const": "0.1.0" },
+        "status": { "type": "string" },
+        "reported_inventory_evidence_count": { "type": "integer", "minimum": 0 },
+        "imported_inventory_evidence_count": { "type": "integer", "minimum": 0 },
+        "limitation": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "authority_order": { "type": "array", "minItems": 1, "items": { "type": "string" }, "uniqueItems": true },
+    "sources": { "type": "array", "items": { "type": "object", "required": ["id", "authority", "status", "ref"] } },
+    "evidence": { "type": "array", "items": { "type": "object", "required": ["id", "source_ref", "statement"] } },
+    "theme": { "type": "object", "required": ["id", "status", "colors_are_semantic", "colors"] },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "concept", "definition", "type", "authority", "status", "source_refs", "evidence_refs", "visual", "semantic_refs", "notes"],
+        "properties": {
+          "id": { "type": "string" },
+          "concept": { "type": "string" },
+          "definition": { "type": "string" },
+          "type": { "enum": ["primitive", "composition", "relational", "no_specific_glyph"] },
+          "authority": { "type": "string" },
+          "status": { "enum": ["validated", "candidate", "ambiguous"] },
+          "source_refs": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+          "evidence_refs": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+          "visual": { "type": "object" },
+          "semantic_refs": { "type": "array", "items": { "type": "string" } },
+          "notes": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

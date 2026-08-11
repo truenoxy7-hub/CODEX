@@ -28,6 +28,29 @@
     return (points || []).map((point) => `${point[0]},${point[1]}`).join(" ");
   }
 
+  function wavyPathData(path) {
+    const source = dependenciesApi.sampledPoints(path, 28);
+    if (source.length < 2) return pathData(path.segments ? path : path.points);
+    const points = [];
+    source.slice(0, -1).forEach((start, segmentIndex) => {
+      const end = source[segmentIndex + 1];
+      for (let step = 0; step < 6; step += 1) {
+        if (segmentIndex && !step) continue;
+        const ratio = step / 6;
+        points.push([start[0] + (end[0] - start[0]) * ratio, start[1] + (end[1] - start[1]) * ratio]);
+      }
+    });
+    points.push(source.at(-1));
+    const waved = points.map((point, index) => {
+      if (!index || index === points.length - 1) return point;
+      const before = points[index - 1], after = points[index + 1];
+      const dx = after[0] - before[0], dy = after[1] - before[1], length = Math.hypot(dx, dy) || 1;
+      const offset = Math.sin(index * Math.PI * 0.72) * 0.095;
+      return [Number((point[0] - dy / length * offset).toFixed(3)), Number((point[1] + dx / length * offset).toFixed(3))];
+    });
+    return pathData(waved);
+  }
+
   function svgNode(documentObject, name, attributes) {
     const node = documentObject.createElementNS(SVG_NS, name);
     Object.entries(attributes || {}).forEach(([key, value]) => {
@@ -155,12 +178,32 @@
       ? primitive === "pass" ? "url(#traca-arrow-pass)" : primitive === "shot" ? "url(#traca-arrow-shot)" : "url(#traca-arrow-dark)"
       : null;
     const renderedPath = visiblePath(path, geometry || {}, grammar, primitive);
+    const renderedData = style.path_mode === "wavy_segments" || style.line === "wavy"
+      ? wavyPathData(renderedPath)
+      : pathData(renderedPath.segments ? renderedPath : renderedPath.points);
+    if (style.render_mode === "double_stroke") {
+      append(documentObject, svg, "path", {
+        d: renderedData, fill: "none", stroke: style.stroke, "stroke-width": style.width,
+        "stroke-linecap": "round", "stroke-linejoin": "miter", "pointer-events": "none"
+      });
+    }
     append(documentObject, svg, "path", {
-      d: pathData(renderedPath.segments ? renderedPath : renderedPath.points), fill: "none", stroke: style.stroke, "stroke-width": style.width,
+      d: renderedData, fill: "none", stroke: style.render_mode === "double_stroke" ? "#f3d2ae" : style.stroke, "stroke-width": style.render_mode === "double_stroke" ? Math.max(0.04, style.width * 0.36) : style.width,
       "stroke-dasharray": style.dash, "stroke-linecap": "round", "stroke-linejoin": "miter",
       "marker-end": marker, class: `selectable exercise-path${selectedClass(selection, ref)}`,
       "data-ref": ref, "data-kind": "path", "data-path-suffix": suffix || (path.segments ? "segments" : "points")
     });
+    const sampled = dependenciesApi.sampledPoints(renderedPath, 10);
+    if (style.cancellation_mark && sampled.length) {
+      const middle = sampled[Math.floor(sampled.length / 2)];
+      append(documentObject, svg, "line", { x1: middle[0] - 0.18, y1: middle[1] + 0.18, x2: middle[0] + 0.18, y2: middle[1] - 0.18, stroke: style.stroke, "stroke-width": 0.08, "stroke-linecap": "round", "pointer-events": "none" });
+    }
+    if (style.terminal_mark && sampled.length > 1) {
+      const end = sampled.at(-1), before = sampled.at(-2);
+      const dx = end[0] - before[0], dy = end[1] - before[1], length = Math.hypot(dx, dy) || 1;
+      const px = -dy / length * 0.23, py = dx / length * 0.23;
+      append(documentObject, svg, "line", { x1: end[0] - px, y1: end[1] - py, x2: end[0] + px, y2: end[1] + py, stroke: style.stroke, "stroke-width": 0.09, "stroke-linecap": "round", "pointer-events": "none" });
+    }
     if (view === "control" && selection && selection.ref === ref) {
       if (path.segments) (path.segments || []).forEach((segment, index) => {
         const handles = [];
@@ -210,6 +253,7 @@
     const participant = (geometry.entities || []).find((entity) => entity.id === state.participant_ref);
     if (!participant) return;
     const style = grammar.entities[participant.kind] || grammar.entities.generic_participant;
+    const temporal = grammar.states && grammar.states.future || { fill: "none", dash: "0.12 0.1", stroke_opacity: 0.72, stroke_width: 0.065 };
     const ref = targetRef("participant_state", state.id);
     const interactive = view === "control";
     const group = append(documentObject, svg, "g", {
@@ -223,11 +267,11 @@
       const text = append(documentObject, group, "text", { x, y, "text-anchor": "middle", fill: style.text, "fill-opacity": 0.55, "font-size": 0.34, "font-weight": 750 });
       text.textContent = participant.label || participant.id;
     } else if (style.shape === "triangle") {
-      append(documentObject, group, "polygon", { points: `${x},${y - 0.3} ${x - 0.27},${y + 0.24} ${x + 0.27},${y + 0.24}`, fill: style.fill, "fill-opacity": 0.24, stroke: style.stroke, "stroke-opacity": 0.72, "stroke-width": 0.055 });
+      append(documentObject, group, "polygon", { points: `${x},${y - 0.3} ${x - 0.27},${y + 0.24} ${x + 0.27},${y + 0.24}`, fill: temporal.fill, stroke: style.stroke, "stroke-opacity": temporal.stroke_opacity, "stroke-width": temporal.stroke_width, "stroke-dasharray": temporal.dash });
     } else if (style.shape === "rect") {
-      append(documentObject, group, "rect", { x: x - style.radius, y: y - 0.24, width: style.radius * 2, height: 0.48, rx: 0.05, fill: style.fill, "fill-opacity": 0.24, stroke: style.stroke, "stroke-opacity": 0.72, "stroke-width": 0.055 });
+      append(documentObject, group, "rect", { x: x - style.radius, y: y - 0.24, width: style.radius * 2, height: 0.48, rx: 0.05, fill: temporal.fill, stroke: style.stroke, "stroke-opacity": temporal.stroke_opacity, "stroke-width": temporal.stroke_width, "stroke-dasharray": temporal.dash });
     } else {
-      append(documentObject, group, "circle", { cx: x, cy: y, r: style.radius || 0.34, fill: style.fill, "fill-opacity": 0.24, stroke: style.stroke, "stroke-opacity": 0.72, "stroke-width": 0.065 });
+      append(documentObject, group, "circle", { cx: x, cy: y, r: style.radius || 0.34, fill: temporal.fill, stroke: style.stroke, "stroke-opacity": temporal.stroke_opacity, "stroke-width": temporal.stroke_width, "stroke-dasharray": temporal.dash });
     }
     if (participant.label && style.shape !== "text") {
       const label = append(documentObject, group, "text", { x, y: y + 0.11, "text-anchor": "middle", fill: style.text, "fill-opacity": 0.68, "font-size": 0.31, "font-weight": 850, "pointer-events": "none" });
@@ -286,5 +330,5 @@
     return svg;
   }
 
-  return { pathData, pathForDisplay: visiblePath, selectedAlternatives, render };
+  return { pathData, wavyPathData, pathForDisplay: visiblePath, selectedAlternatives, render };
 });

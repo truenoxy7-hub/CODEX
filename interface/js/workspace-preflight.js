@@ -33,8 +33,13 @@
 
   function run(snapshot) {
     const diagnostics = [];
+    const staleLayers = Object.entries(snapshot.derivations || {}).filter(([key, value]) => key !== "source" && value && value.status === "stale").map(([key]) => key);
+    if (staleLayers.length) diagnostics.push(diagnostic("error", "SOURCE_DERIVATION_STALE", `El text ha canviat i ${staleLayers.join(", ")} encara provenen de la versió anterior. Torna a generar abans de guardar.`, { actions: ["Tornar a generar"] }));
     if (!snapshot.currentCase || !String(snapshot.currentCase.description || "").trim()) {
       diagnostics.push(diagnostic("error", "CASE_DESCRIPTION_REQUIRED", "El cas no té descripció. Afegeix el text que l’entrenador vol treballar."));
+    }
+    if (snapshot.composition && snapshot.composition.status === "needs_input") {
+      diagnostics.push(diagnostic("error", "COMPOSITION_ANSWER_REQUIRED", "Falta una resposta directa per poder representar l’acció sense inventar-la.", { actions: ["Respondre la pregunta"] }));
     }
     const geometry = snapshot.workingGeometry || snapshot.coachReferenceGeometry;
     if (geometry && geometry.court) {

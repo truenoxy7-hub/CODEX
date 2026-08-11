@@ -460,7 +460,7 @@ coneixement validat.
 
 **Decisió visual:** tota posició futura que sigui origen o destí d’una
 trajectòria visible es representa amb el mateix símbol, color i etiqueta del
-participant, però amb farciment translúcid. No es mostren estats futurs que no
+participant, però sense farciment i amb contorn discontinu. No es mostren estats futurs que no
 participen en l’alternativa previsualitzada.
 
 **Decisió estructural:** moviments i passades han d’enllaçar estats que
@@ -478,3 +478,59 @@ estat.
 **Aplicació:** la cursa d'aproximació forma part de cada alternativa perquè el
 seu destí depèn de l'espai inicial escollit. El preflight bloqueja qualsevol
 alternativa que trenqui aquesta identitat compartida.
+
+## D-053 — Camí normal curt i eines internes avançades
+
+**Decisió de producte:** la interfície s'obre en blanc i redueix el flux visible
+a escriure, generar, corregir i guardar. Origen, etiquetes, coordenades,
+preflight detallat, constructors, promoció i traçabilitat queden automàtics o al
+mode avançat. UVOF015 no és el cas inicial; és una acció explícita d'exemple.
+
+## D-054 — Diccionari visual-funcional amb evidència
+
+**Decisió:** la gramàtica executable es projecta des d'un diccionari estructurat
+amb definició, autoritat, estat, fonts i evidències. Atacant és cercle, defensor
+triangle, moviment continu, passada discontínua, llançament de doble traç,
+estat temporal de contorn discontinu i bot ondulat. 2x1 i espais relacionals no
+tenen glif propi.
+
+**Límit documentat:** l'ordre cita 103 evidències i una llegenda no rebudes. Es
+registra aquesta absència i només s'activen confirmacions explícites; no es
+fabriquen evidències ni convencions candidates.
+
+## D-055 — Resolució per autoritat i candidat només suggeridor
+
+**Decisió:** `KnowledgeResolver` prioritza confirmació de l'entrenador, llegenda,
+cas canònic i coneixement validat. Una coincidència provisional no es marca
+validada. Els candidats només entren a `suggestions` i mai no decideixen una
+interpretació o una representació.
+
+## D-056 — Aprenentatge local consumible amb validació explícita
+
+**Decisió:** una correcció pot quedar només en el cas o ser declarada criteri
+reutilitzable. En el segon cas només entra a
+`coach_validated_local_knowledge` després de validar el cas i conservar
+evidència, cas font i correccions. A partir d'aleshores pot ajudar casos futurs,
+però no modifica el corpus canònic.
+
+## D-057 — Compositor de primitives, no resolutor universal
+
+**Decisió:** una representació nova es pot compondre amb primitives conegudes
+quan identitats i relacions són explícites. La primera composició és una passada
+simple; quan falta emissor o receptor, TRAÇA pregunta. En una recepció en
+carrera, moviment i passada comparteixen el mateix estat futur. Accions no
+suportades queden parcials o manuals.
+
+## D-058 — Derivacions invalidades pel text font
+
+**Decisió:** la descripció té fingerprint i cada capa registra `derives_from`.
+Canviar el text posa en `stale` totes les derivacions que eren vigents, oculta
+la geometria antiga i bloqueja el guardat fins a regenerar.
+
+## D-059 — Identitat durable, esborrany separat i paquet 0.4
+
+**Decisió:** `case_uid` no canvia amb el nom o el codi curt. Els casos en
+construcció viuen a `drafts` i només una validació els mou a
+`validated_cases`. El paquet 0.4 conserva derivacions, respostes i composició;
+les versions 0.2 i 0.3 es migren sense presentar esborranys antics com a
+validats.
