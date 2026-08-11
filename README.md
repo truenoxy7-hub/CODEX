@@ -4,14 +4,15 @@ TRAÇA és un projecte per construir un llenguatge canònic i una base de coneix
 
 ## Estat actual
 
-El projecte es troba en la fase de **modelatge semàntic i preflight espacial**.
+El projecte es troba en la fase de **modelatge semàntic, preflight espacial i
+primer MVP d'interpretació**.
 La primera família completa és `MITJANS 1V1 OFENSIUS`, amb `TR-UVOF-001` a
 `TR-UVOF-015` interpretats i validats amb l'entrenador.
 
 Els quinze artefactes qualitatius han migrat al contracte
 `spatial-relations` v0.3. El preflight comprova traçabilitat, preservació i
-resolubilitat de l'entrada, però no implementa cap resolutor ni genera
-geometria. Un artefacte pot ser estructuralment vàlid i continuar `partial` o
+resolubilitat de l'entrada. UVOF015 disposa ja d'un primer resolutor geomètric
+canònic; un artefacte pot ser estructuralment vàlid i continuar `partial` o
 `blocked`.
 
 La geometria i el renderer anteriors es consideren prototips descartables. No s'han de reprendre com a font de veritat. La font actual és:
@@ -79,17 +80,20 @@ python -m pytest -q
 
 ## Primera interfície de l'MVP
 
-La primera vertical executable permet revisar la descripció validada de
-`TR-UVOF-015`, confirmar-ne la interpretació, generar una geometria separada i
-previsualitzar les alternatives dels tres duels en SVG.
+La interfície permet escriure una descripció nova. El primer abast executable
+interpreta una única situació 1x1, mostra els elements detectats o pendents i,
+després de la confirmació, genera una geometria provisional amb alternatives de
+continuïtat i finta. Les situacions fora d'aquest abast no es dibuixen per
+inferència.
 
 ```bash
 make interface
 ```
 
-La interfície queda disponible a `http://localhost:8000`. L'ordre regenera
-primer l'artefacte geomètric i el paquet de dades del navegador. L'abast i les
-iteracions següents es documenten a [`docs/MVP.md`](docs/MVP.md).
+La interfície queda disponible a `http://localhost:8000` i també es pot obrir
+directament. El corpus continua sent la base de coneixement i de proves, no un
+catàleg tancat d'exercicis seleccionables. L'abast i les iteracions següents es
+documenten a [`docs/MVP.md`](docs/MVP.md).
 
 Per veure exclusivament la matriu read-only del preflight:
 

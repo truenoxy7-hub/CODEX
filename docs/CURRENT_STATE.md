@@ -22,12 +22,19 @@
   amb diagnòstics estructurats i sense geometria.
 - Integració del preflight al validador sense seleccionar silenciosament el
   `semantic.json` germà d'UVOF001.
-- Suite verda amb 127 proves: les 88 del baseline auditat i 39 proves noves de
-  contracte, preservació, integritat i mutacions destructives.
+- Suite verda abans d'aquesta iteració amb 127 proves: les 88 del baseline
+  auditat i 39 proves noves de contracte, preservació, integritat i mutacions
+  destructives.
 - Perfil reglamentari de pista IHF versionat i contracte de geometria derivada
   v0.1, aplicat a la primera vertical executable d'UVOF015.
 - Resolutor determinista d'UVOF015 amb tres zones, sis espais i les dotze
   alternatives, més renderer SVG interactiu i exportació.
+- Primer intèrpret executable de descripcions noves dins d'un abast controlat:
+  una única situació 1x1. Detecta rols, costat, pilota inicial, suport, bot i
+  caràcter de la decisió; conserva els buits com a pendents explícits.
+- Geometria provisional d'un duel 1x1 derivada del text confirmat, amb dues
+  sortides, continuïtats i fintes direccionals. Les entrades fora de l'abast no
+  generen gràfic.
 
 ## Matriu reproduïble del preflight
 
@@ -57,7 +64,7 @@ converteix un resultat `partial` o `blocked` en resoluble.
 
 - Dades tàctiques pendents enumerades a `docs/OPEN_QUESTIONS.md`.
 - Resolutor geomètric general per als altres catorze exercicis.
-- Interpretació automàtica de descripcions noves.
+- Interpretació general de descripcions noves més enllà d'un únic 1x1.
 - Renderer PNG i polítiques visuals generals més enllà d'UVOF015.
 
 ## Risc principal
@@ -70,11 +77,13 @@ de l'MVP no pot convertir-se en font de veritat tàctica.
 
 - Primera versió viva del coneixement canònic d'handbol.
 - Consolidació del corpus UVOF com a font de proves per al futur motor espacial.
-- Primera interfície navegable del MVP amb el flux descripció → interpretació →
-  confirmació → geometria → SVG per a UVOF015.
+- Primera interfície navegable del MVP amb el flux text nou → interpretació 1x1
+  → confirmació → geometria provisional → SVG. UVOF015 es conserva com a prova
+  del resolutor canònic, però ja no és l'exemple fix de la pantalla.
 
 ## Pròxima fita recomanada
 
-Validar visualment amb l'entrenador la política de disposició d'UVOF015 i,
-després, generalitzar el contracte geomètric a UVOF001, UVOF003 i UVOF010. Els
-tres parcials tàctics poden continuar oberts sense bloquejar aquesta vertical.
+Validar amb l'entrenador diverses descripcions 1x1 noves i la seva disposició
+visual. Després cal ampliar l'intèrpret a recepcions, passadors i handicaps 1x1
+abans d'obrir relacions numèriques noves. Els tres parcials tàctics poden
+continuar oberts sense bloquejar aquesta vertical.

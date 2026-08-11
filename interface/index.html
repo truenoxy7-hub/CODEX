@@ -9,7 +9,8 @@
     />
     <title>TRAÇA · De la descripció a la pista</title>
     <link rel="stylesheet" href="styles.css" />
-    <script src="data/uvof015.geometry.js" defer></script>
+    <script src="data/court-profile.js" defer></script>
+    <script src="one-v-one.js" defer></script>
     <script src="app.js" defer></script>
   </head>
   <body>
@@ -47,18 +48,16 @@
               <p class="panel-kicker">Entrada</p>
               <h2 id="description-title">Descriu l’exercici</h2>
             </div>
-            <label class="exercise-select">
-              <span>Exemple</span>
-              <select id="exercise" aria-label="Exercici de prova">
-                <option value="TR-UVOF-015">TR-UVOF-015 · tres duels</option>
-              </select>
-            </label>
+            <div class="exercise-select">
+              <span>Ajuda d’entrada</span>
+              <button id="load-example" type="button">Carregar exemple 1x1</button>
+            </div>
           </div>
 
           <label class="description-label" for="description">
             Explica organització, seqüència i què han de resoldre els jugadors.
           </label>
-          <textarea id="description" rows="9">Tres zones delimitades per quatre cons. A cada zona, l’atacant passa al passador, inicia la cursa sense pilota, rep orientat i resol un 1x1 amb llibertat absoluta, dins la zona i sense bot.</textarea>
+          <textarea id="description" rows="9">Un lateral esquerre amb pilota juga un 1x1 contra un segon defensiu. Té llibertat per sortir cap a l’interior o cap a l’exterior i finalitzar. Sense bot.</textarea>
           <div class="input-footer">
             <p><span aria-hidden="true">◎</span> TRAÇA marcarà qualsevol dada que necessiti confirmació.</p>
             <button id="interpret" class="button button-primary" type="button">
@@ -74,41 +73,20 @@
                 <p class="panel-kicker">Interpretació provisional</p>
                 <h3 id="interpretation-title" tabindex="-1">Això és el que TRAÇA ha entès</h3>
               </div>
-              <span class="confidence"><i aria-hidden="true"></i> Basat en coneixement validat</span>
+              <span class="confidence"><i aria-hidden="true"></i><span id="confidence-label">Abast inicial · 1x1</span></span>
             </div>
 
-            <dl class="fact-grid">
-              <div><dt>Organització</dt><dd>3 zones simultànies</dd></div>
-              <div><dt>Participants</dt><dd>3 atacants · 3 defensors · 3 passadors</dd></div>
-              <div><dt>Materials</dt><dd>4 cons · 3 pilotes</dd></div>
+            <dl id="fact-grid" class="fact-grid">
+              <div><dt>Organització</dt><dd id="fact-organization">—</dd></div>
+              <div><dt>Participants</dt><dd id="fact-participants">—</dd></div>
+              <div><dt>Condicions</dt><dd id="fact-conditions">—</dd></div>
             </dl>
 
-            <div class="phase-list">
-              <article class="phase-card">
-                <span class="phase-number">01</span>
-                <div>
-                  <h4>Passada i recepció orientada</h4>
-                  <p>Cada atacant passa al suport de la seva zona, inicia en carrera sense pilota i rep orientat.</p>
-                  <div class="tags" aria-label="Conceptes de la primera fase">
-                    <span>3 pilotes</span><span>Cursa sense pilota</span><span>Recepció orientada</span>
-                  </div>
-                </div>
-              </article>
-              <article class="phase-card">
-                <span class="phase-number">02</span>
-                <div>
-                  <h4>1x1 amb llibertat absoluta</h4>
-                  <p>L’atacant tria un dels dos espais: continua si té avantatge o finta cap al contigu si el defensor tanca.</p>
-                  <div class="tags" aria-label="Conceptes de la segona fase">
-                    <span>Sense bot</span><span>Dins la zona</span><span>Superar la línia defensiva</span>
-                  </div>
-                </div>
-              </article>
-            </div>
+            <div id="phase-list" class="phase-list"></div>
 
-            <div class="validation-note">
-              <span class="validation-icon" aria-hidden="true">✓</span>
-              <div><strong>Sense preguntes pendents</strong><p>Aquesta interpretació coincideix amb l’UVOF015 validat per l’entrenador.</p></div>
+            <div id="validation-note" class="validation-note">
+              <span id="validation-icon" class="validation-icon" aria-hidden="true">✓</span>
+              <div><strong id="validation-title">Interpretació preparada</strong><p id="validation-message">Revisa què ha entès TRAÇA abans de generar.</p></div>
             </div>
 
             <div class="review-actions">
@@ -143,7 +121,7 @@
             <section id="branch-controls" class="branch-controls" aria-labelledby="branch-controls-title" hidden>
               <div>
                 <strong id="branch-controls-title">Alternatives visibles</strong>
-                <small>La selecció només canvia la previsualització; no tanca la decisió tàctica.</small>
+                <small>La selecció mostra una resolució possible; no modifica la descripció original.</small>
               </div>
               <div id="branch-selectors" class="branch-selectors"></div>
             </section>
@@ -175,7 +153,7 @@
 
     <footer>
       <p>TRAÇA diferencia coneixement tàctic, relacions espacials i representació gràfica.</p>
-      <span>Primera vertical executable · UVOF015</span>
+      <span>Primer intèrpret executable · abast 1x1</span>
     </footer>
 
     <div id="announcer" class="sr-only" aria-live="polite"></div>

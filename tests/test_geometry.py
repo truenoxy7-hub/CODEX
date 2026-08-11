@@ -15,6 +15,7 @@ COURT_PATH = ROOT / "config/handball-court.ihf-2025.json"
 GEOMETRY_PATH = ROOT / "exercises/TR-UVOF-015/geometry.json"
 SCHEMA_PATH = ROOT / "schema/traca.geometry.schema.v0.1.json"
 BUNDLE_PATH = ROOT / "interface/data/uvof015.geometry.js"
+COURT_BUNDLE_PATH = ROOT / "interface/data/court-profile.js"
 
 
 def _load(path: Path) -> dict:
@@ -101,3 +102,12 @@ def test_browser_bundle_is_an_exact_derived_copy() -> None:
     assert payload.startswith(prefix)
     assert payload.endswith(";\n")
     assert json.loads(payload[len(prefix) : -2]) == _load(GEOMETRY_PATH)
+
+
+def test_browser_court_profile_is_an_exact_derived_copy() -> None:
+    payload = COURT_BUNDLE_PATH.read_text(encoding="utf-8")
+    prefix = "window.TRACA_COURT_PROFILE = "
+
+    assert payload.startswith(prefix)
+    assert payload.endswith(";\n")
+    assert json.loads(payload[len(prefix) : -2]) == _load(COURT_PATH)

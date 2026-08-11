@@ -21,6 +21,7 @@ COURT_PROFILE_PATH = ROOT / "config/handball-court.ihf-2025.json"
 GEOMETRY_SCHEMA_PATH = ROOT / "schema/traca.geometry.schema.v0.1.json"
 GEOMETRY_PATH = ROOT / "exercises/TR-UVOF-015/geometry.json"
 INTERFACE_BUNDLE_PATH = ROOT / "interface/data/uvof015.geometry.js"
+COURT_INTERFACE_BUNDLE_PATH = ROOT / "interface/data/court-profile.js"
 
 
 Document = dict[str, Any]
@@ -391,6 +392,12 @@ def build_geometry_artifacts() -> Document:
     INTERFACE_BUNDLE_PATH.write_text(
         "window.TRACA_UVOF015_GEOMETRY = "
         + json.dumps(geometry, ensure_ascii=False, indent=2)
+        + ";\n",
+        encoding="utf-8",
+    )
+    COURT_INTERFACE_BUNDLE_PATH.write_text(
+        "window.TRACA_COURT_PROFILE = "
+        + json.dumps(court_profile, ensure_ascii=False, indent=2)
         + ";\n",
         encoding="utf-8",
     )

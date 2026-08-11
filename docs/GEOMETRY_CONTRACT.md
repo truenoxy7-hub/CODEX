@@ -41,3 +41,15 @@ Les coordenades de cons, participants i amplades de zona són una política de
 lectura simètrica per a l'MVP. No són coneixement tàctic validat. El renderer
 pot canviar-les sense alterar el corpus, sempre que preservi zones, espais,
 contigüitats, línies defensives i alternatives.
+
+## Esborrany interactiu de text nou
+
+La interfície té també una via separada per provar descripcions noves 1x1. La
+seva sortida declara `TRACA_geometria_provisional` i no compleix ni substitueix
+el contracte canònic `traca.geometry.schema.v0.1.json`: no té una font espacial
+amb preflight `ready` ni fingerprint canònic.
+
+La confirmació de pantalla només autoritza la previsualització de l'esborrany.
+No converteix el text en coneixement validat ni l'afegeix al corpus. Aquesta
+separació permet iterar sobre l'intèrpret sense degradar les garanties dels
+exercicis validats.

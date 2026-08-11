@@ -18,8 +18,11 @@ descripció
 
 1. Interfície navegable amb un exercici validat.
 2. Resolució geomètrica i SVG de `TR-UVOF-015` des del contracte v0.3 `ready`.
-3. Interpretació de la descripció original i contrast amb el model aprovat.
-4. Cobertura dels quinze exercicis UVOF, edició, regeneració i exportació.
+3. Interpretació de text nou dins d'un abast 1x1, revisió i geometria
+   provisional. **En curs.**
+4. Ampliació progressiva del llenguatge: variants 1x1, 2x1, continuïtats,
+   col·laboracions i situacions de partit.
+5. Edició, regeneració, persistència i exportació de producte.
 
 ## Pantalla mínima
 
@@ -39,9 +42,22 @@ descripció
 - renderer SVG i descàrrega de l'SVG visible;
 - traçabilitat fins als nodes, espais, transicions i alternatives d'origen.
 
+## Assolit al primer intèrpret de text nou
+
+- l'exemple de pantalla és text editable i no un identificador del corpus;
+- detecció explícita d'una única situació 1x1;
+- extracció de rol atacant i defensiu, costat, possessió inicial, suport, bot i
+  llibertat o direcció declarada;
+- aplicació traçable del criteri general validat de llibertat en el 1x1 quan el
+  text no tanca la sortida;
+- dades absents i detalls encara no representables marcats abans de confirmar;
+- rebuig explícit de 2x1, múltiples zones o textos on el 1x1 no és inequívoc;
+- una geometria provisional amb dues sortides, continuïtats i fintes, sense
+  convertir cap alternativa en decisió canònica.
+
 ## Fora d'abast actual
 
-- interpretar descripcions noves;
+- interpretar descripcions noves fora de l'abast d'un únic 1x1;
 - escollir automàticament una alternativa decisional;
 - persistència, comptes d'usuari o publicació d'exercicis;
 - PNG;

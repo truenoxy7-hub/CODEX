@@ -224,6 +224,22 @@ amplades de zona i les distàncies de lectura dels participants són política
 visual provisional i no coneixement tàctic validat. Qualsevol canvi geomètric
 ha de mantenir la traçabilitat definida a `docs/GEOMETRY_CONTRACT.md`.
 
+## Intèrpret MVP de text nou
+
+El corpus UVOF és coneixement de referència i conjunt de regressió, no una
+llista tancada d'exercicis que l'usuari hagi de seleccionar. La interfície
+accepta text nou, però el primer abast executable és deliberadament una única
+situació 1x1.
+
+L'intèrpret pot aplicar el criteri general validat de llibertat de resolució en
+el 1x1; no pot inventar possessió inicial, bot, costat, passadors, materials ni
+una relació numèrica diferent. Els buits es mostren com a pendents i qualsevol
+entrada fora de l'abast es rebutja abans del render.
+
+La geometria resultant declara `TRACA_geometria_provisional`. La confirmació a
+la pantalla permet previsualitzar-la, però no equival a validació tàctica
+canònica, preflight `ready` ni incorporació al corpus.
+
 ## Regla general de permuta
 
 La direcció nomena el jugador que canvia de posició i el lloc que ocupa. En una

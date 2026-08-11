@@ -115,6 +115,11 @@ preserva totes les alternatives. Les coordenades de lectura viuen només a
 `geometry.json` i poden revisar-se sense canviar el significat tàctic. El
 contracte es documenta a [`GEOMETRY_CONTRACT.md`](GEOMETRY_CONTRACT.md).
 
+La interfície pot generar també una geometria provisional des d'una
+interpretació nova confirmada. Aquesta via és un esborrany interactiu: no té
+preflight canònic, no s'incorpora al corpus i ha de conservar explícitament els
+camps desconeguts.
+
 ## 8. Corpus d'exercicis
 
 El corpus semàntic agrupa exercicis validats que comparteixen una família. Cada

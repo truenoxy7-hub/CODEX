@@ -338,3 +338,21 @@ estat de previsualització i no una decisió tàctica canònica.
 de lectura dels participants són una política de render revisable. Les línies i
 dimensions de pista provenen del perfil IHF versionat; cap coordenada dels
 prototips descartats es reutilitza.
+
+## D-037 — El corpus és coneixement de referència, no un catàleg tancat
+
+**Decisió de producte:** l'entrada principal de TRAÇA és una descripció nova de
+l'entrenador. Els UVOF validats aporten vocabulari, invariants, exemples i
+proves de regressió, però l'usuari no ha de limitar-se a seleccionar-ne un.
+
+**Primera aplicació:** l'intèrpret executable comença amb una única situació
+`1x1`. Extreu només els elements que pot justificar, aplica el criteri general
+validat de llibertat de resolució quan la tasca no la restringeix, i mostra com
+a pendents la possessió, el bot o el costat que el text no declara. Un `2x1`,
+múltiples zones o una acció no identificable no generen geometria en aquesta
+iteració.
+
+**Separació de garanties:** la geometria creada des del text confirmat és un
+esborrany de previsualització. No és un artefacte canònic v0.1, no supera per si
+sola el preflight espacial i no s'incorpora automàticament al corpus. La
+confirmació d'interfície no equival a validació tàctica permanent.
