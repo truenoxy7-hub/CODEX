@@ -3,7 +3,7 @@
     "format": "TRACA_exercici_semantic",
     "versio_llenguatge": "1.0.0",
     "versio_instancia": "1.1.0",
-    "estat": "validada_parcialment_i_viva",
+    "estat": "validada_entrenador_i_viva",
     "objectiu": "Descriure el significat tàctic complet de l'exercici abans de generar-ne la geometria o el gràfic.",
     "separacio_capes": {
       "semantica_tactica": "inclosa",
@@ -18,7 +18,7 @@
     "nom": "1x1 cap al centre amb continuïtat 2x1 amb pivot i extrem",
     "familia": "MITJANS_1V1_OFENSIUS",
     "categoria": "1x1_ofensiu_amb_continuitat",
-    "estat_corpus": "en_revisio"
+    "estat_corpus": "validat_entrenador"
   },
   "origen": {
     "tipus": "banc_exercicis_original",
@@ -292,6 +292,7 @@
         "id": "C3",
         "tipus": "con",
         "funcio": "referencia_posicional_segon_defensor_absent",
+        "funcio_addicional": "delimitar_espai_execucio_i_resolucio_SA2",
         "classe_funcional": "referencia_posicional_passiva",
         "rol_defensiu_representat": "segon_defensor",
         "participa_com_a_defensor": false
@@ -572,7 +573,7 @@
       "la recuperació de SA2 és sense pilota",
       "la passada EXT_a_L ha de ser curta",
       "INT_4 ha de quedar entre D_Z2 i C3",
-      "C3 representa passivament el segon defensor absent i no participa com a defensor",
+      "C3 representa passivament el segon defensor absent, no participa com a defensor i delimita l'espai de SA2",
       "ESPAI_EXTREM_Z2 queda entre la línia de fons i D_Z2",
       "EXT manté amplitud i finalitza amb salt cap al centre",
       "SA2 no es representa com una finta",
@@ -629,7 +630,7 @@
     {
       "id": "VAL-KNOW-03",
       "estat": "executable",
-      "regla": "C1 i C2 són límits espacials; C3 representa passivament el segon defensor absent"
+      "regla": "C1 i C2 són límits espacials; C3 representa passivament el segon defensor absent i delimita SA2"
     },
     {
       "id": "VAL-KNOW-04",
@@ -639,14 +640,14 @@
   ],
   "governanca": {
     "semantica_tactica": {
-      "estat": "validada_parcialment_i_viva",
+      "estat": "validada_entrenador_i_viva",
       "autoritat_validacio": "entrenador",
       "coneixement_confirmat": "docs/HANDBALL_KNOWLEDGE.md",
       "nota": "El coneixement confirmat pot ampliar-se amb nous exercicis sense convertir preferències contextuals en invariants."
     },
     "geometria": {
       "estat": "no_definida",
-      "motiu": "La geometria no es generarà fins que la semàntica d'aquest JSON estigui validada."
+      "motiu": "La geometria no es generarà fins que existeixin el perfil de pista i el contracte de sortida del resolutor."
     },
     "render": {
       "estat": "no_generat"

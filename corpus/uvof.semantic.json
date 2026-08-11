@@ -631,6 +631,9 @@
         {"id": "D1_OPOSAT", "rol_inicial": "primer_defensor_banda_alliberada", "equip": "defensa"},
         {"id": "DAV", "rol_inicial": "avancat_defensiu", "equip": "defensa"}
       ],
+      "pilotes": [
+        {"id": "B1", "posseidor_inicial": "CE"}
+      ],
       "fases": [
         {
           "id": "F1",
@@ -640,7 +643,9 @@
             {"ordre": 2, "actor": "CE", "accio": "mobilitzar_avancat_cap_a_la_mateixa_zona_del_pivot", "estat_coneixement": "validat"},
             {"ordre": 3, "actor": "L_OPOSAT", "accio": "iniciar_1x1_a_lespai_afavorit", "estat_coneixement": "validat"}
           ],
-          "fluxos_pilota": [],
+          "fluxos_pilota": [
+            {"pilota_id": "B1", "posseidor_inicial": "CE", "accio": "passada", "posseidor_final": "L_OPOSAT"}
+          ],
           "decisions": [
             {"id": "D_POST_1X1", "condicio": "resposta_defensiva", "caracter": "disponible", "opcions": ["finalitzar", "continuïtat", "encreuament"]}
           ]
@@ -648,7 +653,9 @@
       ],
       "invariants": [
         "l'avançat no intervé sobre el pivot",
+        "el pivot ocupa l'interval 2-3 de la banda de concentració",
         "el central mobilitza l'avançat sobre la mateixa zona del pivot",
+        "el central inicia amb pilota i passa al lateral oposat després de mobilitzar l'avançat",
         "la concentració defensiva afavoreix l'espai del lateral",
         "és un 6x6 amb els sis rols atacants i els sis rols defensius del 5:1",
         "tot exercici 6x6 es categoritza com a situació de partit"
@@ -656,6 +663,9 @@
       "validacions_entrenador": [
         "central_com_a_organitzador_de_la_concentracio_defensiva",
         "avancat_no_contacta_pivot",
+        "pivot_a_2-3_banda_concentracio",
+        "flux_CE_a_L_OPOSAT",
+        "llibertat_L_OPOSAT_1-2_o_2-3",
         "6x6_contra_5:1_amb_rols_complets"
       ]
     },
@@ -773,7 +783,8 @@
         {"id": "D3", "rol_inicial": "tercer_o_central_defensiu", "equip": "defensa"}
       ],
       "materials": [
-        {"id": "BANC", "tipus": "banc", "funcio": "condicionant_del_llancament_o_passada"}
+        {"id": "BANC", "tipus": "banc", "funcio": "condicionant_del_llancament_o_passada"},
+        {"id": "CON_PV", "tipus": "con", "funcio": "delimita_espai_inicial_del_pivot_oposat_a_la_trajectoria_del_lateral", "estat_coneixement": "validat"}
       ],
       "pilotes": [
         {"id": "B1", "posseidor_inicial": "L_OPOSAT"},
@@ -802,7 +813,8 @@
           "condicio_activacio": "L_no_requerit_en_la_continuitat_posterior_de_F1",
           "accions": [
             {"ordre": 1, "actor": "PV", "accio": "passar_a_L_si_no_ha_intervingut_en_la_continuitat", "estat_coneixement": "validat"},
-            {"ordre": 2, "actor": "L", "accio": "rebre_de_pivot_i_saltar_el_banc", "estat_coneixement": "validat"}
+            {"ordre": 2, "actor": "L", "accio": "rebre_de_pivot_i_saltar_el_banc", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "PV", "accio": "lliscar_des_del_con_cap_a_lespai_lliure_si_D3_puja", "estat_coneixement": "condicio_tasca"}
           ],
           "fluxos_pilota": [
             {"trajectoria_id": "2X1_TANCAT", "ordre": 1, "pilota_id": "B2", "posseidor_inicial": "PV", "accio": "passada_condicional", "posseidor_final": "L", "condicio": "L_no_requerit_en_la_continuitat_posterior_de_F1"},
@@ -816,14 +828,20 @@
       "invariants": [
         "en la permuta lateral–central L va al centre i rep de L_OPOSAT",
         "la segona acció només s'activa després de F1 si L no ha estat necessari en la continuïtat",
+        "el pivot parteix del con que delimita l'espai oposat a la trajectòria del lateral",
+        "el pivot i el lateral no poden ocupar ni atacar el mateix espai",
         "és un 2x1 conceptual amb només dues opcions tancades",
         "si el defensor queda pla es llança de fora",
-        "si el defensor puja es passa al pivot"
+        "si el defensor puja es passa al pivot",
+        "el pivot només abandona el con i llisca quan D3 puja"
       ],
       "validacions_entrenador": [
         "permuta_lateral-central",
         "passada_habilitadora_des_de_lateral_contrari",
         "activacio_condicional_despres_de_la_primera_accio",
+        "con_com_a_ancoratge_de_lespai_inicial_del_pivot",
+        "espais_complementaris_de_lateral_i_pivot",
+        "lliscament_del_pivot_nomes_si_D3_puja",
         "dues_opcions_tancades_del_2x1"
       ]
     },
@@ -842,14 +860,18 @@
         "relacio": "4x4",
         "permuta": "lateral-central",
         "passador_permuta": "EXT",
-        "flux_especific_validat": "L-EXT-L"
+        "flux_especific_validat": "L-EXT-L",
+        "defensors_actius": ["D1_LOCAL", "D2_LOCAL", "D3_LOCAL", "D3_OPOSAT"]
       },
       "participants": [
         {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
         {"id": "CE", "rol_inicial": "central", "equip": "atac"},
         {"id": "EXT", "rol_inicial": "extrem", "equip": "atac"},
         {"id": "PV", "rol_inicial": "pivot", "equip": "atac"},
-        {"id": "DEF_4", "rol_inicial": "quatre_defensors", "equip": "defensa"}
+        {"id": "D1_LOCAL", "rol_inicial": "primer_defensor", "equip": "defensa"},
+        {"id": "D2_LOCAL", "rol_inicial": "segon_defensor", "equip": "defensa"},
+        {"id": "D3_LOCAL", "rol_inicial": "tercer_defensor", "equip": "defensa"},
+        {"id": "D3_OPOSAT", "rol_inicial": "tercer_defensor", "equip": "defensa"}
       ],
       "pilotes": [
         {"id": "B1", "posseidor_inicial": "L"}
@@ -877,12 +899,14 @@
       "invariants": [
         "la permuta és lateral-central",
         "els quatre atacants actius són EXT, L, CE i PV",
+        "els quatre defensors reals i actius són D1_LOCAL, D2_LOCAL, D3_LOCAL i D3_OPOSAT",
         "L inicia amb pilota, passa a EXT i rep de nou al centre",
         "el lateral és el primer jugador, ocupa temporalment el centre i inicia l'1x1"
       ],
       "validacions_entrenador": [
         "situacio_de_partit_reduida_4x4",
         "atacants_EXT_L_CE_PV",
+        "defensors_reals_D1_LOCAL_D2_LOCAL_D3_LOCAL_D3_OPOSAT",
         "flux_especific_L_EXT_L",
         "L_inicia_1x1_des_de_la_posicio_central"
       ]
@@ -1117,6 +1141,8 @@
         "zones": 3,
         "duels": "1x1",
         "execucio": "simultania_i_replicada",
+        "llibertat_1x1": "eleccio_lliure_de_lespai_inicial_i_resolucio_segons_resposta_defensiva",
+        "criteri_superacio": "travessar_la_linia_defensiva_del_defensor_de_zona",
         "representacio_font": "un_exemple_amb_una_pilota_replicable_a_les_tres_zones"
       },
       "participants": [
@@ -1149,8 +1175,9 @@
             {"ordre": 1, "actor": "ATACANT_DE_ZONA", "accio": "passar_al_passador_de_la_mateixa_zona", "estat_coneixement": "validat"},
             {"ordre": 2, "actor": "ATACANT_DE_ZONA", "accio": "iniciar_en_carrera_sense_pilota", "estat_coneixement": "validat"},
             {"ordre": 3, "actor": "ATACANT_DE_ZONA", "accio": "rebre_devolucio_orientat", "estat_coneixement": "validat"},
-            {"ordre": 4, "actor": "ATACANT_DE_ZONA", "accio": "atacar_espai_i_comprometre_defensor", "estat_coneixement": "validat"},
-            {"ordre": 5, "actor": "ATACANT_DE_ZONA", "accio": "canviar_direccio_i_ritme_per_superar_sense_bot", "estat_coneixement": "condicio_tasca"}
+            {"ordre": 4, "actor": "ATACANT_DE_ZONA", "accio": "escollir_i_atacar_lliurement_un_dels_dos_espais_del_defensor", "estat_coneixement": "validat"},
+            {"ordre": 5, "actor": "ATACANT_DE_ZONA", "accio": "continuar_i_superar_per_lespai_escollit_si_hi_ha_avantatge", "estat_coneixement": "validat"},
+            {"ordre": 6, "actor": "ATACANT_DE_ZONA", "accio": "canviar_direccio_i_ritme_cap_a_lespai_contigu_si_el_defensor_tanca", "estat_coneixement": "validat"}
           ],
           "fluxos_pilota": [
             {"trajectoria_id": "DUEL_ESQ", "ordre": 1, "pilota_id": "B_ESQ", "posseidor_inicial": "A_ESQ", "accio": "passada_inicial", "posseidor_final": "P_ESQ"},
@@ -1161,9 +1188,9 @@
             {"trajectoria_id": "DUEL_DRE", "ordre": 2, "pilota_id": "B_DRE", "posseidor_inicial": "P_DRE", "accio": "devolucio", "posseidor_final": "A_DRE"}
           ],
           "decisions": [
-            {"id": "D_1X1_ESQ", "condicio": "resposta_de_D_ESQ", "caracter": "disponible", "opcions": ["superacio_cap_a_un_costat_dins_Z_ESQ", "superacio_cap_a_laltre_costat_dins_Z_ESQ"]},
-            {"id": "D_1X1_CE", "condicio": "resposta_de_D_CE", "caracter": "disponible", "opcions": ["superacio_cap_a_un_costat_dins_Z_CE", "superacio_cap_a_laltre_costat_dins_Z_CE"]},
-            {"id": "D_1X1_DRE", "condicio": "resposta_de_D_DRE", "caracter": "disponible", "opcions": ["superacio_cap_a_un_costat_dins_Z_DRE", "superacio_cap_a_laltre_costat_dins_Z_DRE"]}
+            {"id": "D_1X1_ESQ", "condicio": "resposta_de_D_ESQ_despres_de_lespai_inicial_escollit", "caracter": "disponible", "opcions": ["continuar_per_lespai_escollit_si_hi_ha_avantatge", "canviar_cap_a_lespai_contigu_si_D_ESQ_tanca"]},
+            {"id": "D_1X1_CE", "condicio": "resposta_de_D_CE_despres_de_lespai_inicial_escollit", "caracter": "disponible", "opcions": ["continuar_per_lespai_escollit_si_hi_ha_avantatge", "canviar_cap_a_lespai_contigu_si_D_CE_tanca"]},
+            {"id": "D_1X1_DRE", "condicio": "resposta_de_D_DRE_despres_de_lespai_inicial_escollit", "caracter": "disponible", "opcions": ["continuar_per_lespai_escollit_si_hi_ha_avantatge", "canviar_cap_a_lespai_contigu_si_D_DRE_tanca"]}
           ]
         }
       ],
@@ -1173,6 +1200,9 @@
         "l'única pilota dibuixada a la font és un exemple replicable amb una pilota a cada zona",
         "cada atacant fa passada i devolució amb el passador de la seva zona abans del duel",
         "cada duel conserva oposició real",
+        "cada atacant tria lliurement quin dels dos espais del defensor ataca primer",
+        "si hi ha avantatge continua per l'espai escollit i si el defensor tanca canvia direcció i ritme cap al contigu",
+        "la superació es produeix en travessar la línia defensiva del defensor de zona",
         "no es permet el bot"
       ],
       "condicions_tasca": [
@@ -1184,6 +1214,9 @@
         "quatre_limits_que_delimiten_les_tres_zones",
         "passada_devolucio_abans_del_1x1",
         "sense_intervals_fixos",
+        "llibertat_absoluta_en_lespai_inicial_i_la_resolucio",
+        "continuar_si_hi_ha_avantatge_i_canviar_al_contigu_si_el_defensor_tanca",
+        "superacio_en_travessar_la_linia_defensiva",
         "sense_bot"
       ]
     }

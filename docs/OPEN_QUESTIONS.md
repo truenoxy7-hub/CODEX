@@ -8,11 +8,14 @@ Aquest document evita que Codex resolgui per inferència decisions tàctiques en
   finta cap a `2–3` i genera el 2x1 amb el pivot contra el tercer.
 - `SA2` no conté una finta. Entrena recuperació, recepció orientada sense bot,
   atac directe del carril `1–2` i explotació d'un 2x1 preparat amb l'extrem.
-- El con de `SA2` representa passivament el segon defensor absent.
+- El con `C3` representa passivament el segon defensor absent i també delimita
+  l'espai d'execució i resolució de `SA2`.
 - El defensor actiu de `SA2` és el primer defensor.
 - `C1` i `C2` només delimiten l'espai de resolució de `SA1`.
 - El pivot ocupa l'interval complementari al que ataca el lateral.
 - L'extrem manté l'amplitud i anticipa la possible passada amb criteri tàctic.
+- El model detallat és la font canònica; el corpus és una projecció resumida
+  vinculada a les mateixes identitats globals.
 
 ## Coneixement encara obert
 
@@ -26,6 +29,21 @@ Aquest document evita que Codex resolgui per inferència decisions tàctiques en
    conserva explícitament com a no especificats.
 5. Validar el vocabulari contra altres famílies abans de congelar una nova
    versió del llenguatge.
+
+## Bloquejos i parcials exposats pel preflight v0.3
+
+1. **UVOF005/007 — pilota:** validar, si escau, pilota, posseïdor inicial i
+   passades que avui no estan especificats. No s'afegirà cap flux per
+   inferència.
+2. **UVOF014 — mapping:** validar l'alternativa espacial específica
+   d'`encreuament` i qualsevol separació addicional entre les sis opcions que
+   avui només es preserven simbòlicament.
+3. **Simetria:** aprovar mappings d'identitat només als exercicis que realment
+   els necessitin. `reflectible` o `dues_bandes_paraleles` no autoritzen a
+   duplicar participants o pilotes.
+
+Els diagnòstics anteriors descriuen informació absent o conflictiva; no són
+noves conclusions tàctiques.
 
 ## Regla de treball
 

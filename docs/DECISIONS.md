@@ -124,7 +124,7 @@ seus delimitadors i les contigüitats pel defensor compartit.
 coordenades ni tancar decisions que depenen de la lectura del jugador.
 
 **Abast actual:** la decisió continua vigent i el contracte ha evolucionat a
-v0.2 amb `TR-UVOF-001` i `TR-UVOF-002`. La geometria de sortida continua
+v0.3 amb `TR-UVOF-001`–`TR-UVOF-015`. La geometria de sortida continua
 pendent.
 
 ## D-022 — Flux de pilota i trajectòries alternatives al contracte espacial
@@ -207,3 +207,118 @@ compartits.
 
 **Motiu:** confondre la quantitat dibuixada amb la quantitat operativa eliminaria
 dos dels tres duels simultanis especificats per la tasca.
+
+## D-028 — Contracte v0.3 traçable i sense selecció implícita de font
+
+**Decisió tècnica:** cada instància v0.3 declara candidats de font, versió,
+selector JSON Pointer i fingerprint determinista. Un exercici ordinari exigeix
+exactament un candidat canònic. Si les fonts discrepen sense una decisió de
+l'entrenador, el contracte declara `conflict`, cap candidat esdevé canònic i el
+preflight retorna `SEMANTIC_SOURCE_CONFLICT`.
+
+**Decisió tècnica:** el validador no pot seleccionar el `semantic.json` germà
+per la seva mera existència. La font executable és únicament la declarada i
+fingerprinted per l'artefacte v0.3.
+
+**Motiu:** la coincidència d'IDs o de l'últim segment d'un pseudo-camí no prova
+identitat ni preservació semàntica.
+
+## D-029 — Preflight pur com a gate anterior al resolutor
+
+**Decisió tècnica:** el preflight és read-only, no genera geometria i només
+retorna `ready`, `partial` o `blocked`. `valid` descriu conformitat estructural;
+no és sinònim de `ready`.
+
+**Decisió tècnica:** els bloquejos es deriven dels tipus i invariants generals:
+resolució de referències, namespace, bindings, cardinalitat, capabilities,
+cobertura semàntica, mapping d'opcions, marcs i cicles. Els buits coneguts que
+requereixen entrenador viuen a l'artefacte com `unresolved_items`, no en una
+regla del validador condicionada pel número d'UVOF.
+
+## D-030 — Migració mecànica, preservació simbòlica i estats de coneixement
+
+**Decisió tècnica:** v0.2 es conserva com a esquema històric read-only. La
+migració a v0.3 no completa buits tàctics: pot mapar una entitat, preservar-la
+simbòlicament o declarar-la `unknown`, `provisional` o `unresolved`.
+
+**Decisió tècnica:** equip, rol canònic, costat, rol temporal i funció són camps
+separats. No es dedueixen costat o rol temporal dels IDs ni es parteixen rols
+compostos. La funció i les capabilities del material es declaren per instància.
+
+**Decisió tècnica:** una simetria només pot donar-se per resolta amb mapping
+explícit d'identitats. No es dupliquen participants, materials o pilotes per
+inferència.
+
+## D-031 — Font canònica i mapping validat d'UVOF001
+
+**Decisió de l'entrenador:** el model detallat
+`exercises/TR-UVOF-001/semantic.json` és la font canònica. L'entrada del corpus
+és una projecció resumida i no una autoritat alternativa. Les dues fonts es
+vinculen mitjançant `semantic_coverage`, compartint les mateixes identitats
+globals per a participants, materials, pilotes, accions i decisions.
+
+**Mapping validat:** `D_Z1 ↔ D3`, `D_Z2 ↔ D1` i els materials separats `C1` i
+`C2` corresponen a l'agregat `C1_C2` del corpus. `B1` i `B2` mantenen fluxos
+independents. `C3` representa passivament el segon defensor absent i també
+delimita l'espai d'execució i resolució de `SA2`.
+
+**Efecte tècnic:** s'elimina `SEMANTIC_SOURCE_CONFLICT` d'UVOF001 i el
+preflight passa de `blocked` a `ready`, sense introduir geometria.
+
+## D-032 — Ancoratge i flux validats d'UVOF008
+
+**Decisió de l'entrenador:** `PV` ocupa l'interval `2–3` de la banda de
+concentració. `CE` inicia amb pilota, mobilitza `DAV` cap a la mateixa zona
+sense que l'avançat intervingui sobre el pivot i passa a `L_OPOSAT`.
+`L_OPOSAT` pot atacar lliurement `1–2` o `2–3` a la banda alliberada i resoldre
+amb finalització, continuïtat o encreuament.
+
+**Efecte tècnic:** `ZONA_CONCENTRACIO` s'ancora a `INT_23_LOCAL`, es preserva
+el flux `B1: CE → L_OPOSAT` i desapareixen tant el cicle no ancorat com la
+pilota no especificada. El preflight d'UVOF008 passa de `blocked` a `ready`
+sense introduir coordenades.
+
+## D-033 — Con complementari i lliscament condicional d'UVOF010
+
+**Decisió de l'entrenador:** `PV` parteix sempre del con que delimita l'espai
+oposat a la trajectòria de `L`. Lateral i pivot no poden ocupar ni atacar el
+mateix espai. `PV` només abandona el con i llisca cap a l'espai lliure quan
+`D3` puja; si `D3` queda pla, `L` resol amb llançament exterior.
+
+**Efecte tècnic:** `CON_PV` esdevé l'ancoratge independent d'`ESPAI_PV`; `D3`
+deixa de definir l'espai i només activa la branca de resolució. Desapareix el
+cicle no ancorat i el preflight d'UVOF010 passa de `blocked` a `ready` sense
+introduir coordenades.
+
+## D-034 — Quatre defensors reals i actius d'UVOF011
+
+**Decisió de l'entrenador:** la defensa de la situació reduïda `4x4` està
+formada per `D1_LOCAL`, `D2_LOCAL`, `D3_LOCAL` i `D3_OPOSAT`. Tots quatre són
+participants reals i actius; `DEF_4` no és una persona ni una representació
+vàlida de la defensa completa.
+
+**Aplicació espacial:** `D1_LOCAL` delimita l'espai exterior entre el primer
+defensor i la línia de fons. Els dos tercers es conserven com a identitats
+separades, local i oposada. No es força cap emparellament directe no validat per
+a l'1x1 que `L` inicia des del centre temporal.
+
+**Efecte tècnic:** el corpus i el namespace contenen vuit participants
+individuals, la cobertura semàntica mapeja els quatre defensors i desapareix el
+grup no instanciat. El preflight d'UVOF011 passa de `blocked` a `ready` sense
+introduir coordenades.
+
+## D-035 — Llibertat bilateral dels tres duels d'UVOF015
+
+**Decisió de l'entrenador:** a cadascuna de les tres zones, l'atacant té
+llibertat absoluta per escollir inicialment qualsevol dels dos espais contigus
+al defensor. Si hi ha avantatge, continua i supera pel mateix espai; si el
+defensor el tanca, canvia direcció i ritme per atacar l'altre. L'acció es manté
+dins els límits de zona i sense bot.
+
+**Criteri de superació:** l'atacant supera quan travessa la línia defensiva
+marcada pel defensor real de la zona.
+
+**Efecte tècnic:** cada duel exposa les dues continuïtats i les dues fintes
+direccionals, les contigüitats comparteixen el defensor i totes les branques
+conserven el criteri de superació. Desapareixen els marcs incomplets i el
+preflight d'UVOF015 passa de `blocked` a `ready` sense introduir coordenades.
