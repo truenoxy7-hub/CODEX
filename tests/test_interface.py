@@ -19,6 +19,7 @@ def test_universal_workspace_files_exist() -> None:
         "js/manual-geometry.js",
         "js/promotion.js",
         "js/workspace-preflight.js",
+        "js/geometry-dependencies.js",
         "js/visual-grammar.js",
         "js/corrections.js",
         "js/store.js",
@@ -79,6 +80,9 @@ def test_renderer_is_segment_driven_and_generated_compare_is_read_only() -> None
     assert "function pathData" in renderer
     assert '`${index ? "L" : "M"}' in renderer
     assert "smoothPath" not in renderer
+    assert 'segment.type === "cubic"' in renderer
+    assert "space.polygon" not in renderer
+    assert "space.anchor" in renderer
     assert '"stroke-linejoin": "miter"' in renderer
     assert "comparison-ghost" in renderer
     assert 'snapshot.ui.view === "control" || snapshot.ui.view === "corrected"' in app

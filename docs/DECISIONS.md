@@ -418,3 +418,31 @@ tipus, abast, cas font i únicament les correccions seleccionades; sempre neix
 **Decisió:** gramàtica base, override del cas, candidat visual i diccionari
 validat són nivells separats. Corregir un color o traç no modifica cap convenció
 global.
+
+## D-046 — Els espais tàctics no són objectes gràfics
+
+**Decisió:** un interval o espai tàctic continua sent una relació entre
+delimitadors. Pot conservar àncora i regió de càlcul internes, però la vista
+neta no el dibuixa i Control només en mostra una ajuda mínima. Els polígons de
+zona queden reservats als límits físics de la tasca i mai no es farceixen.
+
+## D-047 — Geometria segmentada resolta abans del render
+
+**Decisió:** línies, corbes, controls i punts funcionals formen part de
+`geometry.json`. El renderer emet literalment `M/L/C`; no aplica suavitzat. La
+finta conserva explícitament un `direction_break` i no pot degradar-se a una
+corba decorativa.
+
+## D-048 — Estats persistents i passades amb identitat
+
+**Decisió:** les posicions temporals són `participant_state`. Els moviments
+enllacen estats del mateix actor i les passades identifiquen pilota, emissor,
+receptor i estats d'origen i destí. El retall al perímetre del símbol és només
+una responsabilitat visual del renderer.
+
+## D-049 — Una correcció principal, efectes derivats
+
+**Decisió:** moure un estat registra un únic esdeveniment principal. Entitats,
+moviments i passades connectats es recalculen com a efectes derivats enumerats
+a l'historial. No es creen correccions secundàries ni s'altera la proposta
+generada immutable.

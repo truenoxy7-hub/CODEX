@@ -74,7 +74,7 @@ process.stdout.write(JSON.stringify({
 def test_generated_and_working_geometry_are_strictly_separate() -> None:
     result = _run_node(_store_prelude() + """
 const before = store.snapshot();
-store.applyCorrection({target:{layer:'geometry', ref:'geometry:entity:A_ESQ', property:'position'}, operation:'move', after:[3,13], reason:'guanyar espai'});
+store.applyCorrection({target:{layer:'geometry', ref:'geometry:participant_state:STATE_ESQ_A_CURRENT', property:'position'}, operation:'move', after:[3,13], reason:'guanyar espai'});
 const after = store.snapshot();
 process.stdout.write(JSON.stringify({
   generatedBefore:before.generatedGeometry.entities.find(x=>x.id==='A_ESQ').position,
@@ -91,6 +91,9 @@ process.stdout.write(JSON.stringify({
     assert result["event"]["machine_explanation"]
     assert result["event"]["coach_explanation"] == "guanyar espai"
     assert result["event"]["correction_type"] == "geometry.move"
+    assert result["event"]["change_role"] == "primary"
+    assert len(result["event"]["derived_effects"]) == 3
+    assert result["event"]["target"]["ref"] == "geometry:participant_state:STATE_ESQ_A_CURRENT"
 
 
 def test_no_resolver_case_can_be_built_saved_and_validated() -> None:
@@ -211,7 +214,7 @@ def test_undo_redo_and_uvof015_regression_remain_stable() -> None:
 const initial = JSON.stringify(store.snapshot().workingGeometry);
 const branch = store.snapshot().workingGeometry.branches[0];
 store.setAlternative(branch.id, branch.alternatives[3].id);
-store.applyCorrection({target:{layer:'geometry',ref:'geometry:entity:A_ESQ',property:'position'},operation:'move',after:[3,13],reason:'test'});
+store.applyCorrection({target:{layer:'geometry',ref:'geometry:participant_state:STATE_ESQ_A_CURRENT',property:'position'},operation:'move',after:[3,13],reason:'test'});
 store.undo(); const undone = store.snapshot().workingGeometry.entities.find(x=>x.id==='A_ESQ').position;
 store.redo(); const redone = store.snapshot().workingGeometry.entities.find(x=>x.id==='A_ESQ').position;
 store.reset(); const snapshot = store.snapshot();
@@ -227,15 +230,54 @@ def test_visual_grammar_and_renderer_preserve_tactical_line_meaning() -> None:
 const Visual = require('./interface/js/visual-grammar.js');
 const Renderer = require('./interface/js/renderer.js');
 const grammar = Visual.createVisualGrammar();
-process.stdout.write(JSON.stringify({entityKinds:Object.keys(grammar.entities),pathKinds:Object.keys(grammar.paths),passDash:grammar.paths.pass.dash,feintMode:grammar.paths.feint.path_mode,preserveVertices:grammar.paths.feint.preserve_vertices,path:Renderer.pathData([[1,2],[3,4],[5,6]])}));
+const segmented = {segments:[{type:'cubic',start:[1,2],control1:[2,2],control2:[2,4],end:[3,4]},{type:'line',start:[3,4],end:[5,6]}]};
+process.stdout.write(JSON.stringify({entityKinds:Object.keys(grammar.entities),pathKinds:Object.keys(grammar.paths),passDash:grammar.paths.pass.dash,feintMode:grammar.paths.feint.path_mode,preserveVertices:grammar.paths.feint.preserve_vertices,legacy:Renderer.pathData([[1,2],[3,4],[5,6]]),segmented:Renderer.pathData(segmented)}));
 """)
 
     assert set(result["entityKinds"]) >= {"attacker", "defender", "goalkeeper", "generic_participant", "generic_material"}
     assert set(result["pathKinds"]) >= {"movement", "pass", "shot", "feint", "generic_action"}
     assert result["passDash"]
-    assert result["feintMode"] == "polyline"
+    assert result["feintMode"] == "functional_segments"
     assert result["preserveVertices"] is True
-    assert result["path"] == "M 1 2 L 3 4 L 5 6"
+    assert result["legacy"] == "M 1 2 L 3 4 L 5 6"
+    assert result["segmented"] == "M 1 2 C 2 2 2 4 3 4 L 5 6"
+
+
+def test_moving_a_future_state_updates_connected_paths_with_one_primary_event() -> None:
+    result = _run_node(_store_prelude() + """
+const branch = store.snapshot().workingGeometry.branches[0];
+const alternative = branch.alternatives[0];
+const target = alternative.from_state_ref;
+const before = store.snapshot().workingGeometry.participant_states.find(x=>x.id===target).position;
+const event = store.applyCorrection({target:{layer:'geometry',ref:`geometry:participant_state:${target}`,property:'position'},operation:'move',after:[2.9,10.4],reason:'ajust de recepció'});
+const snapshot = store.snapshot();
+const updated = snapshot.workingGeometry.branches[0].alternatives[0];
+process.stdout.write(JSON.stringify({count:snapshot.corrections.length,before,event,actionStart:updated.segments[0].start,passEnd:updated.return_pass.segments.at(-1).end,generatedStart:snapshot.generatedGeometry.branches[0].alternatives[0].segments[0].start}));
+""")
+
+    assert result["count"] == 1
+    assert result["event"]["change_role"] == "primary"
+    assert len(result["event"]["derived_effects"]) == 2
+    assert result["actionStart"] == [2.9, 10.4]
+    assert result["passEnd"] == [2.9, 10.4]
+    assert result["generatedStart"] == result["before"]
+
+
+def test_pass_display_is_trimmed_to_symbols_without_mutating_resolved_geometry() -> None:
+    result = _run_node("""
+const fs = require('fs');
+const Renderer = require('./interface/js/renderer.js');
+const Visual = require('./interface/js/visual-grammar.js');
+const geometry = JSON.parse(fs.readFileSync('./exercises/TR-UVOF-015/geometry.json', 'utf8'));
+const path = geometry.common_paths.find(x=>x.kind==='initial_pass');
+const before = JSON.stringify(path);
+const display = Renderer.pathForDisplay(path, geometry, Visual.createVisualGrammar(), 'pass');
+process.stdout.write(JSON.stringify({sourceStart:path.segments[0].start,displayStart:display.segments[0].start,sourceEnd:path.segments.at(-1).end,displayEnd:display.segments.at(-1).end,unchanged:before===JSON.stringify(path)}));
+""")
+
+    assert result["unchanged"] is True
+    assert result["displayStart"] != result["sourceStart"]
+    assert result["displayEnd"] != result["sourceEnd"]
 
 
 def test_training_case_and_correction_schemas_are_valid() -> None:

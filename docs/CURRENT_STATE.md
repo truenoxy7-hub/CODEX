@@ -5,9 +5,13 @@
 - Corpus semàntic `TR-UVOF-001`–`TR-UVOF-015` i contracte
   `spatial-relations` v0.3.
 - Preflight qualitatiu pur amb estats `ready`, `partial` o `blocked`.
-- Perfil IHF, contracte geomètric v0.1 i resolver determinista d’UVOF015.
+- Perfil IHF, contracte geomètric v0.2 i resolver determinista d’UVOF015.
 - UVOF015 conserva tres zones, sis espais, setze entitats, tres branques i
   dotze alternatives.
+- Els sis espais són relacions ocultes; només els límits físics de les tres
+  zones poden aparèixer discretament a Control.
+- Participants amb estats persistents, trajectòries segmentades i passades
+  enllaçades a emissor/receptor; la finta conserva el trencament funcional.
 
 ## Workspace universal MVP
 
@@ -20,8 +24,8 @@
   i fases.
 - Casos sense resolver poden continuar, guardar-se i tenir una
   `coach_reference_geometry` explícitament no generada.
-- Correccions amb diff, explicació automàtica, motiu de l’entrenador i metadades
-  preparades per comparar casos.
+- Correccions amb canvi principal, efectes derivats, diff, explicació
+  automàtica i motiu de l’entrenador.
 - Vistes generada, corregida, comparada i de control.
 - Preflight amb errors bloquejants, warnings i informació accionable.
 - Promotion Builder per tipus, abast i subconjunt seleccionat de correccions.

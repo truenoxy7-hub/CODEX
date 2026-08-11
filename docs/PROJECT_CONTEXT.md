@@ -94,3 +94,7 @@ continua sent l’espècimen canònic i la prova de regressió. El sistema regis
 explica correccions, executa un preflight, valida casos i només crea coneixement
 reutilitzable com a candidat després d’una promoció explícita. No hi ha encara
 interpretació tàctica ni resolució geomètrica generals.
+
+La geometria v0.2 manté els espais tàctics com a relacions ocultes, separa els
+límits físics de la tasca, connecta trajectòries i passades a estats persistents
+i registra una única correcció principal amb efectes dependents explicats.

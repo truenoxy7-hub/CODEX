@@ -21,6 +21,10 @@
     return object.source_ref ? [object.source_ref] : [];
   }
 
+  function readPath(object, path) {
+    return String(path || "").split(".").filter(Boolean).reduce((value, key) => value == null ? undefined : value[key], object);
+  }
+
   function resolveSelection(snapshot, selection) {
     if (!selection || !selection.ref) return null;
     const parsed = correctionsApi.parseRef(selection.ref);
@@ -29,10 +33,17 @@
     if (parsed.collection === "entity") object = (geometry.entities || []).find((item) => item.id === parsed.id);
     if (parsed.collection === "zone") object = (geometry.zones || []).find((item) => item.id === parsed.id);
     if (parsed.collection === "space") object = (geometry.spaces || []).find((item) => item.id === parsed.id);
+    if (parsed.collection === "participant_state") object = (geometry.participant_states || []).find((item) => item.id === parsed.id);
     if (parsed.collection === "common_path") object = (geometry.common_paths || []).find((item) => item.id === parsed.id);
     if (parsed.collection === "alternative") {
       for (const branch of geometry.branches || []) {
         object = (branch.alternatives || []).find((item) => item.id === parsed.id);
+        if (object) break;
+      }
+    }
+    if (parsed.collection === "return_pass") {
+      for (const branch of geometry.branches || []) {
+        object = (branch.alternatives || []).map((item) => item.return_pass).find((item) => item && item.id === parsed.id);
         if (object) break;
       }
     }
@@ -63,16 +74,19 @@
         if (event.target === svg || event.target.tagName === "rect") store.setSelection(null);
       });
 
-      container.querySelectorAll(".entity-node").forEach((node) => {
+      container.querySelectorAll(".entity-node, .participant-state-node").forEach((node) => {
         node.addEventListener("pointerdown", (event) => {
           if (event.button !== 0) return;
           event.preventDefault();
           event.stopPropagation();
           const snapshot = store.snapshot();
-          const resolved = resolveSelection(snapshot, { ref: node.dataset.ref, kind: "entity" });
+          const resolved = resolveSelection(snapshot, { ref: node.dataset.ref, kind: node.dataset.kind });
           if (!resolved) return;
           const start = svgCoordinates(svg, event);
-          const before = resolved.object.position.slice();
+          const linkedState = node.dataset.stateRef && (snapshot.workingGeometry.participant_states || []).find((state) => state.id === node.dataset.stateRef);
+          const correctionObject = linkedState || resolved.object;
+          const correctionRef = linkedState ? `geometry:participant_state:${linkedState.id}` : node.dataset.ref;
+          const before = correctionObject.position.slice();
           let after = before.slice();
           node.setPointerCapture(event.pointerId);
           function move(moveEvent) {
@@ -85,11 +99,11 @@
             node.removeEventListener("pointerup", end);
             node.removeEventListener("pointercancel", cancel);
             if (before[0] !== after[0] || before[1] !== after[1]) {
-              const selection = { ref: node.dataset.ref, kind: "entity" };
+              const selection = { ref: node.dataset.ref, kind: node.dataset.kind };
               store.applyCorrection({
-                target: { layer: "geometry", ref: node.dataset.ref, property: "position" },
+                target: { layer: "geometry", ref: correctionRef, property: "position" },
                 operation: "move", before, after, author: "coach", scope: "case",
-                reason: "Reposicionament manual a la pista", source_refs: resolved.source_refs
+                reason: "Reposicionament manual d’un estat a la pista", source_refs: sourceRefsFor(correctionObject)
               });
               store.setSelection(selection);
             }
@@ -115,10 +129,11 @@
           const resolved = resolveSelection(snapshot, { ref: handle.dataset.ref, kind: "path" });
           if (!resolved) return;
           const propertyRoot = handle.dataset.property || "points";
-          const index = Number(handle.dataset.index);
-          const points = resolved.object[propertyRoot];
-          if (!Array.isArray(points) || !points[index]) return;
-          const before = points[index].slice();
+          const index = handle.dataset.index === undefined ? null : Number(handle.dataset.index);
+          const property = index === null ? propertyRoot : `${propertyRoot}.${index}`;
+          const point = readPath(resolved.object, property);
+          if (!Array.isArray(point)) return;
+          const before = point.slice();
           let after = before.slice();
           handle.setPointerCapture(event.pointerId);
           function move(moveEvent) {
@@ -132,7 +147,7 @@
             handle.removeEventListener("pointercancel", cancel);
             if (before[0] !== after[0] || before[1] !== after[1]) {
               store.applyCorrection({
-                target: { layer: "geometry", ref: handle.dataset.ref, property: `${propertyRoot}.${index}` },
+                target: { layer: "geometry", ref: handle.dataset.ref, property },
                 operation: "move_vertex", before, after, author: "coach", scope: "case",
                 reason: "Ajust manual d’un punt de trajectòria", source_refs: resolved.source_refs
               });

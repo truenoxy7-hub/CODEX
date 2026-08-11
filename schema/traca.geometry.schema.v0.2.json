@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://traca.local/schema/traca.geometry.v0.2.json",
+  "title": "TRAÇA — geometria derivada v0.2",
+  "type": "object",
+  "required": ["$schema", "meta", "court", "layout_policy", "zones", "spaces", "entities", "participant_states", "common_paths", "branches", "dependencies", "traceability"],
+  "properties": {
+    "$schema": {"const": "../../schema/traca.geometry.schema.v0.2.json"},
+    "meta": {
+      "type": "object",
+      "required": ["format", "version", "exercise_id", "status", "source_spatial_ref", "source_spatial_digest", "court_profile_ref", "court_profile_digest"],
+      "properties": {
+        "format": {"const": "TRACA_geometria_derivada"},
+        "version": {"const": "0.2.0"},
+        "exercise_id": {"const": "TR-UVOF-015"},
+        "status": {"const": "derived_from_ready_contract"},
+        "source_spatial_ref": {"type": "string", "minLength": 1},
+        "source_spatial_digest": {"$ref": "#/$defs/digest"},
+        "court_profile_ref": {"type": "string", "minLength": 1},
+        "court_profile_digest": {"$ref": "#/$defs/digest"}
+      },
+      "additionalProperties": false
+    },
+    "court": {
+      "type": "object",
+      "required": ["width_m", "half_length_m", "goal", "markings", "view_box"],
+      "properties": {
+        "width_m": {"const": 20.0},
+        "half_length_m": {"const": 20.0},
+        "goal": {"type": "object"},
+        "markings": {"type": "object"},
+        "view_box": {"type": "array", "prefixItems": [{"type": "number"}, {"type": "number"}, {"type": "number", "exclusiveMinimum": 0}, {"type": "number", "exclusiveMinimum": 0}], "items": false}
+      },
+      "additionalProperties": false
+    },
+    "layout_policy": {
+      "type": "object",
+      "required": ["id", "status", "coordinate_system", "attack_direction", "notes"],
+      "properties": {
+        "id": {"const": "uvof015_three_zones_v0.2"},
+        "status": {"const": "provisional_render_policy"},
+        "coordinate_system": {"const": "metres_origin_goal_line_left"},
+        "attack_direction": {"const": "negative_y"},
+        "notes": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "zones": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"$ref": "#/$defs/zone"}},
+    "spaces": {"type": "array", "minItems": 6, "maxItems": 6, "items": {"$ref": "#/$defs/space"}},
+    "entities": {"type": "array", "minItems": 16, "items": {"$ref": "#/$defs/entity"}},
+    "participant_states": {"type": "array", "minItems": 9, "items": {"$ref": "#/$defs/participant_state"}},
+    "common_paths": {"type": "array", "minItems": 6, "items": {"$ref": "#/$defs/path"}},
+    "branches": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"$ref": "#/$defs/branch"}},
+    "dependencies": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/dependency"}},
+    "traceability": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/traceability"}}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^(sha256:)?[a-f0-9]{64}$"},
+    "point": {"type": "array", "prefixItems": [{"type": "number"}, {"type": "number"}], "items": false},
+    "polygon": {"type": "array", "minItems": 4, "items": {"$ref": "#/$defs/point"}},
+    "zone": {
+      "type": "object",
+      "required": ["id", "kind", "source_ref", "polygon", "limit_refs", "defender_ref", "defensive_line", "render_policy"],
+      "properties": {
+        "id": {"type": "string"}, "kind": {"const": "physical_task_boundary"}, "source_ref": {"type": "string"},
+        "polygon": {"$ref": "#/$defs/polygon"}, "limit_refs": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "string"}},
+        "defender_ref": {"type": "string"}, "defensive_line": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"$ref": "#/$defs/point"}},
+        "render_policy": {"const": "control_only"}
+      },
+      "additionalProperties": false
+    },
+    "space": {
+      "type": "object",
+      "required": ["id", "kind", "source_ref", "zone_ref", "defender_ref", "relation", "anchor", "calculation_region", "render_policy"],
+      "properties": {
+        "id": {"type": "string"}, "kind": {"const": "relational_tactical_space"}, "source_ref": {"type": "string"}, "zone_ref": {"type": "string"}, "defender_ref": {"type": "string"},
+        "relation": {"type": "object", "required": ["type", "delimiter_refs"], "properties": {"type": {"const": "between"}, "delimiter_refs": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "string"}}}, "additionalProperties": false},
+        "anchor": {"$ref": "#/$defs/point"}, "calculation_region": {"$ref": "#/$defs/polygon"}, "render_policy": {"const": "hidden"}
+      },
+      "additionalProperties": false
+    },
+    "entity": {
+      "type": "object",
+      "required": ["id", "kind", "label", "position", "source_ref", "status"],
+      "properties": {
+        "id": {"type": "string"}, "kind": {"enum": ["attacker", "defender", "passer", "ball", "cone"]}, "label": {"type": "string"},
+        "position": {"$ref": "#/$defs/point"}, "state_ref": {"type": "string"}, "source_ref": {"type": "string"}, "status": {"const": "derived"}
+      },
+      "additionalProperties": false
+    },
+    "participant_state": {
+      "type": "object",
+      "required": ["id", "participant_ref", "state_id", "phase", "position", "status", "visibility", "source_refs"],
+      "properties": {
+        "id": {"type": "string"}, "participant_ref": {"type": "string"}, "state_id": {"type": "string"}, "phase": {"type": "string"},
+        "position": {"$ref": "#/$defs/point"}, "status": {"enum": ["current", "future", "past"]}, "visibility": {"enum": ["normal", "control", "selected_alternative", "hidden"]},
+        "alternative_refs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}, "source_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "segment": {
+      "oneOf": [
+        {"type": "object", "required": ["type", "start", "end"], "properties": {"type": {"const": "line"}, "start": {"$ref": "#/$defs/point"}, "end": {"$ref": "#/$defs/point"}}, "additionalProperties": false},
+        {"type": "object", "required": ["type", "start", "control1", "control2", "end"], "properties": {"type": {"const": "cubic"}, "start": {"$ref": "#/$defs/point"}, "control1": {"$ref": "#/$defs/point"}, "control2": {"$ref": "#/$defs/point"}, "end": {"$ref": "#/$defs/point"}}, "additionalProperties": false}
+      ]
+    },
+    "functional_point": {
+      "type": "object", "required": ["id", "role", "position"],
+      "properties": {"id": {"type": "string"}, "role": {"enum": ["waypoint", "commitment", "direction_break", "exit"]}, "position": {"$ref": "#/$defs/point"}}, "additionalProperties": false
+    },
+    "path": {
+      "type": "object",
+      "required": ["id", "kind", "action_type", "segments", "functional_points", "source_refs"],
+      "properties": {
+        "id": {"type": "string"}, "kind": {"enum": ["initial_pass", "run_without_ball", "return_pass", "continuation", "feint"]}, "action_type": {"enum": ["movement", "pass"]},
+        "actor_ref": {"type": "string"}, "from_state_ref": {"type": "string"}, "to_state_ref": {"type": "string"},
+        "ball_ref": {"type": "string"}, "from_participant_ref": {"type": "string"}, "to_participant_ref": {"type": "string"}, "anchor_mode": {"enum": ["symbol_perimeter", "none"]},
+        "segments": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/segment"}}, "functional_points": {"type": "array", "items": {"$ref": "#/$defs/functional_point"}},
+        "source_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {"if": {"properties": {"action_type": {"const": "movement"}}}, "then": {"required": ["actor_ref", "from_state_ref", "to_state_ref"]}},
+        {"if": {"properties": {"action_type": {"const": "pass"}}}, "then": {"required": ["ball_ref", "from_participant_ref", "from_state_ref", "to_participant_ref", "to_state_ref", "anchor_mode"]}}
+      ]
+    },
+    "alternative": {
+      "type": "object",
+      "required": ["id", "source_ref", "transition_ref", "kind", "action_type", "actor_ref", "from_state_ref", "to_state_ref", "initial_space_ref", "target_space_ref", "segments", "functional_points", "return_pass", "qualifiers"],
+      "properties": {
+        "id": {"type": "string"}, "source_ref": {"type": "string"}, "transition_ref": {"type": "string"}, "kind": {"enum": ["continuation", "feint"]}, "action_type": {"const": "movement"},
+        "actor_ref": {"type": "string"}, "from_state_ref": {"type": "string"}, "to_state_ref": {"type": "string"}, "initial_space_ref": {"type": "string"}, "target_space_ref": {"type": "string"},
+        "segments": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/segment"}}, "functional_points": {"type": "array", "items": {"$ref": "#/$defs/functional_point"}},
+        "return_pass": {"$ref": "#/$defs/path"}, "qualifiers": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "branch": {
+      "type": "object", "required": ["id", "source_ref", "zone_ref", "alternatives"],
+      "properties": {"id": {"type": "string"}, "source_ref": {"type": "string"}, "zone_ref": {"type": "string"}, "alternatives": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"$ref": "#/$defs/alternative"}}}, "additionalProperties": false
+    },
+    "dependency": {
+      "type": "object", "required": ["id", "trigger_ref", "effect_refs", "rule"],
+      "properties": {"id": {"type": "string"}, "trigger_ref": {"type": "string"}, "effect_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true}, "rule": {"const": "state_drives_geometry"}}, "additionalProperties": false
+    },
+    "traceability": {
+      "type": "object", "required": ["geometry_ref", "source_refs"],
+      "properties": {"geometry_ref": {"type": "string", "minLength": 1}, "source_refs": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}}, "additionalProperties": false
+    }
+  }
+}

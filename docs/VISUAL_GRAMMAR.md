@@ -28,11 +28,11 @@ El color no defineix el rol canònic: és una decisió visual editable.
 
 | Primitiva | Convenció |
 |---|---|
-| `movement` | línia contínua amb fletxa |
+| `movement` | segments resolts continus amb fletxa |
 | `movement_without_ball` | línia contínua amb fletxa |
 | `pass` | línia discontínua amb fletxa |
 | `shot` | línia contínua destacada amb fletxa |
-| `feint` | polilínia contínua; preserva tots els vèrtexs |
+| `feint` | segments funcionals; preserva el trencament direccional |
 | `future_position` | referència discontínua sense confondre-la amb passada |
 | `generic_action` | trajectòria provisional encara no canonitzada |
 
@@ -40,12 +40,17 @@ Els tipus geomètrics actuals es mapen amb àlies: `initial_pass` i
 `return_pass` són `pass`; `run_without_ball` és `movement_without_ball`; i
 `continuation` és `movement`.
 
-## Superposicions
+## Espais i superposicions
 
-- `spatial_zone`: delimitació de treball visible només a la vista de control;
+- els espais tàctics relacionals no són primitives gràfiques i no es pinten;
+- `spatial_zone`: límit físic de treball amb contorn subtil només a Control;
 - `finishing_zone`: zona funcional de finalització;
 - `defensive_reference`: línia o referència defensiva que permet comprovar la
   superació.
+
+Control pot mostrar una àncora i una etiqueta petites per inspeccionar una
+relació espacial. No pot mostrar rectangles, polígons farcits ni subdivisions
+artificials dels intervals. La vista neta no mostra cap ajuda espacial interna.
 
 ## Finta i canvi de direcció
 
@@ -53,9 +58,9 @@ Una finta no és una corba decorativa. Els punts representen atac a un espai,
 compromís del defensor, canvi de direcció i de ritme, atac de l'espai contigu i
 superació. Per això:
 
-- `path_mode` és `polyline`;
+- `path_mode` és `functional_segments`;
 - `preserve_vertices` és `true`;
-- el renderer genera ordres SVG `M` i `L`;
+- la geometria resol `cubic → line → cubic` i el renderer només emet `M/C/L`;
 - un ajust de vèrtex crea una correcció geomètrica explícita;
 - cap funció de suavitzat pot alterar la lectura funcional.
 
@@ -75,7 +80,7 @@ el converteix en regla global.
 - **Generat:** proposta original del resolver, read-only.
 - **Corregit:** geometria de treball amb correccions del cas.
 - **Comparar:** original en ghost blanc i resultat corregit sòlid, read-only.
-- **Control:** afegeix zones, espais, identificadors, línies defensives i
-  tiradors de trajectòria.
+- **Control:** afegeix límits físics discrets, àncores relacionals,
+  identificadors, línies defensives, estats futurs necessaris i tiradors.
 
 Canviar de vista no modifica el cas.

@@ -224,6 +224,12 @@ amplades de zona i les distàncies de lectura dels participants són política
 visual provisional i no coneixement tàctic validat. Qualsevol canvi geomètric
 ha de mantenir la traçabilitat definida a `docs/GEOMETRY_CONTRACT.md`.
 
+Els espais tàctics són relacions internes i no rectangles pintables. Només els
+límits físics de la tasca poden aparèixer, discretament, a Control. Les
+trajectòries connecten estats persistents dels participants i les corbes han de
+venir resoltes en segments: el renderer no les suavitza. Moure un estat crea
+una sola correcció principal i recalcula els efectes dependents.
+
 ## Workspace universal MVP
 
 El corpus UVOF és coneixement de referència i regressió, no un catàleg tancat.

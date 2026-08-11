@@ -40,7 +40,8 @@ La geometria i el renderer anteriors es consideren prototips descartables. No s'
 - `schema/traca.spatial-relations.schema.v0.2.json` (històric, read-only)
 - `scripts/spatial_preflight.py`
 - `config/handball-court.ihf-2025.json`
-- `schema/traca.geometry.schema.v0.1.json`
+- `schema/traca.geometry.schema.v0.2.json`
+- `schema/traca.geometry.schema.v0.1.json` (històric, read-only)
 - `exercises/TR-UVOF-015/geometry.json`
 - `scripts/resolve_geometry.py`
 - `docs/DOMAIN_MODEL.md`

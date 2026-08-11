@@ -13,13 +13,17 @@ ROOT = Path(__file__).resolve().parents[1]
 SPATIAL_PATH = ROOT / "exercises/TR-UVOF-015/spatial-relations.json"
 COURT_PATH = ROOT / "config/handball-court.ihf-2025.json"
 GEOMETRY_PATH = ROOT / "exercises/TR-UVOF-015/geometry.json"
-SCHEMA_PATH = ROOT / "schema/traca.geometry.schema.v0.1.json"
+SCHEMA_PATH = ROOT / "schema/traca.geometry.schema.v0.2.json"
 BUNDLE_PATH = ROOT / "interface/data/uvof015.geometry.js"
 COURT_BUNDLE_PATH = ROOT / "interface/data/court-profile.js"
 
 
 def _load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _segment_points(path: dict) -> list[list[float]]:
+    return [path["segments"][0]["start"], *[segment["end"] for segment in path["segments"]]]
 
 
 def test_geometry_schema_and_committed_artifact_are_valid() -> None:
@@ -78,13 +82,51 @@ def test_every_duel_path_crosses_its_defensive_line_and_respects_space_change() 
     for branch in geometry["branches"]:
         defensive_y = zones[branch["zone_ref"]]["defensive_line"][0][1]
         for alternative in branch["alternatives"]:
-            ys = [point[1] for point in alternative["points"]]
+            ys = [point[1] for point in _segment_points(alternative)]
             assert max(ys) > defensive_y > min(ys)
             if alternative["kind"] == "feint":
                 assert alternative["initial_space_ref"] != alternative["target_space_ref"]
             else:
                 assert alternative["initial_space_ref"] == alternative["target_space_ref"]
             assert "sense_bot" in alternative["qualifiers"]
+
+
+def test_tactical_spaces_are_hidden_relations_not_renderable_polygons() -> None:
+    geometry = _load(GEOMETRY_PATH)
+
+    for space in geometry["spaces"]:
+        assert space["kind"] == "relational_tactical_space"
+        assert space["relation"]["type"] == "between"
+        assert len(space["relation"]["delimiter_refs"]) == 2
+        assert space["render_policy"] == "hidden"
+        assert "polygon" not in space
+        assert "center" not in space
+        assert space["calculation_region"]
+
+
+def test_paths_are_state_linked_functional_segments_and_feints_keep_the_break() -> None:
+    geometry = _load(GEOMETRY_PATH)
+    states = {state["id"]: state for state in geometry["participant_states"]}
+
+    for entity in geometry["entities"]:
+        if entity.get("state_ref"):
+            assert states[entity["state_ref"]]["participant_ref"] == entity["id"]
+    for path in geometry["common_paths"]:
+        assert path["from_state_ref"] in states
+        assert path["to_state_ref"] in states
+        assert path["segments"]
+        assert "points" not in path
+        if path["action_type"] == "pass":
+            assert path["anchor_mode"] == "symbol_perimeter"
+            assert path["from_participant_ref"] != path["to_participant_ref"]
+    for branch in geometry["branches"]:
+        for alternative in branch["alternatives"]:
+            assert alternative["from_state_ref"] in states
+            assert alternative["to_state_ref"] in states
+            assert alternative["return_pass"]["to_state_ref"] == alternative["from_state_ref"]
+            if alternative["kind"] == "feint":
+                assert [segment["type"] for segment in alternative["segments"]] == ["cubic", "line", "cubic"]
+                assert any(point["role"] == "direction_break" for point in alternative["functional_points"])
 
 
 def test_geometry_resolver_rejects_a_non_ready_input() -> None:

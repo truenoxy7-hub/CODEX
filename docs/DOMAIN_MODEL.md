@@ -109,6 +109,16 @@ La geometria serà derivada de:
 
 Les coordenades no pertanyen al JSON semàntic.
 
+Un espai tàctic continua sent una relació entre delimitadors quan arriba a la
+geometria: pot tenir una regió interna de càlcul, però no es converteix en un
+rectangle visible. En canvi, una delimitació física de la tasca —per exemple
+els cons d'UVOF015— sí que pot tenir geometria de control.
+
+La posició d'un participant es modela amb estats persistents. Una trajectòria
+connecta dos estats del mateix actor i una passada connecta l'estat de
+l'emissor amb el del receptor. Les corbes formen part de la geometria resolta;
+el render només n'executa els segments.
+
 La primera instància executable és UVOF015. Utilitza un perfil de pista IHF
 versionat, exigeix un preflight `ready`, registra fingerprints d'entrada i
 preserva totes les alternatives. Les coordenades de lectura viuen només a
@@ -131,6 +141,10 @@ treball i queda vinculada a un esdeveniment traçable.
 Una correcció és una decisió de l'entrenador sobre una capa i un cas concrets.
 Declara objectiu, propietat, valor anterior i nou, autor, motiu, abast, estat i
 fonts. Les capes són `semantic`, `spatial`, `geometry` i `visual`.
+
+Una correcció d'estat és el canvi principal. Les posicions visibles i les
+trajectòries que se'n deriven són efectes automàtics explicats, no correccions
+independents.
 
 La validació d'un conjunt de correccions crea una versió validada del cas. No
 altera automàticament el corpus, el contracte espacial ni les regles generals.

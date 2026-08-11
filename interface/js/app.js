@@ -4,7 +4,15 @@
   const initialExample = canonicalExamples[0];
   const knowledge = window.TRACA_LOCAL_KNOWLEDGE;
   const courtProfile = window.TRACA_COURT_PROFILE;
-  const persisted = window.TRACA_PERSISTENCE.load();
+  const storedPackage = window.TRACA_PERSISTENCE.load();
+  const persisted = storedPackage
+    && storedPackage.case && storedPackage.case.case_type === "canonical_specimen"
+    && storedPackage.generated_geometry && storedPackage.generated_geometry.meta
+    && storedPackage.generated_geometry.meta.exercise_id === "TR-UVOF-015"
+    && storedPackage.generated_geometry.meta.version !== initialExample.geometry.meta.version
+    && !(storedPackage.corrections || []).length
+      ? { ...storedPackage, generated_geometry: initialExample.geometry, working_geometry: initialExample.geometry, selected_alternatives: null }
+      : storedPackage;
   const store = window.TRACA_STORE.createWorkspaceStore({
     initialCase: initialExample.caseData,
     initialGeometry: initialExample.geometry,
@@ -175,7 +183,7 @@
       const style = snapshot.workingVisualGrammar.entities[resolved.object.kind];
       return style ? { ref: `visual:entity:${resolved.object.kind}`, style } : null;
     }
-    if (resolved.parsed.collection === "common_path" || resolved.parsed.collection === "alternative") {
+    if (resolved.parsed.collection === "common_path" || resolved.parsed.collection === "alternative" || resolved.parsed.collection === "return_pass") {
       const primitive = window.TRACA_VISUAL_GRAMMAR.primitiveForPath(resolved.object.kind, snapshot.workingVisualGrammar);
       const style = snapshot.workingVisualGrammar.paths[primitive];
       return style ? { ref: `visual:primitive:${primitive}`, style } : null;
@@ -192,9 +200,12 @@
     elements.selectedId.textContent = resolved.object.id;
     elements.selectedRef.textContent = resolved.ref;
     const isEntity = resolved.parsed.collection === "entity";
-    const isPath = resolved.parsed.collection === "common_path" || resolved.parsed.collection === "alternative";
-    elements.positionFields.hidden = !isEntity;
-    if (isEntity) { elements.positionX.value = resolved.object.position[0]; elements.positionY.value = resolved.object.position[1]; }
+    const isState = resolved.parsed.collection === "participant_state";
+    const isPath = resolved.parsed.collection === "common_path" || resolved.parsed.collection === "alternative" || resolved.parsed.collection === "return_pass";
+    const linkedState = isEntity && resolved.object.state_ref ? (snapshot.workingGeometry.participant_states || []).find((state) => state.id === resolved.object.state_ref) : null;
+    const positionObject = linkedState || (isEntity || isState ? resolved.object : null);
+    elements.positionFields.hidden = !positionObject;
+    if (positionObject) { elements.positionX.value = positionObject.position[0]; elements.positionY.value = positionObject.position[1]; }
     elements.pathKindField.hidden = !isPath;
     if (isPath) {
       const kinds = ["movement", "movement_without_ball", "pass", "shot", "feint", "continuation", "future_position", "generic_action"];
@@ -219,7 +230,11 @@
     elements.redo.disabled = !snapshot.redoStack.length;
     elements.reset.disabled = !snapshot.corrections.length;
     elements.changeSummary.innerHTML = [...Object.entries(counts), ["conceptes nous", (snapshot.interpretation.unknown_concepts || []).length]].map(([key, value]) => `<div><strong>${value}</strong><small>${escape(key)}</small></div>`).join("");
-    elements.historyList.innerHTML = snapshot.corrections.length ? snapshot.corrections.slice().reverse().map((event) => `<article class="history-item"><header><strong>${escape(event.machine_explanation)}</strong><span>${escape(event.target.layer)}</span></header><p>${escape(event.coach_explanation || "Sense motiu afegit")}</p><p>${escape(event.id)} · ${escape(event.status)}</p><button class="button button-quiet" type="button" data-edit-explanation="${escape(event.id)}">Editar motiu</button></article>`).join("") : '<p class="history-empty">Encara no hi ha correccions.</p>';
+    elements.historyList.innerHTML = snapshot.corrections.length ? snapshot.corrections.slice().reverse().map((event) => {
+      const derived = event.derived_effects || [];
+      const derivedMarkup = derived.length ? `<details><summary>${derived.length} efecte${derived.length === 1 ? "" : "s"} automàtic${derived.length === 1 ? "" : "s"}</summary>${derived.map((effect) => `<p class="derived-effect">↳ ${escape(effect.explanation)} <small>${escape(effect.target_ref)}</small></p>`).join("")}</details>` : "";
+      return `<article class="history-item"><header><strong>${escape(event.machine_explanation)}</strong><span>${escape(event.change_role || "primary")} · ${escape(event.target.layer)}</span></header><p>${escape(event.coach_explanation || "Sense motiu afegit")}</p>${derivedMarkup}<p>${escape(event.id)} · ${escape(event.status)}</p><button class="button button-quiet" type="button" data-edit-explanation="${escape(event.id)}">Editar motiu</button></article>`;
+    }).join("") : '<p class="history-empty">Encara no hi ha correccions.</p>';
     elements.historyList.querySelectorAll("[data-edit-explanation]").forEach((button) => button.addEventListener("click", () => {
       const event = snapshot.corrections.find((item) => item.id === button.dataset.editExplanation);
       const explanation = window.prompt("Per què ho has canviat?", event.coach_explanation || "");
@@ -349,11 +364,15 @@
     if (!resolved) return;
     const reason = elements.correctionReason.value.trim() || "Ajust del tècnic";
     const isEntity = resolved.parsed.collection === "entity";
-    const isPath = resolved.parsed.collection === "common_path" || resolved.parsed.collection === "alternative";
+    const isState = resolved.parsed.collection === "participant_state";
+    const isPath = resolved.parsed.collection === "common_path" || resolved.parsed.collection === "alternative" || resolved.parsed.collection === "return_pass";
     let changes = 0;
-    if (isEntity) {
+    if (isEntity || isState) {
+      const linkedState = isEntity && resolved.object.state_ref ? (snapshot.workingGeometry.participant_states || []).find((state) => state.id === resolved.object.state_ref) : null;
+      const positionObject = linkedState || resolved.object;
+      const targetRef = linkedState ? `geometry:participant_state:${linkedState.id}` : resolved.ref;
       const after = [Number(elements.positionX.value), Number(elements.positionY.value)];
-      if (!window.TRACA_UTILS.sameValue(resolved.object.position, after)) { store.applyCorrection({ target: { layer: "geometry", ref: resolved.ref, property: "position" }, operation: "move", before: resolved.object.position, after, reason, coach_explanation: reason, target_role: resolved.object.kind, source_refs: resolved.source_refs }); changes += 1; }
+      if (!window.TRACA_UTILS.sameValue(positionObject.position, after)) { store.applyCorrection({ target: { layer: "geometry", ref: targetRef, property: "position" }, operation: "move", before: positionObject.position, after, reason, coach_explanation: reason, target_role: resolved.object.kind || resolved.object.participant_ref, source_refs: positionObject.source_refs || resolved.source_refs }); changes += 1; }
     }
     if (isPath && elements.pathKind.value !== resolved.object.kind) { store.applyCorrection({ target: { layer: "semantic", ref: `semantic:action:${resolved.object.id}`, property: "kind" }, operation: "replace", before: resolved.object.kind, after: elements.pathKind.value, reason, coach_explanation: reason, correction_type: "semantic.functional_action", source_refs: resolved.source_refs }); changes += 1; }
     const visual = primitiveForSelection(resolved, snapshot);

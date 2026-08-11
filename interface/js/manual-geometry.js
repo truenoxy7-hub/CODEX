@@ -37,7 +37,7 @@
         attack_direction: "negative_y",
         notes: ["Les coordenades són una referència manual del cas i no una regla tàctica."]
       },
-      zones: [], spaces: [], entities: [], common_paths: [], branches: [], traceability: []
+      zones: [], spaces: [], entities: [], participant_states: [], common_paths: [], branches: [], dependencies: [], traceability: []
     };
   }
 

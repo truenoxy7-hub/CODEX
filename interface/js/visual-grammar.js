@@ -23,16 +23,16 @@
       text: { shape: "text", fill: "transparent", stroke: "transparent", text: "#17241f", radius: 0.1 }
     },
     paths: {
-      movement: { stroke: "#173f33", width: 0.11, dash: null, marker: "arrow", path_mode: "polyline" },
-      movement_without_ball: { stroke: "#173f33", width: 0.11, dash: null, marker: "arrow", path_mode: "polyline" },
-      pass: { stroke: "#d55832", width: 0.09, dash: "0.28 0.2", marker: "arrow", path_mode: "polyline" },
-      shot: { stroke: "#b3232b", width: 0.13, dash: null, marker: "arrow", path_mode: "polyline" },
-      feint: { stroke: "#173f33", width: 0.13, dash: null, marker: "arrow", path_mode: "polyline", preserve_vertices: true },
+      movement: { stroke: "#173f33", width: 0.11, dash: null, marker: "arrow", path_mode: "geometry_segments" },
+      movement_without_ball: { stroke: "#173f33", width: 0.11, dash: null, marker: "arrow", path_mode: "geometry_segments" },
+      pass: { stroke: "#d55832", width: 0.09, dash: "0.28 0.2", marker: "arrow", path_mode: "geometry_segments" },
+      shot: { stroke: "#b3232b", width: 0.13, dash: null, marker: "arrow", path_mode: "geometry_segments" },
+      feint: { stroke: "#173f33", width: 0.13, dash: null, marker: "arrow", path_mode: "functional_segments", preserve_vertices: true },
       future_position: { stroke: "#6f7d78", width: 0.08, dash: "0.18 0.16", marker: null, path_mode: "polyline" },
       generic_action: { stroke: "#6f4e82", width: 0.1, dash: "0.16 0.12", marker: "arrow", path_mode: "polyline" }
     },
     overlays: {
-      spatial_zone: { fill: "#eff7f2", opacity: 0.52, stroke: "#4b7c6c", dash: "0.2 0.13" },
+      spatial_zone: { fill: "none", opacity: 0, stroke: "#4b7c6c", dash: "0.14 0.18" },
       finishing_zone: { fill: "#fbe9df", opacity: 0.62, stroke: "#d06a3a", dash: null },
       defensive_reference: { stroke: "#2668bd", width: 0.06, dash: "0.18 0.14" }
     },

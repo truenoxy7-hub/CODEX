@@ -1,8 +1,9 @@
 (function (root, factory) {
-  const api = factory();
+  const dependencies = typeof module === "object" && module.exports ? require("./geometry-dependencies.js") : root.TRACA_GEOMETRY_DEPENDENCIES;
+  const api = factory(dependencies);
   if (typeof module === "object" && module.exports) module.exports = api;
   root.TRACA_WORKSPACE_PREFLIGHT = api;
-})(typeof globalThis !== "undefined" ? globalThis : this, function () {
+})(typeof globalThis !== "undefined" ? globalThis : this, function (dependenciesApi) {
   "use strict";
 
   function diagnostic(level, code, message, options) {
@@ -39,25 +40,44 @@
     if (geometry && geometry.court) {
       const identityItems = [
         ...(geometry.entities || []),
+        ...(geometry.participant_states || []),
         ...(geometry.zones || []),
         ...(geometry.spaces || []),
         ...(geometry.common_paths || []),
         ...(geometry.branches || []),
-        ...(geometry.branches || []).flatMap((branch) => branch.alternatives || [])
+        ...(geometry.branches || []).flatMap((branch) => (branch.alternatives || []).flatMap((alternative) => alternative.return_pass ? [alternative, alternative.return_pass] : [alternative]))
       ];
       const identityCounts = identityItems.reduce((counts, item) => ({ ...counts, [item.id]: (counts[item.id] || 0) + 1 }), {});
       Object.entries(identityCounts).filter(([, count]) => count > 1).forEach(([id]) => diagnostics.push(diagnostic("error", "DUPLICATE_GEOMETRY_ID", `L’identificador ${id} està duplicat. Cada element gràfic necessita una identitat estable.`, { target_ref: `geometry:identity:${id}`, actions: ["Reanomenar un dels elements"] })));
       (geometry.entities || []).forEach((entity) => {
         if (pointOutside(entity.position, geometry.court)) diagnostics.push(diagnostic("error", "ENTITY_OUT_OF_COURT", `${entity.id} ha quedat fora dels límits de la pista.`, { target_ref: `geometry:entity:${entity.id}`, actions: ["Corregir el gràfic"] }));
       });
+      const states = new Map((geometry.participant_states || []).map((state) => [state.id, state]));
+      const participants = new Map((geometry.entities || []).map((entity) => [entity.id, entity]));
+      (geometry.participant_states || []).forEach((state) => {
+        if (pointOutside(state.position, geometry.court)) diagnostics.push(diagnostic("error", "PARTICIPANT_STATE_OUT_OF_COURT", `${state.id} ha quedat fora dels límits de la pista.`, { target_ref: `geometry:participant_state:${state.id}`, actions: ["Corregir l’estat"] }));
+        if (!participants.has(state.participant_ref)) diagnostics.push(diagnostic("error", "PARTICIPANT_STATE_OWNER_MISSING", `${state.id} referencia un participant inexistent.`, { target_ref: `geometry:participant_state:${state.id}`, actions: ["Reparar la identitat"] }));
+      });
+      (geometry.entities || []).filter((entity) => entity.state_ref).forEach((entity) => {
+        const state = states.get(entity.state_ref);
+        if (!state || state.participant_ref !== entity.id) diagnostics.push(diagnostic("error", "ENTITY_STATE_LINK_INVALID", `${entity.id} no està vinculat a un estat propi vàlid.`, { target_ref: `geometry:entity:${entity.id}`, actions: ["Reparar la dependència"] }));
+      });
       const zones = new Map((geometry.zones || []).map((zone) => [zone.id, zone]));
       const paths = [...(geometry.common_paths || [])];
-      (geometry.branches || []).forEach((branch) => (branch.alternatives || []).forEach((alternative) => paths.push({ ...alternative, zone_ref: branch.zone_ref })));
+      (geometry.branches || []).forEach((branch) => (branch.alternatives || []).forEach((alternative) => {
+        paths.push({ ...alternative, zone_ref: branch.zone_ref });
+        if (alternative.return_pass) paths.push({ ...alternative.return_pass, zone_ref: branch.zone_ref });
+      }));
       paths.forEach((path) => {
-        if ((path.points || []).some((point) => pointOutside(point, geometry.court))) diagnostics.push(diagnostic("error", "PATH_OUT_OF_COURT", `La trajectòria ${path.id} surt fora dels límits de la pista.`, { target_ref: `geometry:path:${path.id}`, actions: ["Corregir el gràfic"] }));
-        if (path.kind === "feint" && !hasDirectionalChange(path.points)) diagnostics.push(diagnostic("error", "FEINT_DIRECTION_MISSING", `La trajectòria ${path.id} està marcada com a finta però ja no mostra un canvi de direcció.`, { target_ref: `semantic:action:${path.id}`, actions: ["Corregir el gràfic", "Registrar que la interpretació semàntica era incorrecta"] }));
+        const points = dependenciesApi.sampledPoints(path);
+        if (points.some((point) => pointOutside(point, geometry.court))) diagnostics.push(diagnostic("error", "PATH_OUT_OF_COURT", `La trajectòria ${path.id} surt fora dels límits de la pista.`, { target_ref: `geometry:path:${path.id}`, actions: ["Corregir el gràfic"] }));
+        const explicitBreak = (path.functional_points || []).some((point) => point.role === "direction_break");
+        if (path.kind === "feint" && ((!path.segments && !hasDirectionalChange(points)) || (path.segments && (!explicitBreak || !hasDirectionalChange(points))))) diagnostics.push(diagnostic("error", "FEINT_DIRECTION_MISSING", `La trajectòria ${path.id} està marcada com a finta però ja no mostra un canvi de direcció funcional.`, { target_ref: `semantic:action:${path.id}`, actions: ["Corregir el gràfic", "Registrar que la interpretació semàntica era incorrecta"] }));
+        if (path.from_state_ref && !states.has(path.from_state_ref)) diagnostics.push(diagnostic("error", "PATH_FROM_STATE_MISSING", `${path.id} no té un estat d’origen vàlid.`, { target_ref: `geometry:path:${path.id}`, actions: ["Reparar la dependència"] }));
+        if (path.to_state_ref && !states.has(path.to_state_ref)) diagnostics.push(diagnostic("error", "PATH_TO_STATE_MISSING", `${path.id} no té un estat de destí vàlid.`, { target_ref: `geometry:path:${path.id}`, actions: ["Reparar la dependència"] }));
+        if (path.action_type === "pass" && (!path.from_participant_ref || !path.to_participant_ref || path.anchor_mode !== "symbol_perimeter")) diagnostics.push(diagnostic("error", "PASS_IDENTITY_LINK_INVALID", `${path.id} no conserva l’origen, el receptor i l’ancoratge visual de la passada.`, { target_ref: `geometry:path:${path.id}`, actions: ["Reparar la passada"] }));
         const zone = zones.get(path.zone_ref);
-        if (path.kind === "feint" && zone && zone.defensive_line && !crossesDefensiveLine(path.points, zone.defensive_line[0][1])) diagnostics.push(diagnostic("error", "FEINT_NO_SUPERATION", `La finta ${path.id} no travessa la línia defensiva que el cas declara com a criteri de superació.`, { target_ref: `geometry:alternative:${path.id}`, actions: ["Corregir el gràfic", "Registrar que la relació espacial estava mal interpretada"] }));
+        if (path.kind === "feint" && zone && zone.defensive_line && !crossesDefensiveLine(points, zone.defensive_line[0][1])) diagnostics.push(diagnostic("error", "FEINT_NO_SUPERATION", `La finta ${path.id} no travessa la línia defensiva que el cas declara com a criteri de superació.`, { target_ref: `geometry:alternative:${path.id}`, actions: ["Corregir el gràfic", "Registrar que la relació espacial estava mal interpretada"] }));
       });
       identityItems.forEach((item) => {
         const refs = item.source_refs || (item.source_ref ? [item.source_ref] : []);

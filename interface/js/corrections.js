@@ -2,10 +2,11 @@
   const isNode = typeof module === "object" && module.exports;
   const utils = isNode ? require("./utils.js") : root.TRACA_UTILS;
   const explainer = isNode ? require("./change-explainer.js") : root.TRACA_CHANGE_EXPLAINER;
-  const api = factory(utils, explainer);
+  const dependencies = isNode ? require("./geometry-dependencies.js") : root.TRACA_GEOMETRY_DEPENDENCIES;
+  const api = factory(utils, explainer, dependencies);
   if (isNode) module.exports = api;
   root.TRACA_CORRECTIONS = api;
-})(typeof globalThis !== "undefined" ? globalThis : this, function (utils, explainer) {
+})(typeof globalThis !== "undefined" ? globalThis : this, function (utils, explainer, dependenciesApi) {
   "use strict";
 
   const LAYERS = ["semantic", "spatial", "geometry", "visual"];
@@ -26,6 +27,8 @@
       branch: "branches",
       zone: "zones",
       space: "spaces",
+      participant_state: "participant_states",
+      return_pass: "return_passes",
       primitive: "paths"
     }[name] || name;
   }
@@ -36,6 +39,14 @@
       for (const branch of geometry.branches || []) {
         const found = (branch.alternatives || []).find((item) => item.id === id);
         if (found) return found;
+      }
+      return null;
+    }
+    if (key === "return_passes") {
+      for (const branch of geometry.branches || []) {
+        for (const alternative of branch.alternatives || []) {
+          if (alternative.return_pass && alternative.return_pass.id === id) return alternative.return_pass;
+        }
       }
       return null;
     }
@@ -96,6 +107,8 @@
     event.correction_type = input.correction_type || `${event.target.layer}.${event.operation}`;
     event.target_role = input.target_role || null;
     event.target_relation = input.target_relation || null;
+    event.change_role = "primary";
+    event.derived_effects = Array.isArray(input.derived_effects) ? utils.deepClone(input.derived_effects) : [];
     return event;
   }
 
@@ -106,6 +119,7 @@
     const target = targetObject(geometry, visualGrammar, event.target);
     if (!target) throw new Error(`CORRECTION_TARGET_NOT_FOUND:${event.target.ref}`);
     utils.writePath(target, event.target.property, event.after);
+    if (geometry) dependenciesApi.reconcileGeometry(geometry);
     return { geometry, visualGrammar, applied: true };
   }
 

@@ -8,7 +8,7 @@
     "id", "timestamp", "target", "operation", "before", "after", "author",
     "scope", "status", "reason", "source_refs", "machine_diff",
     "machine_explanation", "coach_explanation", "concept_refs", "context_refs",
-    "correction_type", "target_role", "target_relation"
+    "correction_type", "target_role", "target_relation", "change_role", "derived_effects"
   ],
   "properties": {
     "id": { "type": "string", "pattern": "^CORR-[A-Za-z0-9_-]+-[0-9]{4}$" },
@@ -48,6 +48,21 @@
     "context_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
     "correction_type": { "type": "string", "minLength": 1 },
     "target_role": { "type": ["string", "null"] },
-    "target_relation": { "type": ["string", "null"] }
+    "target_relation": { "type": ["string", "null"] },
+    "change_role": { "const": "primary" },
+    "derived_effects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["target_ref", "property", "explanation", "reason"],
+        "properties": {
+          "target_ref": {"type": "string", "minLength": 1},
+          "property": {"type": "string", "minLength": 1},
+          "explanation": {"type": "string", "minLength": 1},
+          "reason": {"const": "state_drives_geometry"}
+        }
+      }
+    }
   }
 }

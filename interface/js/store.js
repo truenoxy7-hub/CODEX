@@ -2,13 +2,14 @@
   const isNode = typeof module === "object" && module.exports;
   const utils = isNode ? require("./utils.js") : root.TRACA_UTILS;
   const corrections = isNode ? require("./corrections.js") : root.TRACA_CORRECTIONS;
+  const dependencies = isNode ? require("./geometry-dependencies.js") : root.TRACA_GEOMETRY_DEPENDENCIES;
   const manual = isNode ? require("./manual-geometry.js") : root.TRACA_MANUAL_GEOMETRY;
   const promotion = isNode ? require("./promotion.js") : root.TRACA_PROMOTION;
   const preflight = isNode ? require("./workspace-preflight.js") : root.TRACA_WORKSPACE_PREFLIGHT;
-  const api = factory(utils, corrections, manual, promotion, preflight);
+  const api = factory(utils, corrections, dependencies, manual, promotion, preflight);
   if (isNode) module.exports = api;
   root.TRACA_STORE = api;
-})(typeof globalThis !== "undefined" ? globalThis : this, function (utils, correctionsApi, manualApi, promotionApi, preflightApi) {
+})(typeof globalThis !== "undefined" ? globalThis : this, function (utils, correctionsApi, dependenciesApi, manualApi, promotionApi, preflightApi) {
   "use strict";
 
   const WORKSPACE_VERSION = "0.3.0";
@@ -156,6 +157,7 @@
         else if (state.workingGeometry || event.target.layer === "visual") correctionsApi.applyEvent(state.workingGeometry, state.workingVisualGrammar, event);
         if (event.target.layer === "visual") state.caseVisualOverrides.push({ event_ref: event.id, target: utils.deepClone(event.target), value: utils.deepClone(event.after) });
       });
+      if (state.workingGeometry) dependenciesApi.reconcileGeometry(state.workingGeometry);
       state.validation = { status: state.corrections.length ? "changes_pending" : "pending", validated_at: null, correction_count: state.corrections.length, counts_by_layer: {}, preflight: null };
       state.validatedGeometry = null;
       state.validatedVisualGrammar = null;
@@ -239,6 +241,10 @@
     function applyCorrection(input) {
       const target = utils.deepClone(input.target);
       const before = input.before === undefined ? correctionsApi.readTarget(state.workingGeometry, state.workingVisualGrammar, target) : utils.deepClone(input.before);
+      const parsed = target.layer === "geometry" ? correctionsApi.parseRef(target.ref) : null;
+      const derivedEffects = parsed && parsed.collection === "participant_state"
+        ? dependenciesApi.derivedEffectsFor(state.workingGeometry, target.ref)
+        : [];
       correctionSequence += 1;
       const event = correctionsApi.createEvent({
         ...input,
@@ -246,6 +252,7 @@
         timestamp: input.timestamp || now(),
         target,
         before,
+        derived_effects: input.derived_effects || derivedEffects,
         coach_explanation: input.coach_explanation || input.reason || ""
       });
       state.corrections.push(event);

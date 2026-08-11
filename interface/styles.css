@@ -165,12 +165,13 @@ input, select { min-height: 34px; padding: 6px 8px; font-size: 11px; }
 .court-footer { min-height: 36px; padding: 8px 13px; display: flex; justify-content: space-between; align-items: center; gap: 12px; color: var(--muted); border-top: 1px solid var(--line); font-size: 9px; }
 .court-footer a { white-space: nowrap; }
 .selectable { cursor: pointer; }
-.entity-node { cursor: grab; }
-.entity-node:active, .path-handle:active { cursor: grabbing; }
+.entity-node, .participant-state-node { cursor: grab; }
+.entity-node:active, .participant-state-node:active, .path-handle:active { cursor: grabbing; }
 .selectable.is-selected { filter: drop-shadow(0 0 .14px #fff) drop-shadow(0 0 .2px #173f33); }
 .exercise-path { cursor: pointer; }
 .path-handle { cursor: grab; vector-effect: non-scaling-stroke; }
-.overlay-zone:hover, .overlay-space:hover { fill-opacity: .7; }
+.overlay-zone:hover { stroke-opacity: .8; }
+.overlay-space:hover { fill-opacity: 1; }
 
 .selection-type { padding: 5px 7px; color: var(--muted); background: var(--surface-alt); border-radius: 5px; font-size: 8px; font-weight: 800; }
 .empty-state { min-height: 180px; padding: 25px 12px; display: grid; place-items: center; align-content: center; text-align: center; color: var(--muted); border: 1px dashed var(--line-strong); border-radius: 8px; }
@@ -201,6 +202,8 @@ input, select { min-height: 34px; padding: 6px 8px; font-size: 11px; }
 .history-item header { display: flex; justify-content: space-between; gap: 8px; font-size: 8px; }
 .history-item strong { font-size: 9px; }
 .history-item p { margin: 4px 0 0; color: var(--muted); font-size: 8px; line-height: 1.4; }
+.history-item details { margin-top: 6px; padding-top: 5px; border-top: 1px solid var(--line); color: var(--green); font-size: 8px; }
+.history-item .derived-effect small { display: block; overflow-wrap: anywhere; color: var(--muted); }
 .validation-grid, .trace-grid { display: grid; grid-template-columns: repeat(4, minmax(120px, 1fr)); gap: 8px; }
 .summary-cell, .library-card { padding: 9px; background: var(--surface-alt); border: 1px solid var(--line); border-radius: 6px; }
 .summary-cell small, .library-card small { display: block; color: var(--muted); font-size: 8px; }

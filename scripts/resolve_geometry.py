@@ -18,7 +18,7 @@ from scripts.spatial_preflight import preflight_document
 
 SPATIAL_PATH = ROOT / "exercises/TR-UVOF-015/spatial-relations.json"
 COURT_PROFILE_PATH = ROOT / "config/handball-court.ihf-2025.json"
-GEOMETRY_SCHEMA_PATH = ROOT / "schema/traca.geometry.schema.v0.1.json"
+GEOMETRY_SCHEMA_PATH = ROOT / "schema/traca.geometry.schema.v0.2.json"
 GEOMETRY_PATH = ROOT / "exercises/TR-UVOF-015/geometry.json"
 INTERFACE_BUNDLE_PATH = ROOT / "interface/data/uvof015.geometry.js"
 COURT_INTERFACE_BUNDLE_PATH = ROOT / "interface/data/court-profile.js"
@@ -106,6 +106,25 @@ def _rectangle(left: float, top: float, right: float, bottom: float) -> list[lis
     ]
 
 
+def _line(start: list[float], end: list[float]) -> Document:
+    return {"type": "line", "start": start, "end": end}
+
+
+def _cubic(
+    start: list[float],
+    control1: list[float],
+    control2: list[float],
+    end: list[float],
+) -> Document:
+    return {
+        "type": "cubic",
+        "start": start,
+        "control1": control1,
+        "control2": control2,
+        "end": end,
+    }
+
+
 def _alternative_spaces(alternative_id: str, spaces: tuple[str, str]) -> tuple[str, str]:
     space_a, space_b = spaces
     if alternative_id.endswith("CONTINUA_A"):
@@ -138,8 +157,10 @@ def resolve_uvof015_geometry(
     zones: list[Document] = []
     spaces: list[Document] = []
     entities: list[Document] = []
+    participant_states: list[Document] = []
     common_paths: list[Document] = []
     branches: list[Document] = []
+    dependencies: list[Document] = []
     traceability: list[Document] = []
     entity_ids: set[str] = set()
 
@@ -149,13 +170,13 @@ def resolve_uvof015_geometry(
         label: str,
         x: float,
         y: float,
+        state_ref: str | None = None,
     ) -> None:
         if entity_id in entity_ids:
             return
         index, _ = node_index[entity_id]
         source = _source_ref("nodes", index)
-        entities.append(
-            {
+        entity = {
                 "id": entity_id,
                 "kind": kind,
                 "label": label,
@@ -163,7 +184,9 @@ def resolve_uvof015_geometry(
                 "source_ref": source,
                 "status": "derived",
             }
-        )
+        if state_ref:
+            entity["state_ref"] = state_ref
+        entities.append(entity)
         traceability.append(
             {"geometry_ref": f"geometry:entity:{entity_id}", "source_refs": [source]}
         )
@@ -186,6 +209,7 @@ def resolve_uvof015_geometry(
         zones.append(
             {
                 "id": spec["zone"],
+                "kind": "physical_task_boundary",
                 "source_ref": zone_source,
                 "polygon": _rectangle(left_x, 5.15, right_x, 15.25),
                 "limit_refs": [left_limit, right_limit],
@@ -194,6 +218,7 @@ def resolve_uvof015_geometry(
                     _point(left_x + 0.35, defender_y),
                     _point(right_x - 0.35, defender_y),
                 ],
+                "render_policy": "control_only",
             }
         )
         traceability.append(
@@ -213,20 +238,45 @@ def resolve_uvof015_geometry(
             spaces.append(
                 {
                     "id": space_id,
+                    "kind": "relational_tactical_space",
                     "source_ref": source,
                     "zone_ref": spec["zone"],
                     "defender_ref": spec["defender"],
-                    "polygon": _rectangle(start_x + 0.08, 5.45, end_x - 0.08, 11.05),
-                    "center": _point(space_centers[space_id], 8.25),
+                    "relation": {
+                        "type": "between",
+                        "delimiter_refs": [
+                            left_limit if start_x == left_x else spec["defender"],
+                            spec["defender"] if end_x == defender_x else right_limit,
+                        ],
+                    },
+                    "anchor": _point(space_centers[space_id], 8.25),
+                    "calculation_region": _rectangle(start_x + 0.08, 5.45, end_x - 0.08, 11.05),
+                    "render_policy": "hidden",
                 }
             )
             traceability.append(
                 {"geometry_ref": f"geometry:space:{space_id}", "source_refs": [source]}
             )
 
-        add_entity(spec["attacker"], "attacker", "A", defender_x, attacker_y)
-        add_entity(spec["passer"], "passer", "P", defender_x, passer_y)
-        add_entity(spec["defender"], "defender", "D", defender_x, defender_y)
+        attacker_source = _source_ref("nodes", node_index[spec["attacker"]][0])
+        passer_source = _source_ref("nodes", node_index[spec["passer"]][0])
+        defender_source = _source_ref("nodes", node_index[spec["defender"]][0])
+        current_attacker = f"STATE_{spec['suffix']}_A_CURRENT"
+        current_passer = f"STATE_{spec['suffix']}_P_CURRENT"
+        current_defender = f"STATE_{spec['suffix']}_D_CURRENT"
+        run_state = f"STATE_{spec['suffix']}_A_RUN"
+        for state in (
+            {"id": current_attacker, "participant_ref": spec["attacker"], "state_id": "current", "phase": "initial", "position": _point(defender_x, attacker_y), "status": "current", "visibility": "normal", "source_refs": [attacker_source]},
+            {"id": current_passer, "participant_ref": spec["passer"], "state_id": "current", "phase": "initial", "position": _point(defender_x, passer_y), "status": "current", "visibility": "normal", "source_refs": [passer_source]},
+            {"id": current_defender, "participant_ref": spec["defender"], "state_id": "current", "phase": "duel", "position": _point(defender_x, defender_y), "status": "current", "visibility": "normal", "source_refs": [defender_source]},
+            {"id": run_state, "participant_ref": spec["attacker"], "state_id": "run", "phase": "approach", "position": _point(defender_x, 11.05), "status": "future", "visibility": "control", "source_refs": [attacker_source]},
+        ):
+            participant_states.append(state)
+            traceability.append({"geometry_ref": f"geometry:participant_state:{state['id']}", "source_refs": state["source_refs"]})
+
+        add_entity(spec["attacker"], "attacker", "A", defender_x, attacker_y, current_attacker)
+        add_entity(spec["passer"], "passer", "P", defender_x, passer_y, current_passer)
+        add_entity(spec["defender"], "defender", "D", defender_x, defender_y, current_defender)
         add_entity(spec["ball"], "ball", "", defender_x + 0.34, attacker_y - 0.12)
 
         attacker_index, _ = node_index[spec["attacker"]]
@@ -240,11 +290,17 @@ def resolve_uvof015_geometry(
                 {
                     "id": f"PATH_{spec['suffix']}_PASSADA_INICIAL",
                     "kind": "initial_pass",
-                    "points": [
-                        _point(defender_x, attacker_y - 0.15),
-                        _point(defender_x + 0.62, 15.45),
-                        _point(defender_x, passer_y - 0.25),
+                    "action_type": "pass",
+                    "ball_ref": spec["ball"],
+                    "from_participant_ref": spec["attacker"],
+                    "from_state_ref": current_attacker,
+                    "to_participant_ref": spec["passer"],
+                    "to_state_ref": current_passer,
+                    "anchor_mode": "symbol_perimeter",
+                    "segments": [
+                        _cubic(_point(defender_x, attacker_y), _point(defender_x + 0.62, 14.9), _point(defender_x + 0.62, 16.25), _point(defender_x, passer_y)),
                     ],
+                    "functional_points": [],
                     "source_refs": [
                         _source_ref("transicions", initial_transition_index),
                         _source_ref("nodes", attacker_index),
@@ -254,11 +310,14 @@ def resolve_uvof015_geometry(
                 {
                     "id": f"PATH_{spec['suffix']}_CURSA_SENSE_PILOTA",
                     "kind": "run_without_ball",
-                    "points": [
-                        _point(defender_x, attacker_y - 0.35),
-                        _point(defender_x, 12.45),
-                        _point(defender_x, 11.05),
+                    "action_type": "movement",
+                    "actor_ref": spec["attacker"],
+                    "from_state_ref": current_attacker,
+                    "to_state_ref": run_state,
+                    "segments": [
+                        _cubic(_point(defender_x, attacker_y), _point(defender_x, 13.1), _point(defender_x, 12.0), _point(defender_x, 11.05)),
                     ],
+                    "functional_points": [],
                     "source_refs": [
                         _source_ref("transicions", receive_transition_index),
                         _source_ref("nodes", attacker_index),
@@ -280,45 +339,76 @@ def resolve_uvof015_geometry(
             transition_position, transition = transition_index[transition_id]
             is_feint = transition["tipus"] == "finta"
 
-            if is_feint:
-                path_points = [
-                    _point(initial_x, 10.75),
-                    _point(initial_x, 8.35),
-                    _point(initial_x, 7.9),
-                    _point((initial_x + target_x) / 2, 7.55),
-                    _point(target_x, 6.65),
-                    _point(target_x, 5.75),
-                ]
-            else:
-                path_points = [
-                    _point(initial_x, 10.75),
-                    _point(initial_x, 8.3),
-                    _point(target_x, 5.75),
-                ]
-
             alternative_source = (
                 f"exercises/TR-UVOF-015/spatial-relations.json#/"
                 f"branques_decisionals/{branch_position}/alternatives/"
                 f"{alternative_position}"
             )
             transition_source = _source_ref("transicions", transition_position)
+            state_token = token.replace("_", "-")
+            receive_state = f"STATE_{spec['suffix']}_A_RECEIVE_{state_token}"
+            final_state = f"STATE_{spec['suffix']}_A_FINAL_{state_token}"
+            alternative_refs = [alternative["id"]]
+            participant_states.extend(
+                [
+                    {"id": receive_state, "participant_ref": spec["attacker"], "state_id": f"receive_{state_token.lower()}", "phase": "reception", "position": _point(initial_x, 10.75), "status": "future", "visibility": "selected_alternative", "alternative_refs": alternative_refs, "source_refs": [transition_source]},
+                    {"id": final_state, "participant_ref": spec["attacker"], "state_id": f"final_{state_token.lower()}", "phase": "resolution", "position": _point(target_x, 5.75), "status": "future", "visibility": "selected_alternative", "alternative_refs": alternative_refs, "source_refs": [transition_source]},
+                ]
+            )
+            if is_feint:
+                commitment = _point(initial_x, 7.9)
+                exit_point = _point((initial_x + target_x) / 2, 7.25)
+                segments = [
+                    _cubic(_point(initial_x, 10.75), _point(initial_x, 9.75), _point(initial_x, 8.55), commitment),
+                    _line(commitment, exit_point),
+                    _cubic(exit_point, _point(target_x, 6.95), _point(target_x, 6.2), _point(target_x, 5.75)),
+                ]
+                functional_points = [
+                    {"id": f"FP_{alternative['id']}_COMPROMIS", "role": "direction_break", "position": commitment},
+                    {"id": f"FP_{alternative['id']}_SORTIDA", "role": "exit", "position": exit_point},
+                ]
+            else:
+                segments = [
+                    _cubic(_point(initial_x, 10.75), _point(initial_x, 9.55), _point(target_x, 7.05), _point(target_x, 5.75)),
+                ]
+                functional_points = []
+            return_pass_id = f"PATH_{alternative['id']}_PASSADA_RETORN"
             geometry_alternatives.append(
                 {
                     "id": alternative["id"],
                     "source_ref": alternative_source,
                     "transition_ref": transition_source,
                     "kind": "feint" if is_feint else "continuation",
+                    "action_type": "movement",
+                    "actor_ref": spec["attacker"],
+                    "from_state_ref": receive_state,
+                    "to_state_ref": final_state,
                     "initial_space_ref": initial_space,
                     "target_space_ref": target_space,
-                    "points": path_points,
-                    "return_ball_points": [
-                        _point(defender_x, passer_y - 0.25),
-                        _point(defender_x - 0.68, 13.35),
-                        _point(initial_x, 10.75),
-                    ],
+                    "segments": segments,
+                    "functional_points": functional_points,
+                    "return_pass": {
+                        "id": return_pass_id,
+                        "kind": "return_pass",
+                        "action_type": "pass",
+                        "ball_ref": spec["ball"],
+                        "from_participant_ref": spec["passer"],
+                        "from_state_ref": current_passer,
+                        "to_participant_ref": spec["attacker"],
+                        "to_state_ref": receive_state,
+                        "anchor_mode": "symbol_perimeter",
+                        "segments": [_cubic(_point(defender_x, passer_y), _point(defender_x - 0.68, 14.9), _point(initial_x + 0.25, 12.25), _point(initial_x, 10.75))],
+                        "functional_points": [],
+                        "source_refs": [transition_source, passer_source, attacker_source],
+                    },
                     "qualifiers": deepcopy(transition.get("qualificadors", [])),
                 }
             )
+            for state_ref, effects in (
+                (receive_state, [f"geometry:alternative:{alternative['id']}", f"geometry:return_pass:{return_pass_id}"]),
+                (final_state, [f"geometry:alternative:{alternative['id']}"]),
+            ):
+                dependencies.append({"id": f"DEP_{state_ref}", "trigger_ref": f"geometry:participant_state:{state_ref}", "effect_refs": effects, "rule": "state_drives_geometry"})
             traceability.append(
                 {
                     "geometry_ref": f"geometry:alternative:{alternative['id']}",
@@ -335,15 +425,23 @@ def resolve_uvof015_geometry(
                 "alternatives": geometry_alternatives,
             }
         )
+        dependencies.extend(
+            [
+                {"id": f"DEP_{current_attacker}", "trigger_ref": f"geometry:participant_state:{current_attacker}", "effect_refs": [f"geometry:entity:{spec['attacker']}", f"geometry:common_path:PATH_{spec['suffix']}_PASSADA_INICIAL", f"geometry:common_path:PATH_{spec['suffix']}_CURSA_SENSE_PILOTA"], "rule": "state_drives_geometry"},
+                {"id": f"DEP_{current_passer}", "trigger_ref": f"geometry:participant_state:{current_passer}", "effect_refs": [f"geometry:entity:{spec['passer']}"] + [f"geometry:return_pass:PATH_{item['id']}_PASSADA_RETORN" for item in branch["alternatives"]], "rule": "state_drives_geometry"},
+                {"id": f"DEP_{current_defender}", "trigger_ref": f"geometry:participant_state:{current_defender}", "effect_refs": [f"geometry:entity:{spec['defender']}"], "rule": "state_drives_geometry"},
+                {"id": f"DEP_{run_state}", "trigger_ref": f"geometry:participant_state:{run_state}", "effect_refs": [f"geometry:common_path:PATH_{spec['suffix']}_CURSA_SENSE_PILOTA"], "rule": "state_drives_geometry"},
+            ]
+        )
 
     court = court_profile["court"]
     goal = court_profile["goal"]
     markings = court_profile["markings"]
     result: Document = {
-        "$schema": "../../schema/traca.geometry.schema.v0.1.json",
+        "$schema": "../../schema/traca.geometry.schema.v0.2.json",
         "meta": {
             "format": "TRACA_geometria_derivada",
-            "version": "0.1.0",
+            "version": "0.2.0",
             "exercise_id": "TR-UVOF-015",
             "status": "derived_from_ready_contract",
             "source_spatial_ref": "exercises/TR-UVOF-015/spatial-relations.json",
@@ -359,7 +457,7 @@ def resolve_uvof015_geometry(
             "view_box": [-0.8, -1.0, 21.6, 21.8],
         },
         "layout_policy": {
-            "id": "uvof015_three_zones_v0.1",
+            "id": "uvof015_three_zones_v0.2",
             "status": "provisional_render_policy",
             "coordinate_system": "metres_origin_goal_line_left",
             "attack_direction": "negative_y",
@@ -367,13 +465,17 @@ def resolve_uvof015_geometry(
                 "Les amplades de les tres zones són una política visual simètrica, no coneixement tàctic.",
                 "Cap alternativa decisional se selecciona al JSON; la interfície només en previsualitza una per duel.",
                 "Les posicions es deriven després d'un preflight ready i no modifiquen la font espacial.",
+                "Els espais tàctics són relacions internes ocultes; només els límits físics poden aparèixer en control.",
+                "Les corbes i els canvis de direcció provenen de segments funcionals resolts, no del renderer.",
             ],
         },
         "zones": zones,
         "spaces": spaces,
         "entities": entities,
+        "participant_states": participant_states,
         "common_paths": common_paths,
         "branches": branches,
+        "dependencies": dependencies,
         "traceability": traceability,
     }
     Draft202012Validator(
