@@ -150,10 +150,11 @@ recupera i `EXT_2` resol el segon 2x1 amb `L` contra `D1`.
 
 ## TR-UVOF-008
 
-És un `6x6` complet contra `5:1`. `CE` col·loca `PV` i mobilitza `DAV` cap a la
-mateixa zona sense que l'avançat intervingui sobre el pivot. Aquesta
-concentració afavoreix el 1x1 de `L_OPOSAT` a la banda alliberada. La
-continuïtat posterior és oberta.
+És un `6x6` complet contra `5:1`. `PV` ocupa el `2–3` local i `CE`, que inicia
+amb pilota, mobilitza `DAV` cap a aquesta mateixa zona sense que l'avançat
+intervingui sobre el pivot. Després `CE` passa a `L_OPOSAT`: el lateral pot
+atacar lliurement `1–2` o `2–3` a la banda alliberada i resoldre amb
+finalització, continuïtat o encreuament.
 
 ## TR-UVOF-009
 

@@ -925,12 +925,27 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
         for phase in uvof_008.get("fases", [])
         for action in phase.get("accions", [])
     }
+    balls_008 = {
+        ball.get("id"): ball.get("posseidor_inicial")
+        for ball in uvof_008.get("pilotes", [])
+    }
+    flows_008 = {
+        (
+            flow.get("pilota_id"),
+            flow.get("posseidor_inicial"),
+            flow.get("posseidor_final"),
+            flow.get("accio"),
+        )
+        for flow in _corpus_ball_flows(uvof_008)
+    }
     if (
         attackers_008 != expected_attackers_008
         or defenders_008 != expected_defenders_008
         or uvof_008.get("tipus_exercici") != "situacio_partit"
         or uvof_008.get("organitzacio", {}).get("relacio") != "6x6"
         or uvof_008.get("organitzacio", {}).get("defensa") != "5:1"
+        or balls_008 != {"B1": "CE"}
+        or flows_008 != {("B1", "CE", "L_OPOSAT", "passada")}
         or (
             "CE",
             "mobilitzar_avancat_cap_a_la_mateixa_zona_del_pivot",
@@ -944,7 +959,7 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
                 "path": "TR-UVOF-008",
                 "message": (
                     "TR-UVOF-008 ha de conservar el 6x6 complet contra 5:1, "
-                    "amb CE concentrant PV i DAV per alliberar L_OPOSAT."
+                    "amb CE concentrant PV i DAV i passant a L_OPOSAT."
                 ),
             }
         )
@@ -1622,7 +1637,7 @@ def _spatial_custom_errors(
                 else f"restriccions/{definition_index - 1}"
             )
             for argument in definition.get("arguments", []):
-                if argument not in node_ids:
+                if argument not in node_ids and argument not in spaces_by_id:
                     errors.append(
                         {
                             "code": "SPATIAL_UNKNOWN_BOUNDARY",

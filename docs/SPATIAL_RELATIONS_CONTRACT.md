@@ -287,14 +287,17 @@ informació absent i retorna `partial`.
 La vuitena instància representa:
 
 - els sis atacants i els sis defensors d'un `5:1` complet;
-- `CE` col·locant `PV` i mobilitzant `DAV` cap a la mateixa zona;
+- `PV` ocupant l'interval local `2–3` entre `D2_LOCAL` i `D3_CENTRAL`;
+- `CE` iniciant amb pilota, col·locant `PV` i mobilitzant `DAV` cap a la
+  mateixa zona;
 - `DAV` sense intervenir sobre el pivot;
-- l'espai afavorit per al 1x1 de `L_OPOSAT`;
+- la passada `CE → L_OPOSAT` després de mobilitzar l'avançat;
+- la llibertat de `L_OPOSAT` per atacar `1–2` o `2–3` a la banda afavorida;
 - finalització, continuïtat o encreuament com a alternatives obertes.
 
-`ZONA_CONCENTRACIO` i l'ocupació de `PV` formen el cicle no ancorat documentat
-per l'auditoria. No s'hi afegeix cap ancoratge inventat. Juntament amb la
-informació de pilota no especificada, el resultat és `blocked`.
+`ZONA_CONCENTRACIO` queda ancorada dins `INT_23_LOCAL` i el flux de pilota es
+conserva explícitament. Ambdues dades han estat validades per l'entrenador i el
+resultat del preflight passa a `ready` sense afegir geometria.
 
 ## Instància TR-UVOF-009
 

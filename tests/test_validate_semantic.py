@@ -566,6 +566,17 @@ def test_corpus_rejects_incomplete_51_in_uvof008(valid_corpus, corpus_schema):
     ]
 
 
+def test_corpus_rejects_wrong_ball_flow_in_uvof008(valid_corpus, corpus_schema):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-008")
+    exercise["fases"][0]["fluxos_pilota"][0]["posseidor_final"] = "L_LOCAL"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF008_FULL_6X6_51" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
 def test_corpus_rejects_wrong_first_holder_in_uvof009(valid_corpus, corpus_schema):
     exercise = _corpus_exercise(valid_corpus, "TR-UVOF-009")
     exercise["pilotes"][0]["posseidor_inicial"] = "PV"

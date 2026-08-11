@@ -631,6 +631,9 @@
         {"id": "D1_OPOSAT", "rol_inicial": "primer_defensor_banda_alliberada", "equip": "defensa"},
         {"id": "DAV", "rol_inicial": "avancat_defensiu", "equip": "defensa"}
       ],
+      "pilotes": [
+        {"id": "B1", "posseidor_inicial": "CE"}
+      ],
       "fases": [
         {
           "id": "F1",
@@ -640,7 +643,9 @@
             {"ordre": 2, "actor": "CE", "accio": "mobilitzar_avancat_cap_a_la_mateixa_zona_del_pivot", "estat_coneixement": "validat"},
             {"ordre": 3, "actor": "L_OPOSAT", "accio": "iniciar_1x1_a_lespai_afavorit", "estat_coneixement": "validat"}
           ],
-          "fluxos_pilota": [],
+          "fluxos_pilota": [
+            {"pilota_id": "B1", "posseidor_inicial": "CE", "accio": "passada", "posseidor_final": "L_OPOSAT"}
+          ],
           "decisions": [
             {"id": "D_POST_1X1", "condicio": "resposta_defensiva", "caracter": "disponible", "opcions": ["finalitzar", "continuïtat", "encreuament"]}
           ]
@@ -648,7 +653,9 @@
       ],
       "invariants": [
         "l'avançat no intervé sobre el pivot",
+        "el pivot ocupa l'interval 2-3 de la banda de concentració",
         "el central mobilitza l'avançat sobre la mateixa zona del pivot",
+        "el central inicia amb pilota i passa al lateral oposat després de mobilitzar l'avançat",
         "la concentració defensiva afavoreix l'espai del lateral",
         "és un 6x6 amb els sis rols atacants i els sis rols defensius del 5:1",
         "tot exercici 6x6 es categoritza com a situació de partit"
@@ -656,6 +663,9 @@
       "validacions_entrenador": [
         "central_com_a_organitzador_de_la_concentracio_defensiva",
         "avancat_no_contacta_pivot",
+        "pivot_a_2-3_banda_concentracio",
+        "flux_CE_a_L_OPOSAT",
+        "llibertat_L_OPOSAT_1-2_o_2-3",
         "6x6_contra_5:1_amb_rols_complets"
       ]
     },

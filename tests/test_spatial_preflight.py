@@ -29,7 +29,7 @@ EXPECTED_STATUSES = {
     "TR-UVOF-005": "partial",
     "TR-UVOF-006": "ready",
     "TR-UVOF-007": "partial",
-    "TR-UVOF-008": "blocked",
+    "TR-UVOF-008": "ready",
     "TR-UVOF-009": "ready",
     "TR-UVOF-010": "blocked",
     "TR-UVOF-011": "blocked",
@@ -276,11 +276,38 @@ def test_2x1_roles_and_typed_conditions_resolve() -> None:
     assert "TYPED_CONDITION_ORIGIN_MISMATCH" in _codes(result)
 
 
-def test_uvof008_and_uvof010_cycles_are_detected_without_anchors() -> None:
-    for exercise_id in ("TR-UVOF-008", "TR-UVOF-010"):
-        result = preflight_document(_load(exercise_id))
-        assert result["status"] == "blocked"
-        assert "SPATIAL_UNANCHORED_CYCLE" in _codes(result)
+def test_uvof008_is_anchored_and_uvof010_cycle_remains_detected() -> None:
+    anchored = _load("TR-UVOF-008")
+    assert preflight_document(anchored)["status"] == "ready"
+
+    concentration = next(
+        space
+        for space in anchored["espais"]
+        if space["id"] == "ZONA_CONCENTRACIO"
+    )
+    concentration["definicio"] = {
+        "operador": "proper_a",
+        "arguments": ["PV"],
+    }
+    frame = next(
+        frame
+        for frame in anchored["operator_frames"]
+        if frame["space_ref"] == "traca:TR-UVOF-008:space:ZONA_CONCENTRACIO"
+    )
+    frame["operator"] = "proper_a"
+    dependency = next(
+        dependency
+        for dependency in anchored["dependencies"]
+        if dependency["from_ref"]
+        == "traca:TR-UVOF-008:space:ZONA_CONCENTRACIO"
+    )
+    dependency["to_ref"] = "traca:TR-UVOF-008:node:PV"
+    _refresh_digest(anchored)
+    assert "SPATIAL_UNANCHORED_CYCLE" in _codes(preflight_document(anchored))
+
+    unresolved = preflight_document(_load("TR-UVOF-010"))
+    assert unresolved["status"] == "blocked"
+    assert "SPATIAL_UNANCHORED_CYCLE" in _codes(unresolved)
 
 
 def test_uvof014_keeps_six_individually_identifiable_options() -> None:
@@ -322,16 +349,31 @@ def test_removing_an_option_or_flow_is_a_destructive_failure() -> None:
     )
 
 
-def test_uvof005_007_008_do_not_receive_invented_flows() -> None:
+def test_uvof005_and_007_do_not_receive_invented_flows() -> None:
     expected_codes = {
         "TR-UVOF-005": "SEMANTIC_BALL_FLOW_UNSPECIFIED",
         "TR-UVOF-007": "SEMANTIC_BALL_INFORMATION_UNSPECIFIED",
-        "TR-UVOF-008": "SEMANTIC_BALL_INFORMATION_UNSPECIFIED",
     }
     for exercise_id, code in expected_codes.items():
         document = _load(exercise_id)
         assert document["fluxos_pilota"] == []
         assert code in _codes(preflight_document(document))
+
+
+def test_uvof008_preserves_validated_initial_ball_flow() -> None:
+    document = _load("TR-UVOF-008")
+
+    assert {
+        node["id"] for node in document["nodes"] if node["classe"] == "pilota"
+    } == {"B1"}
+    assert [
+        (
+            flow["pilota_id"],
+            flow["posseidor_inicial"],
+            flow["posseidor_final"],
+        )
+        for flow in document["fluxos_pilota"]
+    ] == [("B1", "CE", "L_OPOSAT")]
 
 
 def test_uvof015_blocks_missing_adjacent_feint_space_and_incomplete_frames() -> None:

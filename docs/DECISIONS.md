@@ -264,3 +264,16 @@ delimita l'espai d'execució i resolució de `SA2`.
 
 **Efecte tècnic:** s'elimina `SEMANTIC_SOURCE_CONFLICT` d'UVOF001 i el
 preflight passa de `blocked` a `ready`, sense introduir geometria.
+
+## D-032 — Ancoratge i flux validats d'UVOF008
+
+**Decisió de l'entrenador:** `PV` ocupa l'interval `2–3` de la banda de
+concentració. `CE` inicia amb pilota, mobilitza `DAV` cap a la mateixa zona
+sense que l'avançat intervingui sobre el pivot i passa a `L_OPOSAT`.
+`L_OPOSAT` pot atacar lliurement `1–2` o `2–3` a la banda alliberada i resoldre
+amb finalització, continuïtat o encreuament.
+
+**Efecte tècnic:** `ZONA_CONCENTRACIO` s'ancora a `INT_23_LOCAL`, es preserva
+el flux `B1: CE → L_OPOSAT` i desapareixen tant el cicle no ancorat com la
+pilota no especificada. El preflight d'UVOF008 passa de `blocked` a `ready`
+sense introduir coordenades.

@@ -127,6 +127,13 @@
       "classe": "referencia_funcional",
       "funcio": "referencia_central",
       "estat_coneixement": "validat"
+    },
+    {
+      "id": "B1",
+      "classe": "pilota",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/7/pilotes/0",
+      "funcio": "pilota_semantica_B1",
+      "estat_coneixement": "validat"
     }
   ],
   "espais": [
@@ -266,9 +273,9 @@
       "classe": "posicio_funcional",
       "nom_canonic": "zona_compartida_de_concentracio_pivot_avancat",
       "definicio": {
-        "operador": "proper_a",
+        "operador": "interior_de",
         "arguments": [
-          "PV"
+          "INT_23_LOCAL"
         ]
       },
       "fases_actives": [
@@ -518,7 +525,23 @@
       "estat_coneixement": "validat"
     }
   ],
-  "fluxos_pilota": [],
+  "fluxos_pilota": [
+    {
+      "id": "FP_F1_B1",
+      "fase_ref": "F1",
+      "trajectoria_id": "F1_B1",
+      "ordre": 1,
+      "pilota_id": "B1",
+      "posseidor_inicial": "CE",
+      "accio": "passada",
+      "posseidor_final": "L_OPOSAT",
+      "qualificadors": [
+        "passada"
+      ],
+      "estat_coneixement": "validat",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/7/fases/0/fluxos_pilota/0"
+    }
+  ],
   "branques_decisionals": [
     {
       "id": "BR_POST_1X1",
@@ -663,7 +686,7 @@
         "artifact": "corpus/uvof.semantic.json",
         "selector": "/exercicis/7",
         "version": "1.6.0",
-        "digest": "sha256:7c575060f3b8ae079d4ba5c796d8773aac10eaf8f09132958a9cf37bd0a6bd5d",
+        "digest": "sha256:b9f694db19a22c831cf9556e0bf256013e9ada0e56110d0cad7b25b54990032a",
         "canonical": true,
         "validation_status": "validated"
       }
@@ -781,6 +804,13 @@
         "knowledge_status": "validat"
       },
       {
+        "ref": "traca:TR-UVOF-008:node:B1",
+        "kind": "ball",
+        "local_id": "B1",
+        "knowledge_status": "validat",
+        "source_ref": "corpus/uvof.semantic.json#/exercicis/7/pilotes/0"
+      },
+      {
         "ref": "traca:TR-UVOF-008:space:ESPAI_EXT_LOCAL",
         "kind": "space",
         "local_id": "ESPAI_EXT_LOCAL",
@@ -880,6 +910,12 @@
         "ref": "traca:TR-UVOF-008:transition:T_CE_ENCREUA",
         "kind": "transition",
         "local_id": "T_CE_ENCREUA",
+        "knowledge_status": "validat"
+      },
+      {
+        "ref": "traca:TR-UVOF-008:flow:FP_F1_B1",
+        "kind": "ball_flow",
+        "local_id": "FP_F1_B1",
         "knowledge_status": "validat"
       },
       {
@@ -1252,11 +1288,11 @@
       "id": "FRAME_ZONA_CONCENTRACIO_3",
       "space_ref": "traca:TR-UVOF-008:space:ZONA_CONCENTRACIO",
       "definition_ref": "exercises/TR-UVOF-008/spatial-relations.json#/espais/5/definicio",
-      "operator": "proper_a",
-      "axis": "relational",
-      "viewpoint": "subject_relative",
-      "distance_class": "functional",
-      "closure": "not_applicable",
+      "operator": "interior_de",
+      "axis": "attack_relative",
+      "viewpoint": "attacking_team",
+      "distance_class": "not_applicable",
+      "closure": "referenced_boundary",
       "status": "complete"
     },
     {
@@ -1375,7 +1411,7 @@
     },
     {
       "from_ref": "traca:TR-UVOF-008:space:ZONA_CONCENTRACIO",
-      "to_ref": "traca:TR-UVOF-008:node:PV",
+      "to_ref": "traca:TR-UVOF-008:space:INT_23_LOCAL",
       "kind": "defined_by",
       "origin_ref": "exercises/TR-UVOF-008/spatial-relations.json#/espais/5/definicio"
     },
@@ -1428,17 +1464,7 @@
     "identity_mapping": [],
     "required_for_preflight": false
   },
-  "unresolved_items": [
-    {
-      "code": "SEMANTIC_BALL_INFORMATION_UNSPECIFIED",
-      "impact": "partial",
-      "entity_refs": [
-        "TR-UVOF-008"
-      ],
-      "message": "La font no declara pilota, posseïdor ni passades.",
-      "requires_trainer": true
-    }
-  ],
+  "unresolved_items": [],
   "compatibility": {
     "migrated_from": "0.2.0",
     "v02_status": "historical_read_only",
@@ -1542,6 +1568,14 @@
       ]
     },
     {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/7/pilotes/0",
+      "kind": "ball",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-008:node:B1"
+      ]
+    },
+    {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/7/fases/0/accions/0",
       "kind": "action",
       "preservation": "mapped",
@@ -1564,6 +1598,14 @@
       "spatial_refs": [
         "traca:TR-UVOF-008:transition:T_L_OP_ATACA_12",
         "traca:TR-UVOF-008:transition:T_L_OP_ATACA_23"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/7/fases/0/fluxos_pilota/0",
+      "kind": "ball_flow",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-008:flow:FP_F1_B1"
       ]
     },
     {
@@ -1599,6 +1641,6 @@
   ],
   "integrity": {
     "algorithm": "sha256",
-    "spatial_digest": "sha256:ab213b8d9535eef6d09aff66fadc58b9f206f3c5cc2ab4566f3119c9a3220f37"
+    "spatial_digest": "sha256:466b31e2bbff5d37b0eae58e2676e1fc16763ab13c6b7801ef9c1a8095f5905f"
   }
 }

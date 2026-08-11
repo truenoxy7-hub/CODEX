@@ -818,7 +818,11 @@ def _flow_ref(
     )
 
 
-def _add_uvof001_ball_flows(document: Document, exercise: Document, exercise_index: int) -> None:
+def _add_declared_ball_flows(
+    document: Document,
+    exercise: Document,
+    exercise_index: int,
+) -> None:
     existing_ids = {node["id"] for node in document["nodes"]}
     for ball_index, ball in enumerate(exercise.get("pilotes", [])):
         if ball["id"] not in existing_ids:
@@ -1458,15 +1462,6 @@ def _unresolved_items(exercise_id: str) -> list[Document]:
                 "requires_trainer": True,
             }
         ],
-        "TR-UVOF-008": [
-            {
-                "code": "SEMANTIC_BALL_INFORMATION_UNSPECIFIED",
-                "impact": "partial",
-                "entity_refs": ["TR-UVOF-008"],
-                "message": "La font no declara pilota, posseïdor ni passades.",
-                "requires_trainer": True,
-            }
-        ],
         "TR-UVOF-011": [
             {
                 "code": "UNINSTANTIATED_PARTICIPANT_GROUP",
@@ -1534,13 +1529,15 @@ def migrate_document(
             "status": "canonical",
             "candidates": [detail_candidate, corpus_candidate],
         }
-        _add_uvof001_ball_flows(result, exercise, exercise_index)
+        _add_declared_ball_flows(result, exercise, exercise_index)
     else:
         result["semantic_source"] = {
             "exercise_id": exercise_id,
             "status": "canonical",
             "candidates": [corpus_candidate],
         }
+        if exercise_id == "TR-UVOF-008":
+            _add_declared_ball_flows(result, exercise, exercise_index)
     result["font_semantica"]["fitxers"] = [
         candidate["artifact"] for candidate in result["semantic_source"]["candidates"]
     ]
@@ -1568,6 +1565,16 @@ def migrate_document(
     else:
         for space in result["espais"]:
             space.pop("referencia_semantica", None)
+    if exercise_id == "TR-UVOF-008":
+        concentration = next(
+            space
+            for space in result["espais"]
+            if space["id"] == "ZONA_CONCENTRACIO"
+        )
+        concentration["definicio"] = {
+            "operador": "interior_de",
+            "arguments": ["INT_23_LOCAL"],
+        }
 
     for transition in result["transicions"]:
         ref = _action_ref(

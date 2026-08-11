@@ -563,11 +563,11 @@ def test_uvof003_rejects_disconnected_change_of_side_flow(
         (
             "TR-UVOF-008",
             {
-                "node_count": 16,
+                "node_count": 17,
                 "space_count": 7,
                 "state_count": 4,
                 "transition_count": 6,
-                "ball_flow_count": 0,
+                "ball_flow_count": 1,
                 "branch_count": 1,
                 "error_count": 0,
                 "structural_error_count": 0,
@@ -835,6 +835,11 @@ def test_uvof008_represents_full_51_and_defensive_concentration() -> None:
     concentration = next(
         state for state in document["estats"] if state["id"] == "S_CONCENTRACIO"
     )
+    concentration_space = next(
+        space
+        for space in document["espais"]
+        if space["id"] == "ZONA_CONCENTRACIO"
+    )
 
     assert participants == {
         "EXT_LOCAL",
@@ -856,6 +861,14 @@ def test_uvof008_represents_full_51_and_defensive_concentration() -> None:
         and relation["objectes"] == ["ZONA_CONCENTRACIO", "PV"]
         for relation in concentration["relacions"]
     )
+    assert concentration_space["definicio"] == {
+        "operador": "interior_de",
+        "arguments": ["INT_23_LOCAL"],
+    }
+    assert [
+        (flow["posseidor_inicial"], flow["posseidor_final"])
+        for flow in document["fluxos_pilota"]
+    ] == [("CE", "L_OPOSAT")]
 
 
 def test_uvof009_preserves_permutation_positions_and_three_ball_flows() -> None:
