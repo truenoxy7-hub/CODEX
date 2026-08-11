@@ -289,3 +289,20 @@ mateix espai. `PV` només abandona el con i llisca cap a l'espai lliure quan
 deixa de definir l'espai i només activa la branca de resolució. Desapareix el
 cicle no ancorat i el preflight d'UVOF010 passa de `blocked` a `ready` sense
 introduir coordenades.
+
+## D-034 — Quatre defensors reals i actius d'UVOF011
+
+**Decisió de l'entrenador:** la defensa de la situació reduïda `4x4` està
+formada per `D1_LOCAL`, `D2_LOCAL`, `D3_LOCAL` i `D3_OPOSAT`. Tots quatre són
+participants reals i actius; `DEF_4` no és una persona ni una representació
+vàlida de la defensa completa.
+
+**Aplicació espacial:** `D1_LOCAL` delimita l'espai exterior entre el primer
+defensor i la línia de fons. Els dos tercers es conserven com a identitats
+separades, local i oposada. No es força cap emparellament directe no validat per
+a l'1x1 que `L` inicia des del centre temporal.
+
+**Efecte tècnic:** el corpus i el namespace contenen vuit participants
+individuals, la cobertura semàntica mapeja els quatre defensors i desapareix el
+grup no instanciat. El preflight d'UVOF011 passa de `blocked` a `ready` sense
+introduir coordenades.

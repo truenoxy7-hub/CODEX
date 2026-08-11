@@ -1154,6 +1154,11 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
         for participant in uvof_011.get("participants", [])
         if participant.get("equip") == "atac"
     }
+    defenders_011 = {
+        participant.get("id")
+        for participant in uvof_011.get("participants", [])
+        if participant.get("equip") == "defensa"
+    }
     balls_011 = {
         ball.get("id"): ball.get("posseidor_inicial")
         for ball in uvof_011.get("pilotes", [])
@@ -1170,8 +1175,12 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
     }
     if (
         attackers_011 != {"EXT", "L", "CE", "PV"}
+        or defenders_011
+        != {"D1_LOCAL", "D2_LOCAL", "D3_LOCAL", "D3_OPOSAT"}
         or balls_011 != {"B1": "L"}
         or uvof_011.get("organitzacio", {}).get("passador_permuta") != "EXT"
+        or uvof_011.get("organitzacio", {}).get("defensors_actius")
+        != ["D1_LOCAL", "D2_LOCAL", "D3_LOCAL", "D3_OPOSAT"]
         or flows_011
         != {
             ("PERMUTA_L_CE_ESPECIFICA", 1, "B1", "L", "EXT"),
@@ -1184,8 +1193,10 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
                 "path": "TR-UVOF-011",
                 "message": (
                     "TR-UVOF-011 ha de conservar els quatre atacants "
-                    "EXT-L-CE-PV i el flux específic L-EXT-L que inicia "
-                    "el 4x4 des de la posició central temporal."
+                    "EXT-L-CE-PV, els quatre defensors reals D1_LOCAL, "
+                    "D2_LOCAL, D3_LOCAL i D3_OPOSAT, i el flux específic "
+                    "L-EXT-L que inicia el 4x4 des de la posició central "
+                    "temporal."
                 ),
             }
         )

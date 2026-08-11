@@ -49,10 +49,31 @@
       "estat_coneixement": "validat"
     },
     {
-      "id": "DEF_4",
+      "id": "D1_LOCAL",
       "classe": "participant",
       "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/10/participants/4",
-      "rol": "unitat_dels_quatre_defensors",
+      "rol": "primer_defensor_local_actiu",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "D2_LOCAL",
+      "classe": "participant",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/10/participants/5",
+      "rol": "segon_defensor_local_actiu",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "D3_LOCAL",
+      "classe": "participant",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/10/participants/6",
+      "rol": "tercer_defensor_local_actiu",
+      "estat_coneixement": "validat"
+    },
+    {
+      "id": "D3_OPOSAT",
+      "classe": "participant",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/10/participants/7",
+      "rol": "tercer_defensor_oposat_actiu",
       "estat_coneixement": "validat"
     },
     {
@@ -132,7 +153,7 @@
         "operador": "entre",
         "arguments": [
           "LINIA_FONS",
-          "DEF_4"
+          "D1_LOCAL"
         ]
       },
       "restriccions": [
@@ -355,7 +376,6 @@
       "tipus": "atac_espai",
       "des_de": "POS_CENTRAL",
       "cap_a": "ZONA_FINAL_6M",
-      "referencia_oposicional": "DEF_4",
       "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/10/fases/0/accions/4",
       "estat_coneixement": "validat"
     },
@@ -475,7 +495,10 @@
         "CE",
         "EXT",
         "PV",
-        "DEF_4"
+        "D1_LOCAL",
+        "D2_LOCAL",
+        "D3_LOCAL",
+        "D3_OPOSAT"
       ],
       "ambit": "document",
       "missatge": "El 4x4 i la permuta es representen sense coordenades."
@@ -500,7 +523,10 @@
         "CE",
         "EXT",
         "PV",
-        "DEF_4"
+        "D1_LOCAL",
+        "D2_LOCAL",
+        "D3_LOCAL",
+        "D3_OPOSAT"
       ],
       "ambit": "BR_JOC_4X4",
       "missatge": "La situació de partit reduïda conserva la lectura oberta."
@@ -550,7 +576,7 @@
         "artifact": "corpus/uvof.semantic.json",
         "selector": "/exercicis/10",
         "version": "1.6.0",
-        "digest": "sha256:83f82071f42237ce3aec3b1aa554d8a8bb6869d479da234d3c92000166d646fe",
+        "digest": "sha256:271fb9a6db756575b48d4be8e96534e62b1356d355b242f994090791232d7466",
         "canonical": true,
         "validation_status": "validated"
       }
@@ -588,11 +614,32 @@
         "source_ref": "corpus/uvof.semantic.json#/exercicis/10/participants/3"
       },
       {
-        "ref": "traca:TR-UVOF-011:node:DEF_4",
+        "ref": "traca:TR-UVOF-011:node:D1_LOCAL",
         "kind": "participant",
-        "local_id": "DEF_4",
+        "local_id": "D1_LOCAL",
         "knowledge_status": "validat",
         "source_ref": "corpus/uvof.semantic.json#/exercicis/10/participants/4"
+      },
+      {
+        "ref": "traca:TR-UVOF-011:node:D2_LOCAL",
+        "kind": "participant",
+        "local_id": "D2_LOCAL",
+        "knowledge_status": "validat",
+        "source_ref": "corpus/uvof.semantic.json#/exercicis/10/participants/5"
+      },
+      {
+        "ref": "traca:TR-UVOF-011:node:D3_LOCAL",
+        "kind": "participant",
+        "local_id": "D3_LOCAL",
+        "knowledge_status": "validat",
+        "source_ref": "corpus/uvof.semantic.json#/exercicis/10/participants/6"
+      },
+      {
+        "ref": "traca:TR-UVOF-011:node:D3_OPOSAT",
+        "kind": "participant",
+        "local_id": "D3_OPOSAT",
+        "knowledge_status": "validat",
+        "source_ref": "corpus/uvof.semantic.json#/exercicis/10/participants/7"
       },
       {
         "ref": "traca:TR-UVOF-011:node:B1",
@@ -846,14 +893,14 @@
       }
     },
     {
-      "participant_ref": "traca:TR-UVOF-011:node:DEF_4",
+      "participant_ref": "traca:TR-UVOF-011:node:D1_LOCAL",
       "source_ref": "corpus/uvof.semantic.json#/exercicis/10/participants/4",
       "team": {
         "value": "defensa",
         "status": "validated"
       },
       "canonical_role": {
-        "value": "quatre_defensors",
+        "value": "primer_defensor",
         "status": "validated"
       },
       "side": {
@@ -865,22 +912,84 @@
         "status": "unknown"
       },
       "exercise_function": {
-        "value": "unitat_dels_quatre_defensors",
+        "value": "primer_defensor_local_actiu",
+        "status": "validated"
+      }
+    },
+    {
+      "participant_ref": "traca:TR-UVOF-011:node:D2_LOCAL",
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/10/participants/5",
+      "team": {
+        "value": "defensa",
+        "status": "validated"
+      },
+      "canonical_role": {
+        "value": "segon_defensor",
+        "status": "validated"
+      },
+      "side": {
+        "value": null,
+        "status": "unknown"
+      },
+      "temporal_role": {
+        "value": null,
+        "status": "unknown"
+      },
+      "exercise_function": {
+        "value": "segon_defensor_local_actiu",
+        "status": "validated"
+      }
+    },
+    {
+      "participant_ref": "traca:TR-UVOF-011:node:D3_LOCAL",
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/10/participants/6",
+      "team": {
+        "value": "defensa",
+        "status": "validated"
+      },
+      "canonical_role": {
+        "value": "tercer_defensor",
+        "status": "validated"
+      },
+      "side": {
+        "value": null,
+        "status": "unknown"
+      },
+      "temporal_role": {
+        "value": null,
+        "status": "unknown"
+      },
+      "exercise_function": {
+        "value": "tercer_defensor_local_actiu",
+        "status": "validated"
+      }
+    },
+    {
+      "participant_ref": "traca:TR-UVOF-011:node:D3_OPOSAT",
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/10/participants/7",
+      "team": {
+        "value": "defensa",
+        "status": "validated"
+      },
+      "canonical_role": {
+        "value": "tercer_defensor",
+        "status": "validated"
+      },
+      "side": {
+        "value": null,
+        "status": "unknown"
+      },
+      "temporal_role": {
+        "value": null,
+        "status": "unknown"
+      },
+      "exercise_function": {
+        "value": "tercer_defensor_oposat_actiu",
         "status": "validated"
       }
     }
   ],
-  "participant_groups": [
-    {
-      "id": "DEF_4",
-      "source_ref": "corpus/uvof.semantic.json#/exercicis/10/participants/4",
-      "expected_cardinality": 4,
-      "instance_refs": [
-        "traca:TR-UVOF-011:node:DEF_4"
-      ],
-      "status": "unresolved"
-    }
-  ],
+  "participant_groups": [],
   "material_semantics": [],
   "typed_relations": [],
   "typed_conditions": [
@@ -1013,7 +1122,7 @@
     },
     {
       "from_ref": "traca:TR-UVOF-011:space:ESPAI_EXT",
-      "to_ref": "traca:TR-UVOF-011:node:DEF_4",
+      "to_ref": "traca:TR-UVOF-011:node:D1_LOCAL",
       "kind": "defined_by",
       "origin_ref": "exercises/TR-UVOF-011/spatial-relations.json#/espais/2/definicio"
     },
@@ -1066,17 +1175,7 @@
     "identity_mapping": [],
     "required_for_preflight": false
   },
-  "unresolved_items": [
-    {
-      "code": "UNINSTANTIATED_PARTICIPANT_GROUP",
-      "impact": "blocked",
-      "entity_refs": [
-        "DEF_4"
-      ],
-      "message": "DEF_4 és un únic node i no quatre defensors identificats.",
-      "requires_trainer": true
-    }
-  ],
+  "unresolved_items": [],
   "compatibility": {
     "migrated_from": "0.2.0",
     "v02_status": "historical_read_only",
@@ -1120,7 +1219,31 @@
       "kind": "participant",
       "preservation": "mapped",
       "spatial_refs": [
-        "traca:TR-UVOF-011:node:DEF_4"
+        "traca:TR-UVOF-011:node:D1_LOCAL"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/10/participants/5",
+      "kind": "participant",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-011:node:D2_LOCAL"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/10/participants/6",
+      "kind": "participant",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-011:node:D3_LOCAL"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/10/participants/7",
+      "kind": "participant",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-011:node:D3_OPOSAT"
       ]
     },
     {
@@ -1217,6 +1340,6 @@
   ],
   "integrity": {
     "algorithm": "sha256",
-    "spatial_digest": "sha256:30598dd3602eb5e16271720216aa3b61af21257ae357bf88293fab48cec023e7"
+    "spatial_digest": "sha256:4b6237fbe3526fd852345dc4b604569c90059f12c039d8e84bed2d1861d4eb48"
   }
 }

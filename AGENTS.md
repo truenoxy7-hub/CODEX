@@ -173,6 +173,19 @@ delimita l'espai oposat a la trajectòria de `L`; lateral i pivot no poden ocupa
 ni atacar el mateix espai. Si `D3` queda pla, `L` llança des de fora. Només si
 `D3` puja, `PV` abandona el con, llisca cap a l'espai lliure i rep de `L`.
 
+## TR-UVOF-011
+
+És una situació de partit reduïda `4x4`. Els atacants reals són `EXT`, `L`,
+`CE` i `PV`; els defensors reals i actius són `D1_LOCAL`, `D2_LOCAL`,
+`D3_LOCAL` i `D3_OPOSAT`. No s'ha de representar la defensa amb un participant
+abstracte `DEF_4`.
+
+El flux específic és `L → EXT → L`: `L` passa abans de la permuta, ocupa
+temporalment el centre, rep d'`EXT` i inicia l'1x1. `D1_LOCAL` delimita l'espai
+exterior de l'extrem. La continuació del 4x4 manté obertes la finalització, la
+continuïtat i l'encreuament segons la resposta dels quatre defensors, sense
+forçar un emparellament directe no validat.
+
 ## TR-UVOF-013
 
 És un `4x4` amb un passador extern que no computa en la relació. Després de la

@@ -978,6 +978,79 @@ def _resolve_uvof010_pivot_anchor(
         document["invariants"].append(no_overlap)
 
 
+def _resolve_uvof011_defenders(
+    document: Document,
+    exercise: Document,
+    exercise_index: int,
+) -> None:
+    defender_specs = [
+        ("D1_LOCAL", "primer_defensor_local_actiu"),
+        ("D2_LOCAL", "segon_defensor_local_actiu"),
+        ("D3_LOCAL", "tercer_defensor_local_actiu"),
+        ("D3_OPOSAT", "tercer_defensor_oposat_actiu"),
+    ]
+    participant_indexes = {
+        participant["id"]: index
+        for index, participant in enumerate(exercise.get("participants", []))
+    }
+    missing = [
+        defender_id
+        for defender_id, _ in defender_specs
+        if defender_id not in participant_indexes
+    ]
+    if missing:
+        raise ValueError(
+            "TR-UVOF-011 requereix els quatre defensors validats: "
+            + ", ".join(missing)
+        )
+
+    replaced_ids = {"DEF_4", *(item[0] for item in defender_specs)}
+    document["nodes"] = [
+        node for node in document["nodes"] if node["id"] not in replaced_ids
+    ]
+    pivot_index = next(
+        index for index, node in enumerate(document["nodes"])
+        if node["id"] == "PV"
+    )
+    for offset, (defender_id, role) in enumerate(defender_specs, start=1):
+        document["nodes"].insert(
+            pivot_index + offset,
+            {
+                "id": defender_id,
+                "classe": "participant",
+                "referencia_semantica": _corpus_ref(
+                    exercise_index,
+                    "participants",
+                    participant_indexes[defender_id],
+                ),
+                "rol": role,
+                "estat_coneixement": "validat",
+            },
+        )
+
+    exterior_space = next(
+        space for space in document["espais"] if space["id"] == "ESPAI_EXT"
+    )
+    exterior_space["definicio"]["arguments"] = ["LINIA_FONS", "D1_LOCAL"]
+
+    initial_duel = next(
+        transition
+        for transition in document["transicions"]
+        if transition["id"] == "T_L_INICIA_1X1"
+    )
+    initial_duel.pop("referencia_oposicional", None)
+
+    defender_ids = [item[0] for item in defender_specs]
+    for invariant in document["invariants"]:
+        if "DEF_4" not in invariant.get("subjectes", []):
+            continue
+        invariant["subjectes"] = [
+            subject
+            for subject in invariant["subjectes"]
+            if subject != "DEF_4"
+        ] + defender_ids
+
+
 def _namespace(document: Document, exercise_id: str) -> Document:
     entities: list[Document] = []
     node_kind = {
@@ -1584,15 +1657,6 @@ def _unresolved_items(exercise_id: str) -> list[Document]:
                 "requires_trainer": True,
             }
         ],
-        "TR-UVOF-011": [
-            {
-                "code": "UNINSTANTIATED_PARTICIPANT_GROUP",
-                "impact": "blocked",
-                "entity_refs": ["DEF_4"],
-                "message": "DEF_4 és un únic node i no quatre defensors identificats.",
-                "requires_trainer": True,
-            }
-        ],
         "TR-UVOF-014": [
             {
                 "code": "SEMANTIC_OPTIONS_PRESERVED_SYMBOLICALLY",
@@ -1662,6 +1726,8 @@ def migrate_document(
             _add_declared_ball_flows(result, exercise, exercise_index)
         if exercise_id == "TR-UVOF-010":
             _resolve_uvof010_pivot_anchor(result, exercise, exercise_index)
+        if exercise_id == "TR-UVOF-011":
+            _resolve_uvof011_defenders(result, exercise, exercise_index)
     result["font_semantica"]["fitxers"] = [
         candidate["artifact"] for candidate in result["semantic_source"]["candidates"]
     ]
@@ -1732,6 +1798,8 @@ def migrate_document(
                         f"/model_exercici/subaccions/{sub_index}/situacio_decisional",
                     )
                 )
+            elif current.startswith("corpus/uvof.semantic.json#/"):
+                stable_refs.append(current)
             else:
                 stable = _decision_ref(decision_id, exercise, exercise_index)
                 if stable:

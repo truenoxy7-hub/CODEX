@@ -860,14 +860,18 @@
         "relacio": "4x4",
         "permuta": "lateral-central",
         "passador_permuta": "EXT",
-        "flux_especific_validat": "L-EXT-L"
+        "flux_especific_validat": "L-EXT-L",
+        "defensors_actius": ["D1_LOCAL", "D2_LOCAL", "D3_LOCAL", "D3_OPOSAT"]
       },
       "participants": [
         {"id": "L", "rol_inicial": "lateral", "equip": "atac"},
         {"id": "CE", "rol_inicial": "central", "equip": "atac"},
         {"id": "EXT", "rol_inicial": "extrem", "equip": "atac"},
         {"id": "PV", "rol_inicial": "pivot", "equip": "atac"},
-        {"id": "DEF_4", "rol_inicial": "quatre_defensors", "equip": "defensa"}
+        {"id": "D1_LOCAL", "rol_inicial": "primer_defensor", "equip": "defensa"},
+        {"id": "D2_LOCAL", "rol_inicial": "segon_defensor", "equip": "defensa"},
+        {"id": "D3_LOCAL", "rol_inicial": "tercer_defensor", "equip": "defensa"},
+        {"id": "D3_OPOSAT", "rol_inicial": "tercer_defensor", "equip": "defensa"}
       ],
       "pilotes": [
         {"id": "B1", "posseidor_inicial": "L"}
@@ -895,12 +899,14 @@
       "invariants": [
         "la permuta és lateral-central",
         "els quatre atacants actius són EXT, L, CE i PV",
+        "els quatre defensors reals i actius són D1_LOCAL, D2_LOCAL, D3_LOCAL i D3_OPOSAT",
         "L inicia amb pilota, passa a EXT i rep de nou al centre",
         "el lateral és el primer jugador, ocupa temporalment el centre i inicia l'1x1"
       ],
       "validacions_entrenador": [
         "situacio_de_partit_reduida_4x4",
         "atacants_EXT_L_CE_PV",
+        "defensors_reals_D1_LOCAL_D2_LOCAL_D3_LOCAL_D3_OPOSAT",
         "flux_especific_L_EXT_L",
         "L_inicia_1x1_des_de_la_posicio_central"
       ]

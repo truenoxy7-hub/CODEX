@@ -605,7 +605,7 @@ def test_uvof003_rejects_disconnected_change_of_side_flow(
         (
             "TR-UVOF-011",
             {
-                "node_count": 11,
+                "node_count": 14,
                 "space_count": 5,
                 "state_count": 4,
                 "transition_count": 4,
@@ -986,7 +986,7 @@ def test_uvof010_separates_permutation_from_conditional_second_ball() -> None:
     )
 
 
-def test_uvof011_keeps_specific_l_ext_l_flow_and_four_attackers() -> None:
+def test_uvof011_keeps_specific_flow_and_eight_real_players() -> None:
     document = json.loads(
         (
             ROOT / "exercises" / "TR-UVOF-011" / "spatial-relations.json"
@@ -1002,8 +1002,22 @@ def test_uvof011_keeps_specific_l_ext_l_flow_and_four_attackers() -> None:
         for flow in sorted(document["fluxos_pilota"], key=lambda item: item["ordre"])
     ]
 
-    assert {"EXT", "L", "CE", "PV"} <= participants
+    assert participants == {
+        "EXT",
+        "L",
+        "CE",
+        "PV",
+        "D1_LOCAL",
+        "D2_LOCAL",
+        "D3_LOCAL",
+        "D3_OPOSAT",
+    }
     assert flows == [("L", "EXT"), ("EXT", "L")]
+    assert document["participant_groups"] == []
+    assert document["unresolved_items"] == []
+    assert next(
+        space for space in document["espais"] if space["id"] == "ESPAI_EXT"
+    )["definicio"]["arguments"] == ["LINIA_FONS", "D1_LOCAL"]
 
 
 def test_uvof012_keeps_two_ordered_superiorities_and_defenders() -> None:

@@ -32,7 +32,7 @@ EXPECTED_STATUSES = {
     "TR-UVOF-008": "ready",
     "TR-UVOF-009": "ready",
     "TR-UVOF-010": "ready",
-    "TR-UVOF-011": "blocked",
+    "TR-UVOF-011": "ready",
     "TR-UVOF-012": "ready",
     "TR-UVOF-013": "ready",
     "TR-UVOF-014": "partial",
@@ -228,9 +228,28 @@ def test_bindings_cardinality_and_material_capabilities_are_checked() -> None:
     _refresh_digest(binding)
     assert "BINDING_TARGET_TYPE_MISMATCH" in _codes(preflight_document(binding))
 
-    cardinality = preflight_document(_load("TR-UVOF-011"))
-    assert cardinality["status"] == "blocked"
-    assert "UNINSTANTIATED_PARTICIPANT_GROUP" in _codes(cardinality)
+    cardinality = _load("TR-UVOF-011")
+    defender_refs = [
+        entity["ref"]
+        for entity in cardinality["namespace"]["entities"]
+        if entity["local_id"]
+        in {"D1_LOCAL", "D2_LOCAL", "D3_LOCAL", "D3_OPOSAT"}
+    ]
+    cardinality["participant_groups"] = [
+        {
+            "id": "DEFENSA_4X4",
+            "source_ref": (
+                "corpus/uvof.semantic.json#/exercicis/10/participants/4"
+            ),
+            "expected_cardinality": 4,
+            "instance_refs": defender_refs[:-1],
+            "status": "unresolved",
+        }
+    ]
+    _refresh_digest(cardinality)
+    cardinality_result = preflight_document(cardinality)
+    assert cardinality_result["status"] == "blocked"
+    assert "UNINSTANTIATED_PARTICIPANT_GROUP" in _codes(cardinality_result)
 
     capability = _load("TR-UVOF-004")
     capability["material_semantics"][0]["capabilities"] = []

@@ -339,9 +339,10 @@ L'onzena instància representa:
 - `L` rebent al centre com a rol temporal de central i iniciant l'1x1;
 - finalització, continuïtat o encreuament com a alternatives obertes.
 
-`DEF_4` declara cardinalitat esperada quatre però només té una instància. La
-situació resta `blocked` fins que l'entrenador identifiqui o validi els quatre
-defensors.
+La defensa queda instanciada amb quatre participants reals i actius:
+`D1_LOCAL`, `D2_LOCAL`, `D3_LOCAL` i `D3_OPOSAT`. `D1_LOCAL` delimita l'espai
+exterior. No queda cap participant abstracte `DEF_4` ni cap grup pendent
+d'instanciació; el preflight passa a `ready`.
 
 ## Instància TR-UVOF-012
 

@@ -649,6 +649,23 @@ def test_corpus_rejects_broken_specific_l_ext_l_flow_in_uvof011(
     ]
 
 
+def test_corpus_rejects_missing_real_defender_in_uvof011(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-011")
+    exercise["participants"] = [
+        participant
+        for participant in exercise["participants"]
+        if participant["id"] != "D3_OPOSAT"
+    ]
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF011_SPECIFIC_L_EXT_L_FLOW" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
 def test_corpus_rejects_wrong_first_passer_in_uvof012(
     valid_corpus, corpus_schema
 ):
