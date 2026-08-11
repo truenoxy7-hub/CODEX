@@ -55,7 +55,8 @@ process.stdout.write(JSON.stringify({
   states:snapshot.interpretation.concepts.map(x=>x.knowledge_state),
   labels:snapshot.interpretation.concepts.map(x=>x.label),
   unknown:snapshot.interpretation.unknown_concepts.map(x=>x.label),
-  unresolved:snapshot.interpretation.unresolved.length
+  unresolved:snapshot.interpretation.unresolved.length,
+  origin:snapshot.currentCase.origin, tags:snapshot.currentCase.tags
 }));
 """)
 
@@ -69,6 +70,8 @@ process.stdout.write(JSON.stringify({
     assert "central" in result["labels"]
     assert "passada i va" in result["unknown"]
     assert result["unresolved"] >= 1
+    assert result["origin"] == "coach_input"
+    assert result["tags"] == ["passada", "recepció", "interval 1–2", "central", "lateral"]
 
 
 def test_generated_and_working_geometry_are_strictly_separate() -> None:

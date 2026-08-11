@@ -446,3 +446,12 @@ una responsabilitat visual del renderer.
 moviments i passades connectats es recalculen com a efectes derivats enumerats
 a l'historial. No es creen correccions secundàries ni s'altera la proposta
 generada immutable.
+
+## D-050 — Metadades automàtiques del cas
+
+**Decisió de producte:** crear un cas no demana a l’entrenador que entengui ni
+ompli `origin` o `tags`. L’origen queda registrat internament com
+`coach_input`; després de la interpretació, TRAÇA proposa fins a vuit etiquetes
+a partir dels conceptes explícits reconeguts. Les etiquetes descriuen la
+classificació del cas, però no converteixen una coincidència provisional en
+coneixement validat.

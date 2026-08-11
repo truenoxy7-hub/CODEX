@@ -45,6 +45,11 @@ def test_interface_exposes_the_universal_supervised_loop() -> None:
     assert "TR-UVOF-015" in html
     assert 'src="js/interpretation-provider.js"' in html
     assert 'src="data/handball-knowledge.js"' in html
+    assert 'id="case-origin"' not in html
+    assert 'id="case-tags"' not in html
+    assert 'id="new-origin"' not in html
+    assert 'id="new-tags"' not in html
+    assert "proposarà les etiquetes" in html
 
 
 def test_interface_has_three_part_workspace_and_mobile_panel_navigation() -> None:

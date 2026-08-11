@@ -24,7 +24,7 @@
   const elements = {
     caseId: $("#case-id"), caseName: $("#case-name"), workspaceStatus: $("#workspace-status"),
     interpretationStatus: $("#interpretation-status"), spatialStatus: $("#spatial-status"), geometryStatus: $("#geometry-status"), knowledgeStatus: $("#knowledge-status"),
-    caseNameInput: $("#case-name-input"), description: $("#description"), caseOrigin: $("#case-origin"), caseTags: $("#case-tags"), caseNotes: $("#case-notes"), engineNotice: $("#engine-notice"),
+    caseNameInput: $("#case-name-input"), description: $("#description"), caseMetadata: $("#case-metadata"), caseNotes: $("#case-notes"), engineNotice: $("#engine-notice"),
     interpretationGroups: $("#interpretation-groups"), providerLabel: $("#provider-label"), semanticModelList: $("#semantic-model-list"),
     resolverLabel: $("#resolver-label"), resolverMessage: $("#resolver-message"), startManualLayout: $("#start-manual-layout"), manualTools: $("#manual-tools"), manualPrimitiveType: $("#manual-primitive-type"), manualKind: $("#manual-kind"), manualLabel: $("#manual-label"), manualObservationText: $("#manual-observation-text"), branchSelectors: $("#branch-selectors"),
     courtStage: $("#court-stage"), noGeometry: $("#no-geometry"), courtHelp: $("#court-help"),
@@ -57,17 +57,16 @@
     return {
       name: elements.caseNameInput.value,
       description: elements.description.value,
-      origin: elements.caseOrigin.value,
-      notes: elements.caseNotes.value,
-      tags: elements.caseTags.value.split(",").map((item) => item.trim()).filter(Boolean)
+      notes: elements.caseNotes.value
     };
   }
 
   function syncCaseForm(snapshot) {
     elements.caseNameInput.value = snapshot.currentCase.name || "";
     elements.description.value = snapshot.currentCase.description || "";
-    elements.caseOrigin.value = snapshot.currentCase.origin || "";
-    elements.caseTags.value = (snapshot.currentCase.tags || []).join(", ");
+    const origin = snapshot.currentCase.origin === "coach_input" ? "Entrada de l’entrenador" : snapshot.currentCase.origin || "Font canònica";
+    const tags = (snapshot.currentCase.tags || []).length ? snapshot.currentCase.tags.join(" · ") : "pendents d’analitzar";
+    elements.caseMetadata.textContent = `Origen: ${origin} · Etiquetes automàtiques: ${tags}`;
     elements.caseNotes.value = snapshot.currentCase.notes || "";
   }
 
@@ -83,6 +82,9 @@
   function renderStatus(snapshot) {
     elements.caseId.textContent = snapshot.currentCase.id;
     elements.caseName.textContent = snapshot.currentCase.name;
+    const origin = snapshot.currentCase.origin === "coach_input" ? "Entrada de l’entrenador" : snapshot.currentCase.origin || "Font canònica";
+    const tags = (snapshot.currentCase.tags || []).length ? snapshot.currentCase.tags.join(" · ") : "pendents d’analitzar";
+    elements.caseMetadata.textContent = `Origen: ${origin} · Etiquetes automàtiques: ${tags}`;
     const unknownCount = (snapshot.interpretation.unknown_concepts || []).length + (snapshot.interpretation.unresolved || []).length;
     elements.interpretationStatus.textContent = String(snapshot.interpretation.status || "unknown").toUpperCase();
     elements.spatialStatus.textContent = String(snapshot.spatialModel.status || "unknown").toUpperCase();
@@ -321,7 +323,7 @@
     event.preventDefault();
     const description = $("#new-description").value;
     if (!description.trim()) { toast("La descripció és necessària per crear el cas."); return; }
-    store.createCase({ name: $("#new-name").value, description, origin: $("#new-origin").value, tags: $("#new-tags").value, notes: $("#new-notes").value });
+    store.createCase({ name: $("#new-name").value, description, notes: $("#new-notes").value });
     syncCaseForm(store.snapshot()); elements.newCaseDialog.close(); interpretCurrentCase(); $("#new-case-form").reset();
   });
   $("#interpret-case").addEventListener("click", interpretCurrentCase);

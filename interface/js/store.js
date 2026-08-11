@@ -203,8 +203,8 @@
         status: "in_construction",
         description,
         notes: String(input.notes || ""),
-        origin: String(input.origin || "coach"),
-        tags: Array.isArray(input.tags) ? input.tags.slice() : String(input.tags || "").split(",").map((item) => item.trim()).filter(Boolean),
+        origin: "coach_input",
+        tags: [],
         source_refs: input.source_refs || ["coach_input"],
         created_at: now()
       };
@@ -225,6 +225,8 @@
 
     function setInterpretation(result) {
       baseInterpretation = utils.deepClone(result || emptyInterpretation());
+      if (state.currentCase.case_type === "learning_case") state.currentCase.origin = "coach_input";
+      state.currentCase.tags = [...new Set([...(state.currentCase.tags || []), ...((result && result.suggested_tags) || [])])].slice(0, 8);
       baseSemanticModel = emptySemanticModel();
       baseSemanticModel.status = result.status === "validated" ? "validated" : result.status === "unresolved" ? "unknown" : "provisional";
       (result.concepts || []).forEach((concept) => {

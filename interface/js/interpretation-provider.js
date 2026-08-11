@@ -55,6 +55,21 @@
     return { concepts, unknownConcepts };
   }
 
+  function suggestedTags(description, concepts) {
+    const priorities = { action: 0, tactical_context: 1, space: 2, participant_role: 3, defensive_role: 3, material: 4 };
+    const ordered = (concepts || []).slice().sort((left, right) => (priorities[left.category] ?? 9) - (priorities[right.category] ?? 9));
+    const tags = [];
+    ordered.forEach((concept) => {
+      const label = String(concept.label || "").trim();
+      if (label && !tags.includes(label)) tags.push(label);
+    });
+    const explicitRelations = normalize(description).match(/\b\d+\s*(?:x|v)\s*\d+\b/g) || [];
+    explicitRelations.map((tag) => tag.replace(/\s+/g, "").replace("v", "x")).reverse().forEach((tag) => {
+      if (!tags.includes(tag)) tags.unshift(tag);
+    });
+    return tags.slice(0, 8);
+  }
+
   function canonicalCaseProvider(currentCase, canonicalCases) {
     const match = (canonicalCases || []).find((item) => item.id === currentCase.id && currentCase.case_type === "canonical_specimen");
     if (!match) return null;
@@ -62,6 +77,7 @@
       provider: "canonical_case_provider",
       status: "validated",
       concepts: utils.deepClone(match.canonical_concepts || []),
+      suggested_tags: suggestedTags(currentCase.description, match.canonical_concepts || []),
       unknown_concepts: [],
       unresolved: [],
       notes: ["Interpretació recuperada d’un cas canònic validat."]
@@ -77,6 +93,7 @@
       provider: "local_rule_provider",
       status: "provisional",
       concepts: matched.concepts,
+      suggested_tags: suggestedTags(currentCase.description, matched.concepts),
       unknown_concepts: matched.unknownConcepts,
       unresolved,
       notes: ["Coincidències lèxiques locals; no són una interpretació tàctica validada."]
@@ -94,5 +111,5 @@
     };
   }
 
-  return { normalize, matchLocalKnowledge, canonicalCaseProvider, localRuleProvider, interpret };
+  return { normalize, matchLocalKnowledge, suggestedTags, canonicalCaseProvider, localRuleProvider, interpret };
 });

@@ -16,6 +16,8 @@
 ## Workspace universal MVP
 
 - `Nou cas` preserva qualsevol text i crea una identitat local.
+- L’origen es registra com a entrada de l’entrenador i les etiquetes es deriven
+  automàticament dels conceptes explícits reconeguts; no són camps obligatoris.
 - Arquitectura d’`InterpretationProvider` amb provider canònic, matcher local i
   constructor manual; cap coincidència local es marca com a validada.
 - Interpretació visible en quatre grups: conegut, provisional, desconegut i no
