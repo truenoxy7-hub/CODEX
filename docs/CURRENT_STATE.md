@@ -1,40 +1,42 @@
 # Estat actual
 
-## Completat
+## Capa de coneixement
 
 - Corpus semàntic `TR-UVOF-001`–`TR-UVOF-015` i coneixement tàctic viu.
-- Esquemes semàntics, corpus v1.1 i validació local amb proves positives i
-  negatives.
-- Contracte qualitatiu `spatial-relations` v0.3 per als quinze UVOF.
-- Esquema v0.2 conservat exclusivament com a versió històrica read-only; no hi
-  ha downgrade implícit de v0.3.
-- Fonts semàntiques versionades amb fingerprint SHA-256 determinista i
-  referències estables `artefacte#/json/pointer`.
-- Namespace global tipat, bindings d'actors genèrics, cardinalitats de grups,
-  semàntica per instància dels materials i capabilities explícites.
-- Separació explícita d'equip, rol canònic, costat, rol temporal i funció dels
-  participants. Els camps absents queden `unknown`; no es dedueixen de l'ID.
-- Papers tipats dels 2x1, condicions tipades, marcs d'operador, graf de
-  dependències i mapping individual de decisions i opcions.
-- Cobertura rastrejable de participants, materials, pilotes, accions, fluxos,
-  decisions i opcions de totes les fonts declarades.
-- Preflight pur i read-only que només retorna `ready`, `partial` o `blocked`,
-  amb diagnòstics estructurats i sense geometria.
-- Integració del preflight al validador sense seleccionar silenciosament el
-  `semantic.json` germà d'UVOF001.
-- Suite verda abans d'aquesta iteració amb 127 proves: les 88 del baseline
-  auditat i 39 proves noves de contracte, preservació, integritat i mutacions
-  destructives.
-- Perfil reglamentari de pista IHF versionat i contracte de geometria derivada
-  v0.1, aplicat a la primera vertical executable d'UVOF015.
-- Resolutor determinista d'UVOF015 amb tres zones, sis espais i les dotze
-  alternatives, més renderer SVG interactiu i exportació.
-- Primer intèrpret executable de descripcions noves dins d'un abast controlat:
-  una única situació 1x1. Detecta rols, costat, pilota inicial, suport, bot i
-  caràcter de la decisió; conserva els buits com a pendents explícits.
-- Geometria provisional d'un duel 1x1 derivada del text confirmat, amb dues
-  sortides, continuïtats i fintes direccionals. Les entrades fora de l'abast no
-  generen gràfic.
+- Esquemes semàntics, corpus v1.1 i contracte qualitatiu
+  `spatial-relations` v0.3 per als quinze UVOF.
+- Fonts versionades amb fingerprint SHA-256, referències estables i cobertura
+  rastrejable de participants, materials, pilotes, accions, fluxos, decisions
+  i opcions.
+- Preflight pur i read-only amb estats `ready`, `partial` o `blocked`.
+- UVOF015 conserva dos espais contigus per defensor, llibertat inicial,
+  continuïtat si hi ha avantatge, finta al contigu si el defensor tanca i
+  superació en travessar la línia defensiva.
+
+## Capa geomètrica
+
+- Perfil reglamentari de pista IHF versionat.
+- Contracte de geometria derivada v0.1 i resolutor determinista d'UVOF015.
+- Tres zones, sis espais, setze entitats, tres branques i dotze alternatives
+  reproduïbles des de l'entrada `ready`.
+- Les coordenades són una política visual revisable i no tornen cap a la
+  semàntica ni al contracte espacial.
+
+## Espai de treball MVP
+
+- Interfície professional en tres panells més franja inferior, amb navegació
+  específica per a mòbil.
+- UVOF015 és l'espècimen executable real; l'aplicació declara explícitament que
+  encara no interpreta text nou arbitrari.
+- Estat central separat en `generatedGeometry`, `workingGeometry`, gramàtica
+  visual generada/de treball, selecció, historial, validació i biblioteca.
+- Editor SVG de participants, materials i vèrtexs de trajectòria.
+- Renderer determinista basat en segments explícits, sense suavitzat automàtic.
+- Historial d'esdeveniments de correcció amb desfer, refer i reiniciar.
+- Validació de cas i promoció explícita a candidat de patró o de regla general;
+  cap correcció local esdevé coneixement canònic automàticament.
+- Persistència local i exportació/importació d'un paquet de cas estructurat.
+- Esquemes nous per a esdeveniments de correcció i paquets de cas.
 
 ## Matriu reproduïble del preflight
 
@@ -43,47 +45,31 @@
 | `ready` | 001, 002, 003, 004, 006, 008, 009, 010, 011, 012, 013, 015 | Contracte i entrades suficients per al gate qualitatiu actual |
 | `partial` | 005, 007, 014 | Flux/informació de pilota no especificat o opcions encara simbòliques |
 
-`valid: true` al validador significa que l'artefacte compleix el contracte. No
-converteix un resultat `partial` o `blocked` en resoluble.
-
-## Estats conservats deliberadament
-
-- UVOF001 declara el model detallat com a font canònica i conserva el corpus
-  com a projecció resumida amb mappings explícits. B1, B2 i els seus dos
-  fluxos no es perden.
-- UVOF005 i UVOF007 no reben pilotes, posseïdors ni passades inventades.
-- UVOF011 identifica quatre defensors reals i actius: `D1_LOCAL`, `D2_LOCAL`,
-  `D3_LOCAL` i `D3_OPOSAT`; ja no existeix el participant abstracte `DEF_4`.
-- UVOF014 conserva les sis opcions individualment; `encreuament` continua
-  identificable encara que resti simbòlic.
-- UVOF015 conserva dos espais contigus per defensor, la llibertat d'elecció
-  inicial, la continuïtat si hi ha avantatge, la finta si el defensor tanca i
-  la superació en travessar la línia defensiva.
+`valid: true` només confirma el contracte. No converteix un resultat
+`partial` o `blocked` en resoluble.
 
 ## No completat
 
-- Dades tàctiques pendents enumerades a `docs/OPEN_QUESTIONS.md`.
-- Resolutor geomètric general per als altres catorze exercicis.
-- Interpretació general de descripcions noves més enllà d'un únic 1x1.
-- Renderer PNG i polítiques visuals generals més enllà d'UVOF015.
+- Dades tàctiques enumerades a `docs/OPEN_QUESTIONS.md`.
+- Interpretació general de descripcions noves.
+- Resolutor geomètric dels altres catorze UVOF.
+- Backend, identitat d'usuari, sincronització, publicació i PNG.
+- Revisió humana de candidats abans d'incorporar-los al corpus o a les regles.
 
 ## Risc principal
 
-Confondre un JSON estructuralment vàlid amb una entrada `ready`, o introduir
-geometria per ocultar un diagnòstic `partial`/`blocked`. La geometria derivada
-de l'MVP no pot convertir-se en font de veritat tàctica.
+Confondre una de les transicions següents:
 
-## En curs
-
-- Primera versió viva del coneixement canònic d'handbol.
-- Consolidació del corpus UVOF com a font de proves per al futur motor espacial.
-- Primera interfície navegable del MVP amb el flux text nou → interpretació 1x1
-  → confirmació → geometria provisional → SVG. UVOF015 es conserva com a prova
-  del resolutor canònic, però ja no és l'exemple fix de la pantalla.
+```text
+vàlid estructuralment ≠ ready
+geometria de treball ≠ geometria generada
+cas validat ≠ patró reutilitzable
+regla candidata ≠ coneixement canònic
+```
 
 ## Pròxima fita recomanada
 
-Validar amb l'entrenador diverses descripcions 1x1 noves i la seva disposició
-visual. Després cal ampliar l'intèrpret a recepcions, passadors i handicaps 1x1
-abans d'obrir relacions numèriques noves. Els tres parcials tàctics poden
-continuar oberts sense bloquejar aquesta vertical.
+Validar amb l'entrenador el flux complet d'edició d'UVOF015 i els camps de
+l'esdeveniment de correcció. Després, utilitzar UVOF001 per provar múltiples
+estats, posicions futures, banc, pivot, extrem, 2x1, recuperació, simetria i
+dues subaccions abans d'implementar un resolutor general.

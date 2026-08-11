@@ -2,73 +2,76 @@
 
 ## Resultat de producte
 
-L'entrenador escriu la descripció d'un exercici, revisa què ha interpretat
-TRAÇA i, després de confirmar-ho, obté un gràfic traçable.
+L'MVP és el primer espai de treball supervisat on l'entrenador pot seguir el
+cicle complet d'un cas sense confondre una correcció local amb coneixement
+canònic:
 
 ```text
-descripció
-  → interpretació semàntica provisional
-  → confirmació de l'entrenador
-  → relacions espacials
-  → geometria derivada
-  → SVG
+DESCRIURE → INTERPRETAR → GENERAR → REVISAR → CORREGIR
+          → VALIDAR → GUARDAR → REUTILITZAR
 ```
 
-## Iteracions
+La primera vertical real és `TR-UVOF-015`. El text, el contracte espacial i la
+geometria provenen dels artefactes validats del repositori. La interfície no
+simula encara una interpretació de text arbitrari: si el text canvia, el motor
+n'informa honestament i no inventa cap gràfic.
 
-1. Interfície navegable amb un exercici validat.
-2. Resolució geomètrica i SVG de `TR-UVOF-015` des del contracte v0.3 `ready`.
-3. Interpretació de text nou dins d'un abast 1x1, revisió i geometria
-   provisional. **En curs.**
-4. Ampliació progressiva del llenguatge: variants 1x1, 2x1, continuïtats,
-   col·laboracions i situacions de partit.
-5. Edició, regeneració, persistència i exportació de producte.
+## Espai de treball
 
-## Pantalla mínima
+- columna esquerra: cas, descripció, interpretació, branques, correcció,
+  validació i promoció;
+- centre: pista reglamentària IHF, vista neta o de control i editor SVG;
+- columna dreta: inspector de propietats, fonts i anotacions conceptuals;
+- franja inferior: historial, validació, biblioteca i traçabilitat;
+- mòbil: els mateixos quatre espais com a panells navegables.
 
-- descripció original editable;
-- resum de participants, organització, materials, fases i decisions;
-- preguntes pendents o confirmació explícita;
-- previsualització del gràfic;
-- estat de traçabilitat de cada capa;
-- exportació SVG i PNG quan existeixi un render validat.
+## Capacitat funcional assolida
 
-## Assolit a la primera vertical executable
+- UVOF015 conserva tres zones, sis espais, setze entitats, tres branques i
+  dotze alternatives;
+- la selecció d'una alternativa és només estat de visualització;
+- participants, pilotes i cons es poden reposicionar;
+- els vèrtexs d'una trajectòria es poden arrossegar en vista de control;
+- el tipus de trajectòria i la seva convenció visual es poden corregir
+  explícitament;
+- desfer, refer i reiniciar reconstrueixen el treball des de la geometria
+  generada, que mai se sobreescriu;
+- cada canvi crea un esdeveniment amb capa, referència, propietat, abans,
+  després, autor, abast, estat, motiu i fonts;
+- les anotacions semàntiques i espacials no muten els artefactes canònics;
+- la validació congela una versió del cas, no una regla general;
+- després de validar hi ha tres decisions separades: guardar el cas, crear un
+  candidat de patró o proposar una regla general candidata;
+- l'estat es conserva a `localStorage` i es pot exportar/importar com a paquet
+  JSON estructurat.
 
-- perfil de mitja pista basat en les regles IHF de juliol de 2025;
-- tres zones i sis espais derivats de les relacions d'UVOF015;
-- dotze alternatives conservades sense selecció tàctica automàtica;
-- un selector independent per duel;
-- renderer SVG i descàrrega de l'SVG visible;
-- traçabilitat fins als nodes, espais, transicions i alternatives d'origen.
+## Gramàtica visual mínima
 
-## Assolit al primer intèrpret de text nou
+La gramàtica visual és dades versionades, no condicionals escampats pel
+renderer. Distingeix atacant, defensor, passador, pivot, pilota, con, banc i
+cilindre; moviment, cursa sense pilota, passada, llançament, finta i posició
+futura; zona espacial, zona de finalització i referència defensiva.
 
-- l'exemple de pantalla és text editable i no un identificador del corpus;
-- detecció explícita d'una única situació 1x1;
-- extracció de rol atacant i defensiu, costat, possessió inicial, suport, bot i
-  llibertat o direcció declarada;
-- aplicació traçable del criteri general validat de llibertat en el 1x1 quan el
-  text no tanca la sortida;
-- dades absents i detalls encara no representables marcats abans de confirmar;
-- rebuig explícit de 2x1, múltiples zones o textos on el 1x1 no és inequívoc;
-- una geometria provisional amb dues sortides, continuïtats i fintes, sense
-  convertir cap alternativa en decisió canònica.
+La passada és discontínua. El moviment del jugador, inclosa la cursa sense
+pilota, és continu. La finta és una polilínia que preserva el canvi funcional
+de direcció. El renderer no suavitza ni inventa punts.
 
-## Fora d'abast actual
+## Límits actuals
 
-- interpretar descripcions noves fora de l'abast d'un únic 1x1;
-- escollir automàticament una alternativa decisional;
-- persistència, comptes d'usuari o publicació d'exercicis;
-- PNG;
-- resolució geomètrica general dels altres catorze exercicis.
+- no hi ha interpretació general de text nou en producció;
+- no hi ha resolutor geomètric general per als altres catorze exercicis;
+- UVOF001 informa l'arquitectura futura, però encara no té editor executable;
+- no hi ha backend, comptes, col·laboració remota ni publicació de casos;
+- la biblioteca i les promocions són locals i candidates;
+- no hi ha exportació PNG ni selecció tàctica automàtica.
 
-## Criteri de validació de la interfície
+## Criteri de validació
 
-L'entrenador ha de poder entendre sense ajuda:
+L'entrenador ha de poder identificar sense ajuda:
 
-1. on escriure la descripció;
-2. què ha entès TRAÇA;
-3. què ha de confirmar;
-4. on apareixerà el gràfic;
-5. en quin punt del procés es troba.
+1. quina informació és font i quina és derivada;
+2. quina geometria és generada i quina és la versió de treball;
+3. què ha canviat, on, per què i qui ho ha canviat;
+4. com desfer o reiniciar sense perdre l'original;
+5. què valida només el cas i què requereix una promoció posterior;
+6. que una proposta general continua sent candidata.

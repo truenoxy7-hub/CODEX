@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://traca.local/schema/traca.correction-event.schema.v0.1.json",
+  "title": "TRAÇA correction event v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "timestamp", "target", "operation", "before", "after", "author", "scope", "status", "reason", "source_refs"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^CORR-[A-Za-z0-9_-]+-[0-9]{4}$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layer", "ref", "property"],
+      "properties": {
+        "layer": { "enum": ["semantic", "spatial", "geometry", "visual"] },
+        "ref": { "type": "string", "minLength": 3 },
+        "property": { "type": "string", "minLength": 1 }
+      }
+    },
+    "operation": { "enum": ["replace", "move", "move_vertex", "annotate"] },
+    "before": true,
+    "after": true,
+    "author": { "type": "string", "minLength": 1 },
+    "scope": { "enum": ["case", "pattern_candidate", "general_rule_candidate"] },
+    "status": { "enum": ["draft", "validated"] },
+    "reason": { "type": "string", "minLength": 1 },
+    "source_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+  }
+}

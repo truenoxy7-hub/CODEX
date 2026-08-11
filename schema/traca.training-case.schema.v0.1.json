@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://traca.local/schema/traca.training-case.schema.v0.1.json",
+  "title": "TRAÇA portable training case v0.2",
+  "type": "object",
+  "required": [
+    "format", "version", "metadata", "case", "description", "source_refs",
+    "generated_geometry", "generated_visual_grammar", "corrections", "visual_decisions",
+    "selected_alternatives", "validation", "promotion_candidates", "knowledge_library"
+  ],
+  "properties": {
+    "format": { "const": "TRACA_training_case" },
+    "version": { "const": "0.2.0" },
+    "metadata": {
+      "type": "object",
+      "required": ["exported_at", "application", "canonical_promotion"],
+      "properties": {
+        "exported_at": { "type": "string", "format": "date-time" },
+        "application": { "type": "string" },
+        "canonical_promotion": { "const": false }
+      }
+    },
+    "case": { "type": "object", "required": ["id", "name", "description"] },
+    "description": { "type": "string" },
+    "source_refs": { "type": "array", "items": { "type": "string" } },
+    "semantic_ref": { "type": ["string", "null"] },
+    "spatial_ref": { "type": ["string", "null"] },
+    "generated_geometry": { "type": "object" },
+    "generated_visual_grammar": { "type": "object" },
+    "corrections": {
+      "type": "array",
+      "items": { "$ref": "traca.correction-event.schema.v0.1.json" }
+    },
+    "validated_geometry": { "type": ["object", "null"] },
+    "validated_visual_grammar": { "type": ["object", "null"] },
+    "visual_decisions": { "type": "object" },
+    "selected_alternatives": { "type": "object", "additionalProperties": { "type": "string" } },
+    "validation": { "type": "object", "required": ["status", "correction_count", "counts_by_layer"] },
+    "promotion_candidates": {
+      "type": "object",
+      "required": ["patterns", "general_rules"],
+      "properties": {
+        "patterns": { "type": "array" },
+        "general_rules": { "type": "array" }
+      }
+    },
+    "knowledge_library": { "type": "object" }
+  }
+}

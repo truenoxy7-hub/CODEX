@@ -85,8 +85,9 @@ superioritats consecutives, un 6x6 complet i tres duels simultanis delimitats.
 Cap d'aquestes capes canòniques conté coordenades ni render. Com a capa
 posterior separada, l'MVP ja deriva `geometry.json` i SVG per a UVOF015 a partir
 del contracte v0.3 `ready`, conservant les dotze alternatives i una política de
-disposició explícitament provisional. La interfície incorpora també el primer
-intèrpret de text nou per a una única situació 1x1: extreu els fets justificats,
-marca els buits i només genera un esborrany gràfic després de confirmació. Aquest
-esborrany no és coneixement canònic ni converteix el corpus en un catàleg
-d'exemples seleccionables.
+disposició explícitament provisional. La interfície és ara un espai de treball
+supervisat sobre UVOF015: manté separades la geometria generada i la còpia de
+treball, registra les correccions, permet desfer/refer, valida versions de cas i
+només crea patrons o regles com a candidats després d'una decisió explícita.
+Encara no interpreta text nou arbitrari en producció i ho declara a l'usuari en
+lloc d'inventar una geometria.

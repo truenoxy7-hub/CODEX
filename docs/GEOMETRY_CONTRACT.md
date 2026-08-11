@@ -42,14 +42,15 @@ lectura simètrica per a l'MVP. No són coneixement tàctic validat. El renderer
 pot canviar-les sense alterar el corpus, sempre que preservi zones, espais,
 contigüitats, línies defensives i alternatives.
 
-## Esborrany interactiu de text nou
+## Còpia de treball editable
 
-La interfície té també una via separada per provar descripcions noves 1x1. La
-seva sortida declara `TRACA_geometria_provisional` i no compleix ni substitueix
-el contracte canònic `traca.geometry.schema.v0.1.json`: no té una font espacial
-amb preflight `ready` ni fingerprint canònic.
+La interfície carrega la geometria canònica d'UVOF015 com a
+`generatedGeometry` immutable i en crea una còpia `workingGeometry`. Els
+moviments i ajustos de trajectòria només afecten la còpia i generen
+esdeveniments de correcció. Desfer, refer i reiniciar reprodueixen l'historial
+des de l'original.
 
-La confirmació de pantalla només autoritza la previsualització de l'esborrany.
-No converteix el text en coneixement validat ni l'afegeix al corpus. Aquesta
-separació permet iterar sobre l'intèrpret sense degradar les garanties dels
-exercicis validats.
+La validació de pantalla pot congelar `validatedGeometry` com a versió del cas.
+No modifica `geometry.json`, no torna coordenades a la capa espacial i no
+promou una correcció a regla. El motor de text arbitrari encara no forma part
+d'aquest contracte executable.

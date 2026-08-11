@@ -3,159 +3,196 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="MVP de TRAÇA per interpretar i representar exercicis d'handbol amb geometria traçable."
-    />
-    <title>TRAÇA · De la descripció a la pista</title>
+    <meta name="description" content="Espai de treball de TRAÇA per interpretar, corregir, validar i reutilitzar exercicis d’handbol." />
+    <title>TRAÇA · Espai de treball</title>
     <link rel="stylesheet" href="styles.css" />
     <script src="data/court-profile.js" defer></script>
-    <script src="one-v-one.js" defer></script>
-    <script src="app.js" defer></script>
+    <script src="data/uvof015.geometry.js" defer></script>
+    <script src="data/uvof015.case.js" defer></script>
+    <script src="js/utils.js" defer></script>
+    <script src="js/visual-grammar.js" defer></script>
+    <script src="js/corrections.js" defer></script>
+    <script src="js/store.js" defer></script>
+    <script src="js/persistence.js" defer></script>
+    <script src="js/import-export.js" defer></script>
+    <script src="js/renderer.js" defer></script>
+    <script src="js/editor.js" defer></script>
+    <script src="js/knowledge-library.js" defer></script>
+    <script src="js/app.js" defer></script>
   </head>
   <body>
     <header class="topbar">
-      <a class="brand" href="#main" aria-label="TRAÇA, anar al contingut principal">
+      <a class="brand" href="#workspace" aria-label="TRAÇA, anar a l’espai de treball">
         <span class="brand-mark" aria-hidden="true">T</span>
-        <span>
-          <strong>TRAÇA</strong>
-          <small>Exercicis d’handbol que conserven el significat</small>
-        </span>
+        <span><strong>TRAÇA</strong><small>Laboratori d’aprenentatge tàctic</small></span>
       </a>
+      <div class="case-identity">
+        <span id="case-id">TR-UVOF-015</span>
+        <strong id="case-name">Tres 1x1 per zones sense bot</strong>
+      </div>
       <div class="topbar-actions">
-        <span class="corpus-status"><i aria-hidden="true"></i> Corpus UVOF · 15 validats</span>
-        <span class="prototype-badge">MVP · vertical 01</span>
+        <span id="workspace-status" class="status-badge is-pending">Pendent de validació</span>
+        <button id="import-trigger" class="button button-quiet" type="button">Importar JSON</button>
+        <button id="export-case" class="button button-secondary" type="button">Exportar cas</button>
+        <input id="import-file" type="file" accept="application/json,.json" hidden />
       </div>
     </header>
 
-    <main id="main" class="page-shell">
-      <section class="intro" aria-labelledby="page-title">
-        <div>
-          <p class="eyebrow">Nou exercici</p>
-          <h1 id="page-title">De la descripció al gràfic, sense perdre la intenció.</h1>
+    <nav class="mobile-tabs" aria-label="Panells de l’espai de treball">
+      <button type="button" data-mobile-panel="flow">Flux</button>
+      <button class="is-active" type="button" data-mobile-panel="court">Pista</button>
+      <button type="button" data-mobile-panel="inspector">Inspector</button>
+      <button type="button" data-mobile-panel="dock">Historial</button>
+    </nav>
+
+    <main id="workspace" class="workspace-shell">
+      <aside class="workspace-panel flow-panel" data-panel="flow" aria-labelledby="flow-title">
+        <div class="panel-header">
+          <div><p class="kicker">Cas de treball</p><h1 id="flow-title">Del text al coneixement validat</h1></div>
         </div>
-        <ol class="stepper" aria-label="Procés de creació">
-          <li class="is-active" data-step="write"><span>1</span>Descriure</li>
-          <li data-step="review"><span>2</span>Revisar</li>
-          <li data-step="generate"><span>3</span>Generar</li>
+
+        <ol class="workflow" aria-label="Flux TRAÇA">
+          <li><button class="workflow-step is-active" type="button" data-mode="description"><span>01</span><b>Descriure</b><small>Text i font</small></button></li>
+          <li><button class="workflow-step" type="button" data-mode="interpretation"><span>02</span><b>Interpretar</b><small>Lectura tàctica</small></button></li>
+          <li><button class="workflow-step" type="button" data-mode="graph"><span>03</span><b>Generar</b><small>Geometria inicial</small></button></li>
+          <li><button class="workflow-step" type="button" data-mode="correction"><span>04</span><b>Corregir</b><small>Sense tocar l’original</small></button></li>
+          <li><button class="workflow-step" type="button" data-mode="validation"><span>05</span><b>Validar</b><small>Decisió del tècnic</small></button></li>
+          <li><button class="workflow-step" type="button" data-mode="library"><span>06</span><b>Guardar i reutilitzar</b><small>Cas o candidat</small></button></li>
         </ol>
-      </section>
 
-      <div class="workspace">
-        <section class="panel input-panel" aria-labelledby="description-title">
-          <div class="panel-heading">
-            <div>
-              <p class="panel-kicker">Entrada</p>
-              <h2 id="description-title">Descriu l’exercici</h2>
-            </div>
-            <div class="exercise-select">
-              <span>Ajuda d’entrada</span>
-              <button id="load-example" type="button">Carregar exemple 1x1</button>
-            </div>
+        <section class="flow-content" data-mode-content="description">
+          <label for="description"><strong>Descripció de l’exercici</strong><small>La font original sempre queda preservada al paquet del cas.</small></label>
+          <textarea id="description" rows="8"></textarea>
+          <div id="engine-notice" class="engine-notice" role="status"></div>
+          <div class="inline-actions">
+            <button id="restore-specimen" class="button button-secondary" type="button">Restaurar UVOF015</button>
+            <button id="interpret-case" class="button button-primary" type="button">Interpretar cas</button>
           </div>
-
-          <label class="description-label" for="description">
-            Explica organització, seqüència i què han de resoldre els jugadors.
-          </label>
-          <textarea id="description" rows="9">Un lateral esquerre amb pilota juga un 1x1 contra un segon defensiu. Té llibertat per sortir cap a l’interior o cap a l’exterior i finalitzar. Sense bot.</textarea>
-          <div class="input-footer">
-            <p><span aria-hidden="true">◎</span> TRAÇA marcarà qualsevol dada que necessiti confirmació.</p>
-            <button id="interpret" class="button button-primary" type="button">
-              Interpretar descripció
-              <span aria-hidden="true">→</span>
-            </button>
-          </div>
-
-          <section id="interpretation" class="interpretation" aria-labelledby="interpretation-title" hidden>
-            <div class="section-divider"></div>
-            <div class="interpretation-heading">
-              <div>
-                <p class="panel-kicker">Interpretació provisional</p>
-                <h3 id="interpretation-title" tabindex="-1">Això és el que TRAÇA ha entès</h3>
-              </div>
-              <span class="confidence"><i aria-hidden="true"></i><span id="confidence-label">Abast inicial · 1x1</span></span>
-            </div>
-
-            <dl id="fact-grid" class="fact-grid">
-              <div><dt>Organització</dt><dd id="fact-organization">—</dd></div>
-              <div><dt>Participants</dt><dd id="fact-participants">—</dd></div>
-              <div><dt>Condicions</dt><dd id="fact-conditions">—</dd></div>
-            </dl>
-
-            <div id="phase-list" class="phase-list"></div>
-
-            <div id="validation-note" class="validation-note">
-              <span id="validation-icon" class="validation-icon" aria-hidden="true">✓</span>
-              <div><strong id="validation-title">Interpretació preparada</strong><p id="validation-message">Revisa què ha entès TRAÇA abans de generar.</p></div>
-            </div>
-
-            <div class="review-actions">
-              <button id="edit" class="button button-secondary" type="button">Modificar descripció</button>
-              <button id="confirm" class="button button-primary" type="button">Confirmar interpretació</button>
-            </div>
-          </section>
         </section>
 
-        <aside class="panel preview-panel" aria-labelledby="preview-title">
-          <div class="panel-heading preview-heading">
-            <div>
-              <p class="panel-kicker">Sortida</p>
-              <h2 id="preview-title">Previsualització</h2>
-            </div>
-            <span id="preview-state" class="state-badge">Esperant interpretació</span>
-          </div>
+        <section class="flow-content" data-mode-content="interpretation" hidden>
+          <div class="content-heading"><strong>Interpretació confirmada</strong><span>Corpus validat</span></div>
+          <dl class="facts">
+            <div><dt>Organització</dt><dd>3 zones · 3 duels simultanis</dd></div>
+            <div><dt>Participants</dt><dd>3 atacants · 3 defensors · 3 passadors</dd></div>
+            <div><dt>Condició</dt><dd>Sense bot · llibertat 1x1</dd></div>
+          </dl>
+          <div id="phase-list" class="phase-list"></div>
+          <details class="invariants"><summary>Invariants validats</summary><ul id="invariant-list"></ul></details>
+        </section>
 
-          <div id="court-preview" class="court-preview" aria-live="polite">
-            <div id="svg-stage" class="svg-stage" hidden></div>
-            <div id="preview-message" class="preview-message">
-              <span class="preview-symbol" aria-hidden="true">↗</span>
-              <strong>El gràfic apareixerà aquí</strong>
-              <p>Primer interpreta i confirma què ha d’entendre TRAÇA.</p>
-            </div>
-          </div>
+        <section class="flow-content" data-mode-content="graph" hidden>
+          <div class="content-heading"><strong>Geometria generada</strong><span>Determinista</span></div>
+          <p>3 zones, 6 espais, 16 entitats i 12 alternatives. La selecció visible de cada duel no canvia el contracte.</p>
+          <div id="branch-selectors" class="branch-selectors"></div>
+        </section>
 
-          <div class="preview-actions">
-            <button id="generate" class="button button-primary button-wide" type="button" disabled>
-              Generar gràfic
-            </button>
-            <section id="branch-controls" class="branch-controls" aria-labelledby="branch-controls-title" hidden>
-              <div>
-                <strong id="branch-controls-title">Alternatives visibles</strong>
-                <small>La selecció mostra una resolució possible; no modifica la descripció original.</small>
-              </div>
-              <div id="branch-selectors" class="branch-selectors"></div>
-            </section>
-            <div class="export-actions">
-              <button id="export-svg" type="button" disabled>Descarregar SVG</button>
-              <button type="button" disabled>PNG · properament</button>
-            </div>
-            <p class="court-source">
-              Pista basada en les
-              <a href="https://www.ihf.info/sites/default/files/2025-07/09A%20-%20Rules%20of%20the%20Game_Indoor%20Handball_E.pdf" target="_blank" rel="noreferrer">regles IHF de juliol de 2025</a>.
-            </p>
-          </div>
+        <section class="flow-content" data-mode-content="correction" hidden>
+          <div class="content-heading"><strong>Correcció supervisada</strong><span id="correction-count">0 canvis</span></div>
+          <p>Selecciona i arrossega una entitat o un punt de trajectòria. Cada gest queda registrat com una correcció de cas.</p>
+          <ul class="compact-list">
+            <li>La geometria generada queda intacta.</li>
+            <li>La finta conserva els vèrtexs explícits.</li>
+            <li>Cap canvi es converteix automàticament en regla.</li>
+          </ul>
+        </section>
 
-          <section class="trace-card" aria-labelledby="trace-title">
-            <div class="trace-heading">
-              <h3 id="trace-title">Traçabilitat</h3>
-              <span>En directe</span>
+        <section class="flow-content" data-mode-content="validation" hidden>
+          <div class="content-heading"><strong>Decisió del tècnic</strong><span id="validation-mini-status">Pendent</span></div>
+          <p>La validació congela una versió del cas amb totes les correccions actuals. No modifica el corpus canònic.</p>
+          <button id="validate-case" class="button button-primary button-wide" type="button">Validar aquesta versió</button>
+        </section>
+
+        <section class="flow-content" data-mode-content="library" hidden>
+          <div class="content-heading"><strong>Promoció explícita</strong><span>Mai automàtica</span></div>
+          <p>Després de validar pots guardar només el cas, crear un candidat de patró o proposar una regla general candidata.</p>
+          <div class="save-options">
+            <button id="save-case" class="button button-secondary" type="button" disabled>Guardar només aquest cas</button>
+            <button id="save-pattern" class="button button-secondary" type="button" disabled>Crear candidat de patró</button>
+            <button id="save-rule" class="button button-secondary" type="button" disabled>Proposar regla candidata</button>
+          </div>
+        </section>
+      </aside>
+
+      <section class="workspace-panel court-panel" data-panel="court" aria-labelledby="court-title">
+        <div class="court-toolbar">
+          <div><p class="kicker">Representació editable</p><h2 id="court-title">Pista IHF · UVOF015</h2></div>
+          <div class="toolbar-actions">
+            <div class="segmented" role="group" aria-label="Vista del gràfic">
+              <button type="button" data-view="clean">Neta</button>
+              <button class="is-active" type="button" data-view="control">Control</button>
             </div>
-            <ul>
-              <li><i class="trace-dot is-ready" aria-hidden="true"></i><span><strong>Text original</strong><small>Font preservada</small></span></li>
-              <li><i id="semantic-dot" class="trace-dot" aria-hidden="true"></i><span><strong>Interpretació tàctica</strong><small id="semantic-status">Pendent</small></span></li>
-              <li><i id="relation-dot" class="trace-dot" aria-hidden="true"></i><span><strong>Relacions espacials</strong><small id="relation-status">Pendent de confirmació</small></span></li>
-              <li><i id="geometry-dot" class="trace-dot" aria-hidden="true"></i><span><strong>Geometria i SVG</strong><small id="geometry-status">Preparat per generar</small></span></li>
-            </ul>
-          </section>
-        </aside>
-      </div>
+            <button id="undo" class="icon-button" type="button" title="Desfer" aria-label="Desfer" disabled>↶</button>
+            <button id="redo" class="icon-button" type="button" title="Refer" aria-label="Refer" disabled>↷</button>
+            <button id="reset" class="button button-danger" type="button" disabled>Reiniciar</button>
+          </div>
+        </div>
+        <div class="court-stage-wrap">
+          <div id="court-stage" class="court-stage" aria-live="polite"></div>
+          <div class="court-legend" aria-label="Llegenda">
+            <span><i class="legend-dot attacker"></i>Atac</span>
+            <span><i class="legend-dot defender"></i>Defensa</span>
+            <span><i class="legend-line movement"></i>Moviment</span>
+            <span><i class="legend-line pass"></i>Passada</span>
+          </div>
+        </div>
+        <div class="court-footer">
+          <span>Arrossega jugadors, materials o punts de trajectòria en vista Control.</span>
+          <a href="https://www.ihf.info/sites/default/files/2025-07/09A%20-%20Rules%20of%20the%20Game_Indoor%20Handball_E.pdf" target="_blank" rel="noreferrer">Mides IHF 2025 ↗</a>
+        </div>
+      </section>
+
+      <aside class="workspace-panel inspector-panel" data-panel="inspector" aria-labelledby="inspector-title">
+        <div class="panel-header">
+          <div><p class="kicker">Inspector</p><h2 id="inspector-title">Propietats i traça</h2></div>
+          <span id="selection-type" class="selection-type">Sense selecció</span>
+        </div>
+        <div id="inspector-empty" class="empty-state">
+          <span aria-hidden="true">⌖</span>
+          <strong>Selecciona un element</strong>
+          <p>Pots editar entitats, punts de trajectòria i convencions visuals sense alterar la geometria generada.</p>
+        </div>
+        <form id="inspector-form" class="inspector-form" hidden>
+          <div class="selected-title"><strong id="selected-id"></strong><small id="selected-ref"></small></div>
+          <div id="position-fields" class="field-grid" hidden>
+            <label>X (m)<input id="position-x" type="number" step="0.05" /></label>
+            <label>Y (m)<input id="position-y" type="number" step="0.05" /></label>
+          </div>
+          <label id="path-kind-field" hidden>Tipus de trajectòria<select id="path-kind"></select></label>
+          <label id="visual-color-field" hidden>Color de la convenció visual<input id="visual-color" type="color" /></label>
+          <label>Motiu de la correcció<input id="correction-reason" type="text" value="Ajust del tècnic" /></label>
+          <button id="apply-inspector" class="button button-primary button-wide" type="submit">Aplicar correcció</button>
+          <div class="traceability-box"><strong>Referències de font</strong><ul id="source-ref-list"></ul></div>
+        </form>
+
+        <section class="conceptual-correction" aria-labelledby="conceptual-title">
+          <div class="section-rule"></div>
+          <h3 id="conceptual-title">Anotar correcció conceptual</h3>
+          <label>Capa<select id="conceptual-layer"><option value="semantic">Semàntica</option><option value="spatial">Espacial</option><option value="geometry">Geometria</option><option value="visual">Visual</option></select></label>
+          <label>Abans<input id="conceptual-before" type="text" placeholder="Lectura actual" /></label>
+          <label>Després<input id="conceptual-after" type="text" placeholder="Correcció proposada" /></label>
+          <label>Raó<input id="conceptual-reason" type="text" placeholder="Criteri del tècnic" /></label>
+          <button id="add-conceptual" class="button button-secondary button-wide" type="button">Registrar anotació</button>
+        </section>
+      </aside>
+
+      <section class="workspace-panel dock-panel" data-panel="dock" aria-labelledby="dock-title">
+        <div class="dock-tabs" role="tablist" aria-label="Informació inferior">
+          <button class="is-active" type="button" role="tab" data-dock="history">Historial <span id="history-count">0</span></button>
+          <button type="button" role="tab" data-dock="validation">Validació</button>
+          <button type="button" role="tab" data-dock="library">Biblioteca</button>
+          <button type="button" role="tab" data-dock="traceability">Traçabilitat</button>
+        </div>
+        <div class="dock-content">
+          <section id="dock-history" data-dock-content="history"><div id="history-list" class="history-list"></div></section>
+          <section id="dock-validation" data-dock-content="validation" hidden><div id="validation-summary"></div></section>
+          <section id="dock-library" data-dock-content="library" hidden><div id="library-summary" class="library-grid"></div></section>
+          <section id="dock-traceability" data-dock-content="traceability" hidden><div id="traceability-summary"></div></section>
+        </div>
+      </section>
     </main>
 
-    <footer>
-      <p>TRAÇA diferencia coneixement tàctic, relacions espacials i representació gràfica.</p>
-      <span>Primer intèrpret executable · abast 1x1</span>
-    </footer>
-
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
     <div id="announcer" class="sr-only" aria-live="polite"></div>
   </body>
 </html>

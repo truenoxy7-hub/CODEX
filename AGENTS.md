@@ -224,21 +224,20 @@ amplades de zona i les distàncies de lectura dels participants són política
 visual provisional i no coneixement tàctic validat. Qualsevol canvi geomètric
 ha de mantenir la traçabilitat definida a `docs/GEOMETRY_CONTRACT.md`.
 
-## Intèrpret MVP de text nou
+## Espai de treball MVP
 
 El corpus UVOF és coneixement de referència i conjunt de regressió, no una
-llista tancada d'exercicis que l'usuari hagi de seleccionar. La interfície
-accepta text nou, però el primer abast executable és deliberadament una única
-situació 1x1.
+llista tancada que defineixi el futur producte. Tot i això, l'espai de treball
+executable actual utilitza UVOF015 com a espècimen real i declara honestament
+que encara no interpreta text nou arbitrari. No s'ha de presentar una
+adaptació d'UVOF015 com si fos geometria derivada d'un text nou.
 
-L'intèrpret pot aplicar el criteri general validat de llibertat de resolució en
-el 1x1; no pot inventar possessió inicial, bot, costat, passadors, materials ni
-una relació numèrica diferent. Els buits es mostren com a pendents i qualsevol
-entrada fora de l'abast es rebutja abans del render.
-
-La geometria resultant declara `TRACA_geometria_provisional`. La confirmació a
-la pantalla permet previsualitzar-la, però no equival a validació tàctica
-canònica, preflight `ready` ni incorporació al corpus.
+La interfície manté `generatedGeometry` separada de `workingGeometry`. Qualsevol
+moviment o canvi visual crea un esdeveniment de correcció de cas; desfer, refer
+i reiniciar reconstrueixen des de l'original. Una validació de cas no muta el
+corpus, i una generalització només pot néixer com a candidat després d'una
+promoció explícita. Els contractes viuen a `docs/LEARNING_WORKFLOW.md`,
+`docs/CORRECTION_MODEL.md` i `docs/VISUAL_GRAMMAR.md`.
 
 ## Regla general de permuta
 

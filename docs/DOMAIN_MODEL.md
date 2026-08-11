@@ -115,12 +115,24 @@ preserva totes les alternatives. Les coordenades de lectura viuen només a
 `geometry.json` i poden revisar-se sense canviar el significat tàctic. El
 contracte es documenta a [`GEOMETRY_CONTRACT.md`](GEOMETRY_CONTRACT.md).
 
-La interfície pot generar també una geometria provisional des d'una
-interpretació nova confirmada. Aquesta via és un esborrany interactiu: no té
-preflight canònic, no s'incorpora al corpus i ha de conservar explícitament els
-camps desconeguts.
+La interfície MVP no genera encara geometria des de text arbitrari. Carrega la
+derivació reproduïble d'UVOF015 i en separa dues versions: la generada i la de
+treball. La correcció gràfica només modifica la segona i sempre queda vinculada
+a un esdeveniment traçable.
 
-## 8. Corpus d'exercicis
+## 8. Correcció supervisada
+
+Una correcció és una decisió de l'entrenador sobre una capa i un cas concrets.
+Declara objectiu, propietat, valor anterior i nou, autor, motiu, abast, estat i
+fonts. Les capes són `semantic`, `spatial`, `geometry` i `visual`.
+
+La validació d'un conjunt de correccions crea una versió validada del cas. No
+altera automàticament el corpus, el contracte espacial ni les regles generals.
+La reutilització exigeix una promoció explícita i produeix primer un candidat.
+El model complet es documenta a
+[`CORRECTION_MODEL.md`](CORRECTION_MODEL.md).
+
+## 9. Corpus d'exercicis
 
 El corpus semàntic agrupa exercicis validats que comparteixen una família. Cada
 entrada declara:
@@ -137,7 +149,7 @@ Una absència d'informació no s'omple per inferència. En particular, un flux d
 pilota buit significa que la font i l'entrenador encara no n'han fixat el
 posseïdor o la transferència.
 
-## 9. Permuta
+## 10. Permuta
 
 La permuta utilitza la notació `primer_jugador-segon_jugador`. El primer canvia
 cap a la posició del segon i rep després de la permuta; el segon ocupa l'espai
@@ -147,7 +159,7 @@ es declara separadament perquè la identitat del participant, la posició
 temporal, el passador i el posseïdor de pilota no són equivalents. Un flux
 específic validat per la tasca preval sobre la topologia general.
 
-## 10. Caràcter de les decisions
+## 11. Caràcter de les decisions
 
 Cada decisió ha d'indicar-ne el caràcter:
 
@@ -158,7 +170,7 @@ Cada decisió ha d'indicar-ne el caràcter:
 El canvi de banda després d'una acció sense avantatge és habitualment
 `preferent`, no `obligatori`.
 
-## 11. Relacions espacials derivades
+## 12. Relacions espacials derivades
 
 La capa de relacions espacials és un graf qualitatiu situat entre el model
 semàntic i la geometria. Conté:
@@ -174,11 +186,11 @@ no hereta una posició fixa. Les contigüitats indiquen explícitament el defens
 compartit. Les decisions continuen obertes fins que la lectura de joc en
 selecciona una alternativa.
 
-El contracte v0.2 es documenta a
+El contracte v0.3 es documenta a
 [`SPATIAL_RELATIONS_CONTRACT.md`](SPATIAL_RELATIONS_CONTRACT.md). Encara no
-genera geometria.
+genera geometria per si mateix.
 
-La v0.2 separa també el flux de pilota de les transicions dels participants.
+La v0.3 separa també el flux de pilota de les transicions dels participants.
 Cada trajectòria alternativa conserva la possessió entre passades i pot
 referenciar la condició tàctica que l'activa. Els encreuaments declaren el pas
 del receptor per darrere del portador i l'interval que ataca després de rebre.

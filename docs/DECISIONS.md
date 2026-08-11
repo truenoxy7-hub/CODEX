@@ -345,14 +345,41 @@ prototips descartats es reutilitza.
 l'entrenador. Els UVOF validats aporten vocabulari, invariants, exemples i
 proves de regressió, però l'usuari no ha de limitar-se a seleccionar-ne un.
 
-**Primera aplicació:** l'intèrpret executable comença amb una única situació
-`1x1`. Extreu només els elements que pot justificar, aplica el criteri general
-validat de llibertat de resolució quan la tasca no la restringeix, i mostra com
-a pendents la possessió, el bot o el costat que el text no declara. Un `2x1`,
-múltiples zones o una acció no identificable no generen geometria en aquesta
-iteració.
+**Primera aplicació revisada:** l'arquitectura continua orientada a text nou,
+però l'espai de treball executable utilitza UVOF015 com a espècimen real. La
+interfície declara que encara no pot interpretar text arbitrari amb garanties;
+si el text canvia, no reutilitza ni adapta silenciosament la geometria del cas.
+El prototip local d'intèrpret 1x1 no forma part del motor de producció.
 
-**Separació de garanties:** la geometria creada des del text confirmat és un
-esborrany de previsualització. No és un artefacte canònic v0.1, no supera per si
-sola el preflight espacial i no s'incorpora automàticament al corpus. La
-confirmació d'interfície no equival a validació tàctica permanent.
+**Separació de garanties:** quan s'habiliti geometria creada des de text nou,
+serà un esborrany de previsualització. No serà un artefacte canònic v0.1, no
+superarà per si sola el preflight espacial i no s'incorporarà automàticament al
+corpus. La confirmació d'interfície no equivaldrà a validació tàctica permanent.
+
+## D-038 — Aprenentatge per correccions de cas i promoció explícita
+
+**Decisió de producte:** l'entrenador ha de poder corregir la representació
+sense sobreescriure la geometria generada. Cada canvi és un esdeveniment amb
+capa, referència, propietat, abans, després, autor, abast, estat, raó i fonts.
+L'estat de treball es reconstrueix aplicant aquests esdeveniments a l'original.
+
+**Separació de capes:** una correcció semàntica o espacial queda anotada però
+no muta els artefactes canònics. Una correcció geomètrica o visual modifica
+només la còpia de treball. Desfer, refer i reiniciar mai no operen directament
+sobre `generatedGeometry`.
+
+**Validació i reutilització:** validar congela una versió del cas. Guardar el
+cas, crear un candidat de patró i proposar una regla general candidata són tres
+accions explícites diferents. Cap acció local promociona automàticament
+coneixement al corpus.
+
+## D-039 — Renderer literal i gramàtica visual estructurada
+
+**Decisió tècnica:** el renderer no conté política tàctica ni suavitzat de
+trajectòries. Dibuixa els punts amb segments `M/L` i rep les convencions des
+d'una gramàtica visual versionada.
+
+**Aplicació:** la passada és discontínua; tot moviment del jugador, inclosa la
+cursa sense pilota, és continu. La finta preserva els vèrtexs funcionals del
+canvi de direcció. Vista neta i vista de control comparteixen geometria i només
+difereixen en superposicions d'inspecció.

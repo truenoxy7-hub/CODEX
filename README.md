@@ -5,7 +5,7 @@ TRAÇA és un projecte per construir un llenguatge canònic i una base de coneix
 ## Estat actual
 
 El projecte es troba en la fase de **modelatge semàntic, preflight espacial i
-primer MVP d'interpretació**.
+primer MVP d'aprenentatge supervisat**.
 La primera família completa és `MITJANS 1V1 OFENSIUS`, amb `TR-UVOF-001` a
 `TR-UVOF-015` interpretats i validats amb l'entrenador.
 
@@ -46,6 +46,9 @@ La geometria i el renderer anteriors es consideren prototips descartables. No s'
 - `docs/DOMAIN_MODEL.md`
 - `docs/SPATIAL_RELATIONS_CONTRACT.md`
 - `docs/GEOMETRY_CONTRACT.md`
+- `docs/LEARNING_WORKFLOW.md`
+- `docs/VISUAL_GRAMMAR.md`
+- `docs/CORRECTION_MODEL.md`
 - `docs/DECISIONS.md`
 - `docs/OPEN_QUESTIONS.md`
 
@@ -80,20 +83,24 @@ python -m pytest -q
 
 ## Primera interfície de l'MVP
 
-La interfície permet escriure una descripció nova. El primer abast executable
-interpreta una única situació 1x1, mostra els elements detectats o pendents i,
-després de la confirmació, genera una geometria provisional amb alternatives de
-continuïtat i finta. Les situacions fora d'aquest abast no es dibuixen per
-inferència.
+La interfície és un espai de treball supervisat per a UVOF015. Permet revisar
+la interpretació validada, mostrar les dotze alternatives, editar entitats i
+trajectòries, desfer/refer, validar una versió i decidir explícitament si es
+guarda com a cas o com a candidat reutilitzable. La geometria generada queda
+sempre separada de la versió de treball.
+
+El motor actual no interpreta text nou arbitrari en producció. La descripció
+es pot contrastar, però si canvia la interfície no inventa geometria ni presenta
+una adaptació d'UVOF015 com si fos una interpretació nova.
 
 ```bash
 make interface
 ```
 
 La interfície queda disponible a `http://localhost:8000` i també es pot obrir
-directament. El corpus continua sent la base de coneixement i de proves, no un
-catàleg tancat d'exercicis seleccionables. L'abast i les iteracions següents es
-documenten a [`docs/MVP.md`](docs/MVP.md).
+directament. L'estat s'emmagatzema només a `localStorage` i es pot
+exportar/importar com un paquet JSON. L'abast es documenta a
+[`docs/MVP.md`](docs/MVP.md).
 
 Per veure exclusivament la matriu read-only del preflight:
 
