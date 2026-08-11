@@ -90,6 +90,9 @@ def test_renderer_is_segment_driven_and_generated_compare_is_read_only() -> None
     assert "space.anchor" in renderer
     assert '"stroke-linejoin": "miter"' in renderer
     assert "comparison-ghost" in renderer
+    assert '"fill-opacity": 0.24' in renderer
+    assert "dependenciesApi.visibleFutureStates" in renderer
+    assert 'if (view === "control") dependenciesApi.visibleFutureStates' not in renderer
     assert 'snapshot.ui.view === "control" || snapshot.ui.view === "corrected"' in app
 
 

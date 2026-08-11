@@ -48,8 +48,9 @@ Cada posició temporal d'un participant és un `participant_state` amb identitat
 estable, fase, posició i estat `current`, `future` o `past`. Les entitats
 visibles apunten al seu estat actual. Una trajectòria de moviment declara
 `actor_ref`, `from_state_ref` i `to_state_ref`; una passada declara també
-pilota, emissor i receptor. Els estats futurs només es mostren a Control quan
-són necessaris per a l'alternativa previsualitzada.
+pilota, emissor i receptor. Una posició futura es mostra sempre que sigui
+l’origen o el destí d’una trajectòria visible; reutilitza el mateix símbol del
+participant amb el farciment translúcid. Només és editable a Control.
 
 `dependencies` declara quins símbols, moviments i passades depenen de cada
 estat. Moure un estat és una única correcció principal: el workspace recalcula

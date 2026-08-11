@@ -100,9 +100,12 @@
 
   function visiblePath(path, geometry, grammar, primitive) {
     const candidate = JSON.parse(JSON.stringify(path));
-    if (!candidate.segments || !candidate.segments.length || primitive !== "pass" || candidate.anchor_mode !== "symbol_perimeter") return candidate;
+    const stateLinked = candidate.from_state_ref && candidate.to_state_ref;
+    const canAnchor = candidate.action_type === "movement" || (primitive === "pass" && candidate.anchor_mode === "symbol_perimeter");
+    if (!candidate.segments || !candidate.segments.length || !stateLinked || !canAnchor) return candidate;
     const entities = new Map((geometry.entities || []).map((entity) => [entity.id, entity]));
-    const from = entities.get(candidate.from_participant_ref), to = entities.get(candidate.to_participant_ref);
+    const from = entities.get(candidate.action_type === "pass" ? candidate.from_participant_ref : candidate.actor_ref);
+    const to = entities.get(candidate.action_type === "pass" ? candidate.to_participant_ref : candidate.actor_ref);
     const first = candidate.segments[0], last = candidate.segments[candidate.segments.length - 1];
     const fromStyle = from && (grammar.entities[from.kind] || grammar.entities.generic_participant);
     const toStyle = to && (grammar.entities[to.kind] || grammar.entities.generic_participant);
@@ -203,16 +206,33 @@
     }
   }
 
-  function addFutureState(documentObject, svg, state, geometry, grammar, selection) {
+  function addFutureState(documentObject, svg, state, geometry, grammar, selection, view) {
     const participant = (geometry.entities || []).find((entity) => entity.id === state.participant_ref);
     if (!participant) return;
     const style = grammar.entities[participant.kind] || grammar.entities.generic_participant;
     const ref = targetRef("participant_state", state.id);
+    const interactive = view === "control";
     const group = append(documentObject, svg, "g", {
-      class: `selectable participant-state-node${selectedClass(selection, ref)}`,
-      "data-ref": ref, "data-kind": "participant_state", tabindex: 0, role: "button", "aria-label": `Posició futura ${participant.label || participant.id}`
+      class: `${interactive ? "selectable " : ""}participant-state-node${selectedClass(selection, ref)}`,
+      "data-ref": interactive ? ref : null, "data-kind": interactive ? "participant_state" : null,
+      tabindex: interactive ? 0 : null, role: interactive ? "button" : "img",
+      "pointer-events": interactive ? null : "none", "aria-label": `Posició futura ${participant.label || participant.id}`
     });
-    append(documentObject, group, "circle", { cx: state.position[0], cy: state.position[1], r: style.radius || 0.34, fill: "none", stroke: style.stroke, "stroke-opacity": 0.62, "stroke-width": 0.07, "stroke-dasharray": "0.13 0.1" });
+    const x = state.position[0], y = state.position[1];
+    if (style.shape === "text") {
+      const text = append(documentObject, group, "text", { x, y, "text-anchor": "middle", fill: style.text, "fill-opacity": 0.55, "font-size": 0.34, "font-weight": 750 });
+      text.textContent = participant.label || participant.id;
+    } else if (style.shape === "triangle") {
+      append(documentObject, group, "polygon", { points: `${x},${y - 0.3} ${x - 0.27},${y + 0.24} ${x + 0.27},${y + 0.24}`, fill: style.fill, "fill-opacity": 0.24, stroke: style.stroke, "stroke-opacity": 0.72, "stroke-width": 0.055 });
+    } else if (style.shape === "rect") {
+      append(documentObject, group, "rect", { x: x - style.radius, y: y - 0.24, width: style.radius * 2, height: 0.48, rx: 0.05, fill: style.fill, "fill-opacity": 0.24, stroke: style.stroke, "stroke-opacity": 0.72, "stroke-width": 0.055 });
+    } else {
+      append(documentObject, group, "circle", { cx: x, cy: y, r: style.radius || 0.34, fill: style.fill, "fill-opacity": 0.24, stroke: style.stroke, "stroke-opacity": 0.72, "stroke-width": 0.065 });
+    }
+    if (participant.label && style.shape !== "text") {
+      const label = append(documentObject, group, "text", { x, y: y + 0.11, "text-anchor": "middle", fill: style.text, "fill-opacity": 0.68, "font-size": 0.31, "font-weight": 850, "pointer-events": "none" });
+      label.textContent = participant.label;
+    }
   }
 
   function selectedAlternatives(geometry, selectionMap) {
@@ -257,7 +277,7 @@
       }
       addPath(documentObject, svg, alternative, "alternative", grammar, selection, view, alternative.segments ? "segments" : "points", geometry);
     });
-    if (view === "control") dependenciesApi.visibleFutureStates(geometry, options.selectedAlternatives || {}).forEach((state) => addFutureState(documentObject, svg, state, geometry, grammar, selection));
+    dependenciesApi.visibleFutureStates(geometry, options.selectedAlternatives || {}).forEach((state) => addFutureState(documentObject, svg, state, geometry, grammar, selection, view));
     (geometry.entities || []).forEach((entity) => addEntity(documentObject, svg, entity, grammar, selection));
     return svg;
   }

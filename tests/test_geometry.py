@@ -119,11 +119,15 @@ def test_paths_are_state_linked_functional_segments_and_feints_keep_the_break() 
         if path["action_type"] == "pass":
             assert path["anchor_mode"] == "symbol_perimeter"
             assert path["from_participant_ref"] != path["to_participant_ref"]
+            assert states[path["from_state_ref"]]["participant_ref"] == path["from_participant_ref"]
+            assert states[path["to_state_ref"]]["participant_ref"] == path["to_participant_ref"]
     for branch in geometry["branches"]:
         for alternative in branch["alternatives"]:
             assert alternative["from_state_ref"] in states
             assert alternative["to_state_ref"] in states
             assert alternative["return_pass"]["to_state_ref"] == alternative["from_state_ref"]
+            assert states[alternative["return_pass"]["from_state_ref"]]["participant_ref"] == alternative["return_pass"]["from_participant_ref"]
+            assert states[alternative["return_pass"]["to_state_ref"]]["participant_ref"] == alternative["return_pass"]["to_participant_ref"]
             if alternative["kind"] == "feint":
                 assert [segment["type"] for segment in alternative["segments"]] == ["cubic", "line", "cubic"]
                 assert any(point["role"] == "direction_break" for point in alternative["functional_points"])

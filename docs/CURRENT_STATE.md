@@ -12,6 +12,9 @@
   zones poden aparèixer discretament a Control.
 - Participants amb estats persistents, trajectòries segmentades i passades
   enllaçades a emissor/receptor; la finta conserva el trencament funcional.
+- Les posicions futures connectades a l’acció visible reutilitzen el símbol del
+  participant amb farciment translúcid; passades i moviments queden ancorats al
+  perímetre dels símbols d’origen i destí.
 
 ## Workspace universal MVP
 

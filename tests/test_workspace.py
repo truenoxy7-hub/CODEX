@@ -283,6 +283,55 @@ process.stdout.write(JSON.stringify({sourceStart:path.segments[0].start,displayS
     assert result["displayEnd"] != result["sourceEnd"]
 
 
+def test_movement_display_is_also_anchored_between_current_and_future_icons() -> None:
+    result = _run_node("""
+const fs = require('fs');
+const Renderer = require('./interface/js/renderer.js');
+const Visual = require('./interface/js/visual-grammar.js');
+const geometry = JSON.parse(fs.readFileSync('./exercises/TR-UVOF-015/geometry.json', 'utf8'));
+const path = geometry.common_paths.find(x=>x.kind==='run_without_ball');
+const display = Renderer.pathForDisplay(path, geometry, Visual.createVisualGrammar(), 'movement_without_ball');
+process.stdout.write(JSON.stringify({sourceStart:path.segments[0].start,displayStart:display.segments[0].start,sourceEnd:path.segments.at(-1).end,displayEnd:display.segments.at(-1).end}));
+""")
+
+    assert result["displayStart"] != result["sourceStart"]
+    assert result["displayEnd"] != result["sourceEnd"]
+
+
+def test_only_future_states_connected_to_visible_paths_are_exposed() -> None:
+    result = _run_node("""
+const fs = require('fs');
+const Dependencies = require('./interface/js/geometry-dependencies.js');
+const geometry = JSON.parse(fs.readFileSync('./exercises/TR-UVOF-015/geometry.json', 'utf8'));
+const selected = Object.fromEntries(geometry.branches.map(branch=>[branch.id, branch.alternatives[0].id]));
+const paths = [...geometry.common_paths];
+geometry.branches.forEach(branch=>{ const alternative=branch.alternatives[0]; paths.push(alternative, alternative.return_pass); });
+const connected = new Set(paths.flatMap(path=>[path.from_state_ref,path.to_state_ref]));
+const visible = Dependencies.visibleFutureStates(geometry, selected);
+process.stdout.write(JSON.stringify({ids:visible.map(state=>state.id),allConnected:visible.every(state=>connected.has(state.id)),futureCount:geometry.participant_states.filter(state=>state.status==='future').length}));
+""")
+
+    assert len(result["ids"]) == 9
+    assert result["allConnected"] is True
+    assert result["futureCount"] > len(result["ids"])
+
+
+def test_preflight_rejects_a_pass_linked_to_the_wrong_receiver_state() -> None:
+    result = _run_node("""
+const fs = require('fs');
+const Store = require('./interface/js/store.js');
+const Visual = require('./interface/js/visual-grammar.js');
+const geometry = JSON.parse(fs.readFileSync('./exercises/TR-UVOF-015/geometry.json', 'utf8'));
+geometry.branches[0].alternatives[0].return_pass.to_participant_ref = 'P_ESQ';
+const store = Store.createWorkspaceStore({initialCase:{id:'TR-UVOF-015',name:'x',description:'x'},initialGeometry:geometry,visualGrammar:Visual.createVisualGrammar()});
+const report = store.runPreflight();
+process.stdout.write(JSON.stringify({canValidate:report.can_validate,codes:report.diagnostics.map(item=>item.code)}));
+""")
+
+    assert result["canValidate"] is False
+    assert "PASS_IDENTITY_LINK_INVALID" in result["codes"]
+
+
 def test_training_case_and_correction_schemas_are_valid() -> None:
     try:
         from jsonschema import Draft202012Validator

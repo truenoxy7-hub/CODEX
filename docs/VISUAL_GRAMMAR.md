@@ -52,6 +52,11 @@ Control pot mostrar una àncora i una etiqueta petites per inspeccionar una
 relació espacial. No pot mostrar rectangles, polígons farcits ni subdivisions
 artificials dels intervals. La vista neta no mostra cap ajuda espacial interna.
 
+Les posicions futures no són ajudes espacials: formen part de l’acció visible.
+Reutilitzen forma, color i etiqueta del participant, amb farciment translúcid,
+i apareixen sempre que una trajectòria visible hi comença o hi acaba. La
+trajectòria toca el perímetre del símbol, no un punt flotant ni el seu centre.
+
 ## Finta i canvi de direcció
 
 Una finta no és una corba decorativa. Els punts representen atac a un espai,

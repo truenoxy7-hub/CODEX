@@ -455,3 +455,15 @@ ompli `origin` o `tags`. L’origen queda registrat internament com
 a partir dels conceptes explícits reconeguts. Les etiquetes descriuen la
 classificació del cas, però no converteixen una coincidència provisional en
 coneixement validat.
+
+## D-051 — Posicions futures visibles i trajectòries ancorades
+
+**Decisió visual:** tota posició futura que sigui origen o destí d’una
+trajectòria visible es representa amb el mateix símbol, color i etiqueta del
+participant, però amb farciment translúcid. No es mostren estats futurs que no
+participen en l’alternativa previsualitzada.
+
+**Decisió estructural:** moviments i passades han d’enllaçar estats que
+pertanyin als participants declarats. Les fletxes es retallen al perímetre dels
+símbols; el preflight bloqueja una passada si l’estat d’origen no pertany a
+l’emissor o l’estat final no pertany al receptor.

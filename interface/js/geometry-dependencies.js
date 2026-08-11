@@ -97,11 +97,16 @@
 
   function visibleFutureStates(geometry, selectedMap) {
     const selected = selectedAlternativeIds(geometry, selectedMap);
+    const visiblePaths = [...((geometry && geometry.common_paths) || [])];
+    ((geometry && geometry.branches) || []).forEach((branch) => {
+      (branch.alternatives || []).filter((alternative) => selected.has(alternative.id)).forEach((alternative) => {
+        visiblePaths.push(alternative);
+        if (alternative.return_pass) visiblePaths.push(alternative.return_pass);
+      });
+    });
+    const connectedStates = new Set(visiblePaths.flatMap((path) => [path.from_state_ref, path.to_state_ref]).filter(Boolean));
     return ((geometry && geometry.participant_states) || []).filter((state) => {
-      if (state.status !== "future") return false;
-      if (state.visibility === "control") return true;
-      if (state.visibility !== "selected_alternative") return false;
-      return (state.alternative_refs || []).some((ref) => selected.has(ref));
+      return state.status === "future" && connectedStates.has(state.id);
     });
   }
 
