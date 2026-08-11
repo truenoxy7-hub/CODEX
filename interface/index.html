@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Prototip de TRAÇA per interpretar descripcions d'exercicis d'handbol abans de generar-ne el gràfic."
+      content="MVP de TRAÇA per interpretar i representar exercicis d'handbol amb geometria traçable."
     />
-    <title>TRAÇA · Interpretar abans de dibuixar</title>
+    <title>TRAÇA · De la descripció a la pista</title>
     <link rel="stylesheet" href="styles.css" />
+    <script src="data/uvof015.geometry.js" defer></script>
     <script src="app.js" defer></script>
   </head>
   <body>
@@ -22,7 +23,7 @@
       </a>
       <div class="topbar-actions">
         <span class="corpus-status"><i aria-hidden="true"></i> Corpus UVOF · 15 validats</span>
-        <span class="prototype-badge">Prototip 01</span>
+        <span class="prototype-badge">MVP · vertical 01</span>
       </div>
     </header>
 
@@ -49,7 +50,7 @@
             <label class="exercise-select">
               <span>Exemple</span>
               <select id="exercise" aria-label="Exercici de prova">
-                <option value="TR-UVOF-001">TR-UVOF-001</option>
+                <option value="TR-UVOF-015">TR-UVOF-015 · tres duels</option>
               </select>
             </label>
           </div>
@@ -57,7 +58,7 @@
           <label class="description-label" for="description">
             Explica organització, seqüència i què han de resoldre els jugadors.
           </label>
-          <textarea id="description" rows="9">El treball consisteix en un treball a dues bandes, on en la primera acció amb 1v1 sobre el banc cap al centre juguem un 2v1 amb PV, i recuperem per rebre de l’extrem donant importància a la trajectòria per jugar un 2v1 amb extrems.</textarea>
+          <textarea id="description" rows="9">Tres zones delimitades per quatre cons. A cada zona, l’atacant passa al passador, inicia la cursa sense pilota, rep orientat i resol un 1x1 amb llibertat absoluta, dins la zona i sense bot.</textarea>
           <div class="input-footer">
             <p><span aria-hidden="true">◎</span> TRAÇA marcarà qualsevol dada que necessiti confirmació.</p>
             <button id="interpret" class="button button-primary" type="button">
@@ -77,29 +78,29 @@
             </div>
 
             <dl class="fact-grid">
-              <div><dt>Organització</dt><dd>2 bandes simètriques</dd></div>
-              <div><dt>Participants</dt><dd>4 atacants · 2 defensors</dd></div>
-              <div><dt>Materials</dt><dd>Banc · 3 cons</dd></div>
+              <div><dt>Organització</dt><dd>3 zones simultànies</dd></div>
+              <div><dt>Participants</dt><dd>3 atacants · 3 defensors · 3 passadors</dd></div>
+              <div><dt>Materials</dt><dd>4 cons · 3 pilotes</dd></div>
             </dl>
 
             <div class="phase-list">
               <article class="phase-card">
                 <span class="phase-number">01</span>
                 <div>
-                  <h4>Finta i 2x1 interior</h4>
-                  <p>El lateral rep en carrera a 1–2, supera el segon defensor simulat pel banc i resol amb el pivot.</p>
+                  <h4>Passada i recepció orientada</h4>
+                  <p>Cada atacant passa al suport de la seva zona, inicia en carrera sense pilota i rep orientat.</p>
                   <div class="tags" aria-label="Conceptes de la primera fase">
-                    <span>Finta en U</span><span>1–2 → 2–3</span><span>2x1 amb pivot</span>
+                    <span>3 pilotes</span><span>Cursa sense pilota</span><span>Recepció orientada</span>
                   </div>
                 </div>
               </article>
               <article class="phase-card">
                 <span class="phase-number">02</span>
                 <div>
-                  <h4>Recuperació i 2x1 exterior</h4>
-                  <p>El mateix lateral recupera sense pilota, rep de l’extrem orientat i ataca directament el carril.</p>
+                  <h4>1x1 amb llibertat absoluta</h4>
+                  <p>L’atacant tria un dels dos espais: continua si té avantatge o finta cap al contigu si el defensor tanca.</p>
                   <div class="tags" aria-label="Conceptes de la segona fase">
-                    <span>Sense bot</span><span>Atac 1–2</span><span>2x1 amb extrem</span>
+                    <span>Sense bot</span><span>Dins la zona</span><span>Superar la línia defensiva</span>
                   </div>
                 </div>
               </article>
@@ -107,7 +108,7 @@
 
             <div class="validation-note">
               <span class="validation-icon" aria-hidden="true">✓</span>
-              <div><strong>Sense preguntes pendents</strong><p>Aquesta interpretació coincideix amb l’UVOF001 validat per l’entrenador.</p></div>
+              <div><strong>Sense preguntes pendents</strong><p>Aquesta interpretació coincideix amb l’UVOF015 validat per l’entrenador.</p></div>
             </div>
 
             <div class="review-actions">
@@ -127,19 +128,7 @@
           </div>
 
           <div id="court-preview" class="court-preview" aria-live="polite">
-            <div
-              class="court"
-              role="img"
-              aria-label="Mitja pista d’handbol de 20 per 20 metres, amb porteria i línies de 4, 6, 7 i 9 metres"
-            >
-              <div class="court-goal" aria-hidden="true"><i></i></div>
-              <div class="goal-area-line" aria-hidden="true"></div>
-              <div class="free-throw-line" aria-hidden="true"></div>
-              <div class="penalty-line" aria-hidden="true"></div>
-              <div class="goalkeeper-line" aria-hidden="true"></div>
-              <div class="throw-off-area" aria-hidden="true"></div>
-              <span class="court-scale" aria-hidden="true">Mitja pista · 20 × 20 m</span>
-            </div>
+            <div id="svg-stage" class="svg-stage" hidden></div>
             <div id="preview-message" class="preview-message">
               <span class="preview-symbol" aria-hidden="true">↗</span>
               <strong>El gràfic apareixerà aquí</strong>
@@ -149,12 +138,23 @@
 
           <div class="preview-actions">
             <button id="generate" class="button button-primary button-wide" type="button" disabled>
-              Generar gràfic · propera iteració
+              Generar gràfic
             </button>
+            <section id="branch-controls" class="branch-controls" aria-labelledby="branch-controls-title" hidden>
+              <div>
+                <strong id="branch-controls-title">Alternatives visibles</strong>
+                <small>La selecció només canvia la previsualització; no tanca la decisió tàctica.</small>
+              </div>
+              <div id="branch-selectors" class="branch-selectors"></div>
+            </section>
             <div class="export-actions">
-              <button type="button" disabled>Descarregar SVG</button>
-              <button type="button" disabled>Descarregar PNG</button>
+              <button id="export-svg" type="button" disabled>Descarregar SVG</button>
+              <button type="button" disabled>PNG · properament</button>
             </div>
+            <p class="court-source">
+              Pista basada en les
+              <a href="https://www.ihf.info/sites/default/files/2025-07/09A%20-%20Rules%20of%20the%20Game_Indoor%20Handball_E.pdf" target="_blank" rel="noreferrer">regles IHF de juliol de 2025</a>.
+            </p>
           </div>
 
           <section class="trace-card" aria-labelledby="trace-title">
@@ -166,7 +166,7 @@
               <li><i class="trace-dot is-ready" aria-hidden="true"></i><span><strong>Text original</strong><small>Font preservada</small></span></li>
               <li><i id="semantic-dot" class="trace-dot" aria-hidden="true"></i><span><strong>Interpretació tàctica</strong><small id="semantic-status">Pendent</small></span></li>
               <li><i id="relation-dot" class="trace-dot" aria-hidden="true"></i><span><strong>Relacions espacials</strong><small id="relation-status">Pendent de confirmació</small></span></li>
-              <li><i class="trace-dot" aria-hidden="true"></i><span><strong>Geometria i SVG</strong><small>Proper bloc de treball</small></span></li>
+              <li><i id="geometry-dot" class="trace-dot" aria-hidden="true"></i><span><strong>Geometria i SVG</strong><small id="geometry-status">Preparat per generar</small></span></li>
             </ul>
           </section>
         </aside>
@@ -175,7 +175,7 @@
 
     <footer>
       <p>TRAÇA diferencia coneixement tàctic, relacions espacials i representació gràfica.</p>
-      <span>Primera iteració de la interfície · sense geometria tàctica</span>
+      <span>Primera vertical executable · UVOF015</span>
     </footer>
 
     <div id="announcer" class="sr-only" aria-live="polite"></div>

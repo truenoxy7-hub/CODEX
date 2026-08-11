@@ -38,8 +38,13 @@ La geometria i el renderer anteriors es consideren prototips descartables. No s'
 - `schema/traca.spatial-relations.schema.v0.3.json`
 - `schema/traca.spatial-relations.schema.v0.2.json` (històric, read-only)
 - `scripts/spatial_preflight.py`
+- `config/handball-court.ihf-2025.json`
+- `schema/traca.geometry.schema.v0.1.json`
+- `exercises/TR-UVOF-015/geometry.json`
+- `scripts/resolve_geometry.py`
 - `docs/DOMAIN_MODEL.md`
 - `docs/SPATIAL_RELATIONS_CONTRACT.md`
+- `docs/GEOMETRY_CONTRACT.md`
 - `docs/DECISIONS.md`
 - `docs/OPEN_QUESTIONS.md`
 
@@ -74,15 +79,16 @@ python -m pytest -q
 
 ## Primera interfície de l'MVP
 
-La primera iteració navegable permet escriure la descripció original de
-`TR-UVOF-001`, revisar-ne la interpretació tàctica i confirmar-la abans del
-futur pas geomètric. No genera encara trajectòries ni SVG tàctic.
+La primera vertical executable permet revisar la descripció validada de
+`TR-UVOF-015`, confirmar-ne la interpretació, generar una geometria separada i
+previsualitzar les alternatives dels tres duels en SVG.
 
 ```bash
 make interface
 ```
 
-La interfície queda disponible a `http://localhost:8000`. L'abast i les
+La interfície queda disponible a `http://localhost:8000`. L'ordre regenera
+primer l'artefacte geomètric i el paquet de dades del navegador. L'abast i les
 iteracions següents es documenten a [`docs/MVP.md`](docs/MVP.md).
 
 Per veure exclusivament la matriu read-only del preflight:

@@ -22,8 +22,12 @@
   amb diagnòstics estructurats i sense geometria.
 - Integració del preflight al validador sense seleccionar silenciosament el
   `semantic.json` germà d'UVOF001.
-- Suite verda amb 114 proves: les 88 del baseline auditat i 26 proves noves de
+- Suite verda amb 127 proves: les 88 del baseline auditat i 39 proves noves de
   contracte, preservació, integritat i mutacions destructives.
+- Perfil reglamentari de pista IHF versionat i contracte de geometria derivada
+  v0.1, aplicat a la primera vertical executable d'UVOF015.
+- Resolutor determinista d'UVOF015 amb tres zones, sis espais i les dotze
+  alternatives, més renderer SVG interactiu i exportació.
 
 ## Matriu reproduïble del preflight
 
@@ -52,10 +56,9 @@ converteix un resultat `partial` o `blocked` en resoluble.
 ## No completat
 
 - Dades tàctiques pendents enumerades a `docs/OPEN_QUESTIONS.md`.
-- Perfil reglamentari de pista versionat.
-- Resolutor espacial o geomètric.
-- `geometry.json`, coordenades, punts, vectors o regions calculades.
-- Renderer, SVG i polítiques visuals.
+- Resolutor geomètric general per als altres catorze exercicis.
+- Interpretació automàtica de descripcions noves.
+- Renderer PNG i polítiques visuals generals més enllà d'UVOF015.
 
 ## Risc principal
 
@@ -68,10 +71,10 @@ de l'MVP no pot convertir-se en font de veritat tàctica.
 - Primera versió viva del coneixement canònic d'handbol.
 - Consolidació del corpus UVOF com a font de proves per al futur motor espacial.
 - Primera interfície navegable del MVP amb el flux descripció → interpretació →
-  confirmació, encara sense geometria tàctica.
+  confirmació → geometria → SVG per a UVOF015.
 
 ## Pròxima fita recomanada
 
-Resoldre amb l'entrenador els tres parcials que encara requereixen autoritat
-tàctica i especificar el perfil de pista i l'API del futur resolutor. El
-preflight v0.3 és el gate d'entrada; encara no resol ni dibuixa cap exercici.
+Validar visualment amb l'entrenador la política de disposició d'UVOF015 i,
+després, generalitzar el contracte geomètric a UVOF001, UVOF003 i UVOF010. Els
+tres parcials tàctics poden continuar oberts sense bloquejar aquesta vertical.

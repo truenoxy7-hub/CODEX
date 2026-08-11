@@ -82,5 +82,7 @@ vinculats als seus defensors reals. El primer cas de permuta conserva per
 separat identitat inicial, posició temporal i tres fluxos de pilota; els casos
 següents fixen la topologia general de passada, una variant específica, dues
 superioritats consecutives, un 6x6 complet i tres duels simultanis delimitats.
-Cap
-d'aquestes capes conté coordenades ni render.
+Cap d'aquestes capes canòniques conté coordenades ni render. Com a capa
+posterior separada, l'MVP ja deriva `geometry.json` i SVG per a UVOF015 a partir
+del contracte v0.3 `ready`, conservant les dotze alternatives i una política de
+disposició explícitament provisional.

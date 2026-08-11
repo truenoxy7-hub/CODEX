@@ -1,3 +1,6 @@
+const SVG_NS = "http://www.w3.org/2000/svg";
+const geometry = window.TRACA_UVOF015_GEOMETRY;
+
 const elements = {
   description: document.querySelector("#description"),
   interpret: document.querySelector("#interpret"),
@@ -5,13 +8,26 @@ const elements = {
   interpretationTitle: document.querySelector("#interpretation-title"),
   edit: document.querySelector("#edit"),
   confirm: document.querySelector("#confirm"),
+  generate: document.querySelector("#generate"),
+  exportSvg: document.querySelector("#export-svg"),
   previewState: document.querySelector("#preview-state"),
   previewMessage: document.querySelector("#preview-message"),
+  svgStage: document.querySelector("#svg-stage"),
+  branchControls: document.querySelector("#branch-controls"),
+  branchSelectors: document.querySelector("#branch-selectors"),
   semanticDot: document.querySelector("#semantic-dot"),
   semanticStatus: document.querySelector("#semantic-status"),
   relationDot: document.querySelector("#relation-dot"),
   relationStatus: document.querySelector("#relation-status"),
+  geometryDot: document.querySelector("#geometry-dot"),
+  geometryStatus: document.querySelector("#geometry-status"),
   announcer: document.querySelector("#announcer"),
+};
+
+const branchNames = {
+  Z_ESQ: "Zona esquerra",
+  Z_CE: "Zona central",
+  Z_DRE: "Zona dreta",
 };
 
 function setStep(activeStep) {
@@ -27,43 +43,366 @@ function announce(message) {
   }, 30);
 }
 
+function svgNode(name, attributes = {}) {
+  const node = document.createElementNS(SVG_NS, name);
+  Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, String(value)));
+  return node;
+}
+
+function append(parent, name, attributes = {}) {
+  const node = svgNode(name, attributes);
+  parent.appendChild(node);
+  return node;
+}
+
+function pointString(points) {
+  return points.map(([x, y]) => `${x},${y}`).join(" ");
+}
+
+function smoothPath(points) {
+  if (points.length < 3) {
+    return `M ${points[0][0]} ${points[0][1]} L ${points[1][0]} ${points[1][1]}`;
+  }
+  let path = `M ${points[0][0]} ${points[0][1]}`;
+  for (let index = 1; index < points.length - 1; index += 1) {
+    const current = points[index];
+    const next = points[index + 1];
+    const middle = [(current[0] + next[0]) / 2, (current[1] + next[1]) / 2];
+    path += ` Q ${current[0]} ${current[1]} ${middle[0]} ${middle[1]}`;
+  }
+  const penultimate = points[points.length - 2];
+  const last = points[points.length - 1];
+  return `${path} Q ${penultimate[0]} ${penultimate[1]} ${last[0]} ${last[1]}`;
+}
+
+function addMarker(defs, id, color) {
+  const marker = append(defs, "marker", {
+    id,
+    viewBox: "0 0 10 10",
+    refX: 9,
+    refY: 5,
+    markerWidth: 5,
+    markerHeight: 5,
+    orient: "auto-start-reverse",
+  });
+  append(marker, "path", { d: "M 0 0 L 10 5 L 0 10 z", fill: color });
+}
+
+function addCourt(svg) {
+  const { court } = geometry;
+  const goalLeft = (court.width_m - court.goal.width_m) / 2;
+  const goalRight = goalLeft + court.goal.width_m;
+  const radius = court.markings.goal_area_radius_m;
+  const freeRadius = court.markings.free_throw_distance_m;
+  const leftAreaStart = goalLeft - radius;
+  const rightAreaStart = goalRight + radius;
+  const leftFreeStart = goalLeft - freeRadius;
+  const rightFreeStart = goalRight + freeRadius;
+
+  const defs = append(svg, "defs");
+  const wood = append(defs, "linearGradient", { id: "wood", x1: 0, y1: 0, x2: 0, y2: 1 });
+  append(wood, "stop", { offset: "0%", "stop-color": "#d7a06b" });
+  append(wood, "stop", { offset: "100%", "stop-color": "#c98950" });
+  const clip = append(defs, "clipPath", { id: "court-clip" });
+  append(clip, "rect", { x: 0, y: 0, width: 20, height: 20 });
+  addMarker(defs, "arrow-player", "#126c55");
+  addMarker(defs, "arrow-ball", "#db5a2a");
+
+  append(svg, "rect", { x: 0, y: 0, width: 20, height: 20, fill: "url(#wood)" });
+  for (let x = 1; x < 20; x += 1.5) {
+    append(svg, "line", { x1: x, y1: 0, x2: x, y2: 20, stroke: "#ffffff", "stroke-opacity": 0.055, "stroke-width": 0.025 });
+  }
+  append(svg, "rect", { x: 0, y: 0, width: 20, height: 20, fill: "none", stroke: "#fff", "stroke-width": 0.08 });
+
+  const goalAreaPath = `M ${leftAreaStart} 0 A ${radius} ${radius} 0 0 0 ${goalLeft} ${radius} L ${goalRight} ${radius} A ${radius} ${radius} 0 0 0 ${rightAreaStart} 0`;
+  append(svg, "path", { d: goalAreaPath, fill: "#75b8ac", "fill-opacity": 0.34, stroke: "#fff", "stroke-width": 0.08 });
+
+  const freeThrowPath = `M ${leftFreeStart} 0 A ${freeRadius} ${freeRadius} 0 0 0 ${goalLeft} ${freeRadius} L ${goalRight} ${freeRadius} A ${freeRadius} ${freeRadius} 0 0 0 ${rightFreeStart} 0`;
+  append(svg, "path", {
+    d: freeThrowPath,
+    fill: "none",
+    stroke: "#fff",
+    "stroke-width": 0.08,
+    "stroke-dasharray": `${court.markings.free_throw_segment_m} ${court.markings.free_throw_gap_m}`,
+    "clip-path": "url(#court-clip)",
+  });
+
+  const penaltyHalf = court.markings.penalty_line_length_m / 2;
+  const goalkeeperHalf = court.markings.goalkeeper_line_length_m / 2;
+  append(svg, "line", {
+    x1: 10 - penaltyHalf,
+    y1: court.markings.penalty_line_distance_m,
+    x2: 10 + penaltyHalf,
+    y2: court.markings.penalty_line_distance_m,
+    stroke: "#fff",
+    "stroke-width": 0.08,
+  });
+  append(svg, "line", {
+    x1: 10 - goalkeeperHalf,
+    y1: court.markings.goalkeeper_line_distance_m,
+    x2: 10 + goalkeeperHalf,
+    y2: court.markings.goalkeeper_line_distance_m,
+    stroke: "#fff",
+    "stroke-width": 0.08,
+  });
+  append(svg, "line", { x1: 0, y1: 20, x2: 20, y2: 20, stroke: "#fff", "stroke-width": 0.08 });
+  append(svg, "path", { d: "M 8 20 A 2 2 0 0 1 12 20", fill: "none", stroke: "#fff", "stroke-width": 0.08 });
+
+  append(svg, "rect", { x: goalLeft, y: -0.72, width: 3, height: 0.72, fill: "#f7f4eb", stroke: "#c83d37", "stroke-width": 0.12 });
+  for (let x = goalLeft + 0.25; x < goalRight; x += 0.5) {
+    append(svg, "line", { x1: x, y1: -0.72, x2: x, y2: 0, stroke: "#c83d37", "stroke-width": 0.12 });
+  }
+}
+
+function selectedAlternatives() {
+  return geometry.branches.map((branch) => {
+    const select = document.querySelector(`[data-branch="${branch.id}"]`);
+    const selectedId = select ? select.value : branch.alternatives[1].id;
+    return branch.alternatives.find((alternative) => alternative.id === selectedId);
+  });
+}
+
+function addSpaces(svg, alternatives) {
+  const selected = new Map();
+  alternatives.forEach((alternative) => {
+    selected.set(alternative.initial_space_ref, "initial");
+    selected.set(alternative.target_space_ref, alternative.initial_space_ref === alternative.target_space_ref ? "same" : "target");
+  });
+  geometry.spaces.forEach((space) => {
+    const state = selected.get(space.id);
+    append(svg, "polygon", {
+      points: pointString(space.polygon),
+      fill: state === "target" ? "#f6b26b" : "#dff2e9",
+      "fill-opacity": state ? 0.28 : 0.08,
+      stroke: state ? "#ffffff" : "none",
+      "stroke-width": 0.035,
+    });
+  });
+}
+
+function addZones(svg) {
+  geometry.zones.forEach((zone) => {
+    append(svg, "polygon", {
+      points: pointString(zone.polygon),
+      fill: "none",
+      stroke: "#183f34",
+      "stroke-opacity": 0.28,
+      "stroke-width": 0.035,
+      "stroke-dasharray": "0.16 0.14",
+    });
+    append(svg, "line", {
+      x1: zone.defensive_line[0][0],
+      y1: zone.defensive_line[0][1],
+      x2: zone.defensive_line[1][0],
+      y2: zone.defensive_line[1][1],
+      stroke: "#b73d3d",
+      "stroke-opacity": 0.5,
+      "stroke-width": 0.045,
+      "stroke-dasharray": "0.12 0.12",
+    });
+    const label = append(svg, "text", {
+      x: (zone.polygon[0][0] + zone.polygon[1][0]) / 2,
+      y: 15.0,
+      "text-anchor": "middle",
+      fill: "#173f33",
+      "fill-opacity": 0.75,
+      "font-size": 0.36,
+      "font-family": "Inter, sans-serif",
+      "font-weight": 750,
+    });
+    label.textContent = branchNames[zone.id];
+  });
+}
+
+function addCommonPaths(svg) {
+  geometry.common_paths.forEach((path) => {
+    const isPass = path.kind === "initial_pass";
+    append(svg, "path", {
+      d: smoothPath(path.points),
+      fill: "none",
+      stroke: isPass ? "#db5a2a" : "#465d56",
+      "stroke-width": isPass ? 0.075 : 0.065,
+      "stroke-dasharray": isPass ? "0.18 0.12" : "0.12 0.11",
+      "stroke-linecap": "round",
+      "marker-end": isPass ? "url(#arrow-ball)" : "none",
+      opacity: 0.82,
+    });
+  });
+}
+
+function addAlternativePaths(svg, alternatives) {
+  alternatives.forEach((alternative) => {
+    append(svg, "path", {
+      d: smoothPath(alternative.return_ball_points),
+      fill: "none",
+      stroke: "#db5a2a",
+      "stroke-width": 0.075,
+      "stroke-dasharray": "0.18 0.12",
+      "stroke-linecap": "round",
+      "marker-end": "url(#arrow-ball)",
+      opacity: 0.86,
+    });
+    append(svg, "path", {
+      d: smoothPath(alternative.points),
+      fill: "none",
+      stroke: "#126c55",
+      "stroke-width": 0.14,
+      "stroke-linecap": "round",
+      "stroke-linejoin": "round",
+      "marker-end": "url(#arrow-player)",
+    });
+  });
+}
+
+function addEntities(svg) {
+  geometry.entities.forEach((entity) => {
+    const [x, y] = entity.position;
+    if (entity.kind === "cone") {
+      append(svg, "polygon", {
+        points: `${x},${y - 0.28} ${x - 0.24},${y + 0.22} ${x + 0.24},${y + 0.22}`,
+        fill: "#f07a2f",
+        stroke: "#fff4e8",
+        "stroke-width": 0.045,
+      });
+      return;
+    }
+    if (entity.kind === "ball") {
+      append(svg, "circle", { cx: x, cy: y, r: 0.16, fill: "#f0a12f", stroke: "#7f4e13", "stroke-width": 0.035 });
+      return;
+    }
+    const palette = {
+      attacker: ["#1f6fb2", "#eaf4ff"],
+      passer: ["#258b7a", "#e9fff9"],
+      defender: ["#b63e45", "#fff1f2"],
+    };
+    const [fill, textColor] = palette[entity.kind];
+    append(svg, "circle", { cx: x, cy: y, r: 0.37, fill, stroke: "#fff", "stroke-width": 0.07 });
+    const label = append(svg, "text", {
+      x,
+      y: y + 0.13,
+      "text-anchor": "middle",
+      fill: textColor,
+      "font-size": 0.36,
+      "font-family": "Inter, sans-serif",
+      "font-weight": 850,
+    });
+    label.textContent = entity.label;
+  });
+}
+
+function renderGeometry() {
+  const alternatives = selectedAlternatives();
+  const svg = svgNode("svg", {
+    xmlns: SVG_NS,
+    viewBox: geometry.court.view_box.join(" "),
+    role: "img",
+    "aria-label": "UVOF015: tres duels simultanis en una mitja pista reglamentària d’handbol",
+  });
+  addCourt(svg);
+  addSpaces(svg, alternatives);
+  addZones(svg);
+  addCommonPaths(svg);
+  addAlternativePaths(svg, alternatives);
+  addEntities(svg);
+  elements.svgStage.replaceChildren(svg);
+  elements.svgStage.hidden = false;
+  elements.previewMessage.hidden = true;
+}
+
+function alternativeLabel(alternative) {
+  const direction = alternative.id.endsWith("A_B") ? "A → B" : alternative.id.endsWith("B_A") ? "B → A" : alternative.id.endsWith("_A") ? "A" : "B";
+  return `${alternative.kind === "feint" ? "Finta" : "Continua"} ${direction}`;
+}
+
+function buildBranchControls() {
+  elements.branchSelectors.replaceChildren();
+  geometry.branches.forEach((branch) => {
+    const label = document.createElement("label");
+    label.textContent = branchNames[branch.zone_ref];
+    const select = document.createElement("select");
+    select.dataset.branch = branch.id;
+    select.setAttribute("aria-label", `Alternativa de ${branchNames[branch.zone_ref]}`);
+    branch.alternatives.forEach((alternative) => {
+      const option = document.createElement("option");
+      option.value = alternative.id;
+      option.textContent = alternativeLabel(alternative);
+      option.selected = alternative.id.endsWith("FINTA_A_B");
+      select.appendChild(option);
+    });
+    select.addEventListener("change", () => {
+      renderGeometry();
+      announce(`${branchNames[branch.zone_ref]} actualitzada: ${select.options[select.selectedIndex].textContent}.`);
+    });
+    label.appendChild(select);
+    elements.branchSelectors.appendChild(label);
+  });
+}
+
 function showInterpretation() {
   if (!elements.description.value.trim()) {
     elements.description.focus();
     announce("Escriu una descripció abans d'interpretar l'exercici.");
     return;
   }
-
   elements.interpretation.hidden = false;
   elements.semanticDot.classList.add("is-ready");
-  elements.semanticStatus.textContent = "Interpretació disponible";
+  elements.semanticStatus.textContent = "UVOF015 reconegut";
   elements.previewState.textContent = "Pendent de confirmació";
   elements.previewState.classList.remove("is-ready");
   setStep("review");
   elements.interpretationTitle.focus();
-  announce("Interpretació provisional preparada. Revisa les dues fases detectades.");
+  announce("Interpretació provisional preparada. Revisa la seqüència dels tres duels.");
 }
 
 function editDescription() {
   elements.description.focus();
+  elements.generate.disabled = true;
   setStep("write");
   announce("Pots modificar la descripció i tornar-la a interpretar.");
 }
 
 function confirmInterpretation() {
   elements.relationDot.classList.add("is-ready");
-  elements.relationStatus.textContent = "Contracte UVOF001 disponible";
-  elements.previewState.textContent = "Interpretació confirmada";
+  elements.relationStatus.textContent = "Contracte UVOF015 ready";
+  elements.previewState.textContent = "Preparat per generar";
   elements.previewState.classList.add("is-ready");
-  elements.previewMessage.innerHTML = `
-    <span class="preview-symbol" aria-hidden="true">✓</span>
-    <strong>Preparat per generar</strong>
-    <p>La interpretació queda confirmada. Connectarem aquí el motor geomètric en la propera iteració.</p>
-  `;
+  elements.generate.disabled = false;
   setStep("generate");
-  announce("Interpretació confirmada. El model està preparat per al futur motor gràfic.");
+  announce("Interpretació confirmada. Ja pots generar el gràfic.");
+}
+
+function generateGraph() {
+  if (!geometry) {
+    announce("No s'ha pogut carregar la geometria derivada.");
+    return;
+  }
+  if (!elements.branchSelectors.children.length) {
+    buildBranchControls();
+  }
+  renderGeometry();
+  elements.branchControls.hidden = false;
+  elements.exportSvg.disabled = false;
+  elements.geometryDot.classList.add("is-ready");
+  elements.geometryStatus.textContent = "SVG derivat · 3 alternatives visibles";
+  elements.previewState.textContent = "Gràfic generat";
+  announce("Gràfic generat amb una alternativa visible per cadascun dels tres duels.");
+}
+
+function exportSvg() {
+  const svg = elements.svgStage.querySelector("svg");
+  if (!svg) return;
+  const source = `<?xml version="1.0" encoding="UTF-8"?>\n${new XMLSerializer().serializeToString(svg)}`;
+  const url = URL.createObjectURL(new Blob([source], { type: "image/svg+xml;charset=utf-8" }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "TR-UVOF-015.svg";
+  link.click();
+  URL.revokeObjectURL(url);
+  announce("SVG de l'UVOF015 descarregat.");
 }
 
 elements.interpret.addEventListener("click", showInterpretation);
 elements.edit.addEventListener("click", editDescription);
 elements.confirm.addEventListener("click", confirmInterpretation);
+elements.generate.addEventListener("click", generateGraph);
+elements.exportSvg.addEventListener("click", exportSvg);

@@ -1,4 +1,4 @@
-.PHONY: install validate test check interface
+.PHONY: install validate test check geometry interface
 
 install:
 	python -m pip install -r requirements.txt
@@ -11,5 +11,8 @@ test:
 
 check: validate test
 
-interface:
+geometry:
+	python scripts/resolve_geometry.py
+
+interface: geometry
 	python -m http.server 8000 --directory interface

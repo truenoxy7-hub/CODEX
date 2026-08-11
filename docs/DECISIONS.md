@@ -124,8 +124,8 @@ seus delimitadors i les contigüitats pel defensor compartit.
 coordenades ni tancar decisions que depenen de la lectura del jugador.
 
 **Abast actual:** la decisió continua vigent i el contracte ha evolucionat a
-v0.3 amb `TR-UVOF-001`–`TR-UVOF-015`. La geometria de sortida continua
-pendent.
+v0.3 amb `TR-UVOF-001`–`TR-UVOF-015`. La geometria continua fora d'aquest
+contracte; UVOF015 ja en té una primera derivació posterior v0.1.
 
 ## D-022 — Flux de pilota i trajectòries alternatives al contracte espacial
 
@@ -322,3 +322,19 @@ marcada pel defensor real de la zona.
 direccionals, les contigüitats comparteixen el defensor i totes les branques
 conserven el criteri de superació. Desapareixen els marcs incomplets i el
 preflight d'UVOF015 passa de `blocked` a `ready` sense introduir coordenades.
+
+## D-036 — Primera geometria derivada i revisable
+
+**Decisió tècnica:** la geometria viu en un artefacte nou i no s'afegeix al
+corpus ni al contracte espacial. Només es deriva d'una entrada amb preflight
+`ready`, referencia el fingerprint d'origen i manté traçabilitat fins als nodes,
+espais, transicions i alternatives.
+
+**Aplicació MVP:** UVOF015 conserva les quatre alternatives de cadascun dels
+tres duels. La interfície en pot mostrar una per zona, però aquesta selecció és
+estat de previsualització i no una decisió tàctica canònica.
+
+**Política provisional:** l'amplada visual de les tres zones i les distàncies
+de lectura dels participants són una política de render revisable. Les línies i
+dimensions de pista provenen del perfil IHF versionat; cap coordenada dels
+prototips descartats es reutilitza.

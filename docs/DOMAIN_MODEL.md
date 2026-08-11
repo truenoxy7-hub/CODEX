@@ -96,7 +96,7 @@ No imposa una única resolució.
 
 La pilota ha de tenir un flux separat del moviment dels jugadors. Una passada només és vàlida quan l'actor té possessió. Una recuperació sense pilota no pot heretar possessió de la fase anterior.
 
-## 7. Geometria futura
+## 7. Geometria derivada
 
 La geometria serà derivada de:
 
@@ -108,6 +108,12 @@ La geometria serà derivada de:
 - invariants tàctics.
 
 Les coordenades no pertanyen al JSON semàntic.
+
+La primera instància executable és UVOF015. Utilitza un perfil de pista IHF
+versionat, exigeix un preflight `ready`, registra fingerprints d'entrada i
+preserva totes les alternatives. Les coordenades de lectura viuen només a
+`geometry.json` i poden revisar-se sense canviar el significat tàctic. El
+contracte es documenta a [`GEOMETRY_CONTRACT.md`](GEOMETRY_CONTRACT.md).
 
 ## 8. Corpus d'exercicis
 

@@ -473,8 +473,9 @@ Sortida futura:
 
 ## Abast i pendents de v0.3
 
-La versió 0.3 valida l'arquitectura amb `TR-UVOF-001`–`TR-UVOF-015`; encara no
-és un resolutor ni un motor geomètric. Abans d'implementar-los cal:
+La versió 0.3 valida l'arquitectura amb `TR-UVOF-001`–`TR-UVOF-015` i continua
+sent exclusivament qualitativa. Una capa posterior v0.1 ja resol UVOF015 sense
+alterar aquest contracte. Per generalitzar el motor encara cal:
 
 - provar-lo amb més permutes i opcions de resolució tancades;
 - definir com canvien els intervals quan els defensors es desplacen entre
@@ -482,4 +483,5 @@ La versió 0.3 valida l'arquitectura amb `TR-UVOF-001`–`TR-UVOF-015`; encara n
 - validar els camps de costat que ara són `unknown` i aprovar els mappings de
   reflexió quan realment siguin necessaris;
 - separar les prioritats tàctiques de les preferències del futur solucionador;
-- decidir el contracte de sortida geomètrica en una versió posterior.
+- estabilitzar el contracte de sortida geomètrica després de la validació
+  visual de la primera vertical.

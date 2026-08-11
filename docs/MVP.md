@@ -16,8 +16,8 @@ descripció
 
 ## Iteracions
 
-1. Interfície navegable amb `TR-UVOF-001` i dades simulades.
-2. Resolució geomètrica i SVG de `TR-UVOF-001` des dels JSON validats.
+1. Interfície navegable amb un exercici validat.
+2. Resolució geomètrica i SVG de `TR-UVOF-015` des del contracte v0.3 `ready`.
 3. Interpretació de la descripció original i contrast amb el model aprovat.
 4. Cobertura dels quinze exercicis UVOF, edició, regeneració i exportació.
 
@@ -30,13 +30,22 @@ descripció
 - estat de traçabilitat de cada capa;
 - exportació SVG i PNG quan existeixi un render validat.
 
-## Fora d'abast de la primera iteració
+## Assolit a la primera vertical executable
 
-- generar geometria tàctica;
+- perfil de mitja pista basat en les regles IHF de juliol de 2025;
+- tres zones i sis espais derivats de les relacions d'UVOF015;
+- dotze alternatives conservades sense selecció tàctica automàtica;
+- un selector independent per duel;
+- renderer SVG i descàrrega de l'SVG visible;
+- traçabilitat fins als nodes, espais, transicions i alternatives d'origen.
+
+## Fora d'abast actual
+
 - interpretar descripcions noves;
 - escollir automàticament una alternativa decisional;
 - persistència, comptes d'usuari o publicació d'exercicis;
-- reutilitzar coordenades dels prototips descartats.
+- PNG;
+- resolució geomètrica general dels altres catorze exercicis.
 
 ## Criteri de validació de la interfície
 

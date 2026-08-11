@@ -212,6 +212,18 @@ escollir el primer. Si obté avantatge, continua pel mateix espai; si el defenso
 el tanca, canvia direcció i ritme cap al contigu. La superació es produeix quan
 l'atacant travessa la línia defensiva marcada pel defensor de la seva zona.
 
+## Geometria MVP de TR-UVOF-015
+
+La geometria derivada viu a `exercises/TR-UVOF-015/geometry.json`, mai dins el
+corpus o el contracte espacial. Només es regenera després d'un preflight
+`ready`. Conserva les dotze alternatives i no en marca cap com a seleccionada;
+els tres selectors de la interfície només controlen la previsualització.
+
+Les mesures de pista provenen de `config/handball-court.ihf-2025.json`. Les
+amplades de zona i les distàncies de lectura dels participants són política
+visual provisional i no coneixement tàctic validat. Qualsevol canvi geomètric
+ha de mantenir la traçabilitat definida a `docs/GEOMETRY_CONTRACT.md`.
+
 ## Regla general de permuta
 
 La direcció nomena el jugador que canvia de posició i el lloc que ocupa. En una
@@ -231,6 +243,8 @@ Abans de tocar codi:
 5. Inspecciona l'exercici i l'esquema afectats.
 6. Si la tasca afecta la capa espacial, llegeix
    `docs/SPATIAL_RELATIONS_CONTRACT.md`.
+7. Si la tasca afecta geometria o render, llegeix
+   `docs/GEOMETRY_CONTRACT.md`.
 
 Durant la implementació:
 
