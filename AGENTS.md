@@ -165,6 +165,14 @@ centre, rep de `PV` i llença trepitjant `BANC_CENTRAL`. Abans, `L` passa a
 finalitza des de l'espai restringit. Els tres fluxos de pilota són independents.
 El cilindre referencia l'espai restringit de finalització del pivot.
 
+## TR-UVOF-010
+
+Després de la permuta lateral–central, la segona acció només s'activa si `L`
+no ha participat en la continuïtat de la primera. `PV` parteix de `CON_PV`, que
+delimita l'espai oposat a la trajectòria de `L`; lateral i pivot no poden ocupar
+ni atacar el mateix espai. Si `D3` queda pla, `L` llança des de fora. Només si
+`D3` puja, `PV` abandona el con, llisca cap a l'espai lliure i rep de `L`.
+
 ## TR-UVOF-013
 
 És un `4x4` amb un passador extern que no computa en la relació. Després de la

@@ -1079,11 +1079,26 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
         (phase for phase in uvof_010.get("fases", []) if phase.get("id") == "F2"),
         {},
     )
+    materials_010 = {
+        material.get("id"): material.get("funcio")
+        for material in uvof_010.get("materials", [])
+    }
+    material_states_010 = {
+        material.get("id"): material.get("estat_coneixement")
+        for material in uvof_010.get("materials", [])
+    }
+    actions_010 = {
+        (action.get("actor"), action.get("accio"), action.get("estat_coneixement"))
+        for action in phase_2_010.get("accions", [])
+    }
     if (
         not {"L", "CE", "L_OPOSAT", "PV", "D3"} <= participants_010
         or uvof_010.get("organitzacio", {}).get("passador_permuta")
         != "L_OPOSAT"
         or balls_010 != {"B1": "L_OPOSAT", "B2": "PV"}
+        or materials_010.get("CON_PV")
+        != "delimita_espai_inicial_del_pivot_oposat_a_la_trajectoria_del_lateral"
+        or material_states_010.get("CON_PV") != "validat"
         or (
             "PERMUTA_L_CE",
             1,
@@ -1102,6 +1117,21 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
             "L_no_requerit_en_la_continuitat_posterior_de_F1",
         )
         not in flows_010
+        or (
+            "2X1_TANCAT",
+            2,
+            "B2",
+            "L",
+            "PV",
+            "D3_puja",
+        )
+        not in flows_010
+        or (
+            "PV",
+            "lliscar_des_del_con_cap_a_lespai_lliure_si_D3_puja",
+            "condicio_tasca",
+        )
+        not in actions_010
         or phase_2_010.get("condicio_activacio")
         != "L_no_requerit_en_la_continuitat_posterior_de_F1"
     ):
@@ -1112,7 +1142,8 @@ def _corpus_custom_errors(document: Document) -> list[Document]:
                 "message": (
                     "TR-UVOF-010 ha de començar amb L_OPOSAT-L i només "
                     "activar PV-L després de F1 quan L no sigui necessari "
-                    "en la continuïtat."
+                    "en la continuïtat; PV parteix del con oposat i només "
+                    "llisca quan D3 puja."
                 ),
             }
         )

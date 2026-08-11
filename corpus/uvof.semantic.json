@@ -783,7 +783,8 @@
         {"id": "D3", "rol_inicial": "tercer_o_central_defensiu", "equip": "defensa"}
       ],
       "materials": [
-        {"id": "BANC", "tipus": "banc", "funcio": "condicionant_del_llancament_o_passada"}
+        {"id": "BANC", "tipus": "banc", "funcio": "condicionant_del_llancament_o_passada"},
+        {"id": "CON_PV", "tipus": "con", "funcio": "delimita_espai_inicial_del_pivot_oposat_a_la_trajectoria_del_lateral", "estat_coneixement": "validat"}
       ],
       "pilotes": [
         {"id": "B1", "posseidor_inicial": "L_OPOSAT"},
@@ -812,7 +813,8 @@
           "condicio_activacio": "L_no_requerit_en_la_continuitat_posterior_de_F1",
           "accions": [
             {"ordre": 1, "actor": "PV", "accio": "passar_a_L_si_no_ha_intervingut_en_la_continuitat", "estat_coneixement": "validat"},
-            {"ordre": 2, "actor": "L", "accio": "rebre_de_pivot_i_saltar_el_banc", "estat_coneixement": "validat"}
+            {"ordre": 2, "actor": "L", "accio": "rebre_de_pivot_i_saltar_el_banc", "estat_coneixement": "validat"},
+            {"ordre": 3, "actor": "PV", "accio": "lliscar_des_del_con_cap_a_lespai_lliure_si_D3_puja", "estat_coneixement": "condicio_tasca"}
           ],
           "fluxos_pilota": [
             {"trajectoria_id": "2X1_TANCAT", "ordre": 1, "pilota_id": "B2", "posseidor_inicial": "PV", "accio": "passada_condicional", "posseidor_final": "L", "condicio": "L_no_requerit_en_la_continuitat_posterior_de_F1"},
@@ -826,14 +828,20 @@
       "invariants": [
         "en la permuta lateral–central L va al centre i rep de L_OPOSAT",
         "la segona acció només s'activa després de F1 si L no ha estat necessari en la continuïtat",
+        "el pivot parteix del con que delimita l'espai oposat a la trajectòria del lateral",
+        "el pivot i el lateral no poden ocupar ni atacar el mateix espai",
         "és un 2x1 conceptual amb només dues opcions tancades",
         "si el defensor queda pla es llança de fora",
-        "si el defensor puja es passa al pivot"
+        "si el defensor puja es passa al pivot",
+        "el pivot només abandona el con i llisca quan D3 puja"
       ],
       "validacions_entrenador": [
         "permuta_lateral-central",
         "passada_habilitadora_des_de_lateral_contrari",
         "activacio_condicional_despres_de_la_primera_accio",
+        "con_com_a_ancoratge_de_lespai_inicial_del_pivot",
+        "espais_complementaris_de_lateral_i_pivot",
+        "lliscament_del_pivot_nomes_si_D3_puja",
         "dues_opcions_tancades_del_2x1"
       ]
     },

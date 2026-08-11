@@ -277,3 +277,15 @@ amb finalització, continuïtat o encreuament.
 el flux `B1: CE → L_OPOSAT` i desapareixen tant el cicle no ancorat com la
 pilota no especificada. El preflight d'UVOF008 passa de `blocked` a `ready`
 sense introduir coordenades.
+
+## D-033 — Con complementari i lliscament condicional d'UVOF010
+
+**Decisió de l'entrenador:** `PV` parteix sempre del con que delimita l'espai
+oposat a la trajectòria de `L`. Lateral i pivot no poden ocupar ni atacar el
+mateix espai. `PV` només abandona el con i llisca cap a l'espai lliure quan
+`D3` puja; si `D3` queda pla, `L` resol amb llançament exterior.
+
+**Efecte tècnic:** `CON_PV` esdevé l'ancoratge independent d'`ESPAI_PV`; `D3`
+deixa de definir l'espai i només activa la branca de resolució. Desapareix el
+cicle no ancorat i el preflight d'UVOF010 passa de `blocked` a `ready` sense
+introduir coordenades.

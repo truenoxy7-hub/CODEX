@@ -31,7 +31,7 @@ EXPECTED_STATUSES = {
     "TR-UVOF-007": "partial",
     "TR-UVOF-008": "ready",
     "TR-UVOF-009": "ready",
-    "TR-UVOF-010": "blocked",
+    "TR-UVOF-010": "ready",
     "TR-UVOF-011": "blocked",
     "TR-UVOF-012": "ready",
     "TR-UVOF-013": "ready",
@@ -276,7 +276,7 @@ def test_2x1_roles_and_typed_conditions_resolve() -> None:
     assert "TYPED_CONDITION_ORIGIN_MISMATCH" in _codes(result)
 
 
-def test_uvof008_is_anchored_and_uvof010_cycle_remains_detected() -> None:
+def test_uvof008_and_uvof010_are_anchored_and_cycles_remain_detectable() -> None:
     anchored = _load("TR-UVOF-008")
     assert preflight_document(anchored)["status"] == "ready"
 
@@ -305,9 +305,52 @@ def test_uvof008_is_anchored_and_uvof010_cycle_remains_detected() -> None:
     _refresh_digest(anchored)
     assert "SPATIAL_UNANCHORED_CYCLE" in _codes(preflight_document(anchored))
 
-    unresolved = preflight_document(_load("TR-UVOF-010"))
-    assert unresolved["status"] == "blocked"
-    assert "SPATIAL_UNANCHORED_CYCLE" in _codes(unresolved)
+    pivot_anchor = _load("TR-UVOF-010")
+    assert preflight_document(pivot_anchor)["status"] == "ready"
+    pivot_space = next(
+        space for space in pivot_anchor["espais"] if space["id"] == "ESPAI_PV"
+    )
+    pivot_space["definicio"] = {
+        "operador": "proper_a",
+        "arguments": ["D3"],
+    }
+    pivot_dependency = next(
+        dependency
+        for dependency in pivot_anchor["dependencies"]
+        if dependency["from_ref"] == "traca:TR-UVOF-010:space:ESPAI_PV"
+        and dependency["kind"] == "defined_by"
+        and dependency["to_ref"] == "traca:TR-UVOF-010:node:CON_PV"
+    )
+    pivot_dependency["to_ref"] = "traca:TR-UVOF-010:node:D3"
+    old_defender_relation = next(
+        relation
+        for state in pivot_anchor["estats"]
+        if state["id"] == "S_2X1_TANCAT"
+        for relation in state["relacions"]
+        if relation["subjecte"] == "PV" and "ESPAI_PV" in relation["objectes"]
+    )
+    old_defender_relation.update(
+        {
+            "subjecte": "D3",
+            "predicat": "proper_a",
+            "caracter": "disponible",
+        }
+    )
+    pivot_anchor["dependencies"].append(
+        {
+            "from_ref": "traca:TR-UVOF-010:node:D3",
+            "to_ref": "traca:TR-UVOF-010:space:ESPAI_PV",
+            "kind": "relational_constraint",
+            "origin_ref": (
+                "exercises/TR-UVOF-010/spatial-relations.json"
+                "#/estats/4/relacions/1"
+            ),
+        }
+    )
+    _refresh_digest(pivot_anchor)
+    assert "SPATIAL_UNANCHORED_CYCLE" in _codes(
+        preflight_document(pivot_anchor)
+    )
 
 
 def test_uvof014_keeps_six_individually_identifiable_options() -> None:

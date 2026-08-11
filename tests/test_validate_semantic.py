@@ -619,6 +619,23 @@ def test_corpus_rejects_wrong_opposite_lateral_passer_in_uvof010(
     ]
 
 
+def test_corpus_rejects_unvalidated_pivot_cone_in_uvof010(
+    valid_corpus, corpus_schema
+):
+    exercise = _corpus_exercise(valid_corpus, "TR-UVOF-010")
+    cone = next(
+        material for material in exercise["materials"]
+        if material["id"] == "CON_PV"
+    )
+    cone["estat_coneixement"] = "provisional"
+
+    report = validate_corpus_document(valid_corpus, corpus_schema)
+
+    assert "UVOF010_ORDERED_CONDITIONAL_ACTION" in [
+        error["code"] for error in report["errors"]
+    ]
+
+
 def test_corpus_rejects_broken_specific_l_ext_l_flow_in_uvof011(
     valid_corpus, corpus_schema
 ):

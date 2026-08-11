@@ -35,17 +35,15 @@ Aquest document evita que Codex resolgui per inferència decisions tàctiques en
 1. **UVOF005/007 — pilota:** validar, si escau, pilota, posseïdor inicial i
    passades que avui no estan especificats. No s'afegirà cap flux per
    inferència.
-2. **UVOF010 — ancoratge:** validar una definició no circular entre `ESPAI_PV`
-   i `D3`.
-3. **UVOF011 — cardinalitat:** identificar quatre defensors concrets o validar
+2. **UVOF011 — cardinalitat:** identificar quatre defensors concrets o validar
    una plantilla i el seu mecanisme d'instanciació. `DEF_4` no equival per si
    sol a quatre persones.
-4. **UVOF014 — mapping:** validar l'alternativa espacial específica
+3. **UVOF014 — mapping:** validar l'alternativa espacial específica
    d'`encreuament` i qualsevol separació addicional entre les sis opcions que
    avui només es preserven simbòlicament.
-5. **UVOF015 — finta:** definir per a cada duel l'espai inicial, l'espai
+4. **UVOF015 — finta:** definir per a cada duel l'espai inicial, l'espai
    contigu i el criteri de superació. No es deduiran dels límits de zona.
-6. **Simetria:** aprovar mappings d'identitat només als exercicis que realment
+5. **Simetria:** aprovar mappings d'identitat només als exercicis que realment
    els necessitin. `reflectible` o `dues_bandes_paraleles` no autoritzen a
    duplicar participants o pilotes.
 

@@ -858,6 +858,126 @@ def _add_declared_ball_flows(
             )
 
 
+def _resolve_uvof010_pivot_anchor(
+    document: Document,
+    exercise: Document,
+    exercise_index: int,
+) -> None:
+    cone_index = _find_index(exercise.get("materials", []), "CON_PV")
+    if cone_index is None:
+        raise ValueError("TR-UVOF-010 requereix el material validat CON_PV")
+
+    if not any(node["id"] == "CON_PV" for node in document["nodes"]):
+        bank_index = next(
+            index for index, node in enumerate(document["nodes"])
+            if node["id"] == "BANC"
+        )
+        document["nodes"].insert(
+            bank_index + 1,
+            {
+                "id": "CON_PV",
+                "classe": "material",
+                "referencia_semantica": _corpus_ref(
+                    exercise_index, "materials", cone_index
+                ),
+                "funcio": (
+                    "delimita_espai_inicial_del_pivot_oposat_a_la_"
+                    "trajectoria_del_lateral"
+                ),
+                "estat_coneixement": "validat",
+            },
+        )
+
+    pivot_space = next(
+        space for space in document["espais"] if space["id"] == "ESPAI_PV"
+    )
+    pivot_space["nom_canonic"] = "espai_inicial_complementari_del_pivot"
+    pivot_space["definicio"] = {
+        "operador": "proper_a",
+        "arguments": ["CON_PV"],
+    }
+
+    for state in document["estats"]:
+        if state["id"] not in {"S_ACTIVACIO_CONDICIONAL", "S_2X1_TANCAT"}:
+            continue
+        pivot_relation = next(
+            (
+                relation for relation in state["relacions"]
+                if relation["subjecte"] in {"PV", "D3"}
+                and "ESPAI_PV" in relation["objectes"]
+            ),
+            None,
+        )
+        if pivot_relation:
+            pivot_relation.update(
+                {
+                    "subjecte": "PV",
+                    "predicat": "ocupa",
+                    "objectes": ["ESPAI_PV"],
+                    "caracter": "obligatori",
+                    "estat_coneixement": "validat",
+                }
+            )
+
+    slide = next(
+        transition
+        for transition in document["transicions"]
+        if transition["id"] == "T_PV_RESOL"
+    )
+    receiver = next(
+        transition
+        for transition in document["transicions"]
+        if transition["id"] == "T_L_REP_PV_BANC"
+    )
+    receiver["accio_semantica_ref"] = artifact_ref(
+        "corpus/uvof.semantic.json",
+        f"/exercicis/{exercise_index}/fases/1/accions/1",
+    )
+    slide.update(
+        {
+            "id": "T_PV_LLISCA",
+            "tipus": "ajust_sense_pilota",
+            "accio_semantica_ref": artifact_ref(
+                "corpus/uvof.semantic.json",
+                f"/exercicis/{exercise_index}/fases/1/accions/2",
+            ),
+            "qualificadors": [
+                "parteix_de_CON_PV",
+                "nomes_si_D3_puja",
+                "manté_espai_complementari_del_lateral",
+            ],
+        }
+    )
+
+    closed_branch = next(
+        branch
+        for branch in document["branques_decisionals"]
+        if branch["id"] == "BR_2X1_TANCAT"
+    )
+    slide_alternative = next(
+        alternative
+        for alternative in closed_branch["alternatives"]
+        if alternative["id"] == "A_D3_PUJA"
+    )
+    slide_alternative["efectes_espacials"][0]["objectes"] = ["ZONA_FINAL_6M"]
+
+    no_overlap = {
+        "code": "SP-UVOF010-COMPLEMENTARI",
+        "operador": "no_superposicio",
+        "subjectes": ["L", "PV", "CON_PV"],
+        "ambit": "F2",
+        "missatge": (
+            "PV parteix del con oposat a la trajectòria de L i només llisca "
+            "quan D3 puja; lateral i pivot no ocupen el mateix espai."
+        ),
+    }
+    if not any(
+        invariant["code"] == no_overlap["code"]
+        for invariant in document["invariants"]
+    ):
+        document["invariants"].append(no_overlap)
+
+
 def _namespace(document: Document, exercise_id: str) -> Document:
     entities: list[Document] = []
     node_kind = {
@@ -922,6 +1042,8 @@ def _material_semantics(
         capabilities = [f"instance_function:{function}"]
         if exercise_id == "TR-UVOF-001" and node["id"] == "C3":
             capabilities.append("delimita_espai:SA2")
+        if exercise_id == "TR-UVOF-010" and node["id"] == "CON_PV":
+            capabilities.append("delimita_espai:ESPAI_PV")
         result.append(
             {
                 "material_ref": _global(exercise_id, "node", node["id"]),
@@ -1538,6 +1660,8 @@ def migrate_document(
         }
         if exercise_id == "TR-UVOF-008":
             _add_declared_ball_flows(result, exercise, exercise_index)
+        if exercise_id == "TR-UVOF-010":
+            _resolve_uvof010_pivot_anchor(result, exercise, exercise_index)
     result["font_semantica"]["fitxers"] = [
         candidate["artifact"] for candidate in result["semantic_source"]["candidates"]
     ]

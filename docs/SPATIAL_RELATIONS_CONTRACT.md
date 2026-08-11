@@ -319,11 +319,15 @@ La desena instància representa:
 - primera acció oberta amb superació, continuïtat o encreuament;
 - segona pilota independent `PV → L`, activada només si `L` no ha estat
   necessari en la continuïtat posterior de la primera acció;
+- `CON_PV` delimitant l'espai inicial del pivot, oposat a la trajectòria de
+  `L`, sense superposició entre els dos atacants;
 - 2x1 conceptual contra `D3` tancat a llançament exterior si queda pla o
-  passada a `PV` si puja.
+  passada a `PV` si puja;
+- lliscament de `PV` des del con cap a l'espai lliure únicament si `D3` puja.
 
-La dependència entre `ESPAI_PV` i `D3` continua sent circular i el preflight la
-retorna com `SPATIAL_UNANCHORED_CYCLE`; v0.3 no la trenca artificialment.
+`ESPAI_PV` queda ancorat a `CON_PV`, no a `D3`. La posició del defensor només
+activa una de les dues respostes tancades, de manera que desapareix el cicle i
+el preflight passa a `ready` sense introduir geometria.
 
 ## Instància TR-UVOF-011
 

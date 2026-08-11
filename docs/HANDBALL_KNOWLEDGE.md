@@ -170,6 +170,11 @@ portador per evitar superposicions. En la relació lateral–pivot:
 - si hi entra, el pivot s'adapta i ocupa l'interval adjacent lliure;
 - lateral i pivot no han d'acabar ocupant el mateix interval.
 
+Quan una tasca ancora el pivot amb un con, el con delimita passivament l'espai
+inicial complementari a la trajectòria del lateral. El pivot no abandona aquest
+ancoratge fins que la resposta defensiva que activa el lliscament es produeix;
+si llisca, continua evitant l'espai atacat pel lateral.
+
 L'extrem manté l'amplitud i utilitza el criteri tàctic per anticipar una possible
 passada, iniciar la carrera i guanyar avantatge.
 

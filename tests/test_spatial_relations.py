@@ -591,7 +591,7 @@ def test_uvof003_rejects_disconnected_change_of_side_flow(
         (
             "TR-UVOF-010",
             {
-                "node_count": 12,
+                "node_count": 13,
                 "space_count": 5,
                 "state_count": 5,
                 "transition_count": 7,
@@ -942,6 +942,14 @@ def test_uvof010_separates_permutation_from_conditional_second_ball() -> None:
         for branch in document["branques_decisionals"]
         if branch["id"] == "BR_2X1_TANCAT"
     )
+    pivot_space = next(
+        space for space in document["espais"] if space["id"] == "ESPAI_PV"
+    )
+    pivot_slide = next(
+        transition
+        for transition in document["transicions"]
+        if transition["id"] == "T_PV_LLISCA"
+    )
 
     assert positions == {"L": "POS_CENTRAL", "CE": "POS_LATERAL"}
     assert (
@@ -965,6 +973,17 @@ def test_uvof010_separates_permutation_from_conditional_second_ball() -> None:
         "A_D3_PLA",
         "A_D3_PUJA",
     }
+    assert pivot_space["definicio"] == {
+        "operador": "proper_a",
+        "arguments": ["CON_PV"],
+    }
+    assert pivot_slide["condicio"] == "D3_puja"
+    assert pivot_slide["tipus"] == "ajust_sense_pilota"
+    assert any(
+        invariant["code"] == "SP-UVOF010-COMPLEMENTARI"
+        and invariant["operador"] == "no_superposicio"
+        for invariant in document["invariants"]
+    )
 
 
 def test_uvof011_keeps_specific_l_ext_l_flow_and_four_attackers() -> None:

@@ -63,6 +63,13 @@
       "estat_coneixement": "condicio_tasca"
     },
     {
+      "id": "CON_PV",
+      "classe": "material",
+      "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/9/materials/1",
+      "funcio": "delimita_espai_inicial_del_pivot_oposat_a_la_trajectoria_del_lateral",
+      "estat_coneixement": "validat"
+    },
+    {
       "id": "B1",
       "classe": "pilota",
       "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/9/pilotes/0",
@@ -151,11 +158,11 @@
     {
       "id": "ESPAI_PV",
       "classe": "zona_resolucio",
-      "nom_canonic": "espai_de_recepcio_del_pivot",
+      "nom_canonic": "espai_inicial_complementari_del_pivot",
       "definicio": {
         "operador": "proper_a",
         "arguments": [
-          "D3"
+          "CON_PV"
         ]
       },
       "restriccions": [
@@ -298,7 +305,7 @@
         },
         {
           "subjecte": "PV",
-          "predicat": "disponible_per_rebre_a",
+          "predicat": "ocupa",
           "objectes": [
             "ESPAI_PV"
           ],
@@ -323,12 +330,12 @@
           "estat_coneixement": "validat"
         },
         {
-          "subjecte": "D3",
-          "predicat": "proper_a",
+          "subjecte": "PV",
+          "predicat": "ocupa",
           "objectes": [
             "ESPAI_PV"
           ],
-          "caracter": "disponible",
+          "caracter": "obligatori",
           "estat_coneixement": "validat"
         }
       ]
@@ -403,6 +410,7 @@
       "tipus": "recepcio",
       "des_de": "POS_CENTRAL",
       "cap_a": "ZONA_BANC",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/9/fases/1/accions/1",
       "condicio": "L_no_requerit_en_la_continuitat_posterior_de_F1",
       "estat_coneixement": "validat"
     },
@@ -419,16 +427,22 @@
       "estat_coneixement": "validat"
     },
     {
-      "id": "T_PV_RESOL",
+      "id": "T_PV_LLISCA",
       "fase_ref": "F2",
       "ordre": 1,
       "trajectoria_id": "PASSADA_PIVOT",
       "actor": "PV",
-      "tipus": "resolucio",
+      "tipus": "ajust_sense_pilota",
       "des_de": "ESPAI_PV",
       "cap_a": "ZONA_FINAL_6M",
       "referencia_oposicional": "D3",
       "condicio": "D3_puja",
+      "accio_semantica_ref": "corpus/uvof.semantic.json#/exercicis/9/fases/1/accions/2",
+      "qualificadors": [
+        "parteix_de_CON_PV",
+        "nomes_si_D3_puja",
+        "manté_espai_complementari_del_lateral"
+      ],
       "estat_coneixement": "validat"
     }
   ],
@@ -559,7 +573,7 @@
               "subjecte": "PV",
               "predicat": "disponible_per_rebre_a",
               "objectes": [
-                "ESPAI_PV"
+                "ZONA_FINAL_6M"
               ],
               "caracter": "obligatori",
               "estat_coneixement": "validat"
@@ -627,6 +641,17 @@
       ],
       "ambit": "F1",
       "missatge": "L va al centre i rep de L_OPOSAT mentre CE s'obre."
+    },
+    {
+      "code": "SP-UVOF010-COMPLEMENTARI",
+      "operador": "no_superposicio",
+      "subjectes": [
+        "L",
+        "PV",
+        "CON_PV"
+      ],
+      "ambit": "F2",
+      "missatge": "PV parteix del con oposat a la trajectòria de L i només llisca quan D3 puja; lateral i pivot no ocupen el mateix espai."
     }
   ],
   "governanca": {
@@ -643,7 +668,7 @@
         "artifact": "corpus/uvof.semantic.json",
         "selector": "/exercicis/9",
         "version": "1.6.0",
-        "digest": "sha256:892dbc6e49328647e2defe5b84d6c657a5604818443b5fb33b24da6eeb5bc7a5",
+        "digest": "sha256:0164545e38de36037cb6faa1d6e10650c6f77da0c38ace6ae7b6f359faa8a0d9",
         "canonical": true,
         "validation_status": "validated"
       }
@@ -693,6 +718,13 @@
         "local_id": "BANC",
         "knowledge_status": "condicio_tasca",
         "source_ref": "corpus/uvof.semantic.json#/exercicis/9/materials/0"
+      },
+      {
+        "ref": "traca:TR-UVOF-010:node:CON_PV",
+        "kind": "material",
+        "local_id": "CON_PV",
+        "knowledge_status": "validat",
+        "source_ref": "corpus/uvof.semantic.json#/exercicis/9/materials/1"
       },
       {
         "ref": "traca:TR-UVOF-010:node:B1",
@@ -829,9 +861,9 @@
         "knowledge_status": "validat"
       },
       {
-        "ref": "traca:TR-UVOF-010:transition:T_PV_RESOL",
+        "ref": "traca:TR-UVOF-010:transition:T_PV_LLISCA",
         "kind": "transition",
-        "local_id": "T_PV_RESOL",
+        "local_id": "T_PV_LLISCA",
         "knowledge_status": "validat"
       },
       {
@@ -1029,6 +1061,16 @@
         "instance_function:condicionant_del_llancament_o_passada"
       ],
       "knowledge_status": "condicio_tasca"
+    },
+    {
+      "material_ref": "traca:TR-UVOF-010:node:CON_PV",
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/9/materials/1",
+      "instance_function": "delimita_espai_inicial_del_pivot_oposat_a_la_trajectoria_del_lateral",
+      "capabilities": [
+        "instance_function:delimita_espai_inicial_del_pivot_oposat_a_la_trajectoria_del_lateral",
+        "delimita_espai:ESPAI_PV"
+      ],
+      "knowledge_status": "validat"
     }
   ],
   "typed_relations": [],
@@ -1235,7 +1277,7 @@
     },
     {
       "from_ref": "traca:TR-UVOF-010:space:ESPAI_PV",
-      "to_ref": "traca:TR-UVOF-010:node:D3",
+      "to_ref": "traca:TR-UVOF-010:node:CON_PV",
       "kind": "defined_by",
       "origin_ref": "exercises/TR-UVOF-010/spatial-relations.json#/espais/3/definicio"
     },
@@ -1282,10 +1324,10 @@
       "origin_ref": "exercises/TR-UVOF-010/spatial-relations.json#/estats/3/relacions/0"
     },
     {
-      "from_ref": "traca:TR-UVOF-010:node:D3",
+      "from_ref": "traca:TR-UVOF-010:node:PV",
       "to_ref": "traca:TR-UVOF-010:space:ESPAI_PV",
       "kind": "relational_constraint",
-      "origin_ref": "exercises/TR-UVOF-010/spatial-relations.json#/estats/4/relacions/1"
+      "origin_ref": "exercises/TR-UVOF-010/spatial-relations.json#/estats/3/relacions/1"
     }
   ],
   "replication": {
@@ -1347,6 +1389,14 @@
       "preservation": "mapped",
       "spatial_refs": [
         "traca:TR-UVOF-010:node:BANC"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/9/materials/1",
+      "kind": "material",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-010:node:CON_PV"
       ]
     },
     {
@@ -1441,8 +1491,18 @@
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/9/fases/1/accions/1",
       "kind": "action",
-      "preservation": "preserved_symbolically",
-      "spatial_refs": []
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-010:transition:T_L_REP_PV_BANC"
+      ]
+    },
+    {
+      "source_ref": "corpus/uvof.semantic.json#/exercicis/9/fases/1/accions/2",
+      "kind": "action",
+      "preservation": "mapped",
+      "spatial_refs": [
+        "traca:TR-UVOF-010:transition:T_PV_LLISCA"
+      ]
     },
     {
       "source_ref": "corpus/uvof.semantic.json#/exercicis/9/fases/1/fluxos_pilota/0",
@@ -1485,6 +1545,6 @@
   ],
   "integrity": {
     "algorithm": "sha256",
-    "spatial_digest": "sha256:c7adc8dbdd43fe57c50006b0abeb5a30967a7fa894bc7f1a0c12cbf1c6c626a7"
+    "spatial_digest": "sha256:bc870f8d38e59d9e5373f2a78b7477173ff965029043c4aad8f532e15dd88574"
   }
 }
