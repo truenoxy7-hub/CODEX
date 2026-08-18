@@ -27,6 +27,7 @@
   let toastTimer = null;
   let handledCorrectionCount = 0;
   let pendingReusable = [];
+  let diagnosticPayloads = {};
 
   const elements = {
     description: $("#description"), nameInput: $("#case-name-input"), notes: $("#case-notes"), metadata: $("#case-metadata"),
@@ -46,7 +47,8 @@
     builderCollection: $("#builder-collection"), builderKind: $("#builder-kind"), builderLabel: $("#builder-label"),
     builderDetails: $("#builder-details"), builderState: $("#builder-state"), builderCurrent: $("#builder-current-list"),
     promotionType: $("#promotion-type"), promotionScope: $("#promotion-scope"), promotionCorrections: $("#promotion-corrections"),
-    importFile: $("#import-file")
+    importFile: $("#import-file"), compositionDiagnosticsStatus: $("#composition-diagnostics-status"),
+    compositionHumanSummary: $("#composition-human-summary"), compositionActionsSummary: $("#composition-actions-summary")
   };
 
   function toast(message) {
@@ -228,7 +230,34 @@
     elements.deleteManual.hidden = !(snapshot.coachReferenceGeometry && !snapshot.generatedGeometry);
   }
 
+  function diagnosticValue(value) {
+    if (Array.isArray(value)) return value.length ? value.join(", ") : "—";
+    return value === null || value === undefined || value === "" ? "—" : String(value);
+  }
+
+  function renderCompositionDiagnostics(snapshot) {
+    const diagnostics = window.TRACA_INSPECTION_UI.diagnosticsFor(snapshot);
+    const summary = diagnostics.composition;
+    diagnosticPayloads = diagnostics.payloads;
+    elements.compositionDiagnosticsStatus.textContent = diagnostics.stale ? "Cal regenerar" : diagnostics.current ? "Actual" : "No generat";
+    elements.compositionHumanSummary.innerHTML = `${diagnostics.message ? `<p class="diagnostics-message ${diagnostics.stale ? "is-stale" : ""}">${escape(diagnostics.message)}</p>` : ""}<h4>COMPOSICIÓ</h4><dl class="diagnostics-facts"><div><dt>estat</dt><dd>${escape(diagnosticValue(summary.status))}</dd></div><div><dt>geometria</dt><dd>${escape(diagnosticValue(summary.geometry))}</dd></div><div><dt>accions totals</dt><dd>${escape(diagnosticValue(summary.total))}</dd></div><div><dt>accions compostes</dt><dd>${escape(diagnosticValue(summary.composed))}</dd></div><div><dt>accions pendents</dt><dd>${escape(diagnosticValue(summary.pending))}</dd></div><div><dt>cobertura</dt><dd>${escape(diagnosticValue(summary.coverage))}</dd></div></dl>`;
+    elements.compositionActionsSummary.innerHTML = `<h4>ACCIONS</h4>${diagnostics.actions.length ? diagnostics.actions.map((action) => `<article class="diagnostic-action"><header><strong>${escape(diagnosticValue(action.type))}</strong><span>${escape(diagnosticValue(action.id))}</span></header><dl><div><dt>actor</dt><dd>${escape(diagnosticValue(action.actor))}</dd></div><div><dt>objectiu / receptor / company</dt><dd>${escape(diagnosticValue(action.target))}</dd></div><div><dt>defensor / oponent</dt><dd>${escape(diagnosticValue(action.opponent))}</dd></div><div><dt>espai inicial</dt><dd>${escape(diagnosticValue(action.initialSpace))}</dd></div><div><dt>espai final</dt><dd>${escape(diagnosticValue(action.finalSpace))}</dd></div><div><dt>estat origen</dt><dd>${escape(diagnosticValue(action.originState))}</dd></div><div><dt>estat destí</dt><dd>${escape(diagnosticValue(action.destinationState))}</dd></div><div><dt>autoritat</dt><dd>${escape(diagnosticValue(action.authority))}</dd></div><div><dt>status</dt><dd>${escape(diagnosticValue(action.status))}</dd></div></dl></article>`).join("") : '<p class="empty-copy">No hi ha accions actuals per inspeccionar.</p>'}`;
+    const outputIds = {
+      tacticalIR: "#diagnostic-tactical-ir",
+      compositionPlan: "#diagnostic-composition-plan",
+      spatialConstraints: "#diagnostic-spatial-constraints",
+      questions: "#diagnostic-questions",
+      ballFlow: "#diagnostic-ball-flow"
+    };
+    Object.entries(outputIds).forEach(([key, selector]) => {
+      $(selector).textContent = JSON.stringify(diagnostics.payloads[key], null, 2);
+      const button = $(`[data-copy-diagnostic="${key}"]`);
+      if (button) button.disabled = diagnostics.payloads[key] === null;
+    });
+  }
+
   function renderAdvanced(snapshot) {
+    renderCompositionDiagnostics(snapshot);
     elements.manualTools.hidden = !snapshot.coachReferenceGeometry;
     $("#start-manual-layout").disabled = Boolean(snapshot.generatedGeometry);
     elements.resolverMessage.textContent = snapshot.generatedGeometry
@@ -252,7 +281,10 @@
     elements.validation.innerHTML = report ? report.diagnostics.map((item) => `<article class="diagnostic is-${item.level}"><strong>${escape(item.code)}</strong>${escape(item.message)}</article>`).join("") : '<p class="empty-copy">Encara no s’ha executat el preflight.</p>';
     const groups = window.TRACA_KNOWLEDGE_LIBRARY.inspectableItems(snapshot.knowledgeLibrary);
     elements.library.innerHTML = groups.map((group) => `<details class="library-section"><summary>${escape(group.label)} · ${group.items.length}</summary>${group.items.map((item) => `<article><strong>${escape(item.label || item.title || item.name || item.id)}</strong><p>${escape(item.definition || item.status || "")}</p></article>`).join("") || '<p class="empty-copy">Buit</p>'}</details>`).join("");
-    elements.traceability.innerHTML = `<pre>${escape(JSON.stringify({ case_uid: snapshot.currentCase.case_uid, derivations: snapshot.derivations, composition: snapshot.composition, geometry_state: snapshot.geometryState }, null, 2))}</pre>`;
+    const traceableComposition = snapshot.composition.status === "stale"
+      ? { status: "stale", message: "La composició anterior s’ha ocultat perquè el text ha canviat." }
+      : snapshot.composition;
+    elements.traceability.innerHTML = `<pre>${escape(JSON.stringify({ case_uid: snapshot.currentCase.case_uid, derivations: snapshot.derivations, composition: traceableComposition, geometry_state: snapshot.geometryState }, null, 2))}</pre>`;
     const groupsKeys = ["participants", "materials", "spaces", "actions", "decisions", "phases"];
     elements.builderCurrent.innerHTML = groupsKeys.flatMap((key) => (snapshot.semanticModel[key] || []).map((item) => `<p class="builder-item"><strong>${escape(item.label)}</strong> · ${escape(item.knowledge_state)}</p>`)).join("") || '<p class="empty-copy">Model encara buit.</p>';
     elements.promotionCorrections.innerHTML = snapshot.corrections.map((event) => `<label><input type="checkbox" value="${escape(event.id)}" /> ${escape(event.machine_explanation)}</label>`).join("") || '<p class="empty-copy">No hi ha correccions seleccionables.</p>';
@@ -304,6 +336,14 @@
   window.TRACA_PROMOTION.SCOPES.forEach((scope) => elements.promotionScope.insertAdjacentHTML("beforeend", `<option value="${scope}">${scope}</option>`));
   updateManualKinds(); updateBuilderKinds();
 
+  window.TRACA_INSPECTION_UI.createPanelController({
+    body: document.body,
+    toggle: $("#toggle-advanced"),
+    tabs: $$('[data-mobile-panel]'),
+    panels: $$('[data-panel]'),
+    fallbackPanel: "court"
+  });
+
   elements.description.addEventListener("input", () => store.updateCase({ description: elements.description.value }));
   elements.nameInput.addEventListener("change", () => store.updateCase({ name: elements.nameInput.value.trim() || "Cas sense títol" }));
   elements.notes.addEventListener("change", () => store.updateCase({ notes: elements.notes.value }));
@@ -334,18 +374,8 @@
   $("#save-draft").addEventListener("click", () => { store.updateCase(readCaseForm()); store.saveCase({ status: "in_construction" }); toast("Esborrany guardat, encara no validat."); });
   $("#new-case").addEventListener("click", () => { store.createCase({ name: "Cas sense títol", description: "", notes: "" }); pendingReusable = []; handledCorrectionCount = 0; syncCaseForm(store.snapshot()); elements.description.focus(); toast("Nou cas en blanc."); });
   $("#exercises").addEventListener("click", () => { renderExercises(); $("#exercises-dialog").showModal(); });
-  $("#toggle-advanced").addEventListener("click", (event) => {
-    const active = document.body.classList.toggle("is-advanced");
-    $$(".advanced-zone").forEach((panel) => { panel.hidden = !active; });
-    event.currentTarget.setAttribute("aria-expanded", String(active));
-    event.currentTarget.textContent = active ? "Amagar avançat" : "Mode avançat";
-  });
   $$('[data-close-dialog]').forEach((button) => button.addEventListener("click", () => button.closest("dialog").close()));
   $$('[data-view]').forEach((button) => button.addEventListener("click", () => { if (!button.disabled) store.setUi({ view: button.dataset.view }); }));
-  $$('[data-mobile-panel]').forEach((button) => button.addEventListener("click", () => {
-    $$('[data-mobile-panel]').forEach((item) => item.classList.toggle("is-active", item === button));
-    $$('[data-panel]').forEach((panel) => panel.classList.toggle("is-mobile-active", panel.dataset.panel === button.dataset.mobilePanel));
-  }));
   $$('[data-dock]').forEach((button) => button.addEventListener("click", () => {
     $$('[data-dock]').forEach((item) => item.classList.toggle("is-active", item === button));
     $$('[data-dock-content]').forEach((section) => { section.hidden = section.dataset.dockContent !== button.dataset.dock; });
@@ -410,6 +440,28 @@
     } catch (_error) { toast("Completa els camps obligatoris."); }
   });
   $("#export-case").addEventListener("click", () => window.TRACA_IMPORT_EXPORT.downloadPackage(store.snapshot()));
+  $$('[data-copy-diagnostic]').forEach((button) => button.addEventListener("click", async () => {
+    const payload = diagnosticPayloads[button.dataset.copyDiagnostic];
+    if (payload === null || payload === undefined) return;
+    const content = JSON.stringify(payload, null, 2);
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) await navigator.clipboard.writeText(content);
+      else {
+        const temporary = document.createElement("textarea");
+        temporary.value = content;
+        temporary.setAttribute("readonly", "");
+        temporary.style.position = "fixed";
+        temporary.style.opacity = "0";
+        document.body.appendChild(temporary);
+        temporary.select();
+        document.execCommand("copy");
+        temporary.remove();
+      }
+      toast(`${button.closest("[data-diagnostic-block]").querySelector("summary").textContent} copiat.`);
+    } catch (_error) {
+      toast("No s’ha pogut copiar aquest bloc.");
+    }
+  }));
   $("#import-trigger").addEventListener("click", () => elements.importFile.click());
   elements.importFile.addEventListener("change", async () => { const file = elements.importFile.files[0]; if (!file) return; try { store.restorePackage(window.TRACA_IMPORT_EXPORT.parsePackage(await file.text())); syncCaseForm(store.snapshot()); toast("Cas importat i migrat si era necessari."); } catch (error) { toast(`Importació rebutjada: ${error.message}`); } finally { elements.importFile.value = ""; } });
 

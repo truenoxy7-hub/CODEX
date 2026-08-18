@@ -38,6 +38,7 @@ def test_universal_workspace_files_exist() -> None:
         "js/renderer.js",
         "js/editor.js",
         "js/knowledge-library.js",
+        "js/inspection-ui.js",
         "js/app.js",
     ]
     assert all((INTERFACE / path).is_file() for path in expected)
@@ -61,6 +62,7 @@ def test_interface_exposes_the_universal_supervised_loop() -> None:
     assert 'src="js/composition-preflight.js"' in html
     assert 'src="js/generic-geometry-resolver.js"' in html
     assert 'src="js/representation-composer.js"' in html
+    assert 'src="js/inspection-ui.js"' in html
     assert 'src="data/handball-knowledge.js"' in html
     assert 'id="case-origin"' not in html
     assert 'id="case-tags"' not in html
@@ -95,6 +97,21 @@ def test_all_geometry_views_and_explicit_promotion_are_visible() -> None:
     assert "Només les seleccionades" in html
     assert 'id="import-file"' in html
     assert 'id="export-case"' in html
+    assert "Diagnòstic de composició" in html
+    for block in ("tacticalIR", "compositionPlan", "spatialConstraints", "questions", "ballFlow"):
+        assert f'data-diagnostic-block="{block}"' in html
+        assert f'data-copy-diagnostic="{block}"' in html
+
+
+def test_export_is_persistently_available_inside_the_data_panel() -> None:
+    html = (INTERFACE / "index.html").read_text(encoding="utf-8")
+    dock_start = html.index('class="workspace-panel dock-panel advanced-zone"')
+    dock_end = html.index("</section>\n    </main>", dock_start)
+    dock = html[dock_start:dock_end]
+
+    assert 'class="dock-header"' in dock
+    assert 'id="export-case"' in dock
+    assert dock.index('id="export-case"') < dock.index('class="dock-content"')
 
 
 def test_renderer_is_segment_driven_and_generated_compare_is_read_only() -> None:

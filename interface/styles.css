@@ -192,10 +192,12 @@ input, select { min-height: 34px; padding: 6px 8px; font-size: 11px; }
 .section-rule { height: 1px; margin: 15px 0 4px; background: var(--line); }
 
 .dock-panel { grid-column: 1 / -1; overflow: hidden; display: grid; grid-template-rows: auto minmax(0, 1fr); }
-.dock-tabs { min-height: 38px; display: flex; align-items: stretch; border-bottom: 1px solid var(--line); }
+.dock-header { min-width: 0; display: flex; align-items: stretch; border-bottom: 1px solid var(--line); }
+.dock-tabs { min-width: 0; min-height: 38px; flex: 1; display: flex; align-items: stretch; overflow-x: auto; }
 .dock-tabs button { padding: 8px 14px; color: var(--muted); background: transparent; border: 0; border-right: 1px solid var(--line); font-size: 9px; font-weight: 800; }
 .dock-tabs button.is-active { color: var(--forest); background: var(--green-soft); box-shadow: inset 0 -2px var(--green); }
 .dock-tabs span { margin-left: 4px; padding: 2px 5px; background: rgba(255,255,255,.7); border-radius: 8px; }
+.dock-export { min-height: 38px; flex: 0 0 auto; margin: 0; border-width: 0 0 0 1px; border-radius: 0; }
 .dock-content { min-height: 90px; max-height: 210px; overflow: auto; padding: 10px 13px; }
 .history-list { display: flex; gap: 8px; overflow-x: auto; }
 .history-empty { color: var(--muted); font-size: 10px; }
@@ -310,6 +312,29 @@ body.is-advanced .dock-panel { grid-column: 1 / -1; }
 .advanced-section { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
 .advanced-section[open] { display: grid; gap: 8px; }
 .advanced-section p { color: var(--muted); font-size: 9px; line-height: 1.45; }
+.composition-diagnostics { display: grid; gap: 8px; }
+.diagnostics-title, .diagnostic-action header { display: flex; justify-content: space-between; align-items: start; gap: 8px; }
+.diagnostics-title h3 { margin: 0; font-size: 12px; }
+.diagnostics-message { margin: 0 0 8px; padding: 8px; background: #e6f0f7; border-left: 3px solid #4c83a9; border-radius: 4px; }
+.diagnostics-message.is-stale { color: #7f302d; background: #f9e6e4; border-color: var(--danger); }
+.composition-human-summary h4, .composition-actions-summary h4 { margin: 8px 0 6px; font-size: 9px; letter-spacing: .08em; }
+.diagnostics-facts { margin: 0; display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.diagnostics-facts div { min-width: 0; padding: 7px; background: var(--surface-alt); border-bottom: 1px solid var(--line); }
+.diagnostics-facts div:nth-child(odd) { border-right: 1px solid var(--line); }
+.diagnostics-facts div:nth-last-child(-n + 2) { border-bottom: 0; }
+.diagnostics-facts dt, .diagnostic-action dt { color: var(--muted); font-size: 7px; font-weight: 850; letter-spacing: .05em; text-transform: uppercase; }
+.diagnostics-facts dd, .diagnostic-action dd { margin: 2px 0 0; overflow-wrap: anywhere; font-size: 9px; font-weight: 700; }
+.composition-actions-summary { display: grid; gap: 6px; }
+.diagnostic-action { padding: 8px; background: var(--surface-alt); border: 1px solid var(--line); border-radius: 6px; }
+.diagnostic-action header { margin-bottom: 7px; }
+.diagnostic-action header strong { font-size: 10px; }
+.diagnostic-action header span { color: var(--muted); font: 8px monospace; }
+.diagnostic-action dl { margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.diagnostic-action dl div { min-width: 0; }
+.diagnostic-block { position: relative; padding: 8px; background: #f8f9f7; border: 1px solid var(--line); border-radius: 6px; }
+.diagnostic-block summary { padding-right: 58px; cursor: pointer; color: var(--forest); font-size: 9px; font-weight: 850; }
+.diagnostic-copy { position: absolute; top: 3px; right: 4px; min-height: 28px; padding: 4px 7px; font-size: 8px; }
+.diagnostic-block pre { max-height: 330px; margin: 8px 0 0; padding: 8px; overflow: auto; color: #20332c; background: #fff; border: 1px solid var(--line); border-radius: 4px; font: 8px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre; }
 .source-list { overflow-wrap: anywhere; color: var(--muted); font: 8px/1.5 monospace; }
 .dialog-body { padding: 18px; }
 .exercise-group { margin-top: 12px; }
@@ -345,4 +370,5 @@ body.is-advanced .dock-panel { grid-column: 1 / -1; }
   .court-legend { display: none; }
   .validation-grid, .trace-grid { grid-template-columns: repeat(2, 1fr); }
   .dock-tabs button { flex: 1; padding: 8px 5px; }
+  .dock-export { padding: 6px 9px; }
 }
