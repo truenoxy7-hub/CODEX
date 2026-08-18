@@ -104,6 +104,178 @@
     return best && best.definition || null;
   }
 
+  const ACTION_SPATIAL_CONTRACT = Object.freeze({
+    reception: { initial_fields: ["initial_space_ref", "from_space_ref"], terminal_fields: ["space_ref", "to_space_ref", "target_space_ref", "end_space_ref"] },
+    movement: { initial_fields: ["initial_space_ref", "from_space_ref"], terminal_fields: ["target_space_ref", "to_space_ref", "end_space_ref"] },
+    movement_without_ball: { initial_fields: ["initial_space_ref", "from_space_ref"], terminal_fields: ["target_space_ref", "to_space_ref", "end_space_ref"] },
+    recovery: { initial_fields: ["initial_space_ref", "from_space_ref"], terminal_fields: ["target_space_ref", "to_space_ref", "end_space_ref"] },
+    dribble: { initial_fields: ["initial_space_ref", "from_space_ref"], terminal_fields: ["target_space_ref", "to_space_ref", "end_space_ref"] },
+    movement_with_dribble: { initial_fields: ["initial_space_ref", "from_space_ref"], terminal_fields: ["target_space_ref", "to_space_ref", "end_space_ref"] },
+    feint: { initial_fields: ["initial_space_ref", "from_space_ref"], terminal_fields: ["target_space_ref", "to_space_ref", "end_space_ref"] },
+    one_v_one: { initial_fields: ["initial_space_ref", "from_space_ref"], terminal_fields: ["target_space_ref", "to_space_ref", "end_space_ref"] },
+    "1x1": { initial_fields: ["initial_space_ref", "from_space_ref"], terminal_fields: ["target_space_ref", "to_space_ref", "end_space_ref"] },
+    pivot_slide: { initial_fields: ["initial_space_ref", "from_space_ref"], terminal_fields: ["target_space_ref", "to_space_ref", "end_space_ref"] },
+    shot: { initial_fields: ["initial_space_ref", "from_space_ref"], terminal_fields: [] },
+    finish: { initial_fields: ["initial_space_ref", "from_space_ref"], terminal_fields: [] }
+  });
+
+  const CONTINUITY_AUTHORITIES = new Set([
+    "coach_explicit_input", "coach_validated", "canonical_semantic", "canonical_spatial",
+    "canonical_validated", "semantic_validated", "spatial_validated",
+    "validated_local_knowledge", "derived_from_validated_rule", "graphic_legend"
+  ]);
+
+  function unique(values) {
+    return [...new Set((values || []).filter(Boolean))];
+  }
+
+  function spatialSlot(action, fields) {
+    const field = (fields || []).find((candidate) => action && action[candidate] !== undefined && action[candidate] !== null && action[candidate] !== "");
+    if (!field) return null;
+    return {
+      field,
+      value: action[field],
+      authority: action.slot_authority && action.slot_authority[field] || action.authority || "unknown",
+      status: action.slot_status && action.slot_status[field] || action.status || "unknown",
+      source_refs: unique(action.slot_source_refs && action.slot_source_refs[field] || action.source_refs || [])
+    };
+  }
+
+  function initialSpace(action) {
+    const contract = action && ACTION_SPATIAL_CONTRACT[action.type];
+    return contract ? spatialSlot(action, contract.initial_fields) : null;
+  }
+
+  function terminalSpace(action) {
+    const contract = action && ACTION_SPATIAL_CONTRACT[action.type];
+    return contract ? spatialSlot(action, contract.terminal_fields) : null;
+  }
+
+  function continuityActor(action) {
+    if (!action) return null;
+    if (action.actor_ref) return action.actor_ref;
+    const actorRefs = action.actor_refs || [];
+    return actorRefs.length === 1 ? actorRefs[0] : null;
+  }
+
+  function addSpatialConflict(action, predecessor, predecessorTerminal, currentInitial, relations) {
+    const sourceRefs = unique([
+      ...(predecessorTerminal.source_refs || []), ...(currentInitial && currentInitial.source_refs || []),
+      `derived:spatial_continuity:${predecessor.id}->${action.id}`
+    ]);
+    const conflict = {
+      code: "ACTION_SPATIAL_CONTINUITY_CONFLICT",
+      predecessor_action_ref: predecessor.id,
+      action_ref: action.id,
+      predecessor_terminal_space_ref: predecessorTerminal.value,
+      action_initial_space_ref: currentInitial && currentInitial.value || null,
+      authority: "derived_from_validated_rule",
+      status: "unresolved",
+      source_refs: sourceRefs
+    };
+    action.spatial_conflicts = [...(action.spatial_conflicts || []), conflict];
+    relations.push({
+      id: `REL_${action.id}_SPATIAL_CONTINUITY_CONFLICT_${action.spatial_conflicts.length}`,
+      type: "spatial_continuity_conflict",
+      from_ref: predecessor.id,
+      to_ref: action.id,
+      space_refs: unique([predecessorTerminal.value, currentInitial && currentInitial.value]),
+      authority: conflict.authority,
+      status: conflict.status,
+      source_refs: sourceRefs
+    });
+  }
+
+  function resolveSpatialContinuity(actions) {
+    const relations = [];
+    const byId = new Map((actions || []).map((action) => [action.id, action]));
+    (actions || []).forEach((action) => {
+      const contract = ACTION_SPATIAL_CONTRACT[action.type];
+      const actorRef = continuityActor(action);
+      if (!contract || !contract.initial_fields.length || !actorRef) return;
+      const candidates = unique(action.after || []).map((ref) => byId.get(ref)).filter((predecessor) => {
+        return predecessor && continuityActor(predecessor) === actorRef;
+      }).map((predecessor) => ({ predecessor, terminal: terminalSpace(predecessor) })).filter((item) => {
+        return item.terminal && CONTINUITY_AUTHORITIES.has(item.terminal.authority) && !["candidate", "provisional", "unknown"].includes(item.terminal.status);
+      });
+      if (!candidates.length) return;
+
+      const currentInitial = initialSpace(action);
+      const candidateValues = unique(candidates.map((item) => item.terminal.value));
+      if (candidateValues.length > 1) {
+        candidates.forEach((item) => addSpatialConflict(action, item.predecessor, item.terminal, currentInitial, relations));
+        return;
+      }
+      const candidate = candidates[0];
+      if (currentInitial && currentInitial.value !== candidate.terminal.value) {
+        addSpatialConflict(action, candidate.predecessor, candidate.terminal, currentInitial, relations);
+        return;
+      }
+
+      const sourceRef = `derived:spatial_continuity:${candidate.predecessor.id}->${action.id}`;
+      const sourceRefs = unique([...(candidate.terminal.source_refs || []), sourceRef]);
+      if (!currentInitial) {
+        const field = contract.initial_fields[0];
+        action[field] = candidate.terminal.value;
+        action.slot_authority = { ...(action.slot_authority || {}), [field]: "derived_from_validated_rule" };
+        action.slot_status = { ...(action.slot_status || {}), [field]: "validated" };
+        action.slot_source_refs = { ...(action.slot_source_refs || {}), [field]: sourceRefs };
+        action.spatial_derivations = [...(action.spatial_derivations || []), {
+          slot: field,
+          relation: "terminal_space_to_initial_space",
+          predecessor_action_ref: candidate.predecessor.id,
+          predecessor_slot: candidate.terminal.field,
+          value: candidate.terminal.value,
+          authority: "derived_from_validated_rule",
+          status: "validated",
+          source_refs: sourceRefs
+        }];
+      }
+      relations.push({
+        id: `REL_${action.id}_SPATIAL_CONTINUITY_${relations.length + 1}`,
+        type: "spatial_continuity",
+        from_ref: candidate.predecessor.id,
+        to_ref: action.id,
+        space_ref: candidate.terminal.value,
+        actor_ref: actorRef,
+        authority: "derived_from_validated_rule",
+        status: "validated",
+        source_refs: sourceRefs
+      });
+    });
+    return relations;
+  }
+
+  function setExplicitSpatialSlot(action, field, mention) {
+    if (!action || !mention || action[field]) return;
+    action[field] = mention.id;
+    action.slot_authority = { ...(action.slot_authority || {}), [field]: "coach_explicit_input" };
+    action.slot_status = { ...(action.slot_status || {}), [field]: "explicit" };
+    action.slot_source_refs = { ...(action.slot_source_refs || {}), [field]: [mention.source_ref] };
+    action.source_refs = unique([...(action.source_refs || []), mention.source_ref]);
+  }
+
+  function attachExplicitActionSpaces(actions, spaceMentions, text) {
+    (actions || []).forEach((action, index) => {
+      const nextIndex = actions[index + 1] && actions[index + 1]._index || text.length;
+      const mentions = (spaceMentions || []).filter((mention) => mention.index >= action._index && mention.index < nextIndex);
+      if (!mentions.length) return;
+      if (action.type === "reception") {
+        setExplicitSpatialSlot(action, "space_ref", mentions[0]);
+        return;
+      }
+      if (!["feint", "one_v_one", "1x1"].includes(action.type)) return;
+      if (mentions.length > 1) {
+        setExplicitSpatialSlot(action, "initial_space_ref", mentions[0]);
+        setExplicitSpatialSlot(action, "target_space_ref", mentions.at(-1));
+        return;
+      }
+      const beforeMention = text.slice(action._index, mentions[0].index);
+      const isTarget = /\b(?:surt|sortir|acaba|finalitza|va|ataca)\b[^.;]*\b(?:cap\s+a|a|en)\b|\bcap\s+a\b/.test(beforeMention);
+      setExplicitSpatialSlot(action, isTarget ? "target_space_ref" : "initial_space_ref", mentions[0]);
+    });
+  }
+
   function buildTacticalIR(description, concepts, options) {
     const text = normalize(description);
     const caseId = options && options.case_id || "CASE";
@@ -111,6 +283,7 @@
     const participants = new Map();
     const actions = [];
     const spaces = [];
+    const spaceMentions = [];
     const rolePattern = roleRegex(ROLE_DEFINITIONS);
     const defenderPattern = roleRegex(DEFENDER_DEFINITIONS);
 
@@ -135,14 +308,21 @@
       { id: "INT_33", label: "Interval 3–3", token: /\b(?:3\s*[-–]\s*3|33)\b/g, delimiter_refs: ["D3_LOCAL", "D3_OPOSAT"] }
     ];
     explicitSpaces.forEach((space) => {
-      const match = space.token.exec(text);
+      const matches = [...text.matchAll(new RegExp(space.token.source, space.token.flags))];
+      matches.forEach((match) => spaceMentions.push({
+        id: space.id,
+        index: match.index,
+        end: match.index + match[0].length,
+        source_ref: `coach_input:span:${match.index}-${match.index + match[0].length}`
+      }));
+      const match = matches[0];
       if (match) spaces.push({
         id: space.id, label: space.label, type: "interval", relation: { type: "between", delimiter_refs: space.delimiter_refs.slice() },
         delimiter_refs: space.delimiter_refs.slice(), authority: "canonical_spatial", status: "validated",
         source_refs: [`coach_input:span:${match.index}-${match.index + match[0].length}`, "docs/DOMAIN_MODEL.md#3-espais-i-intervals"]
       });
-      space.token.lastIndex = 0;
     });
+    spaceMentions.sort((left, right) => left.index - right.index);
 
     function addAction(index, type, payload, endIndex) {
       actions.push({
@@ -188,11 +368,8 @@
       const defenderMatch = tail.match(new RegExp(`\\b(${defenderPattern})\\b`));
       const opponent = defenderMatch && definitionForMention(defenderMatch[1], DEFENDER_DEFINITIONS);
       if (opponent) addParticipant(opponent, "defense", `coach_input:span:${match.index + defenderMatch.index}-${match.index + defenderMatch.index + defenderMatch[0].length}`);
-      const foundSpaces = explicitSpaces.filter((space) => { space.token.lastIndex = 0; const found = space.token.test(tail); space.token.lastIndex = 0; return found; });
       addAction(match.index, "feint", {
-        actor_ref: actor && actor.id, opponent_ref: opponent && opponent.id,
-        initial_space_ref: foundSpaces[0] && foundSpaces[0].id,
-        target_space_ref: foundSpaces[1] && foundSpaces[1].id
+        actor_ref: actor && actor.id, opponent_ref: opponent && opponent.id
       }, match.index + match[0].length);
     }
 
@@ -250,6 +427,7 @@
     }
 
     actions.sort((left, right) => left._index - right._index || left.type.localeCompare(right.type));
+    attachExplicitActionSpaces(actions, spaceMentions, text);
     actions.forEach((action, index) => { action.id = `A${String(index + 1).padStart(3, "0")}`; });
     actions.forEach((action, index) => {
       if (!index) return;
@@ -261,6 +439,7 @@
       const pass = actions.filter((action) => action.type === "pass" && action._index < reception._index && action.receiver_ref === reception.actor_ref).at(-1);
       if (pass) reception.after = [...new Set([...(reception.after || []), pass.id])];
     });
+    const spatialContinuityRelations = resolveSpatialContinuity(actions);
     actions.forEach((action) => { delete action._index; delete action._end; });
 
     const relations = [];
@@ -270,6 +449,7 @@
       if (action.opponent_ref) relations.push({ id: `REL_${action.id}_OPPOSES`, type: "opposes", from_ref: action.actor_ref, to_ref: action.opponent_ref, authority: action.authority, status: action.status, source_refs: action.source_refs });
       (action.after || []).forEach((ref, index) => relations.push({ id: `REL_${action.id}_FOLLOWS_${index + 1}`, type: "follows", from_ref: ref, to_ref: action.id, authority: action.authority, status: action.status, source_refs: action.source_refs }));
     });
+    relations.push(...spatialContinuityRelations);
     const firstBallAction = actions.find((action) => ["pass", "dribble", "shot"].includes(action.type) && action.actor_ref);
     const balls = firstBallAction ? [{ id: "B1", holder_ref: firstBallAction.actor_ref, authority: "derived_from_validated_rule", status: "validated", source_refs: firstBallAction.source_refs }] : [];
     return {
@@ -325,7 +505,8 @@
 
   return {
     ROLE_DEFINITIONS, DEFENDER_DEFINITIONS,
-    normalize, matchLocalKnowledge, suggestedTags, buildTacticalIR,
+    ACTION_SPATIAL_CONTRACT, normalize, matchLocalKnowledge, suggestedTags,
+    initialSpace, terminalSpace, resolveSpatialContinuity, buildTacticalIR,
     canonicalCaseProvider, localRuleProvider, interpret
   };
 });
