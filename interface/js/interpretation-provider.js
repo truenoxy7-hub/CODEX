@@ -4,6 +4,7 @@
   const api = factory(utils);
   if (isNode) module.exports = api;
   root.TRACA_INTERPRETATION = api;
+  root.TRACA_INTERPRETATION_PROVIDER = api;
 })(typeof globalThis !== "undefined" ? globalThis : this, function (utils) {
   "use strict";
 

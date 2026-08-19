@@ -3,6 +3,7 @@
   const utils = isNode ? require("./utils.js") : root.TRACA_UTILS;
   const provider = isNode ? require("./interpretation-provider.js") : root.TRACA_INTERPRETATION_PROVIDER;
   const operators = isNode ? require("./composition-operators.js") : root.TRACA_COMPOSITION_OPERATORS;
+  if (!provider) throw new Error("CLARIFICATION_PROVIDER_UNAVAILABLE");
   const api = factory(utils, provider, operators);
   if (isNode) module.exports = api;
   root.TRACA_CLARIFICATION_ORCHESTRATOR = api;
