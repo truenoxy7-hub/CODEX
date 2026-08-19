@@ -83,6 +83,20 @@
     { id: "D3", role: "third", label: "D3", pattern: "d3|tercer defensor|3r defensor" },
     { id: "DAV", role: "advanced", label: "DAV", pattern: "dav|avancat defensiu|avancat" }
   ];
+  const CANONICAL_INTERVAL_DEFINITIONS = Object.freeze([
+    {
+      id: "INT_12", label: "Interval 1–2", token: /\b(?:1\s*[-–]\s*2|12)\b/g,
+      delimiters: [{ id: "D1", role: "first", label: "D1" }, { id: "D2", role: "second", label: "D2" }]
+    },
+    {
+      id: "INT_23", label: "Interval 2–3", token: /\b(?:2\s*[-–]\s*3|23)\b/g,
+      delimiters: [{ id: "D2", role: "second", label: "D2" }, { id: "D3", role: "third", label: "D3" }]
+    },
+    {
+      id: "INT_33", label: "Interval 3–3", token: /\b(?:3\s*[-–]\s*3|33)\b/g,
+      delimiters: [{ id: "D3_LOCAL", role: "third", label: "D3 local" }, { id: "D3_OPOSAT", role: "third", label: "D3 oposat" }]
+    }
+  ]);
 
   function roleRegex(definitions) {
     return definitions.map((item) => `(?:${item.pattern})`).join("|");
@@ -287,14 +301,36 @@
     const rolePattern = roleRegex(ROLE_DEFINITIONS);
     const defenderPattern = roleRegex(DEFENDER_DEFINITIONS);
 
-    function addParticipant(definition, team, sourceRef) {
-      if (!definition || participants.has(definition.id)) return;
-      participants.set(definition.id, {
-        id: definition.id, label: definition.label, role: definition.role,
-        kind: team === "defense" ? "defender" : "attacker", team,
-        authority: "coach_explicit_input", status: "explicit",
-        source_refs: [sourceRef || "coach_input"]
-      });
+    function addParticipant(definition, team, sourceRef, metadata) {
+      if (!definition) return null;
+      const configuration = metadata || {};
+      const presence = configuration.presence || "explicit";
+      const authority = presence === "structural_reference" ? "derived_from_validated_rule" : "coach_explicit_input";
+      const status = presence === "structural_reference" ? "validated" : "explicit";
+      const sourceRefs = unique([sourceRef || "coach_input", ...(configuration.source_refs || [])]);
+      const existing = participants.get(definition.id);
+      if (!existing) {
+        const participant = {
+          id: definition.id, label: definition.label, role: definition.role,
+          kind: team === "defense" ? "defender" : "attacker", team,
+          presence, functional_participation: presence === "structural_reference" ? "delimiter_only" : "declared",
+          structural_delimiter_refs: unique([configuration.delimiter_space_ref]),
+          authority, status, source_refs: sourceRefs
+        };
+        participants.set(definition.id, participant);
+        return participant;
+      }
+      existing.source_refs = unique([...(existing.source_refs || []), ...sourceRefs]);
+      existing.structural_delimiter_refs = unique([...(existing.structural_delimiter_refs || []), configuration.delimiter_space_ref]);
+      if (presence !== "structural_reference" && existing.presence === "structural_reference") {
+        Object.assign(existing, {
+          label: definition.label, role: definition.role,
+          kind: team === "defense" ? "defender" : "attacker", team,
+          presence: "explicit", functional_participation: "declared",
+          authority: "coach_explicit_input", status: "explicit"
+        });
+      }
+      return existing;
     }
 
     [...ROLE_DEFINITIONS, ...DEFENDER_DEFINITIONS].forEach((definition) => {
@@ -302,11 +338,7 @@
       if (match) addParticipant(definition, DEFENDER_DEFINITIONS.includes(definition) ? "defense" : "attack", `coach_input:span:${match.index}-${match.index + match[0].length}`);
     });
 
-    const explicitSpaces = [
-      { id: "INT_12", label: "Interval 1–2", token: /\b(?:1\s*[-–]\s*2|12)\b/g, delimiter_refs: ["D1", "D2"] },
-      { id: "INT_23", label: "Interval 2–3", token: /\b(?:2\s*[-–]\s*3|23)\b/g, delimiter_refs: ["D2", "D3"] },
-      { id: "INT_33", label: "Interval 3–3", token: /\b(?:3\s*[-–]\s*3|33)\b/g, delimiter_refs: ["D3_LOCAL", "D3_OPOSAT"] }
-    ];
+    const explicitSpaces = CANONICAL_INTERVAL_DEFINITIONS;
     explicitSpaces.forEach((space) => {
       const matches = [...text.matchAll(new RegExp(space.token.source, space.token.flags))];
       matches.forEach((match) => spaceMentions.push({
@@ -316,11 +348,33 @@
         source_ref: `coach_input:span:${match.index}-${match.index + match[0].length}`
       }));
       const match = matches[0];
-      if (match) spaces.push({
-        id: space.id, label: space.label, type: "interval", relation: { type: "between", delimiter_refs: space.delimiter_refs.slice() },
-        delimiter_refs: space.delimiter_refs.slice(), authority: "canonical_spatial", status: "validated",
-        source_refs: [`coach_input:span:${match.index}-${match.index + match[0].length}`, "docs/DOMAIN_MODEL.md#3-espais-i-intervals"]
-      });
+      if (match) {
+        const mentionSource = `coach_input:span:${match.index}-${match.index + match[0].length}`;
+        const canonicalSource = `canonical:interval:${space.id}`;
+        const contractSource = "docs/DOMAIN_MODEL.md#3-espais-i-intervals";
+        const delimiterRefs = space.delimiters.map((delimiter) => delimiter.id);
+        const delimiterDerivations = space.delimiters.map((delimiter) => ({
+          delimiter_ref: delimiter.id,
+          entity_kind: "defender",
+          role: delimiter.role,
+          presence: "structural_reference",
+          authority: "derived_from_validated_rule",
+          status: "validated",
+          source_refs: [`space:${space.id}`, canonicalSource, contractSource, mentionSource]
+        }));
+        space.delimiters.forEach((delimiter) => addParticipant(delimiter, "defense", mentionSource, {
+          presence: "structural_reference",
+          delimiter_space_ref: space.id,
+          source_refs: [`space:${space.id}`, canonicalSource, contractSource]
+        }));
+        spaces.push({
+          id: space.id, label: space.label, type: "interval",
+          relation: { type: "between", delimiter_refs: delimiterRefs.slice() },
+          delimiter_refs: delimiterRefs.slice(), delimiter_derivations: delimiterDerivations,
+          authority: "canonical_spatial", status: "validated",
+          source_refs: [mentionSource, canonicalSource, contractSource]
+        });
+      }
     });
     spaceMentions.sort((left, right) => left.index - right.index);
 
@@ -504,7 +558,7 @@
   }
 
   return {
-    ROLE_DEFINITIONS, DEFENDER_DEFINITIONS,
+    ROLE_DEFINITIONS, DEFENDER_DEFINITIONS, CANONICAL_INTERVAL_DEFINITIONS,
     ACTION_SPATIAL_CONTRACT, normalize, matchLocalKnowledge, suggestedTags,
     initialSpace, terminalSpace, resolveSpatialContinuity, buildTacticalIR,
     canonicalCaseProvider, localRuleProvider, interpret

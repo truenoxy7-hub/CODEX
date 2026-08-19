@@ -10,9 +10,24 @@
     return { level, code, message, ...(details || {}) };
   }
 
+  function structuralDelimiterDerivation(space, delimiterRef) {
+    return (space.delimiter_derivations || []).find((item) => {
+      return item.delimiter_ref === delimiterRef &&
+        item.entity_kind === "defender" &&
+        item.presence === "structural_reference" &&
+        item.status === "validated" &&
+        operatorsApi.OPERATIONAL_AUTHORITIES.has(item.authority);
+    }) || null;
+  }
+
+  function structuralOnly(participant) {
+    return participant && participant.presence === "structural_reference" && participant.functional_participation === "delimiter_only";
+  }
+
   function run(plan, tacticalIR) {
     const diagnostics = [];
-    const participants = new Set((tacticalIR.participants || []).map((item) => item.id));
+    const participantMap = new Map((tacticalIR.participants || []).map((item) => [item.id, item]));
+    const participants = new Set(participantMap.keys());
     const materials = new Map((tacticalIR.materials || []).map((item) => [item.id, item]));
     const spaces = new Map((tacticalIR.spaces || []).map((item) => [item.id, item]));
     const states = new Map((plan.participant_states || []).map((item) => [item.id, item]));
@@ -20,7 +35,9 @@
     spaces.forEach((space) => {
       const delimiters = space.delimiter_refs || space.relation && space.relation.delimiter_refs || [];
       delimiters.forEach((ref) => {
-        if (!participants.has(ref) && !materials.has(ref) && !String(ref).startsWith("COURT_")) diagnostics.push(diagnostic("error", "SPACE_DELIMITER_MISSING", `${space.id} depèn del delimitador inexistent ${ref}.`, { space_ref: space.id, target_ref: ref }));
+        if (!participants.has(ref) && !materials.has(ref) && !String(ref).startsWith("COURT_") && !structuralDelimiterDerivation(space, ref)) {
+          diagnostics.push(diagnostic("error", "SPACE_DELIMITER_MISSING", `${space.id} depèn del delimitador ${ref}, que TRAÇA no pot derivar d’una relació validada.`, { space_ref: space.id, target_ref: ref }));
+        }
       });
     });
 
@@ -28,9 +45,17 @@
       if (!participants.has(state.participant_ref)) diagnostics.push(diagnostic("error", "COMPOSITION_STATE_OWNER_MISSING", `${state.id} referencia un participant inexistent.`, { state_ref: state.id }));
     });
     (plan.actions || []).forEach((action) => {
-      const participantFields = [action.actor_ref, action.receiver_ref, action.blocked_defender_ref, ...(action.attacker_refs || []), ...(action.defender_refs || []), ...(action.participant_refs || []), ...(action.actor_refs || [])].filter(Boolean);
-      participantFields.forEach((ref) => {
+      const participantFields = [
+        ["actor_ref", action.actor_ref], ["receiver_ref", action.receiver_ref],
+        ["opponent_ref", action.opponent_ref], ["blocked_defender_ref", action.blocked_defender_ref],
+        ...(action.attacker_refs || []).map((ref) => ["attacker_refs", ref]),
+        ...(action.defender_refs || []).map((ref) => ["defender_refs", ref]),
+        ...(action.participant_refs || []).map((ref) => ["participant_refs", ref]),
+        ...(action.actor_refs || []).map((ref) => ["actor_refs", ref])
+      ].filter((item) => item[1]);
+      participantFields.forEach(([field, ref]) => {
         if (!participants.has(ref) && !materials.has(ref)) diagnostics.push(diagnostic("error", "COMPOSITION_PARTICIPANT_MISSING", `${action.id} referencia ${ref}, que no existeix.`, { action_ref: action.id, target_ref: ref }));
+        else if (structuralOnly(participantMap.get(ref))) diagnostics.push(diagnostic("error", "STRUCTURAL_REFERENCE_USED_AS_ACTIVE_PARTICIPANT", `${ref} només és una referència estructural de delimitació i no pot ocupar ${field} sense participació explícita.`, { action_ref: action.id, target_ref: ref, field }));
       });
       [action.from_state_ref, action.to_state_ref, action.state_ref, ...(action.from_state_refs || []), ...(action.to_state_refs || [])].filter(Boolean).forEach((ref) => {
         if (!states.has(ref)) diagnostics.push(diagnostic("error", "COMPOSITION_STATE_MISSING", `${action.id} referencia l’estat inexistent ${ref}.`, { action_ref: action.id, state_ref: ref }));
@@ -70,5 +95,5 @@
     };
   }
 
-  return { run };
+  return { structuralDelimiterDerivation, structuralOnly, run };
 });

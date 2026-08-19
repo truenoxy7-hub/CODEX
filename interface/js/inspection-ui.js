@@ -79,13 +79,38 @@
       actor,
       target: companions,
       opponent: firstValues(action, ["opponent_ref", "blocked_defender_ref", "defender_ref", "defender_refs"]),
-      initialSpace: firstValues(action, ["initial_space_ref", "from_space_ref"]),
-      finalSpace: firstValues(action, ["target_space_ref", "to_space_ref", "space_ref"]),
+      initialSpace: firstValues(action, ["initial_space_ref", "start_space_ref", "from_space_ref"]),
+      finalSpace: firstValues(action, ["target_space_ref", "end_space_ref", "to_space_ref", "space_ref"]),
       originState: firstValues(action, ["from_state_ref", "from_state_refs"]),
       destinationState: firstValues(action, ["to_state_ref", "to_state_refs", "state_ref"]),
       authority: action.authority || null,
       status: action.status || null
     };
+  }
+
+  function delimiterRefs(space) {
+    return space && (space.delimiter_refs || space.relation && space.relation.delimiter_refs) || [];
+  }
+
+  function humanDiagnosticReasons(composition, tacticalIR, plan) {
+    const reasons = [];
+    const preflight = composition.preflight || plan && plan.preflight || {};
+    (preflight.diagnostics || []).filter((item) => item.level === "error").forEach((item) => {
+      if (item.code === "SPACE_DELIMITER_MISSING") {
+        reasons.push(`${item.space_ref} depèn del delimitador ${item.target_ref}, que TRAÇA no pot derivar d’una relació validada.`);
+      } else if (item.message) reasons.push(item.message);
+    });
+    const geometryStatus = composition.geometry_status || plan && plan.geometry_status;
+    if (![null, undefined, "ready", "blocked"].includes(geometryStatus)) {
+      (tacticalIR && tacticalIR.spaces || []).forEach((space) => {
+        const delimiters = delimiterRefs(space);
+        if (delimiters.length === 2) reasons.push(`Sé que ${space.id} és entre ${delimiters[0]} i ${delimiters[1]}, però encara no hi ha prou informació espacial per posicionar-los.`);
+      });
+      (composition.unresolved || []).forEach((reason) => {
+        if (reason && /\s/.test(reason) && !/^A\d+:[a-z_]+$/i.test(reason)) reasons.push(reason);
+      });
+    }
+    return [...new Set(reasons)];
   }
 
   function staleSnapshot(snapshot) {
@@ -111,7 +136,7 @@
         composition: {
           status: stale ? "pendent de regenerar" : composition.composition_status || composition.status || "no iniciada",
           geometry: stale ? null : composition.geometry_status || null,
-          total: null, composed: null, pending: null, coverage: null
+          total: null, composed: null, pending: null, coverage: null, reasons: []
         },
         actions: [],
         payloads: {
@@ -130,6 +155,12 @@
       ? coverage.actions_composed
       : (plan && plan.actions || []).filter((action) => action.status === "composed").length;
     const pending = Number.isFinite(total) && Number.isFinite(composed) ? Math.max(0, total - composed) : null;
+    const tacticalActions = new Map((tacticalIR && tacticalIR.actions || []).map((action) => [action.id, action]));
+    const planActions = plan && plan.actions || [];
+    const actions = planActions.length
+      ? planActions.map((action) => actionSummary({ ...(tacticalActions.get(action.id) || {}), ...action }))
+      : [...tacticalActions.values()].map(actionSummary);
+    const preflight = composition.preflight || plan && plan.preflight || null;
 
     return {
       current: true,
@@ -141,15 +172,17 @@
         total,
         composed,
         pending,
-        coverage: coverage.label || (Number.isFinite(total) && Number.isFinite(composed) ? `${composed}/${total}` : null)
+        coverage: coverage.label || (Number.isFinite(total) && Number.isFinite(composed) ? `${composed}/${total}` : null),
+        reasons: humanDiagnosticReasons(composition, tacticalIR, plan)
       },
-      actions: (plan && plan.actions || []).map(actionSummary),
+      actions,
       payloads: {
         tacticalIR,
         compositionPlan: plan,
         spatialConstraints: plan ? {
           constraints: plan.constraints || [],
-          constraint_conflicts: plan.constraint_conflicts || []
+          constraint_conflicts: plan.constraint_conflicts || [],
+          preflight
         } : null,
         questions: {
           questions: composition.questions || plan && plan.questions || [],
@@ -161,5 +194,5 @@
     };
   }
 
-  return { ADVANCED_PANELS, isAdvancedPanel, createPanelController, actionSummary, diagnosticsFor };
+  return { ADVANCED_PANELS, isAdvancedPanel, createPanelController, actionSummary, humanDiagnosticReasons, diagnosticsFor };
 });

@@ -45,8 +45,18 @@
   cobertura per acció i traçabilitat fins a la font.
 - `composition_status` separat de `geometry_status`; el compositor pot quedar
   complet encara que la geometria necessiti dades.
+- Els intervals canònics creen referències defensives estructurals estables
+  per als delimitadors implícits. Aquestes identitats només delimiten l'espai,
+  no actuen com a oponents, i una menció explícita posterior reutilitza la
+  mateixa identitat.
+- El preflight no bloqueja una composició per un delimitador derivable d'una
+  relació validada, però continua bloquejant referències desconegudes. La
+  composició pot quedar `ready` mentre la geometria resta `needs_input`.
 - Vistes neta, d'edició, comparada i original.
 - Preflight amb errors bloquejants, warnings i informació accionable.
+- El diagnòstic avançat combina `TacticalIR` i `CompositionPlan` per mostrar
+  l'espai funcional de cada acció i explica en llenguatge humà els bloquejos o
+  les dades espacials que encara falten.
 - Promotion Builder per tipus, abast i subconjunt seleccionat de correccions.
 - Biblioteca inspectable i resum «Què ha après TRAÇA?».
 - Diccionari visual-funcional amb les 103 evidències de l’inventari i 13

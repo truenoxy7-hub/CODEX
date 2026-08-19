@@ -69,6 +69,22 @@ Cada interval ha de declarar:
 - funció;
 - contigüitat quan sigui rellevant.
 
+### 3.1. Referència defensiva estructural
+
+Mencionar un interval canònic declara també les identitats necessàries per
+definir-lo. Si `INT_12` apareix al text, `D1` i `D2` poden existir al
+`TacticalIR` com a `structural_reference`, amb autoritat
+`derived_from_validated_rule`, encara que l'entrenador no els hagi mencionat
+com a participants actius. Aquesta presència conserva només identitat, rol
+defensiu i funció de delimitador; no implica oposició, moviment, decisió ni
+coordenades.
+
+Una menció explícita posterior enriqueix la mateixa identitat i canvia la seva
+presència a explícita; no crea un segon participant. Una referència que no es
+pot justificar amb una definició o relació validada continua sent absent i
+bloqueja el preflight. Els materials delimitadors conserven la seva funció per
+instància i no adquireixen equivalència defensiva per delimitar un espai.
+
 ## 4. Subacció
 
 Una subacció agrupa una seqüència funcional coherent. Ha d'incloure:

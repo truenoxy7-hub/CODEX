@@ -117,7 +117,7 @@ process.stdout.write(JSON.stringify(diagnostics));
     assert result["payloads"]["ballFlow"]["states"][0]["id"] == "BALL-REAL"
     assert result["composition"] == {
         "status": "ready", "geometry": "needs_input", "total": 1,
-        "composed": 1, "pending": 0, "coverage": "1/1",
+        "composed": 1, "pending": 0, "coverage": "1/1", "reasons": [],
     }
     assert result["actions"][0] == {
         "id": "ACTION-REAL", "type": "feint", "actor": ["L"], "target": [],

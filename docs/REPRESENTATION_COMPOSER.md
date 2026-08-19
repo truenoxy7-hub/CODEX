@@ -49,7 +49,7 @@ Afegir una família nova exigeix un operador registrat amb slots obligatoris, pr
 
 Els operadors produeixen relacions `ATTACKS`, `OPPOSES`, `CONTIGUOUS`, `SURPASSES_DEFENSIVE_LINE`, `BLOCKS`, `NUMERICAL_RELATION`, `OCCUPIES_FUNCTIONAL_POSITION`, `CROSSES_RELATIVE_TO` o `NEAR_6M`. La contigüitat d’intervals es deriva només si comparteixen el delimitador defensiu correcte o si està declarada explícitament.
 
-El preflight comprova participants, estats, materials amb equivalència oposicional, possessió, slots, candidats aplicats, cicles i conflictes. Dues regles incompatibles retornen `blocked`; no se n’escull una silenciosament.
+El preflight comprova participants, estats, materials amb equivalència oposicional, possessió, slots, candidats aplicats, cicles i conflictes. També diferencia un delimitador realment absent d'una referència defensiva estructural derivable d'un interval canònic. Aquesta referència pot definir l'espai, però no pot ocupar automàticament `opponent_ref`, `blocked_defender_ref` ni cap altre paper actiu. Dues regles incompatibles retornen `blocked`; no se n'escull una silenciosament.
 
 ## Estats de resultat
 
@@ -60,6 +60,11 @@ El preflight comprova participants, estats, materials amb equivalència oposicio
 - `blocked`: hi ha una contradicció estructural.
 
 `composition_status` i `geometry_status` són independents. Un pla pot estar `ready` i la geometria `needs_input`.
+
+En particular, saber que `INT_12 = entre(D1, D2)` és suficient per completar la
+composició relacional. Sense posicions justificades de `D1` i `D2`, la geometria
+continua `needs_input`; el compositor no crea coordenades per eliminar aquest
+buit.
 
 ## Autoritat i no-invenció
 
