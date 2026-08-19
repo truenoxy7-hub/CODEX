@@ -57,6 +57,13 @@
 - El diagnòstic avançat combina `TacticalIR` i `CompositionPlan` per mostrar
   l'espai funcional de cada acció i explica en llenguatge humà els bloquejos o
   les dades espacials que encara falten.
+- Les clarificacions són progressives: la pantalla normal mostra una única
+  pregunta activa, mentre el diagnòstic conserva totes les pendents, respostes,
+  opcions i derivacions. Els catàlegs canònics ofereixen referències sense
+  convertir-les en fets; una selecció materialitza la identitat estable.
+- La finta pot derivar l'interval de sortida només quan oponent, espai inicial i
+  contigüitat deixen una única opció validada. Aquesta derivació no determina
+  el defensor d'una relació numèrica posterior.
 - Promotion Builder per tipus, abast i subconjunt seleccionat de correccions.
 - Biblioteca inspectable i resum «Què ha après TRAÇA?».
 - Diccionari visual-funcional amb les 103 evidències de l’inventari i 13

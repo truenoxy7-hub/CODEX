@@ -51,6 +51,21 @@ Els operadors produeixen relacions `ATTACKS`, `OPPOSES`, `CONTIGUOUS`, `SURPASSE
 
 El preflight comprova participants, estats, materials amb equivalència oposicional, possessió, slots, candidats aplicats, cicles i conflictes. També diferencia un delimitador realment absent d'una referència defensiva estructural derivable d'un interval canònic. Aquesta referència pot definir l'espai, però no pot ocupar automàticament `opponent_ref`, `blocked_defender_ref` ni cap altre paper actiu. Dues regles incompatibles retornen `blocked`; no se n'escull una silenciosament.
 
+## Clarificacions progressives
+
+`ClarificationOrchestrator` reutilitza els catàlegs canònics de participants i
+intervals per enriquir les preguntes del pla. Els operadors declaren prioritat
+i dependències entre slots; el pla conserva totes les preguntes pendents, però
+la interfície normal només rep `active_question`. Després de cada resposta es
+materialitza un TacticalIR nou, es recompon i es recalculen preguntes i opcions.
+
+Una opció seleccionable no és un fet i no instancia cap participant. Una
+resposta de l'entrenador esdevé un fet explícit amb
+`coach_explicit_input` i `coach_answer:<question>`. Només una conseqüència única
+de regles canòniques validades pot esdevenir un fet
+`derived_from_validated_rule`; si resten dues opcions, el compositor pregunta.
+Les respostes es vinculen a `source_revision` i s'invaliden quan canvia el text.
+
 ## Estats de resultat
 
 - `ready`: totes les accions estan compostes i no hi ha preguntes ni conflictes.

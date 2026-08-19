@@ -122,7 +122,7 @@
   function diagnosticsFor(snapshot) {
     const stale = staleSnapshot(snapshot || {});
     const composition = snapshot && snapshot.composition || {};
-    const tacticalIR = snapshot && snapshot.interpretation && snapshot.interpretation.tactical_ir || null;
+    const tacticalIR = composition.tactical_ir || snapshot && snapshot.interpretation && snapshot.interpretation.tactical_ir || null;
     const plan = composition.plan || null;
     const current = !stale && Boolean(tacticalIR || plan);
 
@@ -186,6 +186,10 @@
         } : null,
         questions: {
           questions: composition.questions || plan && plan.questions || [],
+          active_question: composition.active_question || null,
+          answers: snapshot.clarificationAnswers || {},
+          auto_derivations: composition.auto_derivations || [],
+          applied_answers: composition.applied_answers || [],
           unresolved: composition.unresolved || [],
           missing_slots: plan && plan.missing_slots || []
         },

@@ -154,9 +154,9 @@
       required_slots: ["actor_ref", "opponent_ref", "initial_space_ref", "target_space_ref"], visual_primitives: ["feint_path"],
       compose(action, context) {
         const actorRef = context.require(action, { slot: "actor_ref", label: "Qui fa la finta?", options: "attackers" });
-        const opponentRef = context.require(action, { slot: "opponent_ref", label: "Contra quin defensor fa la finta?", options: "opponents" });
-        const initialSpace = context.require(action, { slot: "initial_space_ref", label: "Quin espai ataca inicialment?", options: "spaces" });
-        const targetSpace = context.require(action, { slot: "target_space_ref", label: "Quin espai contigu ataca després?", options: "spaces", exclude: initialSpace });
+        const opponentRef = context.require(action, { slot: "opponent_ref", label: "Contra quin defensor fa la finta?", options: "opponents", priority: 100 });
+        const initialSpace = context.require(action, { slot: "initial_space_ref", label: "Quin espai ataca inicialment?", options: "spaces", depends_on: ["opponent_ref"], priority: 80 });
+        const targetSpace = context.require(action, { slot: "target_space_ref", label: "Cap a quin espai contigu surt?", options: "spaces", exclude: initialSpace, depends_on: ["opponent_ref", "initial_space_ref"], priority: 60 });
         if (!actorRef || !opponentRef || !initialSpace || !targetSpace) return context.unresolvedAction(action, this);
         const from = context.states.current(actorRef);
         const to = context.states.ensure(actorRef, action.to_state_ref || `${action.id}:exit`, {
@@ -197,8 +197,11 @@
       required_slots: ["attacker_refs", "defender_refs"], visual_primitives: [],
       compose(action, context) {
         const expected = action.subtype === "2x2" || action.type === "two_v_two" ? [2, 2] : action.subtype === "3x2" || action.type === "three_v_two" ? [3, 2] : [2, 1];
-        const attackerValue = context.require(action, { slot: "attacker_refs", label: `Quins són els ${expected[0]} atacants?`, options: "attackers", min_items: expected[0], max_items: expected[0] });
-        const defenderValue = context.require(action, { slot: "defender_refs", label: `Quins són els ${expected[1]} defensors?`, options: "opponents", min_items: expected[1], max_items: expected[1] });
+        const relation = action.subtype || `${expected[0]}x${expected[1]}`;
+        const attackerLabel = expected[0] === 1 ? `Qui és l’atacant del ${relation}?` : `Quins són els ${expected[0] === 2 ? "dos" : "tres"} atacants del ${relation}?`;
+        const defenderLabel = expected[1] === 1 ? `Quin és el defensor del ${relation}?` : `Quins són els dos defensors del ${relation}?`;
+        const attackerValue = context.require(action, { slot: "attacker_refs", label: attackerLabel, options: "attackers", min_items: expected[0], max_items: expected[0], priority: 50 });
+        const defenderValue = context.require(action, { slot: "defender_refs", label: defenderLabel, options: "opponents", min_items: expected[1], max_items: expected[1], depends_on: ["attacker_refs"], priority: 40 });
         const attackers = values(attackerValue), defenders = values(defenderValue);
         if (attackers.length !== expected[0] || defenders.length !== expected[1]) return context.unresolvedAction(action, this);
         context.constraints.add({ id: `CONSTRAINT_${action.id}_NUMERICAL`, type: "NUMERICAL_RELATION", strength: "hard", subject_refs: attackers, object_refs: defenders, action_ref: action.id, source_refs: action.source_refs });

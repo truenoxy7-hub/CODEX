@@ -24,6 +24,7 @@ def test_universal_workspace_files_exist() -> None:
         "js/spatial-constraints.js",
         "js/composition-operators.js",
         "js/composition-preflight.js",
+        "js/clarification-orchestrator.js",
         "js/generic-geometry-resolver.js",
         "js/representation-composer.js",
         "js/manual-geometry.js",
@@ -60,6 +61,7 @@ def test_interface_exposes_the_universal_supervised_loop() -> None:
     assert 'src="js/composition-graph.js"' in html
     assert 'src="js/composition-operators.js"' in html
     assert 'src="js/composition-preflight.js"' in html
+    assert 'src="js/clarification-orchestrator.js"' in html
     assert 'src="js/generic-geometry-resolver.js"' in html
     assert 'src="js/representation-composer.js"' in html
     assert 'src="js/inspection-ui.js"' in html
@@ -151,3 +153,11 @@ def test_interface_states_honest_resolver_and_knowledge_limits() -> None:
     assert "No és generatedGeometry" in app
     assert "Coincidències lèxiques locals; no són una interpretació tàctica validada" in provider
     assert 'currentCase.case_type === "canonical_specimen"' in provider
+
+
+def test_normal_flow_projects_only_the_active_clarification_question() -> None:
+    app = (INTERFACE / "js/app.js").read_text(encoding="utf-8")
+
+    assert "snapshot.composition.active_question" in app
+    assert "const questions = activeQuestion ? [activeQuestion] : []" in app
+    assert "Suggeriment:" in app

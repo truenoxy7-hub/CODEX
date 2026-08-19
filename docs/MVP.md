@@ -19,6 +19,8 @@ La pantalla normal no demana origen, etiquetes, coordenades, capes ni tipus d'au
 - compon moviment, bot, passada, recepció, llançament, finta/1x1, bloqueig,
   relacions numèriques, permuta, encreuament i lliscament de pivot;
 - pregunta els actors, oponents o espais obligatoris quan no estan determinats;
+- mostra una sola clarificació cada vegada, recalcula opcions després de cada
+  resposta i deriva automàticament només conseqüències canòniques úniques;
 - representa posicions futures vinculades i manté un únic destí per a moviment i passada;
 - permet corregir directament arrossegant;
 - demana si la correcció és només del cas o criteri reutilitzable;
@@ -43,6 +45,10 @@ la composició sense completar la geometria. Qualsevol acció no suportada es
 conserva com a parcial o es completa manualment.
 
 Canviar la descripció invalida interpretació, models i geometria que derivaven de la revisió anterior. La interfície oculta el gràfic obsolet i el preflight bloqueja el guardat fins a regenerar.
+
+En clarificacions, `OPCIÓ ≠ FET`: mostrar D1, D2 o D3 no els activa. Una
+resposta és un fet explícit de l'entrenador; una conseqüència única d'una regla
+validada és un fet derivat i conserva fonts i autoritat pròpies.
 
 ## Fora d’abast
 

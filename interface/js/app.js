@@ -136,16 +136,18 @@
     elements.understood.innerHTML = concepts.length
       ? `<div class="understood-grid">${concepts.map((item) => `<span class="understood-item ${item.knowledge_state === "validated" ? "" : "is-provisional"}">${escape(item.label)}${item.source === "coach_validated_local_knowledge" ? " · après" : ""}</span>`).join("")}</div>${coverageCopy}`
       : '<p class="empty-copy">Encara no hi ha cap concepte resolt.</p>';
-    const questions = snapshot.composition.questions || [];
+    const activeQuestion = snapshot.composition.active_question || null;
+    const questions = activeQuestion ? [activeQuestion] : [];
     const unresolved = [...(snapshot.interpretation.unknown_concepts || []), ...(snapshot.interpretation.unresolved || [])];
-    elements.questionCount.textContent = String(questions.length + unresolved.length);
-    const questionMarkup = questions.map((question) => `<article class="question-card"><strong>${escape(question.label)}</strong>${question.multiple ? `<span class="empty-copy">Tria ${question.required_count} opcions.</span>` : ""}<div class="answer-options">${question.options.map((option) => `<button class="button button-secondary" type="button" data-answer-question="${escape(question.id)}" data-answer-value="${escape(option.value)}" data-answer-multiple="${question.multiple ? "true" : "false"}" data-answer-limit="${question.maximum_count || 1}">${escape(option.label)}</button>`).join("")}</div></article>`).join("");
-    const unresolvedMarkup = unresolved.map((item) => `<article class="question-card"><strong>${escape(item.label || item.reason || "Concepte pendent")}</strong><span class="empty-copy">Es conserva com a no resolt; no s’ha inventat cap regla.</span></article>`).join("");
+    elements.questionCount.textContent = String(questions.length || (unresolved.length ? 1 : 0));
+    const questionMarkup = questions.map((question) => `<article class="question-card"><strong>${escape(question.label)}</strong>${question.multiple ? `<span class="empty-copy">Tria ${question.required_count} opcions.</span>` : ""}${question.suggested_answer ? `<span class="empty-copy">Suggeriment: ${escape(question.suggested_answer.label)}. No s’ha aplicat.</span>` : ""}<div class="answer-options">${question.options.map((option) => `<button class="button button-secondary" type="button" data-answer-question="${escape(question.id)}" data-answer-value="${escape(option.value)}" data-answer-multiple="${question.multiple ? "true" : "false"}" data-answer-limit="${question.maximum_count || 1}">${escape(option.label)}</button>`).join("")}</div></article>`).join("");
+    const unresolvedMarkup = !questions.length && unresolved.length ? `<article class="question-card"><strong>${escape(unresolved[0].label || unresolved[0].reason || "Concepte pendent")}</strong><span class="empty-copy">Es conserva com a no resolt; no s’ha inventat cap regla.</span></article>` : "";
     elements.questions.innerHTML = questionMarkup || unresolvedMarkup || '<p class="empty-copy">Cap pregunta pendent.</p>';
     elements.questions.querySelectorAll("[data-answer-question]").forEach((button) => button.addEventListener("click", () => {
       const questionId = button.dataset.answerQuestion;
       if (button.dataset.answerMultiple === "true") {
-        const current = store.snapshot().clarificationAnswers[questionId];
+        const record = store.snapshot().clarificationAnswers[questionId];
+        const current = record && typeof record === "object" && !Array.isArray(record) && Object.prototype.hasOwnProperty.call(record, "value") ? record.value : record;
         const selected = Array.isArray(current) ? current.slice() : current ? [current] : [];
         const value = button.dataset.answerValue;
         const next = selected.includes(value) ? selected.filter((item) => item !== value) : [...selected, value].slice(-(Number(button.dataset.answerLimit) || 1));

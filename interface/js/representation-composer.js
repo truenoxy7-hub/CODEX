@@ -7,11 +7,12 @@
   const constraintApi = isNode ? require("./spatial-constraints.js") : root.TRACA_SPATIAL_CONSTRAINTS;
   const operatorsApi = isNode ? require("./composition-operators.js") : root.TRACA_COMPOSITION_OPERATORS;
   const preflightApi = isNode ? require("./composition-preflight.js") : root.TRACA_COMPOSITION_PREFLIGHT;
+  const clarificationApi = isNode ? require("./clarification-orchestrator.js") : root.TRACA_CLARIFICATION_ORCHESTRATOR;
   const geometryApi = isNode ? require("./generic-geometry-resolver.js") : root.TRACA_GENERIC_GEOMETRY_RESOLVER;
-  const api = factory(utils, graphApi, stateApi, ballApi, constraintApi, operatorsApi, preflightApi, geometryApi);
+  const api = factory(utils, graphApi, stateApi, ballApi, constraintApi, operatorsApi, preflightApi, clarificationApi, geometryApi);
   if (isNode) module.exports = api;
   root.TRACA_REPRESENTATION_COMPOSER = api;
-})(typeof globalThis !== "undefined" ? globalThis : this, function (utils, graphApi, stateApi, ballApi, constraintApi, operatorsApi, preflightApi, geometryApi) {
+})(typeof globalThis !== "undefined" ? globalThis : this, function (utils, graphApi, stateApi, ballApi, constraintApi, operatorsApi, preflightApi, clarificationApi, geometryApi) {
   "use strict";
 
   const COMPOSITION_VERSION = "0.1.0";
@@ -41,15 +42,7 @@
   }
 
   function optionList(kind, tacticalIR, exclude) {
-    const excluded = new Set(operatorsApi.values(exclude));
-    if (kind === "spaces") return (tacticalIR.spaces || []).filter((item) => !excluded.has(item.id)).map((item) => ({ value: item.id, label: item.label || item.id }));
-    const participants = (tacticalIR.participants || []).filter((item) => !excluded.has(item.id));
-    if (kind === "pivot") return participants.filter((item) => item.role === "pivot" || item.id === "PV").map((item) => ({ value: item.id, label: item.label || item.id }));
-    if (kind === "opponents") {
-      const materials = (tacticalIR.materials || []).filter((item) => item.opponent_equivalence || item.function === "active_oppositional_substitute");
-      return [...participants.filter((item) => item.team === "defense" || item.kind === "defender" || /^D\d|DAV/.test(item.id)), ...materials].map((item) => ({ value: item.id, label: item.label || item.id }));
-    }
-    return participants.filter((item) => item.team !== "defense" && item.kind !== "defender" && !/^D\d|DAV/.test(item.id)).map((item) => ({ value: item.id, label: item.label || item.id }));
+    return clarificationApi.optionList(kind, tacticalIR, { exclude });
   }
 
   function compatibleKnowledgeFact(facts, action, spec) {
@@ -69,19 +62,7 @@
   }
 
   function applyAnswers(tacticalIR, answers) {
-    const result = utils.deepClone(tacticalIR);
-    (result.actions || []).forEach((action) => {
-      Object.entries(answers || {}).forEach(([key, value]) => {
-        const prefix = `${action.id}:`;
-        if (!key.startsWith(prefix)) return;
-        const slot = key.slice(prefix.length);
-        if (value === undefined || value === null || value === "") return;
-        action[slot] = Array.isArray(value) ? value.slice() : value;
-        action.slot_authority = { ...(action.slot_authority || {}), [slot]: "coach_explicit_input" };
-        action.source_refs = [...new Set([...(action.source_refs || []), `coach_answer:${key}`])];
-      });
-    });
-    return result;
+    return clarificationApi.prepare(tacticalIR, answers).tacticalIR;
   }
 
   function createContext(tacticalIR, graph, registry, states, ball, constraints, knowledgeFacts) {
@@ -119,7 +100,8 @@
       const suggestion = candidateSuggestion(knowledgeFacts, action, spec);
       const question = {
         id: `${action.id}:${spec.slot}`, action_ref: action.id, slot: spec.slot,
-        label: spec.label, options: optionList(spec.options, tacticalIR, spec.exclude),
+        label: spec.label, option_kind: spec.options, exclude: utils.deepClone(spec.exclude || null),
+        options: [], depends_on: utils.deepClone(spec.depends_on || []), priority: spec.priority || 0,
         multiple: Boolean(spec.min_items && spec.min_items > 1),
         required_count: spec.min_items || 1,
         maximum_count: spec.max_items || spec.min_items || 1,
@@ -202,7 +184,8 @@
         unresolved: ["Falta una entrada tàctica estructurada; el compositor no rellegeix el text lliure."]
       };
     }
-    const tacticalIR = graphApi.normalizeInput(applyAnswers(rawIR, input.answers || {}));
+    const prepared = clarificationApi.prepare(rawIR, input.answers || {});
+    const tacticalIR = graphApi.normalizeInput(prepared.tacticalIR);
     const graph = graphApi.create(tacticalIR);
     const ordered = graphApi.orderedActions(graph);
     const registry = input.registry || operatorsApi.createDefaultRegistry();
@@ -230,7 +213,8 @@
       }
     });
 
-    const sortedQuestions = context.questions.slice().sort((left, right) => right.unlock_count - left.unlock_count || left.id.localeCompare(right.id));
+    const orchestration = clarificationApi.orchestrate(context.questions, tacticalIR, ordered.actions);
+    const sortedQuestions = orchestration.remaining_questions;
     const constraintSnapshot = constraints.snapshot();
     const ballSnapshot = ball.snapshot();
     const plan = {
@@ -271,6 +255,10 @@
       geometry: geometryResult.geometry,
       plan,
       questions: sortedQuestions,
+      active_question: orchestration.active_question,
+      auto_derivations: prepared.auto_derivations,
+      applied_answers: prepared.applied_answers,
+      tactical_ir: tacticalIR,
       used_primitives: [...new Set(plan.visual_primitives.map((item) => item.type))],
       coverage: plan.coverage,
       unresolved: [

@@ -185,6 +185,7 @@ process.stdout.write(JSON.stringify({partialStatus:partial.composition_status,co
 def test_composer_modules_do_not_hardcode_exercise_ids_or_parse_free_text() -> None:
     modules = [
         ROOT / "interface/js/representation-composer.js",
+        ROOT / "interface/js/clarification-orchestrator.js",
         ROOT / "interface/js/composition-operators.js",
         ROOT / "interface/js/generic-geometry-resolver.js",
     ]

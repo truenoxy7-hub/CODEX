@@ -257,6 +257,7 @@
       state.currentCase = { ...state.currentCase, ...utils.deepClone(patch) };
       const nextRevision = utils.fingerprint(state.currentCase.description);
       if (previousRevision !== nextRevision) {
+        state.clarificationAnswers = {};
         state.derivations.source = { revision: nextRevision, status: "current" };
         ["interpretation", "semantic", "spatial", "geometry"].forEach((key) => {
           const previousStatus = state.derivations[key].status;
@@ -301,6 +302,10 @@
         composition_status: result.composition_status || result.status,
         geometry_status: result.geometry_status || (result.geometry ? "ready" : "unavailable"),
         questions: utils.deepClone(result.questions || []),
+        active_question: utils.deepClone(result.active_question || null),
+        auto_derivations: utils.deepClone(result.auto_derivations || []),
+        applied_answers: utils.deepClone(result.applied_answers || []),
+        tactical_ir: utils.deepClone(result.tactical_ir || null),
         used_primitives: utils.deepClone(result.used_primitives || []),
         unresolved: utils.deepClone(result.unresolved || []),
         coverage: utils.deepClone(result.coverage || null),
@@ -328,7 +333,13 @@
     }
 
     function setClarificationAnswer(questionId, value) {
-      state.clarificationAnswers[questionId] = value;
+      state.clarificationAnswers[questionId] = {
+        value: utils.deepClone(value),
+        source_revision: utils.fingerprint(state.currentCase.description),
+        authority: "coach_explicit_input",
+        status: "explicit",
+        source_refs: [`coach_answer:${questionId}`]
+      };
       state.validation = { ...state.validation, status: "changes_pending", preflight: null };
       emit();
     }
