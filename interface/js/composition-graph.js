@@ -20,9 +20,11 @@
   const DIRECT_EDGES = [
     ["actor_ref", "actor"], ["target_ref", "target"], ["receiver_ref", "target"],
     ["opponent_ref", "opponent"], ["partner_ref", "partner"],
+    ["first_actor_ref", "first_actor"], ["crossing_actor_ref", "crossing_actor"],
+    ["crosses_relative_to", "crosses_relative_to"],
     ["from_state_ref", "from_state"], ["to_state_ref", "to_state"],
     ["state_ref", "state"], ["space_ref", "space"],
-    ["initial_space_ref", "space"], ["target_space_ref", "space"],
+    ["initial_space_ref", "space"], ["initial_attack_relation", "space"], ["target_space_ref", "space"],
     ["phase_ref", "belongs_to_phase"], ["ball_ref", "ball_before"]
   ];
 

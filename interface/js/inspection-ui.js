@@ -73,18 +73,28 @@
     const companions = firstValues(action, [
       "receiver_ref", "target_ref", "target_goal_ref", "partner_ref", "to_participant_ref"
     ]).filter((item) => !actor.includes(item));
+    const crossing = ["cross", "crossing"].includes(action.semantic_type || action.type)
+      ? {
+          firstActor: action.first_actor_ref || action.crosses_relative_to || null,
+          initialAttack: action.initial_attack_relation || action.initial_space_ref || null,
+          crossingActor: action.crossing_actor_ref || null,
+          relativeTo: action.crosses_relative_to || action.first_actor_ref || null,
+          targetSpace: action.target_space_ref || null
+        }
+      : null;
     return {
       id: action.id || null,
       type: action.semantic_type || action.type || action.subtype || null,
       actor,
       target: companions,
       opponent: firstValues(action, ["opponent_ref", "blocked_defender_ref", "defender_ref", "defender_refs"]),
-      initialSpace: firstValues(action, ["initial_space_ref", "start_space_ref", "from_space_ref"]),
+      initialSpace: firstValues(action, ["initial_space_ref", "start_space_ref", "from_space_ref", "initial_attack_relation"]),
       finalSpace: firstValues(action, ["target_space_ref", "end_space_ref", "to_space_ref", "space_ref"]),
       originState: firstValues(action, ["from_state_ref", "from_state_refs"]),
       destinationState: firstValues(action, ["to_state_ref", "to_state_refs", "state_ref"]),
       authority: action.authority || null,
-      status: action.status || null
+      status: action.status || null,
+      ...(crossing ? { crossing } : {})
     };
   }
 

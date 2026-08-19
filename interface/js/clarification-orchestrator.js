@@ -130,7 +130,8 @@
   function isParticipantSlot(slot) {
     return [
       "actor_ref", "sender_ref", "receiver_ref", "target_ref", "partner_ref", "blocker_ref",
-      "opponent_ref", "blocked_defender_ref", "attacker_refs", "defender_refs", "participant_refs", "actor_refs"
+      "opponent_ref", "blocked_defender_ref", "attacker_refs", "defender_refs", "participant_refs", "actor_refs",
+      "first_actor_ref", "crossing_actor_ref", "crosses_relative_to"
     ].includes(slot);
   }
 
@@ -223,8 +224,44 @@
     return derivations;
   }
 
+  function normalizeCrossingRoles(tacticalIR) {
+    (tacticalIR.actions || []).filter((action) => ["cross", "crossing"].includes(action.type)).forEach((action) => {
+      const legacy = Array.isArray(action.actor_refs) ? action.actor_refs : [];
+      const firstActor = action.first_actor_ref || action.crosses_relative_to || legacy[0];
+      const crossingActor = action.crossing_actor_ref || legacy[1];
+      if (!firstActor || !crossingActor) return;
+      const sourceRefs = unique([...(action.source_refs || []), "canonical:crossing:functional-roles"]);
+      action.first_actor_ref = firstActor;
+      action.crossing_actor_ref = crossingActor;
+      action.crosses_relative_to = firstActor;
+      action.actor_refs = [firstActor, crossingActor];
+      action.slot_authority = {
+        ...(action.slot_authority || {}),
+        first_actor_ref: action.slot_authority && (action.slot_authority.first_actor_ref || action.slot_authority.actor_refs) || "derived_from_validated_rule",
+        crossing_actor_ref: action.slot_authority && (action.slot_authority.crossing_actor_ref || action.slot_authority.actor_refs) || "derived_from_validated_rule",
+        crosses_relative_to: action.slot_authority && (action.slot_authority.crosses_relative_to || action.slot_authority.first_actor_ref || action.slot_authority.actor_refs) || "derived_from_validated_rule",
+        actor_refs: action.slot_authority && action.slot_authority.actor_refs || "derived_from_validated_rule"
+      };
+      action.slot_status = {
+        ...(action.slot_status || {}),
+        first_actor_ref: action.slot_status && (action.slot_status.first_actor_ref || action.slot_status.actor_refs) || "validated",
+        crossing_actor_ref: action.slot_status && (action.slot_status.crossing_actor_ref || action.slot_status.actor_refs) || "validated",
+        crosses_relative_to: action.slot_status && (action.slot_status.crosses_relative_to || action.slot_status.first_actor_ref || action.slot_status.actor_refs) || "validated",
+        actor_refs: action.slot_status && action.slot_status.actor_refs || "validated"
+      };
+      action.slot_source_refs = {
+        ...(action.slot_source_refs || {}),
+        first_actor_ref: unique(action.slot_source_refs && (action.slot_source_refs.first_actor_ref || action.slot_source_refs.actor_refs) || sourceRefs),
+        crossing_actor_ref: unique(action.slot_source_refs && (action.slot_source_refs.crossing_actor_ref || action.slot_source_refs.actor_refs) || sourceRefs),
+        crosses_relative_to: unique(action.slot_source_refs && (action.slot_source_refs.crosses_relative_to || action.slot_source_refs.first_actor_ref || action.slot_source_refs.actor_refs) || sourceRefs),
+        actor_refs: unique(action.slot_source_refs && action.slot_source_refs.actor_refs || sourceRefs)
+      };
+    });
+  }
+
   function prepare(tacticalIR, answers) {
     const answered = applyAnswers(tacticalIR, answers);
+    normalizeCrossingRoles(answered.tacticalIR);
     const autoDerivations = deriveUniqueFacts(answered.tacticalIR);
     return { ...answered, auto_derivations: autoDerivations };
   }
@@ -296,7 +333,7 @@
 
   return {
     canonicalDefenders, canonicalIntervals, answerValue, intervalDefinition,
-    applyAnswers, deriveUniqueFacts, prepare, optionList, optionsFor,
+    applyAnswers, deriveUniqueFacts, normalizeCrossingRoles, prepare, optionList, optionsFor,
     compatibleFeintTargets, orchestrate
   };
 });

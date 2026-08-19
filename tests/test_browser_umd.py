@@ -18,6 +18,7 @@ COMPLETE_CASE = (
     "fa una finta contra D2 i surt cap a l’interval 2–3. "
     "Després juga un 2x1 amb el pivot contra D3."
 )
+CROSSING_CASE = "El central ataca l’interval 1–2. El lateral fa un encreuament amb el central per atacar l’interval 2–3."
 
 
 class _ScriptSourceParser(HTMLParser):
@@ -171,18 +172,20 @@ function generate(text) {{
     understood:document.element('#understood-list').innerHTML,
     questionCount:document.element('#question-count').textContent,
     questions:JSON.parse(document.element('#diagnostic-questions').textContent),
-    summary:document.element('#composition-human-summary').innerHTML
+    summary:document.element('#composition-human-summary').innerHTML,
+    actions:document.element('#composition-actions-summary').innerHTML
   }};
 }}
 
 const ambiguous=generate({json.dumps(AMBIGUOUS_CASE)});
 const complete=generate({json.dumps(COMPLETE_CASE)});
+const crossing=generate({json.dumps(CROSSING_CASE)});
 process.stdout.write(JSON.stringify({{
   sources, loaded,
   missingGlobals:requiredGlobals.filter(name=>!context[name]),
   providerAliasIsExact:context.TRACA_INTERPRETATION === context.TRACA_INTERPRETATION_PROVIDER,
   clarifierProviderWorks:context.TRACA_CLARIFICATION_ORCHESTRATOR.canonicalDefenders().map(item=>item.id),
-  ambiguous, complete
+  ambiguous, complete, crossing
 }}));
 """
     return _run_node(script)
@@ -212,6 +215,16 @@ def test_browser_generate_projects_ambiguous_and_complete_cases(browser_bundle: 
     assert complete["questions"]["questions"] == []
     assert "ready" in complete["summary"]
     assert "needs_input" in complete["summary"]
+
+    crossing = browser_bundle["crossing"]
+    assert crossing["questionCount"] == "0"
+    assert "1/1 accions compostes" in crossing["understood"]
+    assert crossing["questions"]["active_question"] is None
+    assert crossing["questions"]["questions"] == []
+    assert "ready" in crossing["summary"]
+    assert "needs_input" in crossing["summary"]
+    for expected in ("primer jugador", "CE", "atac inicial", "INT_12", "jugador que encreua", "L", "espai objectiu", "INT_23"):
+        assert expected in crossing["actions"]
 
 
 def test_clarification_orchestrator_fails_fast_without_browser_provider() -> None:

@@ -264,6 +264,15 @@ espais, fase, dependències temporals, autoritat i fonts. Les relacions
 `after`, `before` i `simultaneous_with` formen un graf; no es pressuposa que
 una llista incidental sigui l’ordre tàctic.
 
+L’encreuament és una relació funcional, no la simple intersecció de dues
+trajectòries. Separa `first_actor_ref` —el jugador que ha atacat primer— de
+`crossing_actor_ref` —qui encreua després—, conserva `crosses_relative_to` i
+ordena `actor_refs` com `[primer, encreua]`. Un `attacks_space` explícit d’un
+actor concret pot aportar `initial_attack_relation` a una acció posterior amb
+autoritat derivada i fonts traçables; l’espai objectiu continua sent un fet
+independent. Un atac d’un altre actor, un canvi espacial posterior o una
+contradicció explícita no es reutilitzen silenciosament.
+
 `TacticalIR` agrupa participants, estats, pilotes, materials, espais,
 `ActionInstance`, decisions, fases, fluxos i relacions tipades. El compositor
 el transforma en `CompositionPlan`: accions compostes o pendents, estats

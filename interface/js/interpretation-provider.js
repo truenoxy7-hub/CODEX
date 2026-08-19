@@ -291,6 +291,140 @@
     });
   }
 
+  function sentenceEnd(text, index) {
+    const boundary = text.slice(index).search(/[.;]/);
+    return boundary === -1 ? text.length : index + boundary;
+  }
+
+  function immediateSpaceMention(text, spaceMentions, start, end) {
+    return (spaceMentions || []).find((mention) => {
+      if (mention.index < start || mention.index >= end) return false;
+      return /^\s*(?:l['’]\s*|el\s+|la\s+)?(?:interval\s+)?$/.test(text.slice(start, mention.index));
+    }) || null;
+  }
+
+  function detectSpatialContextEvents(text, spaceMentions) {
+    const events = [];
+    const rolePattern = roleRegex(ROLE_DEFINITIONS);
+    const attackRegex = new RegExp(`\\b(${rolePattern})\\b\\s+(?:ataca|ataqui)\\b`, "g");
+    const movementRegex = new RegExp(`\\b(${rolePattern})\\b\\s+(?:es\\s+mou|canvia\\s+de\\s+posicio|va)\\s+(?:a|cap\\s+a|fins\\s+a)\\b`, "g");
+
+    function collect(regex, type) {
+      for (const match of text.matchAll(regex)) {
+        const actor = definitionForMention(match[1], ROLE_DEFINITIONS);
+        const end = sentenceEnd(text, match.index);
+        const space = immediateSpaceMention(text, spaceMentions, match.index + match[0].length, end);
+        if (!actor || !space) continue;
+        const actorSource = `coach_input:span:${match.index}-${match.index + match[1].length}`;
+        events.push({
+          _index: match.index,
+          _end: space.end,
+          type,
+          actor_ref: actor.id,
+          space_ref: space.id,
+          from_ref: actor.id,
+          to_ref: space.id,
+          authority: "coach_explicit_input",
+          status: "explicit",
+          source_refs: [actorSource, space.source_ref]
+        });
+      }
+    }
+
+    collect(attackRegex, "attacks_space");
+    collect(movementRegex, "moves_to_space");
+    return events.sort((left, right) => left._index - right._index || left.type.localeCompare(right.type));
+  }
+
+  function semanticallyPrecedesCrossing(event, crossing, text) {
+    if (event._index < crossing._index) return true;
+    if (event._index >= crossing._context_end) return false;
+    return /\bdespres\s+que\b/.test(text.slice(crossing._end, event._index));
+  }
+
+  function latestAttackSpace(actorRef, crossing, contextEvents, text) {
+    if (!actorRef || !crossing) return { relation: null, invalidated_by: null };
+    const compatible = (contextEvents || []).filter((event) => {
+      return event.actor_ref === actorRef && semanticallyPrecedesCrossing(event, crossing, text);
+    }).sort((left, right) => {
+      const leftSubordinate = left._index > crossing._index ? 1 : 0;
+      const rightSubordinate = right._index > crossing._index ? 1 : 0;
+      return rightSubordinate - leftSubordinate || right._index - left._index;
+    });
+    const latest = compatible[0] || null;
+    if (!latest || latest.type !== "attacks_space") return { relation: null, invalidated_by: latest };
+    return { relation: latest, invalidated_by: null };
+  }
+
+  function resolveCrossingContext(actions, contextEvents, text) {
+    const relations = [];
+    (actions || []).filter((action) => ["cross", "crossing"].includes(action.type)).forEach((action) => {
+      const firstActor = action.first_actor_ref || action.crosses_relative_to;
+      const contextual = latestAttackSpace(firstActor, action, contextEvents, text);
+      if (!contextual.relation) {
+        if (contextual.invalidated_by) {
+          action.context_resolution = {
+            status: "invalidated",
+            actor_ref: firstActor,
+            invalidated_by_ref: contextual.invalidated_by.id,
+            source_refs: contextual.invalidated_by.source_refs.slice()
+          };
+        }
+        return;
+      }
+
+      const attack = contextual.relation;
+      const derivationRef = `derived:crossing_context:${attack.id}->${action.id}`;
+      const sourceRefs = unique([...(attack.source_refs || []), ...(action.source_refs || []), derivationRef, "canonical:crossing:functional-roles"]);
+      attack.before_action_ref = action.id;
+      action.context_relation_ref = attack.id;
+      if (action.initial_attack_relation && action.initial_attack_relation !== attack.space_ref) {
+        const conflict = {
+          code: "CROSSING_INITIAL_SPACE_CONFLICT",
+          action_ref: action.id,
+          context_relation_ref: attack.id,
+          contextual_space_ref: attack.space_ref,
+          explicit_space_ref: action.initial_attack_relation,
+          authority: "derived_from_validated_rule",
+          status: "unresolved",
+          source_refs: sourceRefs
+        };
+        action.context_conflicts = [...(action.context_conflicts || []), conflict];
+        action.context_resolution = { status: "conflict", context_relation_ref: attack.id, source_refs: sourceRefs };
+        relations.push({
+          id: `REL_${action.id}_CROSSING_CONTEXT_CONFLICT`,
+          type: "crossing_context_conflict",
+          from_ref: attack.id,
+          to_ref: action.id,
+          space_refs: [attack.space_ref, action.initial_attack_relation],
+          authority: conflict.authority,
+          status: conflict.status,
+          source_refs: sourceRefs
+        });
+        return;
+      }
+
+      if (!action.initial_attack_relation) {
+        action.initial_attack_relation = attack.space_ref;
+        action.slot_authority = { ...(action.slot_authority || {}), initial_attack_relation: "derived_from_validated_rule" };
+        action.slot_status = { ...(action.slot_status || {}), initial_attack_relation: "validated" };
+        action.slot_source_refs = { ...(action.slot_source_refs || {}), initial_attack_relation: sourceRefs };
+      }
+      action.source_refs = unique([...(action.source_refs || []), ...sourceRefs]);
+      action.context_resolution = { status: "resolved", context_relation_ref: attack.id, source_refs: sourceRefs };
+      relations.push({
+        id: `REL_${action.id}_CROSSING_CONTEXT`,
+        type: "context_for",
+        from_ref: attack.id,
+        to_ref: action.id,
+        authority: "derived_from_validated_rule",
+        status: "validated",
+        source_refs: sourceRefs
+      });
+    });
+    return relations;
+  }
+
   function buildTacticalIR(description, concepts, options) {
     const text = normalize(description);
     const caseId = options && options.case_id || "CASE";
@@ -456,11 +590,47 @@
 
     const crossRegex = new RegExp(`\\b(${rolePattern})\\b\\s+(?:encreua|fa\\s+(?:un\\s+)?encreuament)\\s+(?:amb\\s+)?(?:el\\s+|la\\s+)?(${rolePattern})\\b`, "g");
     for (const match of text.matchAll(crossRegex)) {
-      const first = definitionForMention(match[1], ROLE_DEFINITIONS), second = definitionForMention(match[2], ROLE_DEFINITIONS);
-      const tail = text.slice(match.index, Math.min(text.length, match.index + 150));
-      const foundSpaces = explicitSpaces.filter((space) => { space.token.lastIndex = 0; const found = space.token.test(tail); space.token.lastIndex = 0; return found; });
-      addParticipant(first, "attack", `coach_input:span:${match.index}-${match.index + match[1].length}`); addParticipant(second, "attack", `coach_input:span:${match.index}-${match.index + match[0].length}`);
-      addAction(match.index, "cross", { actor_refs: [first.id, second.id], initial_attack_relation: foundSpaces[0] && foundSpaces[0].id, target_space_ref: foundSpaces[1] && foundSpaces[1].id }, match.index + match[0].length);
+      const crossingActor = definitionForMention(match[1], ROLE_DEFINITIONS), firstActor = definitionForMention(match[2], ROLE_DEFINITIONS);
+      const matchEnd = match.index + match[0].length;
+      const contextEnd = sentenceEnd(text, match.index);
+      const localMentions = spaceMentions.filter((mention) => mention.index >= matchEnd && mention.index < contextEnd);
+      const explicitInitial = localMentions.find((mention) => /\b(?:des\s+de|desde|partint\s+de)\s+(?:l['’]\s*|el\s+|la\s+)?(?:interval\s+)?$/.test(text.slice(matchEnd, mention.index)));
+      const explicitTarget = localMentions.find((mention) => /\b(?:per\s+atacar|cap\s+a|fins\s+a)\s+(?:l['’]\s*|el\s+|la\s+)?(?:interval\s+)?$/.test(text.slice(matchEnd, mention.index)));
+      const crossingSource = `coach_input:span:${match.index}-${match.index + match[1].length}`;
+      const firstSource = `coach_input:span:${match.index + match[0].lastIndexOf(match[2])}-${matchEnd}`;
+      const roleRuleSource = "canonical:crossing:functional-roles";
+      addParticipant(crossingActor, "attack", crossingSource); addParticipant(firstActor, "attack", firstSource);
+      const payload = {
+        first_actor_ref: firstActor.id,
+        crossing_actor_ref: crossingActor.id,
+        crosses_relative_to: firstActor.id,
+        actor_refs: [firstActor.id, crossingActor.id],
+        initial_attack_relation: explicitInitial && explicitInitial.id,
+        target_space_ref: explicitTarget && explicitTarget.id,
+        _context_end: contextEnd,
+        slot_authority: {
+          first_actor_ref: "derived_from_validated_rule",
+          crossing_actor_ref: "derived_from_validated_rule",
+          crosses_relative_to: "derived_from_validated_rule",
+          actor_refs: "derived_from_validated_rule",
+          ...(explicitInitial ? { initial_attack_relation: "coach_explicit_input" } : {}),
+          ...(explicitTarget ? { target_space_ref: "coach_explicit_input" } : {})
+        },
+        slot_status: {
+          first_actor_ref: "validated", crossing_actor_ref: "validated", crosses_relative_to: "validated", actor_refs: "validated",
+          ...(explicitInitial ? { initial_attack_relation: "explicit" } : {}),
+          ...(explicitTarget ? { target_space_ref: "explicit" } : {})
+        },
+        slot_source_refs: {
+          first_actor_ref: [firstSource, roleRuleSource],
+          crossing_actor_ref: [crossingSource, roleRuleSource],
+          crosses_relative_to: [firstSource, roleRuleSource],
+          actor_refs: [firstSource, crossingSource, roleRuleSource],
+          ...(explicitInitial ? { initial_attack_relation: [explicitInitial.source_ref] } : {}),
+          ...(explicitTarget ? { target_space_ref: [explicitTarget.source_ref] } : {})
+        }
+      };
+      addAction(match.index, "cross", payload, matchEnd);
     }
 
     const slideRegex = new RegExp(`\\b(${rolePattern})\\b\\s+(?:llisca|fa\\s+(?:un\\s+)?lliscament)\\b`, "g");
@@ -484,6 +654,12 @@
     actions.sort((left, right) => left._index - right._index || left.type.localeCompare(right.type));
     attachExplicitActionSpaces(actions, spaceMentions, text);
     actions.forEach((action, index) => { action.id = `A${String(index + 1).padStart(3, "0")}`; });
+    const contextEvents = detectSpatialContextEvents(text, spaceMentions);
+    contextEvents.forEach((event, index) => {
+      event.id = `REL_CONTEXT_${String(index + 1).padStart(3, "0")}`;
+      const definition = ROLE_DEFINITIONS.find((item) => item.id === event.actor_ref);
+      addParticipant(definition, "attack", event.source_refs[0]);
+    });
     actions.forEach((action, index) => {
       if (!index) return;
       const previous = actions[index - 1];
@@ -494,8 +670,10 @@
       const pass = actions.filter((action) => action.type === "pass" && action._index < reception._index && action.receiver_ref === reception.actor_ref).at(-1);
       if (pass) reception.after = [...new Set([...(reception.after || []), pass.id])];
     });
+    const crossingContextRelations = resolveCrossingContext(actions, contextEvents, text);
     const spatialContinuityRelations = resolveSpatialContinuity(actions);
-    actions.forEach((action) => { delete action._index; delete action._end; });
+    actions.forEach((action) => { delete action._index; delete action._end; delete action._context_end; });
+    contextEvents.forEach((event) => { delete event._index; delete event._end; });
 
     const relations = [];
     actions.forEach((action) => {
@@ -504,7 +682,7 @@
       if (action.opponent_ref) relations.push({ id: `REL_${action.id}_OPPOSES`, type: "opposes", from_ref: action.actor_ref, to_ref: action.opponent_ref, authority: action.authority, status: action.status, source_refs: action.source_refs });
       (action.after || []).forEach((ref, index) => relations.push({ id: `REL_${action.id}_FOLLOWS_${index + 1}`, type: "follows", from_ref: ref, to_ref: action.id, authority: action.authority, status: action.status, source_refs: action.source_refs }));
     });
-    relations.push(...spatialContinuityRelations);
+    relations.push(...contextEvents, ...crossingContextRelations, ...spatialContinuityRelations);
     const firstBallAction = actions.find((action) => ["pass", "dribble", "shot"].includes(action.type) && action.actor_ref);
     const balls = firstBallAction ? [{ id: "B1", holder_ref: firstBallAction.actor_ref, authority: "derived_from_validated_rule", status: "validated", source_refs: firstBallAction.source_refs }] : [];
     return {
@@ -561,7 +739,8 @@
   return {
     ROLE_DEFINITIONS, DEFENDER_DEFINITIONS, CANONICAL_INTERVAL_DEFINITIONS,
     ACTION_SPATIAL_CONTRACT, normalize, matchLocalKnowledge, suggestedTags,
-    initialSpace, terminalSpace, resolveSpatialContinuity, buildTacticalIR,
+    initialSpace, terminalSpace, resolveSpatialContinuity, detectSpatialContextEvents,
+    latestAttackSpace, resolveCrossingContext, buildTacticalIR,
     canonicalCaseProvider, localRuleProvider, interpret
   };
 });

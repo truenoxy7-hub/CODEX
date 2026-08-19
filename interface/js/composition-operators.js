@@ -238,20 +238,21 @@
 
   function crossingOperator() {
     return {
-      id: "crossing", semantic_types: ["cross", "crossing"], required_slots: ["actor_refs", "initial_attack_relation", "target_space_ref"], visual_primitives: ["movement_path"],
+      id: "crossing", semantic_types: ["cross", "crossing"], required_slots: ["first_actor_ref", "crossing_actor_ref", "initial_attack_relation", "target_space_ref"], visual_primitives: ["movement_path"],
       compose(action, context) {
-        const actorValue = context.require(action, { slot: "actor_refs", aliases: ["participant_refs"], label: "Quins dos jugadors fan l’encreuament?", options: "attackers", min_items: 2, max_items: 2 });
-        const actors = values(actorValue);
-        const initial = context.require(action, { slot: "initial_attack_relation", aliases: ["initial_space_ref"], label: "Quin espai ataca el primer jugador?", options: "spaces" });
-        const target = context.require(action, { slot: "target_space_ref", label: "Quin espai contrari ataca el segon jugador?", options: "spaces", exclude: initial });
-        if (!actors || !initial || !target) return context.unresolvedAction(action, this);
-        const second = actors[1];
-        const from = context.states.current(second);
-        const to = context.states.ensure(second, `${action.id}:to`, { phase_ref: action.phase_ref, space_ref: target, authority: action.authority, source_refs: action.source_refs, status: "future", make_current: true });
-        context.constraints.add({ id: `CONSTRAINT_${action.id}_CROSSES`, type: "CROSSES_RELATIVE_TO", strength: "hard", subject_refs: [second], object_refs: [actors[0]], action_ref: action.id, status: "unresolved", source_refs: action.source_refs });
+        if ((action.context_conflicts || []).length) throw new Error("L’espai inicial explícit de l’encreuament contradiu l’atac previ del jugador de referència.");
+        const firstActor = context.require(action, { slot: "first_actor_ref", aliases: ["crosses_relative_to"], label: "Quin és el primer jugador de l’encreuament?", options: "attackers" });
+        const crossingActor = context.require(action, { slot: "crossing_actor_ref", label: "Quin jugador fa l’encreuament?", options: "attackers", exclude: firstActor });
+        const initial = context.require(action, { slot: "initial_attack_relation", aliases: ["initial_space_ref"], label: `Quin espai ataca ${firstActor || "el primer jugador"} abans de l’encreuament?`, options: "spaces" });
+        const target = context.require(action, { slot: "target_space_ref", label: `Quin espai ataca ${crossingActor || "el jugador que encreua"}?`, options: "spaces", exclude: initial, depends_on: ["initial_attack_relation"] });
+        if (!firstActor || !crossingActor || !initial || !target) return context.unresolvedAction(action, this);
+        const actors = [firstActor, crossingActor];
+        const from = context.states.current(crossingActor);
+        const to = context.states.ensure(crossingActor, `${action.id}:to`, { phase_ref: action.phase_ref, space_ref: target, authority: action.authority, source_refs: action.source_refs, status: "future", make_current: true });
+        context.constraints.add({ id: `CONSTRAINT_${action.id}_CROSSES`, type: "CROSSES_RELATIVE_TO", strength: "hard", subject_refs: [crossingActor], object_refs: [firstActor], action_ref: action.id, status: "unresolved", source_refs: action.source_refs });
         context.constraints.add({ id: `CONSTRAINT_${action.id}_TARGET`, type: "ATTACKS", strength: "hard", subject_refs: [to.id], object_refs: [target], action_ref: action.id, source_refs: action.source_refs });
-        context.addPrimitive(action, "movement_path", { actor_ref: second, from_state_ref: from.id, to_state_ref: to.id, geometry_support: "unresolved", dictionary_ref: "VF_MOVEMENT_WITHOUT_BALL" });
-        return context.composedAction(action, this, { actor_refs: actors, initial_attack_relation: initial, target_space_ref: target, from_state_ref: from.id, to_state_ref: to.id });
+        context.addPrimitive(action, "movement_path", { actor_ref: crossingActor, from_state_ref: from.id, to_state_ref: to.id, geometry_support: "unresolved", dictionary_ref: "VF_MOVEMENT_WITHOUT_BALL" });
+        return context.composedAction(action, this, { first_actor_ref: firstActor, crossing_actor_ref: crossingActor, crosses_relative_to: firstActor, actor_refs: actors, initial_attack_relation: initial, target_space_ref: target, from_state_ref: from.id, to_state_ref: to.id });
       }
     };
   }

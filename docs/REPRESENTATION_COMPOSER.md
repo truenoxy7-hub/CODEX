@@ -36,7 +36,7 @@ El registre actual inclou:
 | `block` | bloqueig/pantalla | relació bloquejador-defensor | amb posicions relacionals |
 | `numerical_relation` | 2x1, 2x2, 3x2 | participants + relació; sense glif propi | relacional, no crea coordenades |
 | `permutation` | permuta | intercanvi de posicions funcionals | si les posicions inicials són resoltes |
-| `crossing` | encreuament | actors, ordre i atac de l’espai contrari | no resolta universalment |
+| `crossing` | encreuament | primer actor, actor que encreua, atac inicial contextual i espai objectiu | no resolta universalment |
 | `pivot_slide` | lliscament de pivot | moviment proper a 6 m | només amb destí explícit |
 
 Afegir una família nova exigeix un operador registrat amb slots obligatoris, primitives, constraints, traçabilitat i proves. No s’afegeix un `if` per exercici.
@@ -65,6 +65,15 @@ resposta de l'entrenador esdevé un fet explícit amb
 de regles canòniques validades pot esdevenir un fet
 `derived_from_validated_rule`; si resten dues opcions, el compositor pregunta.
 Les respostes es vinculen a `source_revision` i s'invaliden quan canvia el text.
+
+Per a l’encreuament, la interpretació indexa les relacions explícites
+`attacks_space` per identitat i temps. `latestAttackSpace(actorRef)` només pot
+recuperar l’atac compatible del jugador referenciat; mai l’últim atac global.
+La connexió omple `initial_attack_relation` com a derivació validada, mentre
+`target_space_ref` s’ha de declarar o aclarir separadament. Si falta tot, es
+pregunta primer l’espai del primer actor i després l’objectiu de qui encreua.
+Un moviment espacial posterior invalida el context, i un valor explícit
+incompatible produeix conflicte en lloc de ser sobreescrit.
 
 ## Estats de resultat
 

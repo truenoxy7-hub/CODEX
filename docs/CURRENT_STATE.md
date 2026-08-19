@@ -64,6 +64,11 @@
 - La finta pot derivar l'interval de sortida només quan oponent, espai inicial i
   contigüitat deixen una única opció validada. Aquesta derivació no determina
   el defensor d'una relació numèrica posterior.
+- L’encreuament distingeix el primer jugador del jugador que encreua. Pot
+  recuperar l’atac espacial previ del jugador referenciat, amb traçabilitat per
+  slot i sense confondre’l amb l’últim atac global; context invalidat o
+  contradictori queda pendent o bloquejat. El diagnòstic avançat mostra els
+  dos rols, l’atac inicial i l’espai objectiu.
 - Promotion Builder per tipus, abast i subconjunt seleccionat de correccions.
 - Biblioteca inspectable i resum «Què ha après TRAÇA?».
 - Diccionari visual-funcional amb les 103 evidències de l’inventari i 13

@@ -48,6 +48,8 @@
       const participantFields = [
         ["actor_ref", action.actor_ref], ["receiver_ref", action.receiver_ref],
         ["opponent_ref", action.opponent_ref], ["blocked_defender_ref", action.blocked_defender_ref],
+        ["first_actor_ref", action.first_actor_ref], ["crossing_actor_ref", action.crossing_actor_ref],
+        ["crosses_relative_to", action.crosses_relative_to],
         ...(action.attacker_refs || []).map((ref) => ["attacker_refs", ref]),
         ...(action.defender_refs || []).map((ref) => ["defender_refs", ref]),
         ...(action.participant_refs || []).map((ref) => ["participant_refs", ref]),
