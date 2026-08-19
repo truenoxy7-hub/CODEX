@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://traca.local/schema/traca.correction-event.schema.v0.1.json",
+  "title": "TRAÇA correction event v0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id", "timestamp", "target", "operation", "before", "after", "author",
+    "scope", "status", "reason", "source_refs", "machine_diff",
+    "machine_explanation", "coach_explanation", "concept_refs", "context_refs",
+    "correction_type", "target_role", "target_relation", "change_role", "derived_effects"
+  ],
+  "properties": {
+    "id": { "type": "string", "pattern": "^CORR-[A-Za-z0-9_-]+-[0-9]{4}$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layer", "ref", "property"],
+      "properties": {
+        "layer": { "enum": ["semantic", "spatial", "geometry", "visual"] },
+        "ref": { "type": "string", "minLength": 3 },
+        "property": { "type": "string", "minLength": 1 }
+      }
+    },
+    "operation": { "enum": ["replace", "move", "move_vertex", "annotate"] },
+    "before": true,
+    "after": true,
+    "author": { "type": "string", "minLength": 1 },
+    "scope": { "enum": ["case", "pattern_candidate", "general_rule_candidate"] },
+    "status": { "enum": ["draft", "validated"] },
+    "reason": { "type": "string", "minLength": 1 },
+    "source_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "machine_diff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "property", "before", "after"],
+      "properties": {
+        "operation": { "type": "string" },
+        "property": { "type": "string" },
+        "before": true,
+        "after": true
+      }
+    },
+    "machine_explanation": { "type": "string", "minLength": 1 },
+    "coach_explanation": { "type": "string" },
+    "concept_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "context_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "correction_type": { "type": "string", "minLength": 1 },
+    "target_role": { "type": ["string", "null"] },
+    "target_relation": { "type": ["string", "null"] },
+    "change_role": { "const": "primary" },
+    "derived_effects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["target_ref", "property", "explanation", "reason"],
+        "properties": {
+          "target_ref": {"type": "string", "minLength": 1},
+          "property": {"type": "string", "minLength": 1},
+          "explanation": {"type": "string", "minLength": 1},
+          "reason": {"const": "state_drives_geometry"}
+        }
+      }
+    }
+  }
+}

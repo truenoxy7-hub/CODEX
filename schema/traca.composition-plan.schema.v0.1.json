@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://traca.local/schema/traca.composition-plan.schema.v0.1.json",
+  "title": "TRAÇA deterministic composition plan v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "meta", "graph", "operators", "actions", "participant_states", "ball_flow",
+    "constraints", "constraint_conflicts", "visual_primitives", "missing_slots",
+    "questions", "applied_knowledge", "coverage", "traceability", "preflight",
+    "composition_status", "geometry_status", "geometry_coverage"
+  ],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["format", "version", "fingerprint", "deterministic"],
+      "properties": {
+        "format": { "const": "TRACA_composition_plan" },
+        "version": { "const": "0.1.0" },
+        "source_revision": { "type": ["string", "null"] },
+        "knowledge_version": { "type": ["string", "null"] },
+        "fingerprint": { "type": "string", "minLength": 1 },
+        "deterministic": { "const": true }
+      }
+    },
+    "graph": {
+      "type": "object",
+      "required": ["meta", "nodes", "edges"],
+      "properties": {
+        "meta": { "type": "object" },
+        "nodes": { "type": "array" },
+        "edges": { "type": "array" }
+      }
+    },
+    "operators": { "type": "array", "items": { "type": "string" } },
+    "actions": { "type": "array" },
+    "participant_states": { "type": "array" },
+    "ball_flow": { "type": "object" },
+    "constraints": { "type": "array" },
+    "constraint_conflicts": { "type": "array" },
+    "visual_primitives": { "type": "array" },
+    "missing_slots": { "type": "array" },
+    "questions": { "type": "array" },
+    "applied_knowledge": { "type": "array" },
+    "coverage": {
+      "type": "object",
+      "required": ["actions_total", "actions_composed", "actions_unresolved", "actions_unsupported", "ratio", "label"]
+    },
+    "traceability": { "type": "array" },
+    "preflight": { "type": "object" },
+    "composition_status": { "enum": ["ready", "partial", "needs_input", "unsupported", "blocked"] },
+    "geometry_status": { "enum": ["ready", "partial", "needs_input", "unsupported", "blocked"] },
+    "geometry_coverage": { "type": "object" }
+  }
+}

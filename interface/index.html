@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="TRAÇA converteix una descripció d’handbol en una representació corregible i validable." />
+    <title>TRAÇA · Escriu, genera, corregeix i guarda</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="data/court-profile.js" defer></script>
+    <script src="data/uvof015.geometry.js" defer></script>
+    <script src="data/uvof015.case.js" defer></script>
+    <script src="data/handball-knowledge.js" defer></script>
+    <script src="data/visual-functional-dictionary.js" defer></script>
+    <script src="js/utils.js" defer></script>
+    <script src="js/visual-grammar.js" defer></script>
+    <script src="js/change-explainer.js" defer></script>
+    <script src="js/geometry-dependencies.js" defer></script>
+    <script src="js/corrections.js" defer></script>
+    <script src="js/interpretation-provider.js" defer></script>
+    <script src="js/knowledge-resolver.js" defer></script>
+    <script src="js/composition-graph.js" defer></script>
+    <script src="js/state-registry.js" defer></script>
+    <script src="js/ball-flow.js" defer></script>
+    <script src="js/spatial-constraints.js" defer></script>
+    <script src="js/composition-operators.js" defer></script>
+    <script src="js/composition-preflight.js" defer></script>
+    <script src="js/clarification-orchestrator.js" defer></script>
+    <script src="js/generic-geometry-resolver.js" defer></script>
+    <script src="js/representation-composer.js" defer></script>
+    <script src="js/manual-geometry.js" defer></script>
+    <script src="js/workspace-preflight.js" defer></script>
+    <script src="js/promotion.js" defer></script>
+    <script src="js/store.js" defer></script>
+    <script src="js/persistence.js" defer></script>
+    <script src="js/import-export.js" defer></script>
+    <script src="js/renderer.js" defer></script>
+    <script src="js/editor.js" defer></script>
+    <script src="js/knowledge-library.js" defer></script>
+    <script src="js/inspection-ui.js" defer></script>
+    <script src="js/app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar simple-topbar">
+      <a class="brand" href="#workspace" aria-label="TRAÇA, anar al cas actual"><span class="brand-mark">T</span><span><strong>TRAÇA</strong><small>Handbol explicat, representat i validat</small></span></a>
+      <div class="case-identity"><span id="case-id">NOU CAS</span><strong id="case-name">Cas sense títol</strong></div>
+      <div class="topbar-actions">
+        <button id="exercises" class="button button-secondary" type="button">Exercicis</button>
+        <button id="new-case" class="button button-primary" type="button">Nou cas</button>
+        <button id="toggle-advanced" class="button button-quiet" type="button" aria-expanded="false">Mode avançat</button>
+      </div>
+    </header>
+
+    <div class="progress-strip" aria-label="Flux de treball">
+      <span class="is-current">1 · ESCRIURE</span><span>2 · GENERAR</span><span>3 · CORREGIR</span><span>4 · GUARDAR</span>
+    </div>
+
+    <nav class="mobile-tabs" aria-label="Panells"><button type="button" data-mobile-panel="flow">Text</button><button class="is-active" type="button" data-mobile-panel="court">Pista</button><button type="button" data-mobile-panel="inspector">Avançat</button><button type="button" data-mobile-panel="dock">Dades</button></nav>
+
+    <main id="workspace" class="workspace-shell simple-workspace">
+      <aside class="workspace-panel flow-panel is-mobile-active" data-panel="flow">
+        <p class="kicker">1 · ESCRIURE</p>
+        <h1>Què vols representar?</h1>
+        <p class="lead">Descriu la situació amb les teves paraules. TRAÇA et preguntarà només el que li falti.</p>
+        <label class="main-description"><span class="sr-only">Descripció de l’exercici</span><textarea id="description" rows="9" placeholder="Ex.: El central passa al lateral. El lateral rep en carrera i ataca l’interval 1–2."></textarea></label>
+        <button id="generate-case" class="button button-primary button-wide button-large" type="button">Generar representació</button>
+        <p id="derivation-alert" class="engine-notice is-error" hidden>Has canviat el text. Torna a generar per actualitzar la interpretació i el gràfic.</p>
+
+        <details class="more-options"><summary>Més opcions</summary><label>Nom del cas<input id="case-name-input" type="text" placeholder="Opcional" /></label><label>Notes<textarea id="case-notes" rows="3" placeholder="Context opcional"></textarea></label><p id="case-metadata" class="auto-metadata">Origen i etiquetes s’omplen automàticament.</p></details>
+
+        <section class="result-card" aria-labelledby="understood-title"><header><h2 id="understood-title">✓ He entès</h2><span id="provider-label">Encara no generat</span></header><div id="understood-list"><p class="empty-copy">Escriu una situació i genera-la.</p></div></section>
+        <section class="result-card needs-card" aria-labelledby="needs-title"><header><h2 id="needs-title">? Em falta</h2><span id="question-count">0</span></header><div id="clarification-questions"><p class="empty-copy">Cap pregunta pendent.</p></div><div id="resolver-suggestions"></div></section>
+
+        <div id="reuse-prompt" class="reuse-prompt" hidden><strong>Aquest canvi és només per a aquest cas?</strong><p>Cap correcció es converteix en regla automàticament.</p><div class="inline-actions"><button id="reuse-case-only" class="button button-secondary" type="button">Només aquest cas</button><button id="reuse-rule" class="button button-secondary" type="button">Criteri reutilitzable</button></div></div>
+
+        <button id="save-exercise" class="button button-primary button-wide button-large" type="button">Guardar exercici</button>
+        <p id="save-message" class="save-message" role="status">En guardar, TRAÇA comprova coherència i valida aquesta versió.</p>
+      </aside>
+
+      <section class="workspace-panel court-panel is-mobile-active" data-panel="court" aria-labelledby="court-title">
+        <div class="court-toolbar"><div><p class="kicker">2–3 · GENERAR I CORREGIR</p><h2 id="court-title">Pista</h2></div><div class="toolbar-actions"><div class="segmented" role="group" aria-label="Vista"><button class="is-active" type="button" data-view="corrected">Neta</button><button type="button" data-view="control">Editar</button><button type="button" data-view="compare">Comparar</button><button type="button" data-view="generated">Original</button></div><button id="undo" class="icon-button" type="button" aria-label="Desfer" disabled>↶</button><button id="redo" class="icon-button" type="button" aria-label="Refer" disabled>↷</button><button id="reset" class="button button-danger" type="button" disabled>Reiniciar</button></div></div>
+        <div class="court-stage-wrap"><div id="court-stage" class="court-stage" aria-live="polite"></div><div id="no-geometry" class="no-geometry"><span>◇</span><strong>La pista encara és buida</strong><p>Genera la descripció. Si falta una dada, TRAÇA te la preguntarà.</p></div><div class="court-legend"><span><i class="legend-attacker"></i>Atacant</span><span><i class="legend-defender"></i>Defensor</span><span><i class="legend-line movement"></i>Moviment</span><span><i class="legend-line pass"></i>Passada</span><span><i class="legend-line shot"></i>Llançament</span></div></div>
+        <div class="court-footer"><span id="court-help">Arrossega participants o estats futurs per corregir-los.</span><a href="https://www.ihf.info/sites/default/files/2025-07/09A%20-%20Rules%20of%20the%20Game_Indoor%20Handball_E.pdf" target="_blank" rel="noreferrer">Mides IHF 2025 ↗</a></div>
+      </section>
+
+      <aside class="workspace-panel inspector-panel advanced-zone" data-panel="inspector" aria-labelledby="inspector-title" hidden>
+        <div class="panel-header"><div><p class="kicker">Eines internes</p><h2 id="inspector-title">Inspector</h2></div><span id="selection-type" class="selection-type">Sense selecció</span></div>
+        <div id="inspector-empty" class="empty-state"><strong>Selecciona un element</strong><p>La correcció directa de la pista no et demana coordenades.</p></div>
+        <form id="inspector-form" class="inspector-form" hidden><div class="selected-title"><strong id="selected-id"></strong><small id="selected-ref"></small></div><div id="position-fields" class="field-grid" hidden><label>X (m)<input id="position-x" type="number" step="0.05" /></label><label>Y (m)<input id="position-y" type="number" step="0.05" /></label></div><label id="entity-kind-field" hidden>Rol / símbol<select id="entity-kind"></select></label><label id="path-kind-field" hidden>Acció<select id="path-kind"></select></label><label id="visual-color-field" hidden>Color del cas<input id="visual-color" type="color" /></label><label>Nota opcional<textarea id="correction-reason" rows="2"></textarea></label><button class="button button-primary button-wide" type="submit">Aplicar</button><button id="delete-manual" class="button button-danger button-wide" type="button" hidden>Eliminar element manual</button><ul id="source-ref-list" class="source-list"></ul></form>
+
+        <section class="advanced-section composition-diagnostics" aria-labelledby="composition-diagnostics-title">
+          <div class="diagnostics-title"><div><p class="kicker">Lectura del store actual</p><h3 id="composition-diagnostics-title">Diagnòstic de composició</h3></div><span id="composition-diagnostics-status" class="selection-type">No generat</span></div>
+          <div id="composition-human-summary" class="composition-human-summary"></div>
+          <div id="composition-actions-summary" class="composition-actions-summary"></div>
+          <details class="diagnostic-block" data-diagnostic-block="tacticalIR" open><summary>TacticalIR</summary><button class="button button-quiet diagnostic-copy" type="button" data-copy-diagnostic="tacticalIR">Copiar</button><pre id="diagnostic-tactical-ir"></pre></details>
+          <details class="diagnostic-block" data-diagnostic-block="compositionPlan" open><summary>CompositionPlan</summary><button class="button button-quiet diagnostic-copy" type="button" data-copy-diagnostic="compositionPlan">Copiar</button><pre id="diagnostic-composition-plan"></pre></details>
+          <details class="diagnostic-block" data-diagnostic-block="spatialConstraints"><summary>Spatial constraints</summary><button class="button button-quiet diagnostic-copy" type="button" data-copy-diagnostic="spatialConstraints">Copiar</button><pre id="diagnostic-spatial-constraints"></pre></details>
+          <details class="diagnostic-block" data-diagnostic-block="questions"><summary>Preguntes / unresolved</summary><button class="button button-quiet diagnostic-copy" type="button" data-copy-diagnostic="questions">Copiar</button><pre id="diagnostic-questions"></pre></details>
+          <details class="diagnostic-block" data-diagnostic-block="ballFlow"><summary>Ball flow</summary><button class="button button-quiet diagnostic-copy" type="button" data-copy-diagnostic="ballFlow">Copiar</button><pre id="diagnostic-ball-flow"></pre></details>
+        </section>
+
+        <details class="advanced-section"><summary>Manual / Assisted Builder</summary><p>Només serveix per completar o dibuixar una referència quan el compositor no pot representar el cas.</p><button id="start-manual-layout" class="button button-secondary button-wide" type="button">Iniciar referència manual</button><div id="manual-tools" class="manual-tools" hidden><label>Primitiva<select id="manual-primitive-type"><option value="entity">Participant / material</option><option value="path">Trajectòria</option><option value="zone">Zona</option></select></label><label>Tipus<select id="manual-kind"></select></label><label>Etiqueta<input id="manual-label" type="text" /></label><button id="add-manual-primitive" class="button button-secondary" type="button">Afegir</button></div><button id="open-semantic-builder" class="button button-quiet button-wide" type="button">Completar model semàntic</button></details>
+        <details class="advanced-section"><summary>NO RESOLVER AVAILABLE / branques</summary><p id="resolver-message">No hi ha resolutor per a aquest cas.</p><div id="branch-selectors"></div></details>
+      </aside>
+
+      <section class="workspace-panel dock-panel advanced-zone" data-panel="dock" hidden>
+        <div class="dock-header"><div class="dock-tabs"><button class="is-active" type="button" data-dock="validation">Preflight</button><button type="button" data-dock="history">Historial <span id="history-count">0</span></button><button type="button" data-dock="library">Biblioteca</button><button type="button" data-dock="traceability">Traçabilitat</button></div><button id="export-case" class="button button-secondary dock-export" type="button">Exportar</button></div>
+        <div class="dock-content"><section data-dock-content="validation"><div class="inline-actions"><button id="run-preflight" class="button button-secondary" type="button">Comprovar</button><button id="save-draft" class="button button-secondary" type="button">Guardar en construcció</button></div><div id="validation-summary"></div></section><section data-dock-content="history" hidden><div id="history-list"></div></section><section data-dock-content="library" hidden><div class="inline-actions"><button id="load-example" class="button button-secondary" type="button">Exemple · TR-UVOF-015</button><button id="open-promotion" class="button button-secondary" type="button">Promotion Builder</button></div><div id="library-summary"></div></section><section data-dock-content="traceability" hidden><div id="traceability-summary"></div><div class="inline-actions"><button id="continue-last" class="button button-secondary" type="button">Recuperar darrer cas</button><button id="import-trigger" class="button button-secondary" type="button">Importar</button><input id="import-file" type="file" accept="application/json,.json" hidden /></div></section></div>
+      </section>
+    </main>
+
+    <dialog id="exercises-dialog" class="workspace-dialog"><div class="dialog-body"><div class="dialog-header"><div><p class="kicker">Biblioteca local</p><h2>Exercicis</h2></div><button type="button" data-close-dialog>×</button></div><div id="exercise-list"></div></div></dialog>
+    <dialog id="reuse-dialog" class="workspace-dialog"><form id="reuse-form" method="dialog"><div class="dialog-header"><div><p class="kicker">Criteri reutilitzable</p><h2>Què ha d’aprendre TRAÇA?</h2></div><button type="button" data-close-dialog>×</button></div><label>Nom curt<input id="reuse-label" required /></label><label>Definició<textarea id="reuse-definition" rows="3" required></textarea></label><label>Paraules o expressions que l’activen<input id="reuse-aliases" placeholder="Separades per comes" /></label><label>Categoria<select id="reuse-category"><option value="action">Acció</option><option value="participant_role">Rol</option><option value="space">Espai</option><option value="decision">Decisió</option></select></label><div class="dialog-actions"><button type="button" data-close-dialog class="button button-secondary">Cancel·lar</button><button class="button button-primary">Afegir en guardar</button></div></form></dialog>
+    <dialog id="semantic-builder-dialog" class="workspace-dialog"><form id="semantic-builder-form" method="dialog"><div class="dialog-header"><h2>Completar model semàntic</h2><button type="button" data-close-dialog>×</button></div><label>Col·lecció<select id="builder-collection"><option value="participant">Participant</option><option value="material">Material</option><option value="space">Espai</option><option value="action">Acció</option><option value="decision">Decisió</option><option value="phase">Fase</option></select></label><label>Tipus<select id="builder-kind"></select></label><label>Etiqueta<input id="builder-label" /></label><label>Detalls<textarea id="builder-details" rows="2"></textarea></label><label>Estat<select id="builder-state"><option value="provisional">Provisional</option><option value="validated">Validat per l’entrenador</option></select></label><button id="builder-add" class="button button-primary" type="button">Afegir al cas</button><div id="builder-current-list"></div></form></dialog>
+    <dialog id="promotion-dialog" class="workspace-dialog"><form id="promotion-form" method="dialog"><div class="dialog-header"><div><p class="kicker">Promotion Builder</p><h2>Candidat explícit</h2></div><button type="button" data-close-dialog>×</button></div><p>Només les seleccionades es proposen com a evidència. Un candidat no decideix interpretacions futures.</p><label>Tipus<select id="promotion-type"></select></label><label>Abast<select id="promotion-scope"></select></label><label>Referència<input id="promotion-scope-ref" /></label><label>Títol<input id="promotion-title" required /></label><label>Definició<textarea id="promotion-definition" required></textarea></label><label>Motiu<input id="promotion-reason" /></label><label>Exemples<input id="promotion-examples" /></label><div id="promotion-corrections"></div><button class="button button-primary">Crear candidat</button></form></dialog>
+    <div id="toast" class="toast" hidden></div><div id="announcer" class="sr-only" aria-live="polite"></div>
+  </body>
+</html>

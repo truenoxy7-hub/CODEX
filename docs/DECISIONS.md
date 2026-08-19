@@ -124,8 +124,8 @@ seus delimitadors i les contigüitats pel defensor compartit.
 coordenades ni tancar decisions que depenen de la lectura del jugador.
 
 **Abast actual:** la decisió continua vigent i el contracte ha evolucionat a
-v0.3 amb `TR-UVOF-001`–`TR-UVOF-015`. La geometria de sortida continua
-pendent.
+v0.3 amb `TR-UVOF-001`–`TR-UVOF-015`. La geometria continua fora d'aquest
+contracte; UVOF015 ja en té una primera derivació posterior v0.1.
 
 ## D-022 — Flux de pilota i trajectòries alternatives al contracte espacial
 
@@ -322,3 +322,215 @@ marcada pel defensor real de la zona.
 direccionals, les contigüitats comparteixen el defensor i totes les branques
 conserven el criteri de superació. Desapareixen els marcs incomplets i el
 preflight d'UVOF015 passa de `blocked` a `ready` sense introduir coordenades.
+
+## D-036 — Primera geometria derivada i revisable
+
+**Decisió tècnica:** la geometria viu en un artefacte nou i no s'afegeix al
+corpus ni al contracte espacial. Només es deriva d'una entrada amb preflight
+`ready`, referencia el fingerprint d'origen i manté traçabilitat fins als nodes,
+espais, transicions i alternatives.
+
+**Aplicació MVP:** UVOF015 conserva les quatre alternatives de cadascun dels
+tres duels. La interfície en pot mostrar una per zona, però aquesta selecció és
+estat de previsualització i no una decisió tàctica canònica.
+
+**Política provisional:** l'amplada visual de les tres zones i les distàncies
+de lectura dels participants són una política de render revisable. Les línies i
+dimensions de pista provenen del perfil IHF versionat; cap coordenada dels
+prototips descartats es reutilitza.
+
+## D-037 — El corpus és coneixement de referència, no un catàleg tancat
+
+**Decisió de producte:** l'entrada principal de TRAÇA és una descripció nova de
+l'entrenador. Els UVOF validats aporten vocabulari, invariants, exemples i
+proves de regressió, però l'usuari no ha de limitar-se a seleccionar-ne un.
+
+**Primera aplicació revisada:** l'arquitectura continua orientada a text nou,
+però l'espai de treball executable utilitza UVOF015 com a espècimen real. La
+interfície declara que encara no pot interpretar text arbitrari amb garanties;
+si el text canvia, no reutilitza ni adapta silenciosament la geometria del cas.
+El prototip local d'intèrpret 1x1 no forma part del motor de producció.
+
+**Separació de garanties:** quan s'habiliti geometria creada des de text nou,
+serà un esborrany de previsualització. No serà un artefacte canònic v0.1, no
+superarà per si sola el preflight espacial i no s'incorporarà automàticament al
+corpus. La confirmació d'interfície no equivaldrà a validació tàctica permanent.
+
+## D-038 — Aprenentatge per correccions de cas i promoció explícita
+
+**Decisió de producte:** l'entrenador ha de poder corregir la representació
+sense sobreescriure la geometria generada. Cada canvi és un esdeveniment amb
+capa, referència, propietat, abans, després, autor, abast, estat, raó i fonts.
+L'estat de treball es reconstrueix aplicant aquests esdeveniments a l'original.
+
+**Separació de capes:** una correcció semàntica o espacial queda anotada però
+no muta els artefactes canònics. Una correcció geomètrica o visual modifica
+només la còpia de treball. Desfer, refer i reiniciar mai no operen directament
+sobre `generatedGeometry`.
+
+**Validació i reutilització:** validar congela una versió del cas. Guardar el
+cas, crear un candidat de patró i proposar una regla general candidata són tres
+accions explícites diferents. Cap acció local promociona automàticament
+coneixement al corpus.
+
+## D-039 — Renderer literal i gramàtica visual estructurada
+
+**Decisió tècnica:** el renderer no conté política tàctica ni suavitzat de
+trajectòries. Dibuixa els punts amb segments `M/L` i rep les convencions des
+d'una gramàtica visual versionada.
+
+**Aplicació:** la passada és discontínua; tot moviment del jugador, inclosa la
+cursa sense pilota, és continu. La finta preserva els vèrtexs funcionals del
+canvi de direcció. Vista neta i vista de control comparteixen geometria i només
+difereixen en superposicions d'inspecció.
+
+## D-040 — Workspace universal amb UVOF015 com a espècimen
+
+**Decisió:** qualsevol text crea un cas nou independent. UVOF015 només activa el
+provider i el resolver canònics quan coincideixen identificador i
+`case_type: canonical_specimen`.
+
+## D-041 — Interpretació parcial i auditable
+
+**Decisió:** el matcher local pot reconèixer termes explícits, però els marca
+provisionals i conserva evidència, font i referència. Els desconeguts i els
+punts no resolts no s’eliminen ni s’assimilen automàticament.
+
+## D-042 — Referència geomètrica de l’entrenador
+
+**Decisió:** un cas sense resolver pot tenir `coach_reference_geometry`. No és
+`generatedGeometry`, no prova cap invariant tàctic i no es promociona.
+
+## D-043 — Preflight explicable per severitat
+
+**Decisió:** els errors estructurals o les contradiccions bloquegen la
+validació. Els warnings i les preguntes demanen revisió però poden quedar dins
+un cas validat. Cada diagnòstic ofereix missatge, objectiu i accions possibles.
+
+## D-044 — Promoció construïda des d’evidència seleccionada
+
+**Decisió:** només un cas validat pot obrir una promoció. El candidat conserva
+tipus, abast, cas font i únicament les correccions seleccionades; sempre neix
+`candidate` i no canònic.
+
+## D-045 — Quatre nivells de gramàtica visual
+
+**Decisió:** gramàtica base, override del cas, candidat visual i diccionari
+validat són nivells separats. Corregir un color o traç no modifica cap convenció
+global.
+
+## D-046 — Els espais tàctics no són objectes gràfics
+
+**Decisió:** un interval o espai tàctic continua sent una relació entre
+delimitadors. Pot conservar àncora i regió de càlcul internes, però la vista
+neta no el dibuixa i Control només en mostra una ajuda mínima. Els polígons de
+zona queden reservats als límits físics de la tasca i mai no es farceixen.
+
+## D-047 — Geometria segmentada resolta abans del render
+
+**Decisió:** línies, corbes, controls i punts funcionals formen part de
+`geometry.json`. El renderer emet literalment `M/L/C`; no aplica suavitzat. La
+finta conserva explícitament un `direction_break` i no pot degradar-se a una
+corba decorativa.
+
+## D-048 — Estats persistents i passades amb identitat
+
+**Decisió:** les posicions temporals són `participant_state`. Els moviments
+enllacen estats del mateix actor i les passades identifiquen pilota, emissor,
+receptor i estats d'origen i destí. El retall al perímetre del símbol és només
+una responsabilitat visual del renderer.
+
+## D-049 — Una correcció principal, efectes derivats
+
+**Decisió:** moure un estat registra un únic esdeveniment principal. Entitats,
+moviments i passades connectats es recalculen com a efectes derivats enumerats
+a l'historial. No es creen correccions secundàries ni s'altera la proposta
+generada immutable.
+
+## D-050 — Metadades automàtiques del cas
+
+**Decisió de producte:** crear un cas no demana a l’entrenador que entengui ni
+ompli `origin` o `tags`. L’origen queda registrat internament com
+`coach_input`; després de la interpretació, TRAÇA proposa fins a vuit etiquetes
+a partir dels conceptes explícits reconeguts. Les etiquetes descriuen la
+classificació del cas, però no converteixen una coincidència provisional en
+coneixement validat.
+
+## D-051 — Posicions futures visibles i trajectòries ancorades
+
+**Decisió visual:** tota posició futura que sigui origen o destí d’una
+trajectòria visible es representa amb el mateix símbol, color i etiqueta del
+participant, però sense farciment i amb contorn discontinu. No es mostren estats futurs que no
+participen en l’alternativa previsualitzada.
+
+**Decisió estructural:** moviments i passades han d’enllaçar estats que
+pertanyin als participants declarats. Les fletxes es retallen al perímetre dels
+símbols; el preflight bloqueja una passada si l’estat d’origen no pertany a
+l’emissor o l’estat final no pertany al receptor.
+
+## D-052 — Recepció com a estat únic compartit
+
+**Decisió:** una recepció en carrera no es representa amb un final de cursa i
+un destí de passada diferents. La cursa sense pilota i la passada acaben al
+mateix `participant_state`, i l'acció posterior comença des d'aquest mateix
+estat.
+
+**Aplicació:** la cursa d'aproximació forma part de cada alternativa perquè el
+seu destí depèn de l'espai inicial escollit. El preflight bloqueja qualsevol
+alternativa que trenqui aquesta identitat compartida.
+
+## D-053 — Camí normal curt i eines internes avançades
+
+**Decisió de producte:** la interfície s'obre en blanc i redueix el flux visible
+a escriure, generar, corregir i guardar. Origen, etiquetes, coordenades,
+preflight detallat, constructors, promoció i traçabilitat queden automàtics o al
+mode avançat. UVOF015 no és el cas inicial; és una acció explícita d'exemple.
+
+## D-054 — Diccionari visual-funcional amb evidència
+
+**Decisió:** la gramàtica executable es projecta des d'un diccionari estructurat
+amb definició, autoritat, estat, fonts i evidències. Atacant és cercle, defensor
+triangle, moviment continu, passada discontínua, llançament de doble traç,
+estat temporal de contorn discontinu i bot ondulat. 2x1 i espais relacionals no
+tenen glif propi.
+
+**Límit documentat:** l'ordre cita 103 evidències i una llegenda no rebudes. Es
+registra aquesta absència i només s'activen confirmacions explícites; no es
+fabriquen evidències ni convencions candidates.
+
+## D-055 — Resolució per autoritat i candidat només suggeridor
+
+**Decisió:** `KnowledgeResolver` prioritza confirmació de l'entrenador, llegenda,
+cas canònic i coneixement validat. Una coincidència provisional no es marca
+validada. Els candidats només entren a `suggestions` i mai no decideixen una
+interpretació o una representació.
+
+## D-056 — Aprenentatge local consumible amb validació explícita
+
+**Decisió:** una correcció pot quedar només en el cas o ser declarada criteri
+reutilitzable. En el segon cas només entra a
+`coach_validated_local_knowledge` després de validar el cas i conservar
+evidència, cas font i correccions. A partir d'aleshores pot ajudar casos futurs,
+però no modifica el corpus canònic.
+
+## D-057 — Compositor de primitives, no resolutor universal
+
+**Decisió:** una representació nova es pot compondre amb primitives conegudes
+quan identitats i relacions són explícites. La primera composició és una passada
+simple; quan falta emissor o receptor, TRAÇA pregunta. En una recepció en
+carrera, moviment i passada comparteixen el mateix estat futur. Accions no
+suportades queden parcials o manuals.
+
+## D-058 — Derivacions invalidades pel text font
+
+**Decisió:** la descripció té fingerprint i cada capa registra `derives_from`.
+Canviar el text posa en `stale` totes les derivacions que eren vigents, oculta
+la geometria antiga i bloqueja el guardat fins a regenerar.
+
+## D-059 — Identitat durable, esborrany separat i paquet 0.4
+
+**Decisió:** `case_uid` no canvia amb el nom o el codi curt. Els casos en
+construcció viuen a `drafts` i només una validació els mou a
+`validated_cases`. El paquet 0.4 conserva derivacions, respostes i composició;
+les versions 0.2 i 0.3 es migren sense presentar esborranys antics com a
+validats.

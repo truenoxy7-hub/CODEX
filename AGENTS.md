@@ -28,9 +28,17 @@ No converteixis una proposta geomètrica o una inferència en coneixement tàcti
 - El contracte espacial és un graf qualitatiu; no hi afegeixis coordenades,
   distàncies gràfiques ni una resolució única de decisions obertes.
 - El mateix jugador manté una identitat persistent al llarg de les fases.
+- En una recepció en carrera, cursa, passada i acció posterior comparteixen un
+  únic estat de recepció.
 - Les situacions decisionals descriuen opcions, no una solució gràfica obligatòria.
 - Qualsevol dada inferida ha de portar estat `provisional` o equivalent.
 - L'entrenador és l'única autoritat que pot aprovar una interpretació tàctica.
+- El compositor rep `TacticalIR` estructurat: no rellegeix text lliure ni usa
+  l’identificador UVOF per triar operadors, fluxos, posicions o geometria.
+- Composició i geometria tenen estats independents. Un pla tàctic pot estar
+  complet i la geometria continuar `needs_input` o `partial`.
+- Només fonts validades poden omplir slots obligatoris. Els candidats només
+  suggereixen i no decideixen.
 
 ## Definició canònica actual: 1x1 / finta
 
@@ -212,6 +220,43 @@ escollir el primer. Si obté avantatge, continua pel mateix espai; si el defenso
 el tanca, canvia direcció i ritme cap al contigu. La superació es produeix quan
 l'atacant travessa la línia defensiva marcada pel defensor de la seva zona.
 
+## Geometria MVP de TR-UVOF-015
+
+La geometria derivada viu a `exercises/TR-UVOF-015/geometry.json`, mai dins el
+corpus o el contracte espacial. Només es regenera després d'un preflight
+`ready`. Conserva les dotze alternatives i no en marca cap com a seleccionada;
+els tres selectors de la interfície només controlen la previsualització.
+
+Les mesures de pista provenen de `config/handball-court.ihf-2025.json`. Les
+amplades de zona i les distàncies de lectura dels participants són política
+visual provisional i no coneixement tàctic validat. Qualsevol canvi geomètric
+ha de mantenir la traçabilitat definida a `docs/GEOMETRY_CONTRACT.md`.
+
+Els espais tàctics són relacions internes i no rectangles pintables. Només els
+límits físics de la tasca poden aparèixer, discretament, a Control. Les
+trajectòries connecten estats persistents dels participants i les corbes han de
+venir resoltes en segments: el renderer no les suavitza. Moure un estat crea
+una sola correcció principal i recalcula els efectes dependents.
+
+## Workspace universal MVP
+
+El corpus UVOF és coneixement de referència i regressió, no un catàleg tancat.
+Qualsevol descripció nova crea un cas independent i conserva el text exacte.
+El matcher local només produeix coincidències provisionals; conceptes
+desconeguts i preguntes s’han de preservar. El provider canònic d’UVOF015 només
+pot activar-se amb identificador i `case_type: canonical_specimen` explícits.
+
+Sense resolver, el cas pot continuar i guardar-se. Una referència gràfica
+manual porta autoritat `coach_reference` i mai no és `generatedGeometry`.
+Correccions semàntiques, espacials, geomètriques i visuals conserven explicació
+de màquina i motiu de l’entrenador. Validar no muta el corpus; generalitzar
+requereix un Promotion Builder posterior amb correccions seleccionades.
+
+Llegeix també `docs/UNIVERSAL_CASE_WORKFLOW.md`,
+`docs/INTERPRETATION_PROVIDER.md`, `docs/KNOWLEDGE_PROMOTION.md`,
+`docs/LEARNING_WORKFLOW.md`, `docs/CORRECTION_MODEL.md` i
+`docs/VISUAL_GRAMMAR.md`.
+
 ## Regla general de permuta
 
 La direcció nomena el jugador que canvia de posició i el lloc que ocupa. En una
@@ -231,6 +276,8 @@ Abans de tocar codi:
 5. Inspecciona l'exercici i l'esquema afectats.
 6. Si la tasca afecta la capa espacial, llegeix
    `docs/SPATIAL_RELATIONS_CONTRACT.md`.
+7. Si la tasca afecta geometria o render, llegeix
+   `docs/GEOMETRY_CONTRACT.md`.
 
 Durant la implementació:
 
