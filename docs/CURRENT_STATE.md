@@ -7,7 +7,8 @@
 - Corpus semàntic `TR-UVOF-001`–`TR-UVOF-015` i contracte
   `spatial-relations` v0.3.
 - Preflight qualitatiu pur amb estats `ready`, `partial` o `blocked`.
-- Perfil IHF, contracte geomètric v0.2 i resolver determinista d’UVOF015.
+- Perfil IHF, contracte geomètric general v0.3 i adaptador compatible amb la
+  geometria canònica v0.2 d’UVOF015.
 - UVOF015 conserva tres zones, sis espais, setze entitats, tres branques i
   dotze alternatives.
 - Els sis espais són relacions ocultes; només els límits físics de les tres
@@ -19,6 +20,12 @@
   perímetre dels símbols d’origen i destí.
 - Cada recepció en carrera és un únic estat compartit: la cursa i la passada hi
   acaben, i la trajectòria posterior comença exactament des del mateix punt.
+- Resolver relacional A1–A3 sense coordenades manuals per a passada, recepció,
+  finta amb trencament funcional i 2x1 obert, inclosa la variant de costat.
+- Obligacions exhaustives per primitiva i relació, diagnòstics accionables i
+  conflicte explícit quan una àncora manual contradiu el graf.
+- Tres exemples reproduïbles amb TacticalIR, geometria v0.3 i SVG a
+  `examples/general-geometry/`.
 
 ### MVP funcional v0.5
 
@@ -92,8 +99,8 @@ treball, la seva geometria disponible, identitats, fonts i correccions pendents.
 
 - La cobertura estructural del corpus és 164/203 unitats (80,79%); el detall
   per exercici és a [`COMPOSER_COVERAGE.md`](COMPOSER_COVERAGE.md).
-- Finta, bloqueig, permuta i lliscament poden obtenir geometria quan les
-  posicions necessàries són explícites. No tenen encara resolució universal.
+- Bloqueig, permuta i lliscament poden obtenir geometria quan les posicions
+  necessàries són explícites. No tenen encara resolució universal.
 - L’encreuament es compon a nivell funcional però deixa la geometria sense
   resoldre.
 - L’intèrpret local produeix TacticalIR per formulacions explícites comunes;
@@ -103,7 +110,7 @@ treball, la seva geometria disponible, identitats, fonts i correccions pendents.
 
 - Tipar `resolucio` del corpus com a passada, llançament o moviment abans de
   compondre-la.
-- Traduir totes les relacions qualitatives v0.3 a posicions sense defaults.
+- Traduir la resta de relacions qualitatives v0.3 a posicions sense defaults.
 - Resoldre geometria general d’encreuament i coexistència de trajectòries en
   lliscaments de pivot.
 - Decidir a la interpretació els actors/espais que falten en diversos casos;
@@ -130,7 +137,8 @@ override visual del cas ≠ regla visual global
 
 ## Pròxima fita
 
-Validar manualment el pipeline amb cinc casos nous: cadena
-passada–recepció–finta–2x1, dades absents, conflicte de pilota, permuta i
-encreuament sense geometria. Després, prioritzar els buits publicats a
+Validar amb l'entrenador la política visual provisional dels casos A1–A3 i
+registrar les correccions com a coneixement local, no com a regla tàctica
+automàtica. Després, provar dades absents, conflicte de pilota, permuta i
+encreuament sense geometria i prioritzar els buits de
 `COMPOSER_COVERAGE.md` sense hardcodejar exercicis.

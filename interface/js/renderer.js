@@ -305,10 +305,11 @@
     const view = options.view || "control";
     const selection = options.selection;
     const alternatives = selectedAlternatives(geometry, options.selectedAlternatives || {});
+    const geometryLabel = geometry.meta.exercise_id || geometry.meta.case_id || "cas sense identificador";
     container.replaceChildren();
     const svg = append(documentObject, container, "svg", {
       viewBox: geometry.court.view_box.join(" "), class: `traca-court view-${view}`,
-      role: "img", "aria-label": `Representació editable de ${geometry.meta.exercise_id}`
+      role: "img", "aria-label": `Representació editable de ${geometryLabel}`
     });
     addCourt(documentObject, svg, geometry.court);
     if (options.comparisonGeometry) addGhostGeometry(documentObject, svg, options.comparisonGeometry, options.selectedAlternatives || {});

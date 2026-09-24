@@ -105,10 +105,10 @@ process.stdout.write(JSON.stringify({status:composed.status,geometryStatus:compo
 """)
 
     assert result["status"] == "ready"
-    assert result["geometryStatus"] == "needs_input"
+    assert result["geometryStatus"] == "ready"
     assert result["movementTarget"] == result["passTarget"]
     assert result["passReceiver"] == "L"
-    assert result["geometry"] is None
+    assert result["geometry"]["meta"]["format"] == "TRACA_general_geometry"
     assert set(result["primitives"]) == {"movement_path", "pass_path"}
 
 
@@ -170,8 +170,8 @@ process.stdout.write(JSON.stringify({statuses:Object.fromEntries(Object.entries(
 
     assert result["statuses"]["interpretation"] == "stale"
     assert result["statuses"]["semantic"] == "stale"
-    assert result["statuses"]["geometry"] == "unavailable"
-    assert result["geometryState"] == "unavailable"
+    assert result["statuses"]["geometry"] == "stale"
+    assert result["geometryState"] == "stale"
     assert result["canValidate"] is False
     assert "SOURCE_DERIVATION_STALE" in result["codes"]
 

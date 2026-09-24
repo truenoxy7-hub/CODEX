@@ -534,3 +534,27 @@ construcció viuen a `drafts` i només una validació els mou a
 `validated_cases`. El paquet 0.4 conserva derivacions, respostes i composició;
 les versions 0.2 i 0.3 es migren sense presentar esborranys antics com a
 validats.
+
+## D-060 — Geometria general v0.3 derivada del graf
+
+**Decisió:** el resolver general pot materialitzar una disposició provisional
+quan les relacions formen un graf connectat de delimitadors, espais, atacs i
+participants. Ordena els delimitadors per la cadena d'intervals i deriva les
+posicions sense consultar `exercise_id`, rol o índex. Cada coordenada conserva
+la relació d'origen a `meta.policy.decisions`.
+
+**Límit d'autoritat:** aquesta disposició és una política visual provisional,
+no una regla tàctica. Una coordenada manual incompatible produeix un conflicte
+diagnosticat; no sobreescriu silenciosament el graf.
+
+## D-061 — Obligacions de representació i 2x1 obert
+
+**Decisió:** tota primitiva i tota relació visual exigible crea una obligació
+auditable. L'estat geomètric només és `ready` si totes estan satisfetes; les
+pendents i els conflictes expliquen què falta sense alterar la composició.
+
+**Aplicació A1–A3:** passada i cursa comparteixen l'estat de recepció; la finta
+conserva aproximació, compromís, trencament i sortida; el 2x1 situa els tres
+participants però resta obert. El resolver no afegeix una passada o un
+llançament final que el text no hagi declarat. UVOF015 entra al contracte v0.3
+mitjançant un adaptador que conserva totes les branques i alternatives v0.2.

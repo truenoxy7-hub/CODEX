@@ -136,7 +136,7 @@ process.stdout.write(JSON.stringify({feint:badFeint.composition_status,feintCode
     assert result["goodMaterial"] == "ready"
 
 
-def test_geometry_is_only_resolved_from_explicit_or_relational_positions() -> None:
+def test_geometry_is_resolved_from_explicit_or_qualitative_relations() -> None:
     result = _run_node(r"""
 const noPositions=base([{id:'M',type:'movement',actor_ref:'A1',target_space_ref:'S12'}]);
 noPositions.participants=noPositions.participants.map(({position,...item})=>item);
@@ -146,8 +146,8 @@ process.stdout.write(JSON.stringify({composition:unresolved.composition_status,g
 """)
     assert result == {
         "composition": "ready",
-        "geometry": "needs_input",
-        "hasGeometry": False,
+        "geometry": "ready",
+        "hasGeometry": True,
         "explicitGeometry": "ready",
         "path": {"type": "line", "start": [5, 12], "end": [7, 9]},
     }

@@ -102,7 +102,7 @@ process.stdout.write(JSON.stringify({partialDefenders:partial.tactical_ir.action
     assert result["partialDefenders"] == []
     assert result["active"] == "Quin és el defensor del 2x1?"
     assert result["status"] == "ready"
-    assert result["geometry"] == "needs_input"
+    assert result["geometry"] == "ready"
     assert result["coverage"]["label"] == "2/2"
     assert result["questions"] == []
     assert len(result["d3"]) == 1
@@ -177,7 +177,7 @@ const ir=sourceIR(mainCase);const composed=compose(ir);process.stdout.write(JSON
 """)
     assert result == {
         "status": "ready",
-        "geometry": "needs_input",
+        "geometry": "ready",
         "coverage": {
             "actions_total": 4,
             "actions_composed": 4,

@@ -11,9 +11,10 @@ La primera família completa és `MITJANS 1V1 OFENSIUS`, amb `TR-UVOF-001` a
 
 Els quinze artefactes qualitatius han migrat al contracte
 `spatial-relations` v0.3. El preflight comprova traçabilitat, preservació i
-resolubilitat de l'entrada. UVOF015 disposa ja d'un primer resolutor geomètric
-canònic; un artefacte pot ser estructuralment vàlid i continuar `partial` o
-`blocked`.
+resolubilitat de l'entrada. El contracte geomètric v0.3 resol relacionalment la
+cadena passada–recepció–finta–2x1 sense coordenades manuals i adapta el primer
+resolver canònic d'UVOF015; un artefacte pot ser estructuralment vàlid i
+continuar `partial` o `blocked`.
 
 La font actual inclou el corpus canònic, els contractes, el diccionari visual-funcional i el bucle local supervisat:
 
@@ -40,10 +41,13 @@ La font actual inclou el corpus canònic, els contractes, el diccionari visual-f
 - `schema/traca.spatial-relations.schema.v0.2.json` (històric, read-only)
 - `scripts/spatial_preflight.py`
 - `config/handball-court.ihf-2025.json`
+- `schema/traca.geometry.schema.v0.3.json`
 - `schema/traca.geometry.schema.v0.2.json`
 - `schema/traca.geometry.schema.v0.1.json` (històric, read-only)
 - `exercises/TR-UVOF-015/geometry.json`
 - `scripts/resolve_geometry.py`
+- `scripts/generate_general_geometry_examples.js`
+- `examples/general-geometry/`
 - `docs/DOMAIN_MODEL.md`
 - `docs/SPATIAL_RELATIONS_CONTRACT.md`
 - `docs/GEOMETRY_CONTRACT.md`
@@ -96,9 +100,10 @@ explícitament com a exemple i regressió.
 
 El `KnowledgeResolver` aplica autoritat explícita: cas canònic, coneixement
 local validat per l'entrenador, vocabulari provisional i candidats que només
-suggereixen. El `RepresentationComposer` compon una passada simple i la seva
-recepció en carrera amb primitives conegudes; no és un intèrpret o resolutor
-tàctic universal.
+suggereixen. El `RepresentationComposer` compon una passada, la recepció en
+carrera, la finta funcional i la relació numèrica amb primitives conegudes;
+el resolver geomètric les situa des del graf i declara la seva política visual
+provisional. No és un intèrpret o resolutor tàctic universal.
 
 ```bash
 make interface

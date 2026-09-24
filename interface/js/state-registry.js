@@ -64,18 +64,25 @@
     function ensure(participantRef, semanticKey, options) {
       const configuration = options || {};
       if (!participants.has(participantRef)) throw new Error(`STATE_PARTICIPANT_UNKNOWN:${participantRef}`);
+      function enrich(existing) {
+        if (!existing.phase_ref && configuration.phase_ref) existing.phase_ref = configuration.phase_ref;
+        if (!existing.space_ref && configuration.space_ref) existing.space_ref = configuration.space_ref;
+        if (!existing.functional_position_ref && configuration.functional_position_ref) existing.functional_position_ref = configuration.functional_position_ref;
+        if (!Array.isArray(existing.position) && Array.isArray(configuration.position)) existing.position = configuration.position.slice();
+        existing.source_refs = [...new Set([...(existing.source_refs || []), ...(configuration.source_refs || [])])];
+        if (configuration.make_current) current.set(participantRef, existing.id);
+        return existing;
+      }
       const requestedId = configuration.state_ref || null;
       if (requestedId && byId.has(requestedId)) {
         const existing = byId.get(requestedId);
         if (existing.participant_ref !== participantRef) throw new Error(`STATE_OWNER_CONFLICT:${requestedId}`);
-        if (configuration.make_current) current.set(participantRef, existing.id);
-        return existing;
+        return enrich(existing);
       }
       const mapKey = `${participantRef}|${semanticKey}`;
       if (bySemanticKey.has(mapKey)) {
         const existing = byId.get(bySemanticKey.get(mapKey));
-        if (configuration.make_current) current.set(participantRef, existing.id);
-        return existing;
+        return enrich(existing);
       }
       const id = requestedId || `STATE_${stableToken(participantRef)}_${stableToken(semanticKey)}`;
       return add({

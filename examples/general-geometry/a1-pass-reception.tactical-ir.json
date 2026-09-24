@@ -1,0 +1,133 @@
+{
+  "meta": {
+    "format": "TRACA_tactical_ir",
+    "version": "0.1.0",
+    "case_id": "A1_PASS_RECEPTION",
+    "source_revision": "fnv1a:98836507",
+    "knowledge_version": "K1"
+  },
+  "participants": [
+    {
+      "id": "CE",
+      "label": "CE",
+      "role": "central",
+      "kind": "attacker",
+      "team": "attack",
+      "presence": "explicit",
+      "functional_participation": "declared",
+      "structural_delimiter_refs": [],
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:3-10"
+      ]
+    },
+    {
+      "id": "L",
+      "label": "L",
+      "role": "lateral",
+      "kind": "attacker",
+      "team": "attack",
+      "presence": "explicit",
+      "functional_participation": "declared",
+      "structural_delimiter_refs": [],
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:20-27",
+        "coach_input:span:3-27"
+      ]
+    }
+  ],
+  "participant_states": [],
+  "balls": [
+    {
+      "id": "B1",
+      "holder_ref": "CE",
+      "authority": "derived_from_validated_rule",
+      "status": "validated",
+      "source_refs": [
+        "coach_input:span:3-27"
+      ]
+    }
+  ],
+  "materials": [],
+  "spaces": [],
+  "actions": [
+    {
+      "type": "pass",
+      "actor_ref": "CE",
+      "receiver_ref": "L",
+      "ball_ref": "B1",
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:3-27"
+      ],
+      "id": "A001"
+    },
+    {
+      "type": "reception",
+      "actor_ref": "L",
+      "mode": "in_motion",
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:32-43"
+      ],
+      "id": "A002",
+      "after": [
+        "A001"
+      ]
+    }
+  ],
+  "decisions": [],
+  "phases": [],
+  "ball_flow": [],
+  "relations": [
+    {
+      "id": "REL_A001_PERFORMS",
+      "type": "performs",
+      "from_ref": "CE",
+      "to_ref": "A001",
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:3-27"
+      ]
+    },
+    {
+      "id": "REL_A001_PASSES_TO",
+      "type": "passes_to",
+      "from_ref": "CE",
+      "to_ref": "L",
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:3-27"
+      ]
+    },
+    {
+      "id": "REL_A002_PERFORMS",
+      "type": "performs",
+      "from_ref": "L",
+      "to_ref": "A002",
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:32-43"
+      ]
+    },
+    {
+      "id": "REL_A002_FOLLOWS_1",
+      "type": "follows",
+      "from_ref": "A001",
+      "to_ref": "A002",
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:32-43"
+      ]
+    }
+  ]
+}

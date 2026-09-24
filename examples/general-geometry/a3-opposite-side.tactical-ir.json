@@ -1,0 +1,468 @@
+{
+  "meta": {
+    "format": "TRACA_tactical_ir",
+    "version": "0.1.0",
+    "case_id": "A3_OPPOSITE_SIDE",
+    "source_revision": "fnv1a:f70db386",
+    "knowledge_version": "K1"
+  },
+  "participants": [
+    {
+      "id": "CE",
+      "label": "CE",
+      "role": "central",
+      "kind": "attacker",
+      "team": "attack",
+      "presence": "explicit",
+      "functional_participation": "declared",
+      "structural_delimiter_refs": [],
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:3-10"
+      ]
+    },
+    {
+      "id": "D1",
+      "label": "D1",
+      "role": "first",
+      "kind": "defender",
+      "team": "defense",
+      "presence": "explicit",
+      "functional_participation": "declared",
+      "structural_delimiter_refs": [
+        "INT_12"
+      ],
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:165-167",
+        "coach_input:span:120-123",
+        "space:INT_12",
+        "canonical:interval:INT_12",
+        "docs/DOMAIN_MODEL.md#3-espais-i-intervals",
+        "coach_input:span:158-167"
+      ]
+    },
+    {
+      "id": "D2",
+      "label": "D2",
+      "role": "second",
+      "kind": "defender",
+      "team": "defense",
+      "presence": "explicit",
+      "functional_participation": "declared",
+      "structural_delimiter_refs": [
+        "INT_12",
+        "INT_23"
+      ],
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:93-95",
+        "coach_input:span:120-123",
+        "space:INT_12",
+        "canonical:interval:INT_12",
+        "docs/DOMAIN_MODEL.md#3-espais-i-intervals",
+        "coach_input:span:68-71",
+        "space:INT_23",
+        "canonical:interval:INT_23"
+      ]
+    },
+    {
+      "id": "D3",
+      "label": "D3",
+      "role": "third",
+      "kind": "defender",
+      "team": "defense",
+      "presence": "structural_reference",
+      "functional_participation": "delimiter_only",
+      "structural_delimiter_refs": [
+        "INT_23"
+      ],
+      "authority": "derived_from_validated_rule",
+      "status": "validated",
+      "source_refs": [
+        "coach_input:span:68-71",
+        "space:INT_23",
+        "canonical:interval:INT_23",
+        "docs/DOMAIN_MODEL.md#3-espais-i-intervals"
+      ]
+    },
+    {
+      "id": "L",
+      "label": "L",
+      "role": "lateral",
+      "kind": "attacker",
+      "team": "attack",
+      "presence": "explicit",
+      "functional_participation": "declared",
+      "structural_delimiter_refs": [],
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:20-27",
+        "coach_input:span:3-27"
+      ]
+    },
+    {
+      "id": "PV",
+      "label": "PV",
+      "role": "pivot",
+      "kind": "attacker",
+      "team": "attack",
+      "presence": "explicit",
+      "functional_participation": "declared",
+      "structural_delimiter_refs": [],
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:152-157",
+        "coach_input:span:145-157"
+      ]
+    }
+  ],
+  "participant_states": [],
+  "balls": [
+    {
+      "id": "B1",
+      "holder_ref": "CE",
+      "authority": "derived_from_validated_rule",
+      "status": "validated",
+      "source_refs": [
+        "coach_input:span:3-27"
+      ]
+    }
+  ],
+  "materials": [],
+  "spaces": [
+    {
+      "id": "INT_12",
+      "label": "Interval 1–2",
+      "type": "interval",
+      "relation": {
+        "type": "between",
+        "delimiter_refs": [
+          "D1",
+          "D2"
+        ]
+      },
+      "delimiter_refs": [
+        "D1",
+        "D2"
+      ],
+      "delimiter_derivations": [
+        {
+          "delimiter_ref": "D1",
+          "entity_kind": "defender",
+          "role": "first",
+          "presence": "structural_reference",
+          "authority": "derived_from_validated_rule",
+          "status": "validated",
+          "source_refs": [
+            "space:INT_12",
+            "canonical:interval:INT_12",
+            "docs/DOMAIN_MODEL.md#3-espais-i-intervals",
+            "coach_input:span:120-123"
+          ]
+        },
+        {
+          "delimiter_ref": "D2",
+          "entity_kind": "defender",
+          "role": "second",
+          "presence": "structural_reference",
+          "authority": "derived_from_validated_rule",
+          "status": "validated",
+          "source_refs": [
+            "space:INT_12",
+            "canonical:interval:INT_12",
+            "docs/DOMAIN_MODEL.md#3-espais-i-intervals",
+            "coach_input:span:120-123"
+          ]
+        }
+      ],
+      "authority": "canonical_spatial",
+      "status": "validated",
+      "source_refs": [
+        "coach_input:span:120-123",
+        "canonical:interval:INT_12",
+        "docs/DOMAIN_MODEL.md#3-espais-i-intervals"
+      ]
+    },
+    {
+      "id": "INT_23",
+      "label": "Interval 2–3",
+      "type": "interval",
+      "relation": {
+        "type": "between",
+        "delimiter_refs": [
+          "D2",
+          "D3"
+        ]
+      },
+      "delimiter_refs": [
+        "D2",
+        "D3"
+      ],
+      "delimiter_derivations": [
+        {
+          "delimiter_ref": "D2",
+          "entity_kind": "defender",
+          "role": "second",
+          "presence": "structural_reference",
+          "authority": "derived_from_validated_rule",
+          "status": "validated",
+          "source_refs": [
+            "space:INT_23",
+            "canonical:interval:INT_23",
+            "docs/DOMAIN_MODEL.md#3-espais-i-intervals",
+            "coach_input:span:68-71"
+          ]
+        },
+        {
+          "delimiter_ref": "D3",
+          "entity_kind": "defender",
+          "role": "third",
+          "presence": "structural_reference",
+          "authority": "derived_from_validated_rule",
+          "status": "validated",
+          "source_refs": [
+            "space:INT_23",
+            "canonical:interval:INT_23",
+            "docs/DOMAIN_MODEL.md#3-espais-i-intervals",
+            "coach_input:span:68-71"
+          ]
+        }
+      ],
+      "authority": "canonical_spatial",
+      "status": "validated",
+      "source_refs": [
+        "coach_input:span:68-71",
+        "canonical:interval:INT_23",
+        "docs/DOMAIN_MODEL.md#3-espais-i-intervals"
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "type": "pass",
+      "actor_ref": "CE",
+      "receiver_ref": "L",
+      "ball_ref": "B1",
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:3-27"
+      ],
+      "id": "A001"
+    },
+    {
+      "type": "reception",
+      "actor_ref": "L",
+      "mode": "in_motion",
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:32-43",
+        "coach_input:span:68-71"
+      ],
+      "space_ref": "INT_23",
+      "slot_authority": {
+        "space_ref": "coach_explicit_input"
+      },
+      "slot_status": {
+        "space_ref": "explicit"
+      },
+      "slot_source_refs": {
+        "space_ref": [
+          "coach_input:span:68-71"
+        ]
+      },
+      "id": "A002",
+      "after": [
+        "A001"
+      ]
+    },
+    {
+      "type": "feint",
+      "actor_ref": "L",
+      "opponent_ref": "D2",
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:73-85",
+        "coach_input:span:120-123"
+      ],
+      "target_space_ref": "INT_12",
+      "slot_authority": {
+        "target_space_ref": "coach_explicit_input",
+        "initial_space_ref": "derived_from_validated_rule"
+      },
+      "slot_status": {
+        "target_space_ref": "explicit",
+        "initial_space_ref": "validated"
+      },
+      "slot_source_refs": {
+        "target_space_ref": [
+          "coach_input:span:120-123"
+        ],
+        "initial_space_ref": [
+          "coach_input:span:68-71",
+          "derived:spatial_continuity:A002->A003"
+        ]
+      },
+      "id": "A003",
+      "after": [
+        "A002"
+      ],
+      "initial_space_ref": "INT_23",
+      "spatial_derivations": [
+        {
+          "slot": "initial_space_ref",
+          "relation": "terminal_space_to_initial_space",
+          "predecessor_action_ref": "A002",
+          "predecessor_slot": "space_ref",
+          "value": "INT_23",
+          "authority": "derived_from_validated_rule",
+          "status": "validated",
+          "source_refs": [
+            "coach_input:span:68-71",
+            "derived:spatial_continuity:A002->A003"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "numerical_relation",
+      "subtype": "2x1",
+      "attacker_refs": [
+        "L",
+        "PV"
+      ],
+      "defender_refs": [
+        "D1"
+      ],
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:141-144"
+      ],
+      "id": "A004",
+      "after": [
+        "A003"
+      ]
+    }
+  ],
+  "decisions": [],
+  "phases": [],
+  "ball_flow": [],
+  "relations": [
+    {
+      "id": "REL_A001_PERFORMS",
+      "type": "performs",
+      "from_ref": "CE",
+      "to_ref": "A001",
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:3-27"
+      ]
+    },
+    {
+      "id": "REL_A001_PASSES_TO",
+      "type": "passes_to",
+      "from_ref": "CE",
+      "to_ref": "L",
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:3-27"
+      ]
+    },
+    {
+      "id": "REL_A002_PERFORMS",
+      "type": "performs",
+      "from_ref": "L",
+      "to_ref": "A002",
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:32-43",
+        "coach_input:span:68-71"
+      ]
+    },
+    {
+      "id": "REL_A002_FOLLOWS_1",
+      "type": "follows",
+      "from_ref": "A001",
+      "to_ref": "A002",
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:32-43",
+        "coach_input:span:68-71"
+      ]
+    },
+    {
+      "id": "REL_A003_PERFORMS",
+      "type": "performs",
+      "from_ref": "L",
+      "to_ref": "A003",
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:73-85",
+        "coach_input:span:120-123"
+      ]
+    },
+    {
+      "id": "REL_A003_OPPOSES",
+      "type": "opposes",
+      "from_ref": "L",
+      "to_ref": "D2",
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:73-85",
+        "coach_input:span:120-123"
+      ]
+    },
+    {
+      "id": "REL_A003_FOLLOWS_1",
+      "type": "follows",
+      "from_ref": "A002",
+      "to_ref": "A003",
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:73-85",
+        "coach_input:span:120-123"
+      ]
+    },
+    {
+      "id": "REL_A004_FOLLOWS_1",
+      "type": "follows",
+      "from_ref": "A003",
+      "to_ref": "A004",
+      "authority": "coach_explicit_input",
+      "status": "explicit",
+      "source_refs": [
+        "coach_input:span:141-144"
+      ]
+    },
+    {
+      "id": "REL_A003_SPATIAL_CONTINUITY_1",
+      "type": "spatial_continuity",
+      "from_ref": "A002",
+      "to_ref": "A003",
+      "space_ref": "INT_23",
+      "actor_ref": "L",
+      "authority": "derived_from_validated_rule",
+      "status": "validated",
+      "source_refs": [
+        "coach_input:span:68-71",
+        "derived:spatial_continuity:A002->A003"
+      ]
+    }
+  ]
+}

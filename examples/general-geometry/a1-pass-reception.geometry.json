@@ -1,0 +1,366 @@
+{
+  "$schema": "../../schema/traca.geometry.schema.v0.3.json",
+  "meta": {
+    "format": "TRACA_general_geometry",
+    "version": "0.3.0",
+    "case_id": "A1_PASS_RECEPTION",
+    "source_revision": "fnv1a:98836507",
+    "status": "resolved",
+    "authority": "provisional_visual_policy",
+    "composition_fingerprint": "fnv1a:0c4c185b",
+    "canonical_promotion": false,
+    "court_profile_ref": "IHF_INDOOR_HANDBALL_COURT_2025@1.0.0"
+  },
+  "court": {
+    "width_m": 20,
+    "half_length_m": 20,
+    "goal": {
+      "width_m": 3,
+      "height_m": 2,
+      "post_width_m": 0.08
+    },
+    "markings": {
+      "goal_area_radius_m": 6,
+      "goal_area_straight_m": 3,
+      "free_throw_distance_m": 9,
+      "free_throw_segment_m": 0.15,
+      "free_throw_gap_m": 0.15,
+      "penalty_line_distance_m": 7,
+      "penalty_line_length_m": 1,
+      "goalkeeper_line_distance_m": 4,
+      "goalkeeper_line_length_m": 0.15,
+      "throw_off_diameter_m": 4
+    },
+    "view_box": [
+      -0.8,
+      -1,
+      21.6,
+      21.8
+    ]
+  },
+  "layout_policy": {
+    "id": "generic_relational_layout_v0.3",
+    "version": "0.3.0",
+    "status": "provisional_render_policy",
+    "coordinate_system": "metres_origin_goal_line_left",
+    "attack_direction": "negative_y",
+    "notes": [
+      "Distribució derivada de delimitadors, espais, dependències d’acció i relacions numèriques.",
+      "Les distàncies són una política visual versionada i no coneixement tàctic."
+    ],
+    "decisions": [
+      {
+        "id": "LAYOUT_0001",
+        "type": "pass_relation_receiver",
+        "target_ref": "STATE_L_RECEPTION_A002",
+        "status": "provisional_visual_policy",
+        "position": [
+          11.7,
+          10
+        ],
+        "source_refs": [
+          "action:A001",
+          "coach_input:span:3-27",
+          "coach_input:span:32-43"
+        ]
+      },
+      {
+        "id": "LAYOUT_0002",
+        "type": "pass_relation_sender",
+        "target_ref": "STATE_CE_S0",
+        "status": "provisional_visual_policy",
+        "position": [
+          8.3,
+          13
+        ],
+        "source_refs": [
+          "action:A001",
+          "coach_input:span:3-10"
+        ]
+      },
+      {
+        "id": "LAYOUT_0003",
+        "type": "reception_approach",
+        "target_ref": "STATE_L_S0",
+        "status": "provisional_visual_policy",
+        "position": [
+          14.1,
+          13
+        ],
+        "source_refs": [
+          "action:A002",
+          "coach_input:span:20-27",
+          "coach_input:span:3-27"
+        ]
+      }
+    ]
+  },
+  "zones": [],
+  "spaces": [],
+  "objects": [],
+  "phases": [],
+  "entities": [
+    {
+      "id": "CE",
+      "kind": "attacker",
+      "label": "CE",
+      "position": [
+        8.3,
+        13
+      ],
+      "state_ref": "STATE_CE_S0",
+      "status": "derived",
+      "presence": "explicit",
+      "source_refs": [
+        "coach_input:span:3-10"
+      ]
+    },
+    {
+      "id": "L",
+      "kind": "attacker",
+      "label": "L",
+      "position": [
+        14.1,
+        13
+      ],
+      "state_ref": "STATE_L_S0",
+      "status": "derived",
+      "presence": "explicit",
+      "source_refs": [
+        "coach_input:span:20-27",
+        "coach_input:span:3-27"
+      ]
+    }
+  ],
+  "participant_states": [
+    {
+      "id": "STATE_CE_S0",
+      "participant_ref": "CE",
+      "state_key": "S0",
+      "phase_ref": null,
+      "space_ref": null,
+      "functional_position_ref": null,
+      "position": [
+        8.3,
+        13
+      ],
+      "status": "current",
+      "authority": "coach_explicit_input",
+      "source_refs": [
+        "coach_input:span:3-10"
+      ],
+      "layout_decision_ref": "LAYOUT_0002",
+      "visibility": "normal"
+    },
+    {
+      "id": "STATE_L_RECEPTION_A002",
+      "participant_ref": "L",
+      "state_key": "RECEPTION:A002",
+      "phase_ref": null,
+      "space_ref": null,
+      "functional_position_ref": null,
+      "position": [
+        11.7,
+        10
+      ],
+      "status": "future",
+      "authority": "coach_explicit_input",
+      "source_refs": [
+        "coach_input:span:3-27",
+        "coach_input:span:32-43"
+      ],
+      "layout_decision_ref": "LAYOUT_0001",
+      "visibility": "normal"
+    },
+    {
+      "id": "STATE_L_S0",
+      "participant_ref": "L",
+      "state_key": "S0",
+      "phase_ref": null,
+      "space_ref": null,
+      "functional_position_ref": null,
+      "position": [
+        14.1,
+        13
+      ],
+      "status": "current",
+      "authority": "coach_explicit_input",
+      "source_refs": [
+        "coach_input:span:20-27",
+        "coach_input:span:3-27"
+      ],
+      "layout_decision_ref": "LAYOUT_0003",
+      "visibility": "normal"
+    }
+  ],
+  "common_paths": [
+    {
+      "id": "PATH_VIS_A001_PASS_PATH",
+      "kind": "pass",
+      "action_type": "pass",
+      "segments": [
+        {
+          "type": "line",
+          "start": [
+            8.3,
+            13
+          ],
+          "end": [
+            11.7,
+            10
+          ]
+        }
+      ],
+      "functional_points": [],
+      "source_refs": [
+        "coach_input:span:3-27"
+      ],
+      "action_ref": "A001",
+      "ball_ref": "B1",
+      "from_participant_ref": "CE",
+      "from_state_ref": "STATE_CE_S0",
+      "to_participant_ref": "L",
+      "to_state_ref": "STATE_L_RECEPTION_A002",
+      "anchor_mode": "symbol_perimeter"
+    },
+    {
+      "id": "PATH_VIS_A002_MOVEMENT_PATH",
+      "kind": "movement_without_ball",
+      "action_type": "movement",
+      "segments": [
+        {
+          "type": "line",
+          "start": [
+            14.1,
+            13
+          ],
+          "end": [
+            11.7,
+            10
+          ]
+        }
+      ],
+      "functional_points": [],
+      "source_refs": [
+        "coach_input:span:32-43"
+      ],
+      "action_ref": "A002",
+      "actor_ref": "L",
+      "from_state_ref": "STATE_L_S0",
+      "to_state_ref": "STATE_L_RECEPTION_A002"
+    }
+  ],
+  "branches": [],
+  "dependencies": [
+    {
+      "id": "DEP_STATE_CE_S0",
+      "trigger_ref": "geometry:participant_state:STATE_CE_S0",
+      "effect_refs": [
+        "geometry:entity:CE",
+        "geometry:common_path:PATH_VIS_A001_PASS_PATH"
+      ],
+      "rule": "state_drives_geometry"
+    },
+    {
+      "id": "DEP_STATE_L_S0",
+      "trigger_ref": "geometry:participant_state:STATE_L_S0",
+      "effect_refs": [
+        "geometry:entity:L",
+        "geometry:common_path:PATH_VIS_A002_MOVEMENT_PATH"
+      ],
+      "rule": "state_drives_geometry"
+    },
+    {
+      "id": "DEP_STATE_L_RECEPTION_A002",
+      "trigger_ref": "geometry:participant_state:STATE_L_RECEPTION_A002",
+      "effect_refs": [
+        "geometry:common_path:PATH_VIS_A001_PASS_PATH",
+        "geometry:common_path:PATH_VIS_A002_MOVEMENT_PATH"
+      ],
+      "rule": "state_drives_geometry"
+    }
+  ],
+  "obligations": [
+    {
+      "id": "OBLIGATION_PRIMITIVE_VIS_A001_PASS_PATH",
+      "kind": "visual_primitive",
+      "action_ref": "A001",
+      "target_ref": "VIS_A001_PASS_PATH",
+      "required": true,
+      "status": "resolved",
+      "geometry_refs": [
+        "geometry:common_path:PATH_VIS_A001_PASS_PATH"
+      ],
+      "source_refs": [
+        "coach_input:span:3-27"
+      ]
+    },
+    {
+      "id": "OBLIGATION_PRIMITIVE_VIS_A002_MOVEMENT_PATH",
+      "kind": "visual_primitive",
+      "action_ref": "A002",
+      "target_ref": "VIS_A002_MOVEMENT_PATH",
+      "required": true,
+      "status": "resolved",
+      "geometry_refs": [
+        "geometry:common_path:PATH_VIS_A002_MOVEMENT_PATH"
+      ],
+      "source_refs": [
+        "coach_input:span:32-43"
+      ]
+    },
+    {
+      "id": "OBLIGATION_RECEPTION_A002",
+      "kind": "shared_reception_state",
+      "action_ref": "A002",
+      "target_ref": "STATE_L_RECEPTION_A002",
+      "required": true,
+      "status": "resolved",
+      "geometry_refs": [
+        "geometry:participant_state:STATE_L_RECEPTION_A002"
+      ],
+      "source_refs": [
+        "coach_input:span:32-43"
+      ]
+    }
+  ],
+  "diagnostics": [],
+  "result": {
+    "status": "ready",
+    "obligations_total": 3,
+    "obligations_resolved": 3,
+    "obligations_pending": 0,
+    "incompatible_count": 0
+  },
+  "traceability": [
+    {
+      "geometry_ref": "geometry:entity:CE",
+      "source_refs": [
+        "coach_input:span:3-10"
+      ]
+    },
+    {
+      "geometry_ref": "geometry:entity:L",
+      "source_refs": [
+        "coach_input:span:20-27",
+        "coach_input:span:3-27"
+      ]
+    },
+    {
+      "geometry_ref": "geometry:common_path:PATH_VIS_A001_PASS_PATH",
+      "action_ref": "A001",
+      "primitive_ref": "VIS_A001_PASS_PATH",
+      "source_refs": [
+        "coach_input:span:3-27"
+      ]
+    },
+    {
+      "geometry_ref": "geometry:common_path:PATH_VIS_A002_MOVEMENT_PATH",
+      "action_ref": "A002",
+      "primitive_ref": "VIS_A002_MOVEMENT_PATH",
+      "source_refs": [
+        "coach_input:span:32-43"
+      ]
+    }
+  ]
+}

@@ -214,7 +214,7 @@ def test_browser_generate_projects_ambiguous_and_complete_cases(browser_bundle: 
     assert complete["questions"]["active_question"] is None
     assert complete["questions"]["questions"] == []
     assert "ready" in complete["summary"]
-    assert "needs_input" in complete["summary"]
+    assert "geometria</dt><dd>ready" in complete["summary"]
 
     crossing = browser_bundle["crossing"]
     assert crossing["questionCount"] == "0"
@@ -222,7 +222,7 @@ def test_browser_generate_projects_ambiguous_and_complete_cases(browser_bundle: 
     assert crossing["questions"]["active_question"] is None
     assert crossing["questions"]["questions"] == []
     assert "ready" in crossing["summary"]
-    assert "needs_input" in crossing["summary"]
+    assert "geometria</dt><dd>partial" in crossing["summary"]
     for expected in ("primer jugador", "CE", "atac inicial", "INT_12", "jugador que encreua", "L", "espai objectiu", "INT_23"):
         assert expected in crossing["actions"]
 

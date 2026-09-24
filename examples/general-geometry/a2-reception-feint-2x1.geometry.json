@@ -1,0 +1,904 @@
+{
+  "$schema": "../../schema/traca.geometry.schema.v0.3.json",
+  "meta": {
+    "format": "TRACA_general_geometry",
+    "version": "0.3.0",
+    "case_id": "A2_RECEPTION_FEINT_2X1",
+    "source_revision": "fnv1a:7509ce20",
+    "status": "resolved",
+    "authority": "provisional_visual_policy",
+    "composition_fingerprint": "fnv1a:82a3f4c4",
+    "canonical_promotion": false,
+    "court_profile_ref": "IHF_INDOOR_HANDBALL_COURT_2025@1.0.0"
+  },
+  "court": {
+    "width_m": 20,
+    "half_length_m": 20,
+    "goal": {
+      "width_m": 3,
+      "height_m": 2,
+      "post_width_m": 0.08
+    },
+    "markings": {
+      "goal_area_radius_m": 6,
+      "goal_area_straight_m": 3,
+      "free_throw_distance_m": 9,
+      "free_throw_segment_m": 0.15,
+      "free_throw_gap_m": 0.15,
+      "penalty_line_distance_m": 7,
+      "penalty_line_length_m": 1,
+      "goalkeeper_line_distance_m": 4,
+      "goalkeeper_line_length_m": 0.15,
+      "throw_off_diameter_m": 4
+    },
+    "view_box": [
+      -0.8,
+      -1,
+      21.6,
+      21.8
+    ]
+  },
+  "layout_policy": {
+    "id": "generic_relational_layout_v0.3",
+    "version": "0.3.0",
+    "status": "provisional_render_policy",
+    "coordinate_system": "metres_origin_goal_line_left",
+    "attack_direction": "negative_y",
+    "notes": [
+      "Distribució derivada de delimitadors, espais, dependències d’acció i relacions numèriques.",
+      "Les distàncies són una política visual versionada i no coneixement tàctic."
+    ],
+    "decisions": [
+      {
+        "id": "LAYOUT_0001",
+        "type": "relational_delimiter_order",
+        "target_ref": "STATE_D1_S0",
+        "status": "provisional_visual_policy",
+        "position": [
+          6,
+          7.2
+        ],
+        "source_refs": [
+          "relation:delimiter:D1",
+          "coach_input:span:68-71",
+          "space:INT_12",
+          "canonical:interval:INT_12",
+          "docs/DOMAIN_MODEL.md#3-espais-i-intervals"
+        ]
+      },
+      {
+        "id": "LAYOUT_0002",
+        "type": "relational_delimiter_order",
+        "target_ref": "STATE_D2_S0",
+        "status": "provisional_visual_policy",
+        "position": [
+          10,
+          7.2
+        ],
+        "source_refs": [
+          "relation:delimiter:D2",
+          "coach_input:span:93-95",
+          "coach_input:span:68-71",
+          "space:INT_12",
+          "canonical:interval:INT_12",
+          "docs/DOMAIN_MODEL.md#3-espais-i-intervals",
+          "coach_input:span:120-123",
+          "space:INT_23",
+          "canonical:interval:INT_23"
+        ]
+      },
+      {
+        "id": "LAYOUT_0003",
+        "type": "relational_delimiter_order",
+        "target_ref": "STATE_D3_S0",
+        "status": "provisional_visual_policy",
+        "position": [
+          14,
+          7.2
+        ],
+        "source_refs": [
+          "relation:delimiter:D3",
+          "coach_input:span:165-167",
+          "coach_input:span:120-123",
+          "space:INT_23",
+          "canonical:interval:INT_23",
+          "docs/DOMAIN_MODEL.md#3-espais-i-intervals",
+          "coach_input:span:158-167"
+        ]
+      },
+      {
+        "id": "LAYOUT_0004",
+        "type": "space_exit_after_defensive_line",
+        "target_ref": "STATE_L_A003_EXIT",
+        "status": "provisional_visual_policy",
+        "position": [
+          12,
+          5.5
+        ],
+        "source_refs": [
+          "space:INT_23",
+          "coach_input:span:73-85",
+          "coach_input:span:120-123"
+        ]
+      },
+      {
+        "id": "LAYOUT_0005",
+        "type": "space_approach_anchor",
+        "target_ref": "STATE_L_RECEPTION_A002",
+        "status": "provisional_visual_policy",
+        "position": [
+          8,
+          10
+        ],
+        "source_refs": [
+          "space:INT_12",
+          "coach_input:span:3-27",
+          "coach_input:span:32-43",
+          "coach_input:span:68-71"
+        ]
+      },
+      {
+        "id": "LAYOUT_0006",
+        "type": "pass_sender_from_receiver",
+        "target_ref": "STATE_CE_S0",
+        "status": "provisional_visual_policy",
+        "position": [
+          11,
+          13
+        ],
+        "source_refs": [
+          "action:A001",
+          "coach_input:span:3-10"
+        ]
+      },
+      {
+        "id": "LAYOUT_0007",
+        "type": "reception_approach",
+        "target_ref": "STATE_L_S0",
+        "status": "provisional_visual_policy",
+        "position": [
+          5.6,
+          13
+        ],
+        "source_refs": [
+          "action:A002",
+          "coach_input:span:20-27",
+          "coach_input:span:3-27"
+        ]
+      },
+      {
+        "id": "LAYOUT_0008",
+        "type": "numerical_relation_participant",
+        "target_ref": "STATE_PV_S0",
+        "status": "provisional_visual_policy",
+        "position": [
+          15.25,
+          6.4
+        ],
+        "source_refs": [
+          "action:A004",
+          "coach_input:span:152-157",
+          "coach_input:span:145-157"
+        ]
+      }
+    ]
+  },
+  "zones": [],
+  "spaces": [
+    {
+      "id": "INT_12",
+      "kind": "relational_tactical_space",
+      "relation": {
+        "type": "between",
+        "delimiter_refs": [
+          "D1",
+          "D2"
+        ]
+      },
+      "anchor": [
+        8,
+        7.2
+      ],
+      "calculation_region": [
+        [
+          7.55,
+          6.75
+        ],
+        [
+          8.45,
+          6.75
+        ],
+        [
+          8.45,
+          7.65
+        ],
+        [
+          7.55,
+          7.65
+        ]
+      ],
+      "render_policy": "hidden",
+      "source_refs": [
+        "coach_input:span:68-71",
+        "canonical:interval:INT_12",
+        "docs/DOMAIN_MODEL.md#3-espais-i-intervals"
+      ]
+    },
+    {
+      "id": "INT_23",
+      "kind": "relational_tactical_space",
+      "relation": {
+        "type": "between",
+        "delimiter_refs": [
+          "D2",
+          "D3"
+        ]
+      },
+      "anchor": [
+        12,
+        7.2
+      ],
+      "calculation_region": [
+        [
+          11.55,
+          6.75
+        ],
+        [
+          12.45,
+          6.75
+        ],
+        [
+          12.45,
+          7.65
+        ],
+        [
+          11.55,
+          7.65
+        ]
+      ],
+      "render_policy": "hidden",
+      "source_refs": [
+        "coach_input:span:120-123",
+        "canonical:interval:INT_23",
+        "docs/DOMAIN_MODEL.md#3-espais-i-intervals"
+      ]
+    }
+  ],
+  "objects": [],
+  "phases": [],
+  "entities": [
+    {
+      "id": "CE",
+      "kind": "attacker",
+      "label": "CE",
+      "position": [
+        11,
+        13
+      ],
+      "state_ref": "STATE_CE_S0",
+      "status": "derived",
+      "presence": "explicit",
+      "source_refs": [
+        "coach_input:span:3-10"
+      ]
+    },
+    {
+      "id": "D2",
+      "kind": "defender",
+      "label": "D2",
+      "position": [
+        10,
+        7.2
+      ],
+      "state_ref": "STATE_D2_S0",
+      "status": "derived",
+      "presence": "explicit",
+      "source_refs": [
+        "coach_input:span:93-95",
+        "coach_input:span:68-71",
+        "space:INT_12",
+        "canonical:interval:INT_12",
+        "docs/DOMAIN_MODEL.md#3-espais-i-intervals",
+        "coach_input:span:120-123",
+        "space:INT_23",
+        "canonical:interval:INT_23"
+      ]
+    },
+    {
+      "id": "D3",
+      "kind": "defender",
+      "label": "D3",
+      "position": [
+        14,
+        7.2
+      ],
+      "state_ref": "STATE_D3_S0",
+      "status": "derived",
+      "presence": "explicit",
+      "source_refs": [
+        "coach_input:span:165-167",
+        "coach_input:span:120-123",
+        "space:INT_23",
+        "canonical:interval:INT_23",
+        "docs/DOMAIN_MODEL.md#3-espais-i-intervals",
+        "coach_input:span:158-167"
+      ]
+    },
+    {
+      "id": "L",
+      "kind": "attacker",
+      "label": "L",
+      "position": [
+        5.6,
+        13
+      ],
+      "state_ref": "STATE_L_S0",
+      "status": "derived",
+      "presence": "explicit",
+      "source_refs": [
+        "coach_input:span:20-27",
+        "coach_input:span:3-27"
+      ]
+    },
+    {
+      "id": "PV",
+      "kind": "pivot",
+      "label": "PV",
+      "position": [
+        15.25,
+        6.4
+      ],
+      "state_ref": "STATE_PV_S0",
+      "status": "derived",
+      "presence": "explicit",
+      "source_refs": [
+        "coach_input:span:152-157",
+        "coach_input:span:145-157"
+      ]
+    }
+  ],
+  "participant_states": [
+    {
+      "id": "STATE_CE_S0",
+      "participant_ref": "CE",
+      "state_key": "S0",
+      "phase_ref": null,
+      "space_ref": null,
+      "functional_position_ref": null,
+      "position": [
+        11,
+        13
+      ],
+      "status": "current",
+      "authority": "coach_explicit_input",
+      "source_refs": [
+        "coach_input:span:3-10"
+      ],
+      "layout_decision_ref": "LAYOUT_0006",
+      "visibility": "normal"
+    },
+    {
+      "id": "STATE_D1_S0",
+      "participant_ref": "D1",
+      "state_key": "S0",
+      "phase_ref": null,
+      "space_ref": null,
+      "functional_position_ref": null,
+      "position": [
+        6,
+        7.2
+      ],
+      "status": "current",
+      "authority": "derived_from_validated_rule",
+      "source_refs": [
+        "coach_input:span:68-71",
+        "space:INT_12",
+        "canonical:interval:INT_12",
+        "docs/DOMAIN_MODEL.md#3-espais-i-intervals"
+      ],
+      "layout_decision_ref": "LAYOUT_0001",
+      "visibility": "control"
+    },
+    {
+      "id": "STATE_D2_S0",
+      "participant_ref": "D2",
+      "state_key": "S0",
+      "phase_ref": null,
+      "space_ref": null,
+      "functional_position_ref": null,
+      "position": [
+        10,
+        7.2
+      ],
+      "status": "current",
+      "authority": "coach_explicit_input",
+      "source_refs": [
+        "coach_input:span:93-95",
+        "coach_input:span:68-71",
+        "space:INT_12",
+        "canonical:interval:INT_12",
+        "docs/DOMAIN_MODEL.md#3-espais-i-intervals",
+        "coach_input:span:120-123",
+        "space:INT_23",
+        "canonical:interval:INT_23"
+      ],
+      "layout_decision_ref": "LAYOUT_0002",
+      "visibility": "normal"
+    },
+    {
+      "id": "STATE_D3_S0",
+      "participant_ref": "D3",
+      "state_key": "S0",
+      "phase_ref": null,
+      "space_ref": null,
+      "functional_position_ref": null,
+      "position": [
+        14,
+        7.2
+      ],
+      "status": "current",
+      "authority": "coach_explicit_input",
+      "source_refs": [
+        "coach_input:span:165-167",
+        "coach_input:span:120-123",
+        "space:INT_23",
+        "canonical:interval:INT_23",
+        "docs/DOMAIN_MODEL.md#3-espais-i-intervals",
+        "coach_input:span:158-167"
+      ],
+      "layout_decision_ref": "LAYOUT_0003",
+      "visibility": "normal"
+    },
+    {
+      "id": "STATE_L_A003_EXIT",
+      "participant_ref": "L",
+      "state_key": "A003:exit",
+      "phase_ref": null,
+      "space_ref": "INT_23",
+      "functional_position_ref": null,
+      "position": [
+        12,
+        5.5
+      ],
+      "status": "future",
+      "authority": "coach_explicit_input",
+      "source_refs": [
+        "coach_input:span:73-85",
+        "coach_input:span:120-123"
+      ],
+      "layout_decision_ref": "LAYOUT_0004",
+      "visibility": "normal"
+    },
+    {
+      "id": "STATE_L_RECEPTION_A002",
+      "participant_ref": "L",
+      "state_key": "RECEPTION:A002",
+      "phase_ref": null,
+      "space_ref": "INT_12",
+      "functional_position_ref": null,
+      "position": [
+        8,
+        10
+      ],
+      "status": "future",
+      "authority": "coach_explicit_input",
+      "source_refs": [
+        "coach_input:span:3-27",
+        "coach_input:span:32-43",
+        "coach_input:span:68-71"
+      ],
+      "layout_decision_ref": "LAYOUT_0005",
+      "visibility": "normal"
+    },
+    {
+      "id": "STATE_L_S0",
+      "participant_ref": "L",
+      "state_key": "S0",
+      "phase_ref": null,
+      "space_ref": null,
+      "functional_position_ref": null,
+      "position": [
+        5.6,
+        13
+      ],
+      "status": "current",
+      "authority": "coach_explicit_input",
+      "source_refs": [
+        "coach_input:span:20-27",
+        "coach_input:span:3-27"
+      ],
+      "layout_decision_ref": "LAYOUT_0007",
+      "visibility": "normal"
+    },
+    {
+      "id": "STATE_PV_S0",
+      "participant_ref": "PV",
+      "state_key": "S0",
+      "phase_ref": null,
+      "space_ref": null,
+      "functional_position_ref": null,
+      "position": [
+        15.25,
+        6.4
+      ],
+      "status": "current",
+      "authority": "coach_explicit_input",
+      "source_refs": [
+        "coach_input:span:152-157",
+        "coach_input:span:145-157"
+      ],
+      "layout_decision_ref": "LAYOUT_0008",
+      "visibility": "normal"
+    }
+  ],
+  "common_paths": [
+    {
+      "id": "PATH_VIS_A001_PASS_PATH",
+      "kind": "pass",
+      "action_type": "pass",
+      "segments": [
+        {
+          "type": "line",
+          "start": [
+            11,
+            13
+          ],
+          "end": [
+            8,
+            10
+          ]
+        }
+      ],
+      "functional_points": [],
+      "source_refs": [
+        "coach_input:span:3-27"
+      ],
+      "action_ref": "A001",
+      "ball_ref": "B1",
+      "from_participant_ref": "CE",
+      "from_state_ref": "STATE_CE_S0",
+      "to_participant_ref": "L",
+      "to_state_ref": "STATE_L_RECEPTION_A002",
+      "anchor_mode": "symbol_perimeter"
+    },
+    {
+      "id": "PATH_VIS_A002_MOVEMENT_PATH",
+      "kind": "movement_without_ball",
+      "action_type": "movement",
+      "segments": [
+        {
+          "type": "line",
+          "start": [
+            5.6,
+            13
+          ],
+          "end": [
+            8,
+            10
+          ]
+        }
+      ],
+      "functional_points": [],
+      "source_refs": [
+        "coach_input:span:32-43",
+        "coach_input:span:68-71"
+      ],
+      "action_ref": "A002",
+      "actor_ref": "L",
+      "from_state_ref": "STATE_L_S0",
+      "to_state_ref": "STATE_L_RECEPTION_A002"
+    },
+    {
+      "id": "PATH_VIS_A003_FEINT_PATH",
+      "kind": "feint",
+      "action_type": "movement",
+      "actor_ref": "L",
+      "from_state_ref": "STATE_L_RECEPTION_A002",
+      "to_state_ref": "STATE_L_A003_EXIT",
+      "segments": [
+        {
+          "type": "line",
+          "start": [
+            8,
+            10
+          ],
+          "end": [
+            9.72,
+            7.62
+          ]
+        },
+        {
+          "type": "line",
+          "start": [
+            9.72,
+            7.62
+          ],
+          "end": [
+            11.15,
+            6.48
+          ]
+        },
+        {
+          "type": "line",
+          "start": [
+            11.15,
+            6.48
+          ],
+          "end": [
+            12,
+            5.5
+          ]
+        }
+      ],
+      "functional_points": [
+        {
+          "id": "PATH_VIS_A003_FEINT_PATH_COMMITMENT",
+          "role": "commitment",
+          "position": [
+            9.72,
+            7.62
+          ]
+        },
+        {
+          "id": "PATH_VIS_A003_FEINT_PATH_DIRECTION_BREAK",
+          "role": "direction_break",
+          "position": [
+            9.72,
+            7.62
+          ]
+        },
+        {
+          "id": "PATH_VIS_A003_FEINT_PATH_EXIT",
+          "role": "exit",
+          "position": [
+            11.15,
+            6.48
+          ]
+        }
+      ],
+      "opponent_ref": "D2",
+      "initial_space_ref": "INT_12",
+      "target_space_ref": "INT_23",
+      "source_refs": [
+        "coach_input:span:73-85",
+        "coach_input:span:120-123"
+      ],
+      "action_ref": "A003"
+    }
+  ],
+  "branches": [],
+  "dependencies": [
+    {
+      "id": "DEP_STATE_CE_S0",
+      "trigger_ref": "geometry:participant_state:STATE_CE_S0",
+      "effect_refs": [
+        "geometry:entity:CE",
+        "geometry:common_path:PATH_VIS_A001_PASS_PATH"
+      ],
+      "rule": "state_drives_geometry"
+    },
+    {
+      "id": "DEP_STATE_D2_S0",
+      "trigger_ref": "geometry:participant_state:STATE_D2_S0",
+      "effect_refs": [
+        "geometry:entity:D2"
+      ],
+      "rule": "state_drives_geometry"
+    },
+    {
+      "id": "DEP_STATE_D3_S0",
+      "trigger_ref": "geometry:participant_state:STATE_D3_S0",
+      "effect_refs": [
+        "geometry:entity:D3"
+      ],
+      "rule": "state_drives_geometry"
+    },
+    {
+      "id": "DEP_STATE_L_S0",
+      "trigger_ref": "geometry:participant_state:STATE_L_S0",
+      "effect_refs": [
+        "geometry:entity:L",
+        "geometry:common_path:PATH_VIS_A002_MOVEMENT_PATH"
+      ],
+      "rule": "state_drives_geometry"
+    },
+    {
+      "id": "DEP_STATE_PV_S0",
+      "trigger_ref": "geometry:participant_state:STATE_PV_S0",
+      "effect_refs": [
+        "geometry:entity:PV"
+      ],
+      "rule": "state_drives_geometry"
+    },
+    {
+      "id": "DEP_STATE_L_RECEPTION_A002",
+      "trigger_ref": "geometry:participant_state:STATE_L_RECEPTION_A002",
+      "effect_refs": [
+        "geometry:common_path:PATH_VIS_A001_PASS_PATH",
+        "geometry:common_path:PATH_VIS_A002_MOVEMENT_PATH",
+        "geometry:common_path:PATH_VIS_A003_FEINT_PATH"
+      ],
+      "rule": "state_drives_geometry"
+    },
+    {
+      "id": "DEP_STATE_L_A003_EXIT",
+      "trigger_ref": "geometry:participant_state:STATE_L_A003_EXIT",
+      "effect_refs": [
+        "geometry:common_path:PATH_VIS_A003_FEINT_PATH"
+      ],
+      "rule": "state_drives_geometry"
+    }
+  ],
+  "obligations": [
+    {
+      "id": "OBLIGATION_PRIMITIVE_VIS_A001_PASS_PATH",
+      "kind": "visual_primitive",
+      "action_ref": "A001",
+      "target_ref": "VIS_A001_PASS_PATH",
+      "required": true,
+      "status": "resolved",
+      "geometry_refs": [
+        "geometry:common_path:PATH_VIS_A001_PASS_PATH"
+      ],
+      "source_refs": [
+        "coach_input:span:3-27"
+      ]
+    },
+    {
+      "id": "OBLIGATION_PRIMITIVE_VIS_A002_MOVEMENT_PATH",
+      "kind": "visual_primitive",
+      "action_ref": "A002",
+      "target_ref": "VIS_A002_MOVEMENT_PATH",
+      "required": true,
+      "status": "resolved",
+      "geometry_refs": [
+        "geometry:common_path:PATH_VIS_A002_MOVEMENT_PATH"
+      ],
+      "source_refs": [
+        "coach_input:span:32-43",
+        "coach_input:span:68-71"
+      ]
+    },
+    {
+      "id": "OBLIGATION_PRIMITIVE_VIS_A003_FEINT_PATH",
+      "kind": "visual_primitive",
+      "action_ref": "A003",
+      "target_ref": "VIS_A003_FEINT_PATH",
+      "required": true,
+      "status": "resolved",
+      "geometry_refs": [
+        "geometry:common_path:PATH_VIS_A003_FEINT_PATH"
+      ],
+      "source_refs": [
+        "coach_input:span:73-85",
+        "coach_input:span:120-123"
+      ]
+    },
+    {
+      "id": "OBLIGATION_RECEPTION_A002",
+      "kind": "shared_reception_state",
+      "action_ref": "A002",
+      "target_ref": "STATE_L_RECEPTION_A002",
+      "required": true,
+      "status": "resolved",
+      "geometry_refs": [
+        "geometry:participant_state:STATE_L_RECEPTION_A002"
+      ],
+      "source_refs": [
+        "coach_input:span:32-43",
+        "coach_input:span:68-71"
+      ]
+    },
+    {
+      "id": "OBLIGATION_RELATION_A004",
+      "kind": "numerical_relation_state",
+      "action_ref": "A004",
+      "target_ref": "A004",
+      "required": true,
+      "status": "resolved",
+      "geometry_refs": [
+        "geometry:participant_state:STATE_L_A003_EXIT",
+        "geometry:participant_state:STATE_PV_S0",
+        "geometry:participant_state:STATE_D3_S0"
+      ],
+      "source_refs": [
+        "coach_input:span:141-144"
+      ]
+    },
+    {
+      "id": "OBLIGATION_CONSTRAINT_CONSTRAINT_A003_SURPASSES",
+      "kind": "surpasses_defensive_line",
+      "action_ref": "A003",
+      "target_ref": "CONSTRAINT_A003_SURPASSES",
+      "required": true,
+      "status": "resolved",
+      "geometry_refs": [
+        "geometry:participant_state:STATE_L_A003_EXIT"
+      ],
+      "source_refs": [
+        "coach_input:span:73-85",
+        "coach_input:span:120-123"
+      ]
+    }
+  ],
+  "diagnostics": [],
+  "result": {
+    "status": "ready",
+    "obligations_total": 6,
+    "obligations_resolved": 6,
+    "obligations_pending": 0,
+    "incompatible_count": 0
+  },
+  "traceability": [
+    {
+      "geometry_ref": "geometry:entity:CE",
+      "source_refs": [
+        "coach_input:span:3-10"
+      ]
+    },
+    {
+      "geometry_ref": "geometry:entity:D2",
+      "source_refs": [
+        "coach_input:span:93-95",
+        "coach_input:span:68-71",
+        "space:INT_12",
+        "canonical:interval:INT_12",
+        "docs/DOMAIN_MODEL.md#3-espais-i-intervals",
+        "coach_input:span:120-123",
+        "space:INT_23",
+        "canonical:interval:INT_23"
+      ]
+    },
+    {
+      "geometry_ref": "geometry:entity:D3",
+      "source_refs": [
+        "coach_input:span:165-167",
+        "coach_input:span:120-123",
+        "space:INT_23",
+        "canonical:interval:INT_23",
+        "docs/DOMAIN_MODEL.md#3-espais-i-intervals",
+        "coach_input:span:158-167"
+      ]
+    },
+    {
+      "geometry_ref": "geometry:entity:L",
+      "source_refs": [
+        "coach_input:span:20-27",
+        "coach_input:span:3-27"
+      ]
+    },
+    {
+      "geometry_ref": "geometry:entity:PV",
+      "source_refs": [
+        "coach_input:span:152-157",
+        "coach_input:span:145-157"
+      ]
+    },
+    {
+      "geometry_ref": "geometry:common_path:PATH_VIS_A001_PASS_PATH",
+      "action_ref": "A001",
+      "primitive_ref": "VIS_A001_PASS_PATH",
+      "source_refs": [
+        "coach_input:span:3-27"
+      ]
+    },
+    {
+      "geometry_ref": "geometry:common_path:PATH_VIS_A002_MOVEMENT_PATH",
+      "action_ref": "A002",
+      "primitive_ref": "VIS_A002_MOVEMENT_PATH",
+      "source_refs": [
+        "coach_input:span:32-43",
+        "coach_input:span:68-71"
+      ]
+    },
+    {
+      "geometry_ref": "geometry:common_path:PATH_VIS_A003_FEINT_PATH",
+      "action_ref": "A003",
+      "primitive_ref": "VIS_A003_FEINT_PATH",
+      "source_refs": [
+        "coach_input:span:73-85",
+        "coach_input:span:120-123"
+      ]
+    }
+  ]
+}

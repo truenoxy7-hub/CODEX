@@ -1,18 +1,20 @@
-# Contracte de geometria derivada v0.2
+# Contracte de geometria derivada v0.3
 
 ## Propòsit
 
-Aquesta capa converteix constraints espacials resolubles en metres de pista
-sense modificar la semàntica ni les relacions d'origen. UVOF015 continua sent
-el primer resolver canònic complet; el compositor global incorpora un resolver
-genèric conservador per als casos amb posicions o àncores explícites.
+Aquesta capa converteix relacions espacials resolubles en metres de pista sense
+modificar la semàntica ni les relacions d'origen. El resolver general v0.3
+resol la primera cadena executable sense coordenades manuals: passada,
+recepció en carrera, finta amb canvi de direcció i relació oberta de 2x1.
+UVOF015 es conserva com a cas canònic i entra al mateix contracte mitjançant un
+adaptador explícit, sense reescriure el seu artefacte històric v0.2.
 
 ```text
 semàntica validada
   → TacticalIR / relacions espacials v0.3
   → CompositionPlan + constraints
   → composition preflight ready
-  → geometria derivada v0.2
+  → geometria derivada v0.3 + obligacions de representació
   → renderer SVG literal
 ```
 
@@ -30,12 +32,35 @@ i 4 m.
 - cap alternativa decisional queda seleccionada a `geometry.json`;
 - les dotze alternatives d'UVOF015 es resolen separadament;
 - cada entitat, estat i trajectòria apunta a la font que la justifica;
-- la política visual provisional es declara explícitament.
+- la política visual provisional es declara explícitament;
 - `composition_status` i `geometry_status` es calculen separadament;
-- el resolver genèric no distribueix participants en una graella per rol,
-  índex o exercici;
+- el resolver general no consulta `exercise_id` ni distribueix participants en
+  una graella per rol o índex;
+- cada primitiva visual crea una obligació comprovable i cada obligació queda
+  `satisfied`, `unsatisfied` o `conflicting`;
 - si una relació qualitativa no determina una posició, retorna `needs_input`
-  o `partial` i conserva la composició.
+  o `partial`, emet un diagnòstic accionable i conserva la composició;
+- una àncora manual incompatible amb una relació tàctica es declara com a
+  conflicte: mai no guanya silenciosament.
+
+## Política relacional provisional
+
+La posició és una conseqüència del graf, no una entrada obligatòria. El
+resolver ordena els delimitadors defensius a partir dels intervals `between`,
+els situa sobre una línia defensiva declarada com a política provisional i
+calcula els centres dels espais. A partir d'aquests anchors:
+
+- `ATTACKS` col·loca l'estat d'aproximació davant de l'espai;
+- la passada enllaça els estats de l'emissor i del receptor;
+- la recepció reutilitza el mateix estat de destí de la passada;
+- `CONTIGUOUS`, `OPPOSES` i la sortida de la finta determinen aproximació,
+  compromís del defensor, trencament de direcció i sortida;
+- `NUMERICAL_RELATION` conserva tots els participants de l'acció i obre
+  visualment el 2x1, però no inventa una resolució final.
+
+Les coordenades resultants no són coneixement tàctic. Cada decisió queda a
+`meta.policy.decisions` amb la relació que la justifica i es pot substituir
+després d'una validació de l'entrenador.
 
 ## Espais relacionals i límits físics
 
@@ -73,12 +98,26 @@ els efectes derivats, els enumera a l'historial i no crea correccions noves.
 
 Les trajectòries canòniques utilitzen segments `line` i `cubic`, amb inici,
 final i controls explícits. El resolver —no el renderer— determina la corba.
-La finta d'UVOF015 combina `cubic → line → cubic` i conserva un punt funcional
-`direction_break`; no es pot substituir per un suavitzat genèric.
+La finta general conserva tres trams funcionals (`approach`,
+`direction_break`, `exit`) i punts de compromís i trencament. L'adaptador
+d'UVOF015 conserva literalment els seus trams `cubic → line → cubic`; cap dels
+dos casos es pot substituir per un suavitzat genèric.
 
 Les passades s'enllacen als estats dels participants. El renderer en retalla
 només la presentació al perímetre dels símbols (`symbol_perimeter`), sense
 alterar la geometria tàctica ni guardar extrems flotants.
+
+## Obligacions i diagnòstics
+
+`obligations` és la prova executable que la figura diu tot el que exigeix la
+composició. Com a mínim cobreix cada primitiva, l'estat compartit de recepció,
+la relació numèrica i qualsevol superació de línia defensiva. `result.summary`
+compta les obligacions satisfetes, pendents i en conflicte; `diagnostics`
+explica per què una obligació no s'ha pogut representar.
+
+Una geometria és `ready` només quan no hi ha obligacions pendents ni
+conflictes. Pot ser `partial`, `needs_input` o `blocked` sense degradar ni
+modificar el `CompositionPlan`.
 
 ## Límits
 
@@ -87,12 +126,17 @@ lectura simètrica per a l'MVP. No són coneixement tàctic validat. El resolver
 pot revisar-les sempre que preservi relacions, límits físics, contigüitats,
 línies defensives i alternatives. El renderer no pot inventar geometria.
 
-El resolver genèric actual resol línies entre estats posicionats, punts
-derivats d’àncores explícites i centres d’intervals amb dos delimitadors ja
-posicionats. L’encreuament no té geometria universal; la finta necessita
-waypoints que preservin aproximació, trencament i sortida; el lliscament de
-pivot necessita un destí explícit. Un pla `ready` pot, per tant, tenir
+El resolver general actual cobreix passada, recepció en carrera, finta i
+relació numèrica oberta quan el graf identifica participants, espais i
+delimitadors. No decideix a quin jugador acaba una superioritat, no afegeix
+una passada o un llançament final i no converteix un delimitador estructural en
+oponent actiu. L’encreuament no té encara geometria universal i el lliscament
+de pivot necessita un destí resoluble. Un pla `ready` pot, per tant, tenir
 geometria `partial` o `needs_input`.
+
+Els casos reproduïbles A1–A3 són a `examples/general-geometry/`; el generador
+`scripts/generate_general_geometry_examples.js` produeix TacticalIR,
+geometria v0.3 i SVG a partir del mateix pipeline de la interfície.
 
 ## Còpia de treball editable
 

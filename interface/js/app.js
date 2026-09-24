@@ -176,6 +176,7 @@
     elements.redo.disabled = !snapshot.redoStack.length;
     elements.reset.disabled = !snapshot.corrections.length;
     if (!geometry) return;
+    if (!elements.courtStage.ownerDocument || typeof elements.courtStage.ownerDocument.createElementNS !== "function") return;
     window.TRACA_RENDERER.render(elements.courtStage, {
       geometry,
       visualGrammar: snapshot.workingVisualGrammar,

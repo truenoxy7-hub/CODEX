@@ -80,7 +80,7 @@ process.stdout.write(JSON.stringify({participants:ir.participants,spaces:ir.spac
     assert result["feint"]["initial_space_ref"] == "INT_12"
     assert result["feint"]["target_space_ref"] == "INT_23"
     assert result["composition"] == "ready"
-    assert result["geometry"] == "needs_input"
+    assert result["geometry"] == "ready"
 
 
 def test_later_explicit_mention_promotes_same_d1_identity_without_duplicate() -> None:
@@ -161,18 +161,17 @@ process.stdout.write(JSON.stringify({status:composed.composition_status,coverage
     assert result["passTarget"] == result["reception"] == result["feintStart"]
 
 
-def test_main_case_geometry_remains_independent_and_does_not_invent_coordinates() -> None:
+def test_main_case_geometry_is_derived_without_mutating_tactical_input() -> None:
     result = _run_node("""
 const ir=Provider.buildTacticalIR(mainCase,[],{case_id:'MAIN'});
 const composed=Composer.compose({tacticalIR:ir,courtProfile:profile});
 process.stdout.write(JSON.stringify({composition:composed.composition_status,geometryStatus:composed.geometry_status,geometry:composed.geometry,positions:ir.participants.filter(item=>item.position).map(item=>item.id)}));
 """)
-    assert result == {
-        "composition": "ready",
-        "geometryStatus": "needs_input",
-        "geometry": None,
-        "positions": [],
-    }
+    assert result["composition"] == "ready"
+    assert result["geometryStatus"] == "ready"
+    assert result["geometry"]["meta"]["authority"] == "provisional_visual_policy"
+    assert result["geometry"]["result"]["obligations_pending"] == 0
+    assert result["positions"] == []
 
 
 def test_diagnostic_projects_reception_space_and_human_geometry_reason() -> None:
@@ -186,6 +185,6 @@ process.stdout.write(JSON.stringify({summary:diagnostic.composition,reception:di
     assert result["feint"]["initialSpace"] == ["INT_12"]
     assert result["feint"]["finalSpace"] == ["INT_23"]
     assert result["summary"]["status"] == "ready"
-    assert result["summary"]["geometry"] == "needs_input"
-    assert any("INT_12 és entre D1 i D2" in reason for reason in result["summary"]["reasons"])
+    assert result["summary"]["geometry"] == "ready"
+    assert not any("Falta una relació espacial" in reason for reason in result["summary"]["reasons"])
     assert result["preflight"]["status"] == "ready"

@@ -29,12 +29,12 @@ El registre actual inclou:
 |---|---|---|---|
 | `movement` | moviment, recuperació | estats origen/destí + trajectòria | amb posició o espai resoluble |
 | `dribble` | desplaçament amb bot | moviment + possessió estable | amb origen/destí resolts |
-| `pass` | passada | emissor, receptor, pilota i estat receptor | amb dos estats posicionats |
-| `reception` | recepció | comparteix l’estat d’arribada de la passada | condicional; moviment si és en carrera |
+| `pass` | passada | emissor, receptor, pilota i estat receptor | relacional; resol emissor i receptor des del graf |
+| `reception` | recepció | comparteix l’estat d’arribada de la passada | relacional; moviment si és en carrera |
 | `shot` | llançament/finalització | posseïdor → porteria | amb posició de llançament |
-| `feint` | finta/1x1 | atac inicial, oposició, contigüitat i sortida | parcial; exigeix waypoints funcionals explícits |
+| `feint` | finta/1x1 | atac inicial, oposició, contigüitat i sortida | relacional; conserva aproximació, trencament i sortida |
 | `block` | bloqueig/pantalla | relació bloquejador-defensor | amb posicions relacionals |
-| `numerical_relation` | 2x1, 2x2, 3x2 | participants + relació; sense glif propi | relacional, no crea coordenades |
+| `numerical_relation` | 2x1, 2x2, 3x2 | participants + relació; sense glif propi | relacional; col·loca participants però no inventa resolució final |
 | `permutation` | permuta | intercanvi de posicions funcionals | si les posicions inicials són resoltes |
 | `crossing` | encreuament | primer actor, actor que encreua, atac inicial contextual i espai objectiu | no resolta universalment |
 | `pivot_slide` | lliscament de pivot | moviment proper a 6 m | només amb destí explícit |
@@ -86,13 +86,14 @@ incompatible produeix conflicte en lloc de ser sobreescrit.
 `composition_status` i `geometry_status` són independents. Un pla pot estar `ready` i la geometria `needs_input`.
 
 En particular, saber que `INT_12 = entre(D1, D2)` és suficient per completar la
-composició relacional. Sense posicions justificades de `D1` i `D2`, la geometria
-continua `needs_input`; el compositor no crea coordenades per eliminar aquest
-buit.
+composició relacional. El resolver geomètric v0.3 pot ordenar delimitadors i
+calcular l'interval a partir del graf connectat i de la seva política visual
+provisional. Si el graf queda desconnectat o ambigu, la geometria continua
+`needs_input`; el compositor no crea fets per eliminar aquest buit.
 
 ## Autoritat i no-invenció
 
-Un slot obligatori només es pot omplir des d’entrada explícita, corpus/relacions validats, coneixement local validat o una regla validada. Un candidat pot aparèixer com a suggeriment, però no decideix. El resolutor geomètric només usa posicions explícites, posicions funcionals ja resoltes o l’àncora d’un espai justificat. No existeix cap graella arbitrària per rol o índex.
+Un slot obligatori només es pot omplir des d’entrada explícita, corpus/relacions validats, coneixement local validat o una regla validada. Un candidat pot aparèixer com a suggeriment, però no decideix. El resolutor geomètric usa posicions explícites compatibles o posicions derivades de relacions connectades i en registra la política provisional. No existeix cap graella arbitrària per rol, índex o exercici.
 
 ## Traçabilitat i determinisme
 
