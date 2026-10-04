@@ -1,21 +1,35 @@
 (function (root, factory) {
-  const utils = typeof module === "object" && module.exports ? require("./utils.js") : root.TRACA_UTILS;
-  const api = factory(utils);
+  const isNode = typeof module === "object" && module.exports;
+  const utils = isNode ? require("./utils.js") : root.TRACA_UTILS;
+  const courtGeometry = isNode ? require("./court-geometry.js") : root.TRACA_COURT_GEOMETRY;
+  const api = factory(utils, courtGeometry);
   if (typeof module === "object" && module.exports) module.exports = api;
   root.TRACA_GENERIC_GEOMETRY_RESOLVER = api;
-})(typeof globalThis !== "undefined" ? globalThis : this, function (utils) {
+})(typeof globalThis !== "undefined" ? globalThis : this, function (utils, courtGeometry) {
   "use strict";
 
-  const GEOMETRY_VERSION = "0.3.0";
-  const SCHEMA_REF = "../../schema/traca.geometry.schema.v0.3.json";
+  const GEOMETRY_VERSION = "0.4.0";
+  const SCHEMA_REF = "../../schema/traca.geometry.schema.v0.4.json";
   const DEFAULT_POLICY = Object.freeze({
-    id: "generic_relational_layout_v0.3",
-    version: "0.3.0",
-    defensive_line_y: 7.2,
-    approach_offset_y: 2.8,
-    exit_offset_y: 1.7,
+    id: "generic_relational_layout_v0.4",
+    version: "0.4.0",
+    defensive_area_clearance_m: 1.5,
+    minimum_defensive_depth_m: 6.8,
+    reception_free_throw_offset_m: 0.9,
+    ground_symbol_clearance_m: 0.48,
+    surpass_depth_m: 0.5,
     staging_offset_y: 3.0,
-    relation_separation_x: 1.25
+    feint_contact_distance_m: 0.9,
+    feint_break_lateral_m: 1.05,
+    feint_break_depth_m: 0.4,
+    feint_bypass_depth_m: 0.9,
+    feint_exit_lateral_m: 0.8,
+    feint_min_turn_degrees: 28,
+    defender_path_clearance_m: 0.58,
+    relation_support_distance_m: 1.45,
+    relation_min_attacker_separation_m: 1.4,
+    relation_max_defender_distance_m: 3.4,
+    ball_offset_m: 0.48
   });
 
   function rounded(point) { return point.map((value) => Number(Number(value).toFixed(3))); }
@@ -25,13 +39,13 @@
   function unique(values) { return [...new Set((values || []).filter(Boolean))]; }
   function sourceRefs(item) { return unique(item && item.source_refs || ["derived:generic_geometry"]); }
 
-  function court(profile) {
+  function court(profile, viewBox) {
     return {
       width_m: profile.court.width_m,
       half_length_m: profile.court.half_length_m,
       goal: utils.deepClone(profile.goal),
       markings: utils.deepClone(profile.markings),
-      view_box: [-0.8, -1.0, profile.court.width_m + 1.6, profile.court.half_length_m + 1.8]
+      view_box: viewBox || [-0.8, -1.0, profile.court.width_m + 1.6, profile.court.half_length_m + 1.8]
     };
   }
 
@@ -140,16 +154,52 @@
       const step = delimiterOrder.length > 1 ? span / (delimiterOrder.length - 1) : 0;
       delimiterOrder.forEach((ref, index) => {
         const state = stateForParticipant(ref);
-        assign(state, [start + step * index, policy.defensive_line_y], "relational_delimiter_order", [`relation:delimiter:${ref}`]);
+        const x = start + step * index;
+        const y = Math.max(
+          policy.minimum_defensive_depth_m,
+          courtGeometry.goalAreaBoundaryY(profile, x) + policy.defensive_area_clearance_m
+        );
+        assign(state, [x, y], "court_aware_relational_delimiter", [`relation:delimiter:${ref}`, `court:${profile.meta && profile.meta.id || "profile"}`]);
       });
     }
 
     const spaceAnchors = new Map();
+    const spaceRegions = new Map();
     spaces.forEach((space) => {
-      if (Array.isArray(space.anchor_position)) { spaceAnchors.set(space.id, space.anchor_position.slice()); return; }
+      if (Array.isArray(space.anchor_position)) spaceAnchors.set(space.id, space.anchor_position.slice());
       const refs = delimiterRefs(space);
       const points = refs.map(positionOfRef).filter(Boolean);
-      if (refs.length === 2 && points.length === 2) spaceAnchors.set(space.id, rounded([(points[0][0] + points[1][0]) / 2, (points[0][1] + points[1][1]) / 2]));
+      if (!spaceAnchors.has(space.id) && refs.length === 2 && points.length === 2) {
+        spaceAnchors.set(space.id, rounded([(points[0][0] + points[1][0]) / 2, (points[0][1] + points[1][1]) / 2]));
+      }
+      const anchor = spaceAnchors.get(space.id);
+      if (!anchor) return;
+      const xValues = points.length === 2 ? points.map((point) => point[0]) : [anchor[0] - 1, anchor[0] + 1];
+      const left = Math.min(...xValues) + 0.38;
+      const right = Math.max(...xValues) - 0.38;
+      const defenseY = points.length ? points.reduce((total, point) => total + point[1], 0) / points.length : anchor[1];
+      const reception = rounded([
+        anchor[0],
+        Math.max(courtGeometry.freeThrowBoundaryY(profile, anchor[0]) + policy.reception_free_throw_offset_m, defenseY + 2)
+      ]);
+      const threat = rounded([anchor[0], defenseY + policy.feint_contact_distance_m]);
+      const exit = rounded([
+        anchor[0],
+        Math.max(
+          courtGeometry.minimumGroundCenterY(profile, anchor[0], policy.ground_symbol_clearance_m),
+          defenseY - policy.surpass_depth_m
+        )
+      ]);
+      spaceRegions.set(space.id, {
+        calculation_region: [
+          rounded([left, courtGeometry.minimumGroundCenterY(profile, left, policy.ground_symbol_clearance_m)]),
+          rounded([right, courtGeometry.minimumGroundCenterY(profile, right, policy.ground_symbol_clearance_m)]),
+          rounded([right, Math.max(reception[1], courtGeometry.freeThrowBoundaryY(profile, right) + policy.reception_free_throw_offset_m)]),
+          rounded([left, Math.max(reception[1], courtGeometry.freeThrowBoundaryY(profile, left) + policy.reception_free_throw_offset_m)])
+        ],
+        functional_anchors: { reception, threat, exit },
+        defensive_depth_m: Number(defenseY.toFixed(3))
+      });
     });
 
     (plan.constraints || []).filter((constraint) => constraint.type === "ATTACKS" && constraint.status !== "conflict").forEach((constraint) => {
@@ -161,20 +211,23 @@
     const actions = plan.actions || [];
     states.forEach((state) => {
       if (Array.isArray(state.position) || !state.space_ref || !spaceAnchors.has(state.space_ref)) return;
+      const region = spaceRegions.get(state.space_ref);
       const anchor = spaceAnchors.get(state.space_ref);
       const exitsFeint = actions.some((action) => action.operator_id === "feint" && action.to_state_ref === state.id);
       const receivesOrAttacks = actions.some((action) => (action.operator_id === "reception" && action.state_ref === state.id) || (action.operator_id === "feint" && action.from_state_ref === state.id));
-      const y = exitsFeint ? policy.defensive_line_y - policy.exit_offset_y
-        : receivesOrAttacks ? policy.defensive_line_y + policy.approach_offset_y : anchor[1] + 1.8;
-      assign(state, [anchor[0], y], exitsFeint ? "space_exit_after_defensive_line" : "space_approach_anchor", [`space:${state.space_ref}`]);
+      const position = region
+        ? exitsFeint ? region.functional_anchors.exit : receivesOrAttacks ? region.functional_anchors.reception : region.functional_anchors.threat
+        : anchor;
+      assign(state, position, exitsFeint ? "legal_space_exit_after_defensive_line" : "functional_space_anchor", [`space:${state.space_ref}`]);
     });
 
     actions.filter((action) => action.operator_id === "pass" && action.status === "composed").forEach((action, index) => {
       const from = states.get(action.from_state_ref), to = states.get(action.to_state_ref);
       const center = profile.court.width_m / 2;
+      const receptionDepth = courtGeometry.freeThrowBoundaryY(profile, center) + policy.reception_free_throw_offset_m;
       if (from && to && !Array.isArray(from.position) && !Array.isArray(to.position)) {
-        assign(to, [center + 1.7, policy.defensive_line_y + policy.approach_offset_y], "pass_relation_receiver", [`action:${action.id}`]);
-        assign(from, [center - 1.7, policy.defensive_line_y + policy.approach_offset_y + policy.staging_offset_y], "pass_relation_sender", [`action:${action.id}`]);
+        assign(to, [center + 1.7, receptionDepth], "pass_relation_receiver", [`action:${action.id}`]);
+        assign(from, [center - 1.7, receptionDepth + policy.staging_offset_y], "pass_relation_sender", [`action:${action.id}`]);
       } else if (from && to && !Array.isArray(from.position) && Array.isArray(to.position)) {
         const direction = to.position[0] <= center ? 1 : -1;
         assign(from, [to.position[0] + direction * 3, to.position[1] + policy.staging_offset_y], "pass_sender_from_receiver", [`action:${action.id}`]);
@@ -196,17 +249,25 @@
       assign(from, [to.position[0] + direction * 2.4, to.position[1] + policy.staging_offset_y], "reception_approach", [`action:${action.id}`]);
     });
 
+    const actionsById = new Map(actions.map((action) => [action.id, action]));
     actions.filter((action) => action.operator_id === "numerical_relation" && action.status === "composed").forEach((action) => {
       const preferred = action.state_refs || [];
       const defenders = (action.defender_refs || []).map((ref) => stateForParticipant(ref, preferred)).filter(Boolean);
       const reference = defenders.find((state) => Array.isArray(state.position));
-      if (!reference) return;
-      (action.attacker_refs || []).forEach((ref, index) => {
-        const state = stateForParticipant(ref, preferred);
-        if (!state || Array.isArray(state.position)) return;
-        const side = index % 2 ? 1 : -1;
-        assign(state, [reference.position[0] + side * policy.relation_separation_x, reference.position[1] - 0.8 - Math.floor(index / 2) * 0.7], "numerical_relation_participant", [`action:${action.id}`]);
-      });
+      const predecessors = (action.after || []).map((ref) => actionsById.get(ref)).filter(Boolean);
+      const primaryRef = predecessors.map((candidate) => candidate.actor_ref).find((ref) => (action.attacker_refs || []).includes(ref));
+      const primary = primaryRef && stateForParticipant(primaryRef, preferred);
+      const companions = (action.attacker_refs || []).filter((ref) => ref !== primaryRef);
+      if (!reference || !primary || !Array.isArray(primary.position) || defenders.length !== 1 || companions.length !== 1) return;
+      const companion = stateForParticipant(companions[0], preferred);
+      if (!companion || Array.isArray(companion.position)) return;
+      const side = Math.sign(reference.position[0] - primary.position[0]) || 1;
+      const x = reference.position[0] + side * policy.relation_support_distance_m;
+      const y = Math.max(
+        courtGeometry.minimumGroundCenterY(profile, x, policy.ground_symbol_clearance_m),
+        primary.position[1] + 0.15
+      );
+      assign(companion, [x, y], "connected_two_v_one_support", [`action:${action.id}`, `predecessor:${predecessors[0] && predecessors[0].id || "none"}`]);
     });
 
     (plan.visual_primitives || []).filter((primitive) => ["movement_path", "dribble_path"].includes(primitive.type)).forEach((primitive) => {
@@ -217,30 +278,54 @@
     });
 
     spaces.forEach((space) => {
-      const anchor = spaceAnchors.get(space.id);
-      if (!anchor) return;
+      const region = spaceRegions.get(space.id);
+      if (!region) return;
+      const xValues = region.calculation_region.map((point) => point[0]);
+      const left = Math.min(...xValues), right = Math.max(...xValues);
       const explicitStates = [...states.values()].filter((state) => state.space_ref === space.id && Array.isArray(state.position) && String(state.layout_decision_ref || "").startsWith("LAYOUT_EXPLICIT_"));
       explicitStates.forEach((state) => {
-        if (Math.abs(state.position[0] - anchor[0]) <= 4.5) return;
+        if (state.position[0] >= left - 0.4 && state.position[0] <= right + 0.4) return;
         diagnostics.push({ code: "MANUAL_ANCHOR_RELATION_CONFLICT", severity: "error", path: `/participant_states/${state.id}/position`, message: `${state.id} queda fora de la relació espacial ${space.id}.`, state_ref: state.id, space_ref: space.id, source_refs: sourceRefs(state) });
       });
     });
 
-    return { states, spaceAnchors, decisions, diagnostics, policy };
+    return { states, spaceAnchors, spaceRegions, decisions, diagnostics, policy };
   }
 
   function enumerateObligations(plan) {
     const obligations = [];
-    (plan.visual_primitives || []).forEach((primitive) => obligations.push({
-      id: `OBLIGATION_PRIMITIVE_${primitive.id}`,
-      kind: "visual_primitive",
-      action_ref: primitive.action_ref || null,
-      target_ref: primitive.id,
-      required: true,
-      status: "pending",
-      geometry_refs: [],
-      source_refs: sourceRefs(primitive)
-    }));
+    (plan.visual_primitives || []).forEach((primitive) => {
+      obligations.push({
+        id: `OBLIGATION_PRIMITIVE_${primitive.id}`,
+        kind: "visual_primitive",
+        action_ref: primitive.action_ref || null,
+        target_ref: primitive.id,
+        required: true,
+        status: "pending",
+        geometry_refs: [],
+        source_refs: sourceRefs(primitive)
+      });
+      if (["movement_path", "dribble_path", "feint_path"].includes(primitive.type)) obligations.push({
+        id: `OBLIGATION_GROUND_PATH_${primitive.id}`,
+        kind: "ground_path_outside_goal_area",
+        action_ref: primitive.action_ref || null,
+        target_ref: primitive.id,
+        required: true,
+        status: "pending",
+        geometry_refs: [],
+        source_refs: sourceRefs(primitive)
+      });
+      if (primitive.type === "feint_path") obligations.push({
+        id: `OBLIGATION_FEINT_SHAPE_${primitive.id}`,
+        kind: "functional_feint_shape",
+        action_ref: primitive.action_ref || null,
+        target_ref: primitive.id,
+        required: true,
+        status: "pending",
+        geometry_refs: [],
+        source_refs: sourceRefs(primitive)
+      });
+    });
     (plan.actions || []).filter((action) => action.operator_id === "reception" && action.in_motion).forEach((action) => obligations.push({
       id: `OBLIGATION_RECEPTION_${action.id}`,
       kind: "shared_reception_state",
@@ -271,7 +356,177 @@
       geometry_refs: [],
       source_refs: sourceRefs(constraint)
     }));
+    (plan.ball_flow && plan.ball_flow.states || []).filter((state) => !state.action_ref && state.holder_ref).forEach((state) => obligations.push({
+      id: `OBLIGATION_BALL_${state.ball_ref}`,
+      kind: "initial_ball_visible",
+      action_ref: null,
+      target_ref: state.ball_ref,
+      required: true,
+      status: "pending",
+      geometry_refs: [],
+      source_refs: sourceRefs(state)
+    }));
     return obligations;
+  }
+
+  function validationCheck(id, kind, status, subjectRef, message, source, details) {
+    return {
+      id,
+      kind,
+      status,
+      severity: status === "failed" ? "error" : status === "unknown" ? "pending" : "info",
+      subject_ref: subjectRef,
+      action_ref: source && source.action_ref || null,
+      message,
+      source_refs: sourceRefs(source),
+      details: details || {}
+    };
+  }
+
+  function positionIndex(geometry) {
+    const states = new Map((geometry.participant_states || []).map((state) => [state.id, state.position]));
+    const entities = new Map((geometry.entities || []).map((entity) => [entity.id, entity.position]));
+    (geometry.contextual_references || []).forEach((reference) => entities.set(reference.participant_ref, reference.position));
+    return { states, entities };
+  }
+
+  function validateResolvedGeometry(geometry, profileInput, policyInput) {
+    const policy = { ...DEFAULT_POLICY, ...(policyInput || geometry && geometry.layout_policy && geometry.layout_policy.parameters || {}) };
+    const profile = profileInput || geometry && geometry.court;
+    const checks = [];
+    if (!geometry || !profile) {
+      checks.push(validationCheck("CHECK_RENDERABLE", "renderability", "failed", "geometry", "Falta geometria o perfil de pista.", null));
+      return { renderability: "failed", geometry: "invalid", tactical: "not_validated", checks };
+    }
+    const index = positionIndex(geometry);
+    const branchPaths = (geometry.branches || []).flatMap((branch) => (branch.alternatives || []).flatMap((alternative) => [
+      alternative.approach_path,
+      alternative.return_pass,
+      alternative
+    ].filter(Boolean)));
+    const paths = [...(geometry.common_paths || []), ...branchPaths];
+    const groundPaths = paths.filter((path) => ["movement", "movement_without_ball", "run_without_ball", "continuation", "dribble", "feint"].includes(path.kind));
+    checks.push(validationCheck(
+      "CHECK_RENDERABLE",
+      "renderability",
+      paths.length || (geometry.entities || []).length ? "passed" : "failed",
+      "geometry",
+      paths.length || (geometry.entities || []).length ? "La geometria conté primitives renderitzables." : "La geometria no conté cap primitiva renderitzable.",
+      null
+    ));
+    groundPaths.forEach((path) => {
+      const physical = courtGeometry.validateGroundPath(path, profile, { minimum_clearance_m: 0, maximum_step_m: 0.04, tolerance_m: 0.005 });
+      checks.push(validationCheck(
+        `CHECK_GROUND_PHYSICAL_${path.id}`,
+        "ground_path_physical_area",
+        physical.valid ? "passed" : "failed",
+        path.id,
+        physical.valid ? "El recorregut terrestre queda fora de l’àrea física." : "El recorregut terrestre entra dins de l’àrea física.",
+        path,
+        physical
+      ));
+      const visual = courtGeometry.validateGroundPath(path, profile, { minimum_clearance_m: policy.ground_symbol_clearance_m, maximum_step_m: 0.04, tolerance_m: 0.015 });
+      checks.push(validationCheck(
+        `CHECK_GROUND_VISUAL_${path.id}`,
+        "ground_path_visual_clearance",
+        visual.valid ? "passed" : "failed",
+        path.id,
+        visual.valid ? "El símbol manté el marge visual provisional respecte de l’àrea." : "El recorregut no preserva el marge visual provisional respecte de l’àrea.",
+        path,
+        visual
+      ));
+    });
+    paths.filter((path) => path.kind === "feint").forEach((path) => {
+      const commitment = (path.functional_points || []).find((point) => point.role === "commitment");
+      const directionBreak = (path.functional_points || []).find((point) => point.role === "direction_break");
+      const clearance = (path.functional_points || []).find((point) => point.role === "clearance");
+      const exit = (path.functional_points || []).find((point) => point.role === "exit");
+      const opponent = index.entities.get(path.opponent_ref);
+      if (!commitment || !directionBreak || !clearance || !exit || !opponent) {
+        checks.push(validationCheck(`CHECK_FEINT_FUNCTIONS_${path.id}`, "functional_feint", "unknown", path.id, "Falten punts funcionals o la posició del defensor per comprovar la finta.", path));
+        return;
+      }
+      const distinctDistance = distance(commitment.position, directionBreak.position);
+      const turn = courtGeometry.turnAngleDegrees(commitment.position, directionBreak.position, clearance.position);
+      const defenderClearance = courtGeometry.minimumDistanceToPath(opponent, path);
+      const distinct = distinctDistance >= 0.45;
+      const turns = turn >= policy.feint_min_turn_degrees;
+      const clears = defenderClearance >= policy.defender_path_clearance_m;
+      checks.push(validationCheck(
+        `CHECK_FEINT_FUNCTIONS_${path.id}`,
+        "functional_feint",
+        distinct && turns && clears ? "passed" : "failed",
+        path.id,
+        distinct && turns && clears ? "La finta diferencia compromís, ruptura i evasió sense travessar el defensor." : "La finta no preserva una ruptura funcional llegible o interfereix amb el defensor.",
+        path,
+        { commitment_break_distance_m: Number(distinctDistance.toFixed(3)), direction_change_degrees: turn, defender_clearance_m: defenderClearance }
+      ));
+      const targetSpace = (geometry.spaces || []).find((space) => space.id === path.target_space_ref);
+      const xValues = targetSpace && targetSpace.calculation_region.map((point) => point[0]) || [];
+      const inTarget = xValues.length && exit.position[0] >= Math.min(...xValues) && exit.position[0] <= Math.max(...xValues);
+      checks.push(validationCheck(
+        `CHECK_FEINT_EXIT_${path.id}`,
+        "feint_exit_corridor",
+        inTarget ? "passed" : targetSpace ? "failed" : "unknown",
+        path.id,
+        inTarget ? "La sortida funcional entra al corredor de l’interval contigu." : "No es pot confirmar que la sortida entri al corredor contigu.",
+        path,
+        { target_space_ref: path.target_space_ref, exit_position: exit.position }
+      ));
+    });
+    (geometry.relations || []).forEach((relation) => {
+      if (relation.subtype !== "2x1") return;
+      const attackers = (relation.participants || []).filter((item) => ["primary_attacker", "support_attacker"].includes(item.role));
+      const defenders = (relation.participants || []).filter((item) => item.role === "defender");
+      const attackerPoints = attackers.map((item) => index.states.get(item.state_ref)).filter(Boolean);
+      const defenderPoint = defenders.length === 1 && index.states.get(defenders[0].state_ref);
+      if (attackers.length !== 2 || defenders.length !== 1 || attackerPoints.length !== 2 || !defenderPoint || !relation.primary_attacker_ref) {
+        checks.push(validationCheck(`CHECK_RELATION_${relation.id}`, "numerical_relation_layout", "unknown", relation.id, "Falten rols o estats connectats per comprovar el 2x1.", relation));
+        return;
+      }
+      const attackerSeparation = distance(attackerPoints[0], attackerPoints[1]);
+      const defenderDistances = attackerPoints.map((point) => distance(point, defenderPoint));
+      const outsideArea = attackerPoints.every((point) => !courtGeometry.isInsideGoalArea(profile, point));
+      const readable = attackerSeparation >= policy.relation_min_attacker_separation_m
+        && defenderDistances.every((value) => value <= policy.relation_max_defender_distance_m)
+        && outsideArea;
+      checks.push(validationCheck(
+        `CHECK_RELATION_${relation.id}`,
+        "numerical_relation_layout",
+        readable ? "passed" : "failed",
+        relation.id,
+        readable ? "Els dos atacants i el defensor formen un dilema local llegible sense tancar-ne la resolució." : "La disposició del 2x1 no permet llegir prou la relació o situa un atacant dins l’àrea.",
+        relation,
+        { attacker_separation_m: Number(attackerSeparation.toFixed(3)), defender_distances_m: defenderDistances.map((value) => Number(value.toFixed(3))), attackers_outside_goal_area: outsideArea }
+      ));
+    });
+    const visibleBalls = geometry.balls || [];
+    const passes = paths.filter((path) => path.kind === "pass" && path.ball_ref);
+    [...new Set([...visibleBalls.map((ball) => ball.ball_ref), ...passes.map((path) => path.ball_ref)])].forEach((ballRef) => {
+      const visible = visibleBalls.filter((ball) => ball.ball_ref === ballRef && ball.visibility === "initial");
+      const ballPasses = passes.filter((path) => path.ball_ref === ballRef);
+      const transfers = (geometry.ball_flow || []).filter((transition) => transition.ball_ref === ballRef && transition.path_ref);
+      const valid = visible.length === 1 && (!ballPasses.length || transfers.length >= 1)
+        && transfers.every((transition) => ballPasses.some((path) => path.id === transition.path_ref && path.ball_ref === ballRef));
+      checks.push(validationCheck(
+        `CHECK_BALL_${ballRef}`,
+        "ball_identity_and_visibility",
+        valid ? "passed" : "failed",
+        ballRef,
+        valid ? "La pilota inicial és única i qualsevol passada conserva la mateixa identitat." : "La pilota no és visible de manera única o el flux no està vinculat a la passada.",
+        visible[0] || ballPasses[0],
+        { visible_initial_instances: visible.length, linked_transfers: transfers.length }
+      ));
+    });
+    const geometryChecks = checks.filter((check) => check.kind !== "renderability");
+    const geometryStatus = geometryChecks.some((check) => check.status === "failed") ? "invalid"
+      : geometryChecks.some((check) => check.status === "unknown") ? "pending" : "valid";
+    return {
+      renderability: checks.find((check) => check.kind === "renderability").status,
+      geometry: geometryStatus,
+      tactical: "not_validated_by_coach",
+      checks
+    };
   }
 
   function resolve(plan, tacticalIR, profile, options) {
@@ -279,9 +534,13 @@
     const positions = layout.states;
     const participants = new Map((tacticalIR.participants || []).map((item) => [item.id, item]));
     const entities = [];
+    const contextualReferences = [];
     const participantStates = [];
     const dependencies = [];
     const commonPaths = [];
+    const balls = [];
+    const ballFlow = [];
+    const relations = [];
     const diagnostics = layout.diagnostics.slice();
     const obligations = enumerateObligations(plan);
     const firstStateByParticipant = new Map();
@@ -293,10 +552,22 @@
       if (!firstStateByParticipant.has(state.participant_ref) || state.state_key === "S0") firstStateByParticipant.set(state.participant_ref, state.id);
     });
     [...participants.values()].sort((a, b) => a.id.localeCompare(b.id)).forEach((participant) => {
-      if (structuralOnly(participant)) return;
       const stateRef = firstStateByParticipant.get(participant.id);
       const state = stateRef && positions.get(stateRef);
       if (!state || !Array.isArray(state.position)) return;
+      if (structuralOnly(participant)) {
+        contextualReferences.push({
+          id: `CONTEXT_${participant.id}`,
+          participant_ref: participant.id,
+          kind: "structural_delimiter",
+          label: participant.label || participant.id,
+          position: state.position.slice(),
+          state_ref: stateRef,
+          active_participant: false,
+          source_refs: sourceRefs(participant)
+        });
+        return;
+      }
       entities.push({
         id: participant.id,
         kind: participantKind(participant),
@@ -375,8 +646,18 @@
         const initialAnchor = layout.spaceAnchors.get(primitive.initial_space_ref), targetAnchor = layout.spaceAnchors.get(primitive.target_space_ref);
         if (!start || !end || !opponent || !initialAnchor || !targetAnchor) { addDiagnostic("GEOMETRY_FEINT_RELATION_MISSING", primitive, "La finta necessita origen, sortida, defensor i dos espais contigus resolts."); return; }
         const direction = Math.sign(targetAnchor[0] - initialAnchor[0]) || Math.sign(end[0] - start[0]) || 1;
-        const breakPoint = rounded([opponent[0] - direction * 0.28, opponent[1] + 0.42]);
-        const exitPoint = rounded([opponent[0] + direction * 1.15, opponent[1] - 0.72]);
+        const commitmentPoint = rounded([opponent[0] - direction * 0.72, opponent[1] + 0.95]);
+        const breakPoint = rounded([opponent[0] - direction * layout.policy.feint_break_lateral_m, opponent[1] + layout.policy.feint_break_depth_m]);
+        const bypassX = opponent[0] - direction * 0.92;
+        const bypassPoint = rounded([
+          bypassX,
+          Math.max(courtGeometry.minimumGroundCenterY(profile, bypassX, layout.policy.ground_symbol_clearance_m), opponent[1] - layout.policy.feint_bypass_depth_m)
+        ]);
+        const exitX = opponent[0] + direction * layout.policy.feint_exit_lateral_m;
+        const exitPoint = rounded([
+          exitX,
+          Math.max(courtGeometry.minimumGroundCenterY(profile, exitX, layout.policy.ground_symbol_clearance_m), end[1])
+        ]);
         const id = `PATH_${primitive.id}`;
         const path = {
           id,
@@ -385,10 +666,17 @@
           actor_ref: primitive.actor_ref,
           from_state_ref: primitive.from_state_ref,
           to_state_ref: primitive.to_state_ref,
-          segments: [line(start, breakPoint), line(breakPoint, exitPoint), line(exitPoint, end)],
+          segments: [
+            line(start, commitmentPoint),
+            line(commitmentPoint, breakPoint),
+            line(breakPoint, bypassPoint),
+            line(bypassPoint, exitPoint),
+            line(exitPoint, end)
+          ],
           functional_points: [
-            { id: `${id}_COMMITMENT`, role: "commitment", position: breakPoint.slice() },
+            { id: `${id}_COMMITMENT`, role: "commitment", position: commitmentPoint.slice() },
             { id: `${id}_DIRECTION_BREAK`, role: "direction_break", position: breakPoint.slice() },
+            { id: `${id}_CLEARANCE`, role: "clearance", position: bypassPoint.slice() },
             { id: `${id}_EXIT`, role: "exit", position: exitPoint.slice() }
           ],
           opponent_ref: primitive.opponent_ref,
@@ -408,11 +696,146 @@
       }
     });
 
+    const actionById = new Map((plan.actions || []).map((action) => [action.id, action]));
+    function preferredStateRef(participantRef, refs) {
+      return (refs || []).find((ref) => {
+        const state = positions.get(ref);
+        return state && state.participant_ref === participantRef && Array.isArray(state.position);
+      }) || firstStateByParticipant.get(participantRef) || null;
+    }
+    (plan.actions || []).filter((action) => action.operator_id === "numerical_relation" && action.status === "composed").forEach((action) => {
+      const predecessors = (action.after || []).map((ref) => actionById.get(ref)).filter(Boolean);
+      const primary = predecessors.map((candidate) => candidate.actor_ref).find((ref) => (action.attacker_refs || []).includes(ref)) || null;
+      const primaryState = primary && preferredStateRef(primary, action.state_refs);
+      const spaceRef = action.space_ref || primaryState && positions.get(primaryState) && positions.get(primaryState).space_ref
+        || predecessors.map((candidate) => candidate.target_space_ref).find(Boolean) || null;
+      const relationParticipants = [];
+      (action.attacker_refs || []).forEach((ref) => relationParticipants.push({
+        participant_ref: ref,
+        state_ref: preferredStateRef(ref, action.state_refs),
+        role: ref === primary ? "primary_attacker" : "support_attacker"
+      }));
+      (action.defender_refs || []).forEach((ref) => relationParticipants.push({
+        participant_ref: ref,
+        state_ref: preferredStateRef(ref, action.state_refs),
+        role: "defender"
+      }));
+      relations.push({
+        id: `RELATION_${action.id}`,
+        kind: "numerical_relation",
+        subtype: action.subtype || "2x1",
+        action_ref: action.id,
+        primary_attacker_ref: primary,
+        space_ref: spaceRef,
+        participants: relationParticipants,
+        resolution: "open",
+        source_refs: sourceRefs(action)
+      });
+    });
+
+    (plan.ball_flow && plan.ball_flow.states || []).filter((state) => !state.action_ref && state.holder_ref).forEach((ballState) => {
+      const holderStateRef = firstStateByParticipant.get(ballState.holder_ref);
+      const holderPoint = statePoint(holderStateRef);
+      if (!holderPoint) return;
+      const direction = holderPoint[0] >= profile.court.width_m / 2 ? 1 : -1;
+      balls.push({
+        id: `BALL_VISUAL_${ballState.ball_ref}_INITIAL`,
+        ball_ref: ballState.ball_ref,
+        ball_state_ref: ballState.id,
+        holder_ref: ballState.holder_ref,
+        holder_state_ref: holderStateRef,
+        position: rounded([holderPoint[0] + direction * layout.policy.ball_offset_m, holderPoint[1] - 0.04]),
+        status: "held",
+        visibility: "initial",
+        source_refs: sourceRefs(ballState)
+      });
+    });
+    (plan.ball_flow && plan.ball_flow.transitions || []).forEach((transition) => {
+      const path = commonPaths.find((candidate) => candidate.action_ref === transition.action_ref && candidate.ball_ref === transition.ball_ref);
+      ballFlow.push({
+        id: transition.id,
+        ball_ref: transition.ball_ref,
+        from_ball_state_ref: transition.from_state_ref,
+        to_ball_state_ref: transition.to_state_ref,
+        from_holder_ref: transition.from_holder_ref,
+        to_holder_ref: transition.to_holder_ref,
+        path_ref: path && path.id || null,
+        receiver_state_ref: path && path.to_state_ref || null,
+        source_refs: sourceRefs(transition)
+      });
+    });
+
+    const resolvedSpaces = [...new Map((tacticalIR.spaces || []).map((space) => [space.id, space])).values()]
+      .filter((space) => layout.spaceAnchors.has(space.id))
+      .map((space) => {
+        const anchor = layout.spaceAnchors.get(space.id);
+        const region = layout.spaceRegions.get(space.id);
+        return {
+          id: space.id,
+          kind: "relational_tactical_space",
+          relation: { type: space.relation && space.relation.type || "between", delimiter_refs: delimiterRefs(space) },
+          anchor: anchor.slice(),
+          calculation_region: region ? region.calculation_region : [
+            rounded([anchor[0] - 0.45, anchor[1] - 0.45]), rounded([anchor[0] + 0.45, anchor[1] - 0.45]),
+            rounded([anchor[0] + 0.45, anchor[1] + 0.45]), rounded([anchor[0] - 0.45, anchor[1] + 0.45])
+          ],
+          functional_anchors: region ? utils.deepClone(region.functional_anchors) : { reception: anchor.slice(), threat: anchor.slice(), exit: anchor.slice() },
+          render_policy: "hidden",
+          source_refs: sourceRefs(space)
+        };
+      });
+    const viewPoints = [
+      ...participantStates.map((state) => state.position),
+      ...balls.map((ball) => ball.position),
+      ...commonPaths.flatMap((path) => (path.segments || []).flatMap((segment) => [segment.start, segment.control1, segment.control2, segment.end].filter(Boolean)))
+    ];
+    const courtInstance = court(profile, courtGeometry.usefulViewBox(profile, viewPoints));
+    const validation = validateResolvedGeometry({
+      court: courtInstance,
+      layout_policy: { parameters: layout.policy },
+      spaces: resolvedSpaces,
+      entities,
+      contextual_references: contextualReferences,
+      participant_states: participantStates,
+      common_paths: commonPaths,
+      relations,
+      balls,
+      ball_flow: ballFlow
+    }, profile, layout.policy);
+    const checksBySubject = new Map();
+    validation.checks.forEach((check) => {
+      if (!checksBySubject.has(check.subject_ref)) checksBySubject.set(check.subject_ref, []);
+      checksBySubject.get(check.subject_ref).push(check);
+      if (check.status !== "passed") diagnostics.push({
+        code: check.status === "failed" ? "GEOMETRY_VALIDATION_FAILED" : "GEOMETRY_VALIDATION_PENDING",
+        severity: check.severity,
+        path: `/validation/checks/${check.id}`,
+        message: check.message,
+        action_ref: check.action_ref,
+        validation_ref: check.id,
+        source_refs: check.source_refs
+      });
+    });
+
     const pathByPrimitive = new Map(commonPaths.map((path) => [path.id.replace(/^PATH_/, ""), path]));
     obligations.forEach((obligation) => {
       if (obligation.kind === "visual_primitive") {
         const path = pathByPrimitive.get(obligation.target_ref);
         if (path) { obligation.status = "resolved"; obligation.geometry_refs = [`geometry:common_path:${path.id}`]; }
+      } else if (obligation.kind === "ground_path_outside_goal_area") {
+        const path = pathByPrimitive.get(obligation.target_ref);
+        const checks = path && checksBySubject.get(path.id) || [];
+        if (checks.length && checks.filter((check) => check.kind.startsWith("ground_path_")).every((check) => check.status === "passed")) {
+          obligation.status = "resolved";
+          obligation.geometry_refs = [`geometry:common_path:${path.id}`];
+        } else if (checks.some((check) => check.kind.startsWith("ground_path_") && check.status === "failed")) obligation.status = "incompatible";
+      } else if (obligation.kind === "functional_feint_shape") {
+        const path = pathByPrimitive.get(obligation.target_ref);
+        const checks = path && checksBySubject.get(path.id) || [];
+        if (checks.length && checks.filter((check) => ["functional_feint", "feint_exit_corridor"].includes(check.kind)).every((check) => check.status === "passed")) {
+          obligation.status = "resolved";
+          obligation.geometry_refs = [`geometry:common_path:${path.id}`];
+        } else if (checks.some((check) => ["functional_feint", "feint_exit_corridor"].includes(check.kind) && check.status === "failed")) obligation.status = "incompatible";
       } else if (obligation.kind === "shared_reception_state") {
         const action = (plan.actions || []).find((item) => item.id === obligation.action_ref);
         const pass = (plan.actions || []).find((item) => item.operator_id === "pass" && item.to_state_ref === action.state_ref);
@@ -422,12 +845,12 @@
           obligation.geometry_refs = [`geometry:participant_state:${state.id}`];
         }
       } else if (obligation.kind === "numerical_relation_state") {
-        const action = (plan.actions || []).find((item) => item.id === obligation.action_ref);
-        const stateRefs = action && action.state_refs || [];
-        if (stateRefs.length && stateRefs.every((ref) => statePoint(ref))) {
+        const relation = relations.find((item) => item.action_ref === obligation.action_ref);
+        const check = relation && (checksBySubject.get(relation.id) || []).find((item) => item.kind === "numerical_relation_layout");
+        if (relation && check && check.status === "passed") {
           obligation.status = "resolved";
-          obligation.geometry_refs = stateRefs.map((ref) => `geometry:participant_state:${ref}`);
-        }
+          obligation.geometry_refs = relation.participants.map((item) => `geometry:participant_state:${item.state_ref}`);
+        } else if (check && check.status === "failed") obligation.status = "incompatible";
       } else if (obligation.kind === "surpasses_defensive_line") {
         const constraint = (plan.constraints || []).find((item) => item.id === obligation.target_ref);
         const state = constraint && statePoint(constraint.subject_refs[0]);
@@ -436,13 +859,20 @@
           obligation.status = "resolved";
           obligation.geometry_refs = [`geometry:participant_state:${constraint.subject_refs[0]}`];
         }
+      } else if (obligation.kind === "initial_ball_visible") {
+        const check = (checksBySubject.get(obligation.target_ref) || []).find((item) => item.kind === "ball_identity_and_visibility");
+        const ball = balls.find((item) => item.ball_ref === obligation.target_ref);
+        if (check && check.status === "passed" && ball) {
+          obligation.status = "resolved";
+          obligation.geometry_refs = [`geometry:ball:${ball.id}`];
+        } else if (check && check.status === "failed") obligation.status = "incompatible";
       }
     });
     obligations.filter((item) => item.status !== "resolved").forEach((item) => diagnostics.push({
-      code: "GEOMETRY_OBLIGATION_PENDING",
-      severity: "pending",
+      code: item.status === "incompatible" ? "GEOMETRY_OBLIGATION_INCOMPATIBLE" : "GEOMETRY_OBLIGATION_PENDING",
+      severity: item.status === "incompatible" ? "error" : "pending",
       path: `/obligations/${item.id}`,
-      message: `No s’ha pogut resoldre l’obligació ${item.kind}.`,
+      message: item.status === "incompatible" ? `La geometria incompleix l’obligació ${item.kind}.` : `No s’ha pogut resoldre l’obligació ${item.kind}.`,
       action_ref: item.action_ref,
       obligation_ref: item.id,
       source_refs: item.source_refs
@@ -465,7 +895,7 @@
         canonical_promotion: false,
         court_profile_ref: profile.meta && `${profile.meta.id}@${profile.meta.version}` || "court_profile"
       },
-      court: court(profile),
+      court: courtInstance,
       layout_policy: {
         id: layout.policy.id,
         version: layout.policy.version,
@@ -473,38 +903,34 @@
         coordinate_system: "metres_origin_goal_line_left",
         attack_direction: "negative_y",
         notes: [
-          "Distribució derivada de delimitadors, espais, dependències d’acció i relacions numèriques.",
-          "Les distàncies són una política visual versionada i no coneixement tàctic."
+          "Distribució derivada de delimitadors, corredors d’interval, dependències d’acció i relacions numèriques connectades.",
+          "Les profunditats, separacions, marges de símbol i distàncies de contacte són política visual provisional.",
+          "La validesa geomètrica no concedeix validació tàctica de l’entrenador."
         ],
+        parameters: utils.deepClone(layout.policy),
         decisions: layout.decisions
       },
       zones: [],
-      spaces: [...new Map((tacticalIR.spaces || []).map((space) => [space.id, space])).values()].filter((space) => layout.spaceAnchors.has(space.id)).map((space) => {
-        const anchor = layout.spaceAnchors.get(space.id);
-        return {
-          id: space.id,
-          kind: "relational_tactical_space",
-          relation: { type: space.relation && space.relation.type || "between", delimiter_refs: delimiterRefs(space) },
-          anchor: anchor.slice(),
-          calculation_region: [
-            rounded([anchor[0] - 0.45, anchor[1] - 0.45]), rounded([anchor[0] + 0.45, anchor[1] - 0.45]),
-            rounded([anchor[0] + 0.45, anchor[1] + 0.45]), rounded([anchor[0] - 0.45, anchor[1] + 0.45])
-          ],
-          render_policy: "hidden",
-          source_refs: sourceRefs(space)
-        };
-      }),
+      spaces: resolvedSpaces,
       objects: [],
       phases: [],
       entities,
+      contextual_references: contextualReferences,
       participant_states: participantStates,
+      balls,
+      ball_flow: ballFlow,
       common_paths: commonPaths,
+      relations,
       branches: [],
       dependencies,
       obligations,
       diagnostics,
+      validation,
       result: {
         status,
+        renderability_status: validation.renderability,
+        geometry_validation_status: validation.geometry,
+        tactical_validation_status: validation.tactical,
         obligations_total: required.length,
         obligations_resolved: resolved.length,
         obligations_pending: required.length - resolved.length,
@@ -512,6 +938,9 @@
       },
       traceability: [
         ...entities.map((entity) => ({ geometry_ref: `geometry:entity:${entity.id}`, source_refs: entity.source_refs || [] })),
+        ...contextualReferences.map((reference) => ({ geometry_ref: `geometry:contextual_reference:${reference.id}`, source_refs: reference.source_refs || [] })),
+        ...balls.map((ball) => ({ geometry_ref: `geometry:ball:${ball.id}`, source_refs: ball.source_refs || [] })),
+        ...relations.map((relation) => ({ geometry_ref: `geometry:relation:${relation.id}`, action_ref: relation.action_ref, source_refs: relation.source_refs || [] })),
         ...commonPaths.map((path) => ({ geometry_ref: `geometry:common_path:${path.id}`, action_ref: path.action_ref, primitive_ref: path.id.replace(/^PATH_/, ""), source_refs: path.source_refs || [] }))
       ]
     } : null;
@@ -550,17 +979,95 @@
       court_profile_ref: legacy.meta.court_profile_ref || "legacy:court_profile",
       adapted_from: { format: legacy.meta.format || "unknown", version: sourceVersion }
     };
-    adapted.layout_policy = { ...adapted.layout_policy, version: sourceVersion, decisions: [], notes: [...(adapted.layout_policy.notes || []), `Adaptat explícitament des del contracte ${sourceVersion}.`] };
+    adapted.layout_policy = {
+      ...adapted.layout_policy,
+      version: sourceVersion,
+      parameters: { ...DEFAULT_POLICY, legacy_layout_preserved: true },
+      decisions: [],
+      notes: [...(adapted.layout_policy.notes || []), `Adaptat explícitament des del contracte ${sourceVersion}.`, "La geometria legacy es conserva literalment i se sotmet als validadors físics v0.4."]
+    };
     adapted.objects = adapted.objects || [];
     adapted.phases = adapted.phases || [];
+    adapted.contextual_references = [];
+    adapted.relations = [];
+    (adapted.entities || []).forEach((entity) => { entity.source_refs = entity.source_refs || unique([entity.source_ref, "derived:legacy_adapter"]); entity.presence = entity.presence || "explicit"; delete entity.source_ref; });
+    const legacyBalls = (adapted.entities || []).filter((entity) => entity.kind === "ball");
+    adapted.entities = (adapted.entities || []).filter((entity) => entity.kind !== "ball");
+    adapted.balls = legacyBalls.map((entity) => {
+      const initialPass = (adapted.common_paths || []).find((path) => path.ball_ref === entity.id);
+      return {
+        id: `BALL_VISUAL_${entity.id}_INITIAL`,
+        ball_ref: entity.id,
+        ball_state_ref: `BALL_STATE_${entity.id}_S0`,
+        holder_ref: initialPass && initialPass.from_participant_ref || "UNKNOWN",
+        holder_state_ref: initialPass && initialPass.from_state_ref || "UNKNOWN",
+        position: entity.position.slice(),
+        status: "held",
+        visibility: "initial",
+        source_refs: entity.source_refs
+      };
+    });
+    const legacyPaths = [
+      ...(adapted.common_paths || []),
+      ...(adapted.branches || []).flatMap((branch) => (branch.alternatives || []).flatMap((alternative) => [alternative.return_pass, alternative].filter(Boolean)))
+    ];
+    adapted.ball_flow = legacyPaths.filter((path) => path.ball_ref).map((path, index) => ({
+      id: `BALL_TRANSITION_LEGACY_${String(index + 1).padStart(3, "0")}`,
+      ball_ref: path.ball_ref,
+      from_ball_state_ref: `BALL_STATE_${path.ball_ref}_${String(index).padStart(3, "0")}`,
+      to_ball_state_ref: `BALL_STATE_${path.ball_ref}_${String(index + 1).padStart(3, "0")}`,
+      from_holder_ref: path.from_participant_ref || null,
+      to_holder_ref: path.to_participant_ref || null,
+      path_ref: path.id || null,
+      receiver_state_ref: path.to_state_ref || null,
+      source_refs: sourceRefs(path)
+    }));
+    (adapted.spaces || []).forEach((space) => {
+      space.source_refs = space.source_refs || unique([space.source_ref, "derived:legacy_adapter"]);
+      space.functional_anchors = space.functional_anchors || { reception: space.anchor.slice(), threat: space.anchor.slice(), exit: space.anchor.slice() };
+      delete space.source_ref;
+      delete space.zone_ref;
+      delete space.defender_ref;
+    });
     adapted.obligations = [
       ...(adapted.common_paths || []).map((path) => ({ id: `OBLIGATION_LEGACY_PATH_${path.id}`, kind: "legacy_path", action_ref: path.action_ref || null, target_ref: path.id, required: true, status: "resolved", geometry_refs: [`geometry:common_path:${path.id}`], source_refs: sourceRefs(path) })),
       ...(adapted.branches || []).map((branch) => ({ id: `OBLIGATION_LEGACY_BRANCH_${branch.id}`, kind: "legacy_branch", action_ref: null, target_ref: branch.id, required: true, status: "resolved", geometry_refs: [`geometry:branch:${branch.id}`], source_refs: unique([branch.source_ref, "derived:legacy_adapter"]) }))
     ];
-    adapted.diagnostics = [];
-    adapted.result = { status: "ready", obligations_total: adapted.obligations.length, obligations_resolved: adapted.obligations.length, obligations_pending: 0, incompatible_count: 0 };
-    (adapted.entities || []).forEach((entity) => { entity.source_refs = entity.source_refs || unique([entity.source_ref, "derived:legacy_adapter"]); entity.presence = entity.presence || "explicit"; delete entity.source_ref; });
-    (adapted.spaces || []).forEach((space) => { space.source_refs = space.source_refs || unique([space.source_ref, "derived:legacy_adapter"]); delete space.source_ref; delete space.zone_ref; delete space.defender_ref; });
+    adapted.validation = validateResolvedGeometry(adapted, adapted.court, adapted.layout_policy.parameters);
+    adapted.validation.tactical = "preserved_legacy_validation";
+    const failedChecks = adapted.validation.checks.filter((check) => check.status === "failed");
+    const unknownChecks = adapted.validation.checks.filter((check) => check.status === "unknown");
+    adapted.obligations.push({
+      id: "OBLIGATION_LEGACY_V04_VALIDATION",
+      kind: "legacy_geometry_validation",
+      action_ref: null,
+      target_ref: adapted.meta.case_id,
+      required: true,
+      status: failedChecks.length ? "incompatible" : unknownChecks.length ? "pending" : "resolved",
+      geometry_refs: [],
+      source_refs: ["derived:legacy_adapter:v0.4"]
+    });
+    adapted.diagnostics = [...failedChecks, ...unknownChecks].map((check) => ({
+      code: check.status === "failed" ? "LEGACY_GEOMETRY_VALIDATION_FAILED" : "LEGACY_GEOMETRY_VALIDATION_PENDING",
+      severity: check.severity,
+      path: `/validation/checks/${check.id}`,
+      message: check.message,
+      action_ref: check.action_ref,
+      validation_ref: check.id,
+      source_refs: check.source_refs
+    }));
+    const legacyStatus = failedChecks.length ? "blocked" : unknownChecks.length ? "partial" : "ready";
+    adapted.meta.status = legacyStatus === "ready" ? "resolved" : legacyStatus;
+    adapted.result = {
+      status: legacyStatus,
+      renderability_status: adapted.validation.renderability,
+      geometry_validation_status: adapted.validation.geometry,
+      tactical_validation_status: adapted.validation.tactical,
+      obligations_total: adapted.obligations.length,
+      obligations_resolved: adapted.obligations.filter((item) => item.status === "resolved").length,
+      obligations_pending: adapted.obligations.filter((item) => item.status !== "resolved").length,
+      incompatible_count: failedChecks.length
+    };
     return adapted;
   }
 
@@ -571,6 +1078,7 @@
     orderedDelimiterRefs,
     statePositions,
     enumerateObligations,
+    validateResolvedGeometry,
     adaptLegacyGeometry,
     resolve
   };

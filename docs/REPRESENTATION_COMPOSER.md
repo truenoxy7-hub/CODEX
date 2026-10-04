@@ -43,7 +43,7 @@ Afegir una família nova exigeix un operador registrat amb slots obligatoris, pr
 
 ## Estats compartits i pilota
 
-`StateRegistry` manté identitats temporals estables. Si una passada precedeix una recepció, el final de la passada, el final de la cursa i l’inici de l’acció següent reutilitzen el mateix `participant_state`. `BallFlow` valida el posseïdor abans de passada, bot o llançament i registra cada transició. Una recuperació sense pilota no altera la possessió.
+`StateRegistry` manté identitats temporals estables. Si una passada precedeix una recepció, el final de la passada, el final de la cursa i l’inici de l’acció següent reutilitzen el mateix `participant_state`. `BallFlow` valida el posseïdor abans de passada, bot o llançament i registra cada transició. La geometria v0.4 projecta aquesta identitat en una única pilota inicial visible i en transicions que reutilitzen el mateix `ball_ref`. Una recuperació sense pilota no altera la possessió.
 
 ## Constraints abans de coordenades
 
@@ -83,10 +83,10 @@ incompatible produeix conflicte en lloc de ser sobreescrit.
 - `unsupported`: no hi ha cap operador aplicable.
 - `blocked`: hi ha una contradicció estructural.
 
-`composition_status` i `geometry_status` són independents. Un pla pot estar `ready` i la geometria `needs_input`.
+`composition_status` i `geometry_status` són independents. Un pla pot estar `ready` i la geometria `needs_input`. Dins la geometria també se separen `renderability_status`, `geometry_validation_status` i `tactical_validation_status`: que l'SVG es pugui dibuixar o que no envaeixi l'àrea no valida la decisió tàctica.
 
 En particular, saber que `INT_12 = entre(D1, D2)` és suficient per completar la
-composició relacional. El resolver geomètric v0.3 pot ordenar delimitadors i
+composició relacional. El resolver geomètric v0.4 pot ordenar delimitadors i
 calcular l'interval a partir del graf connectat i de la seva política visual
 provisional. Si el graf queda desconnectat o ambigu, la geometria continua
 `needs_input`; el compositor no crea fets per eliminar aquest buit.

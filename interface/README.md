@@ -12,6 +12,9 @@ escriure → generar amb allò justificable → respondre si falta una dada
 - `data/handball-knowledge.js`: vocabulari local auditable;
 - `js/interpretation-provider.js`: providers canònic i local;
 - `data/visual-functional-dictionary.js`: bundle reproduïble del diccionari amb evidències;
+- `data/visual-style.js`: política central de mides, traços, capes i exportació;
+- `js/graphic-knowledge-base.js`: validació, consulta i adaptació selectiva de bases externes;
+- `js/model-interpretation-provider.js`: provider injectable de propostes estructurades, mai auto-validades;
 - `js/knowledge-resolver.js`: resolució per autoritat i suggeriments candidats;
 - `js/representation-composer.js`: composició de primitives conegudes;
 - `js/store.js`: estat universal, models, geometries i biblioteca;
@@ -19,7 +22,7 @@ escriure → generar amb allò justificable → respondre si falta una dada
 - `js/corrections.js` i `js/change-explainer.js`: events i explicacions;
 - `js/workspace-preflight.js`: diagnòstics explicables;
 - `js/promotion.js`: candidats explícits;
-- `js/visual-grammar.js`, `renderer.js`, `editor.js`: representació i edició;
+- `js/visual-grammar.js`, `renderer.js`, `editor.js`: representació, edició i exportació SVG/PNG;
 - `js/import-export.js` i `persistence.js`: paquet v0.5, compatibilitat i estat local;
 - `js/app.js`: coordinació de la interfície.
 

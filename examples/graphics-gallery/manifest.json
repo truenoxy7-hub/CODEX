@@ -1,0 +1,20 @@
+{
+  "format": "TRACA_graphics_gallery",
+  "version": "0.1.0",
+  "generated_by": "scripts/generate_graphics_gallery.js",
+  "dictionary": "knowledge/visual-functional-dictionary.v0.2.json",
+  "visual_style": "config/visual-style.v0.1.json",
+  "source_availability": {
+    "graphic_knowledge_json": "not_found",
+    "graphic_knowledge_html": "not_found",
+    "manifest": "not_found",
+    "coach_legend_png": "inspected_external_attachment"
+  },
+  "artifacts": [
+    "symbol-sheet-color.svg",
+    "symbol-sheet-monochrome.svg",
+    "current-TR-UVOF-015.svg",
+    "coverage.json",
+    "index.html"
+  ]
+}

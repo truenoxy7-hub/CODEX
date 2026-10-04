@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DICTIONARY = ROOT / "knowledge/visual-functional-dictionary.v0.1.json"
+DICTIONARY = ROOT / "knowledge/visual-functional-dictionary.v0.2.json"
 
 ROW = re.compile(r"^\| `(?P<id>EV-[^`]+)`\s+—\s+(?P<label>[^|]+)\| \*\*(?P<classification>[^*]+)\*\* \| (?P<statement>.+) \|$")
 

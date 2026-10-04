@@ -2,7 +2,11 @@
 
 ## Font i autoritat
 
-La font operativa és [`knowledge/visual-functional-dictionary.v0.1.json`](../knowledge/visual-functional-dictionary.v0.1.json). Cada entrada declara definició, tipus, autoritat, estat, fonts, evidències, projecció visual i referències semàntiques. El renderer no conté convencions tàctiques independents: `visual-grammar.js` projecta el diccionari a estils executables.
+La font operativa és [`knowledge/visual-functional-dictionary.v0.2.json`](../knowledge/visual-functional-dictionary.v0.2.json). Cada entrada declara definició, tipus, autoritat, estat, fonts, evidències, projecció visual i referències semàntiques. Les catorze entrades de `canonical_visual_reference` fan explícita la correspondència amb la llegenda de l'entrenador. El renderer no conté convencions tàctiques independents: `visual-grammar.js` projecta el diccionari a estils executables.
+
+Les mides, gruixos, marques, estats, fletxes, capes i paràmetres d'exportació
+viuen a [`config/visual-style.v0.1.json`](../config/visual-style.v0.1.json). Aquesta
+política és provisional i visual: no té autoritat tàctica.
 
 L’inventari consolidat i la llegenda gràfica s’han rebut i importat. El
 diccionari conserva exactament 103 evidències UVOF: 10 confirmades per ambdues
@@ -31,6 +35,11 @@ omplir slots obligatoris ni activar geometria.
 
 El color pertany al tema i no defineix el significat. El tema actual diferencia atac i defensa per llegibilitat, però la forma és la convenció principal.
 
+La làmina reproduïble en color i monocrom és a
+[`examples/graphics-gallery/index.html`](../examples/graphics-gallery/index.html).
+Inclou també les extensions pròpies —porter, con, banc i cilindre— separades
+de les catorze convencions atribuïdes a la llegenda.
+
 ## Composicions, no glifs
 
 - `2x1` no té una icona pròpia: es compon amb dos atacants, un defensor, estats i accions.
@@ -51,4 +60,4 @@ renderer   → projecció SVG literal
 editor     → correccions explícites, mai regles automàtiques
 ```
 
-El renderer admet `M/L/C`, doble traç, ona visual, marques terminals o de cancel·lació i contorns temporals. No inventa espais, actors ni decisions.
+El renderer admet `M/L/C`, doble traç, ona visual, marques terminals o de cancel·lació i contorns temporals anteriors i futurs. El mateix arbre SVG alimenta la pantalla, l'exportació SVG i la rasterització PNG; cada SVG incorpora versió geomètrica, revisió font, política visual i estat de validació disponible. No inventa espais, actors ni decisions.

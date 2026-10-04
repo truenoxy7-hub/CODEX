@@ -1,8 +1,8 @@
 {
-  "$schema": "../../schema/traca.geometry.schema.v0.3.json",
+  "$schema": "../../schema/traca.geometry.schema.v0.4.json",
   "meta": {
     "format": "TRACA_general_geometry",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "case_id": "A3_OPPOSITE_SIDE",
     "source_revision": "fnv1a:f70db386",
     "status": "resolved",
@@ -35,31 +35,54 @@
       -0.8,
       -1,
       21.6,
-      21.8
+      15.136
     ]
   },
   "layout_policy": {
-    "id": "generic_relational_layout_v0.3",
-    "version": "0.3.0",
+    "id": "generic_relational_layout_v0.4",
+    "version": "0.4.0",
     "status": "provisional_render_policy",
     "coordinate_system": "metres_origin_goal_line_left",
     "attack_direction": "negative_y",
     "notes": [
-      "Distribució derivada de delimitadors, espais, dependències d’acció i relacions numèriques.",
-      "Les distàncies són una política visual versionada i no coneixement tàctic."
+      "Distribució derivada de delimitadors, corredors d’interval, dependències d’acció i relacions numèriques connectades.",
+      "Les profunditats, separacions, marges de símbol i distàncies de contacte són política visual provisional.",
+      "La validesa geomètrica no concedeix validació tàctica de l’entrenador."
     ],
+    "parameters": {
+      "id": "generic_relational_layout_v0.4",
+      "version": "0.4.0",
+      "defensive_area_clearance_m": 1.5,
+      "minimum_defensive_depth_m": 6.8,
+      "reception_free_throw_offset_m": 0.9,
+      "ground_symbol_clearance_m": 0.48,
+      "surpass_depth_m": 0.5,
+      "staging_offset_y": 3,
+      "feint_contact_distance_m": 0.9,
+      "feint_break_lateral_m": 1.05,
+      "feint_break_depth_m": 0.4,
+      "feint_bypass_depth_m": 0.9,
+      "feint_exit_lateral_m": 0.8,
+      "feint_min_turn_degrees": 28,
+      "defender_path_clearance_m": 0.58,
+      "relation_support_distance_m": 1.45,
+      "relation_min_attacker_separation_m": 1.4,
+      "relation_max_defender_distance_m": 3.4,
+      "ball_offset_m": 0.48
+    },
     "decisions": [
       {
         "id": "LAYOUT_0001",
-        "type": "relational_delimiter_order",
+        "type": "court_aware_relational_delimiter",
         "target_ref": "STATE_D1_S0",
         "status": "provisional_visual_policy",
         "position": [
           6,
-          7.2
+          6.954
         ],
         "source_refs": [
           "relation:delimiter:D1",
+          "court:IHF_INDOOR_HANDBALL_COURT_2025",
           "coach_input:span:165-167",
           "coach_input:span:120-123",
           "space:INT_12",
@@ -70,15 +93,16 @@
       },
       {
         "id": "LAYOUT_0002",
-        "type": "relational_delimiter_order",
+        "type": "court_aware_relational_delimiter",
         "target_ref": "STATE_D2_S0",
         "status": "provisional_visual_policy",
         "position": [
           10,
-          7.2
+          7.5
         ],
         "source_refs": [
           "relation:delimiter:D2",
+          "court:IHF_INDOOR_HANDBALL_COURT_2025",
           "coach_input:span:93-95",
           "coach_input:span:120-123",
           "space:INT_12",
@@ -91,15 +115,16 @@
       },
       {
         "id": "LAYOUT_0003",
-        "type": "relational_delimiter_order",
+        "type": "court_aware_relational_delimiter",
         "target_ref": "STATE_D3_S0",
         "status": "provisional_visual_policy",
         "position": [
           14,
-          7.2
+          6.954
         ],
         "source_refs": [
           "relation:delimiter:D3",
+          "court:IHF_INDOOR_HANDBALL_COURT_2025",
           "coach_input:span:68-71",
           "space:INT_23",
           "canonical:interval:INT_23",
@@ -108,12 +133,12 @@
       },
       {
         "id": "LAYOUT_0004",
-        "type": "space_exit_after_defensive_line",
+        "type": "legal_space_exit_after_defensive_line",
         "target_ref": "STATE_L_A003_EXIT",
         "status": "provisional_visual_policy",
         "position": [
           8,
-          5.5
+          6.727
         ],
         "source_refs": [
           "space:INT_12",
@@ -123,12 +148,12 @@
       },
       {
         "id": "LAYOUT_0005",
-        "type": "space_approach_anchor",
+        "type": "functional_space_anchor",
         "target_ref": "STATE_L_RECEPTION_A002",
         "status": "provisional_visual_policy",
         "position": [
           12,
-          10
+          9.886
         ],
         "source_refs": [
           "space:INT_23",
@@ -144,7 +169,7 @@
         "status": "provisional_visual_policy",
         "position": [
           9,
-          13
+          12.886
         ],
         "source_refs": [
           "action:A001",
@@ -158,7 +183,7 @@
         "status": "provisional_visual_policy",
         "position": [
           14.4,
-          13
+          12.886
         ],
         "source_refs": [
           "action:A002",
@@ -168,15 +193,16 @@
       },
       {
         "id": "LAYOUT_0008",
-        "type": "numerical_relation_participant",
+        "type": "connected_two_v_one_support",
         "target_ref": "STATE_PV_S0",
         "status": "provisional_visual_policy",
         "position": [
-          7.25,
-          6.4
+          4.55,
+          6.877
         ],
         "source_refs": [
           "action:A004",
+          "predecessor:A003",
           "coach_input:span:152-157",
           "coach_input:span:145-157"
         ]
@@ -197,26 +223,40 @@
       },
       "anchor": [
         8,
-        7.2
+        7.227
       ],
       "calculation_region": [
         [
-          7.55,
-          6.75
+          6.38,
+          6.093
         ],
         [
-          8.45,
-          6.75
+          9.62,
+          6.48
         ],
         [
-          8.45,
-          7.65
+          9.62,
+          9.9
         ],
         [
-          7.55,
-          7.65
+          6.38,
+          9.886
         ]
       ],
+      "functional_anchors": {
+        "reception": [
+          8,
+          9.886
+        ],
+        "threat": [
+          8,
+          8.127
+        ],
+        "exit": [
+          8,
+          6.727
+        ]
+      },
       "render_policy": "hidden",
       "source_refs": [
         "coach_input:span:120-123",
@@ -236,26 +276,40 @@
       },
       "anchor": [
         12,
-        7.2
+        7.227
       ],
       "calculation_region": [
         [
-          11.55,
-          6.75
+          10.38,
+          6.48
         ],
         [
-          12.45,
-          6.75
+          13.62,
+          6.093
         ],
         [
-          12.45,
-          7.65
+          13.62,
+          9.886
         ],
         [
-          11.55,
-          7.65
+          10.38,
+          9.9
         ]
       ],
+      "functional_anchors": {
+        "reception": [
+          12,
+          9.886
+        ],
+        "threat": [
+          12,
+          8.127
+        ],
+        "exit": [
+          12,
+          6.727
+        ]
+      },
       "render_policy": "hidden",
       "source_refs": [
         "coach_input:span:68-71",
@@ -273,7 +327,7 @@
       "label": "CE",
       "position": [
         9,
-        13
+        12.886
       ],
       "state_ref": "STATE_CE_S0",
       "status": "derived",
@@ -288,7 +342,7 @@
       "label": "D1",
       "position": [
         6,
-        7.2
+        6.954
       ],
       "state_ref": "STATE_D1_S0",
       "status": "derived",
@@ -308,7 +362,7 @@
       "label": "D2",
       "position": [
         10,
-        7.2
+        7.5
       ],
       "state_ref": "STATE_D2_S0",
       "status": "derived",
@@ -330,7 +384,7 @@
       "label": "L",
       "position": [
         14.4,
-        13
+        12.886
       ],
       "state_ref": "STATE_L_S0",
       "status": "derived",
@@ -345,8 +399,8 @@
       "kind": "pivot",
       "label": "PV",
       "position": [
-        7.25,
-        6.4
+        4.55,
+        6.877
       ],
       "state_ref": "STATE_PV_S0",
       "status": "derived",
@@ -354,6 +408,26 @@
       "source_refs": [
         "coach_input:span:152-157",
         "coach_input:span:145-157"
+      ]
+    }
+  ],
+  "contextual_references": [
+    {
+      "id": "CONTEXT_D3",
+      "participant_ref": "D3",
+      "kind": "structural_delimiter",
+      "label": "D3",
+      "position": [
+        14,
+        6.954
+      ],
+      "state_ref": "STATE_D3_S0",
+      "active_participant": false,
+      "source_refs": [
+        "coach_input:span:68-71",
+        "space:INT_23",
+        "canonical:interval:INT_23",
+        "docs/DOMAIN_MODEL.md#3-espais-i-intervals"
       ]
     }
   ],
@@ -367,7 +441,7 @@
       "functional_position_ref": null,
       "position": [
         9,
-        13
+        12.886
       ],
       "status": "current",
       "authority": "coach_explicit_input",
@@ -386,7 +460,7 @@
       "functional_position_ref": null,
       "position": [
         6,
-        7.2
+        6.954
       ],
       "status": "current",
       "authority": "coach_explicit_input",
@@ -410,7 +484,7 @@
       "functional_position_ref": null,
       "position": [
         10,
-        7.2
+        7.5
       ],
       "status": "current",
       "authority": "coach_explicit_input",
@@ -436,7 +510,7 @@
       "functional_position_ref": null,
       "position": [
         14,
-        7.2
+        6.954
       ],
       "status": "current",
       "authority": "derived_from_validated_rule",
@@ -458,7 +532,7 @@
       "functional_position_ref": null,
       "position": [
         8,
-        5.5
+        6.727
       ],
       "status": "future",
       "authority": "coach_explicit_input",
@@ -478,7 +552,7 @@
       "functional_position_ref": null,
       "position": [
         12,
-        10
+        9.886
       ],
       "status": "future",
       "authority": "coach_explicit_input",
@@ -499,7 +573,7 @@
       "functional_position_ref": null,
       "position": [
         14.4,
-        13
+        12.886
       ],
       "status": "current",
       "authority": "coach_explicit_input",
@@ -518,8 +592,8 @@
       "space_ref": null,
       "functional_position_ref": null,
       "position": [
-        7.25,
-        6.4
+        4.55,
+        6.877
       ],
       "status": "current",
       "authority": "coach_explicit_input",
@@ -529,6 +603,39 @@
       ],
       "layout_decision_ref": "LAYOUT_0008",
       "visibility": "normal"
+    }
+  ],
+  "balls": [
+    {
+      "id": "BALL_VISUAL_B1_INITIAL",
+      "ball_ref": "B1",
+      "ball_state_ref": "BALL_STATE_B1_S0",
+      "holder_ref": "CE",
+      "holder_state_ref": "STATE_CE_S0",
+      "position": [
+        8.52,
+        12.846
+      ],
+      "status": "held",
+      "visibility": "initial",
+      "source_refs": [
+        "coach_input:span:3-27"
+      ]
+    }
+  ],
+  "ball_flow": [
+    {
+      "id": "BALL_TRANSITION_A001",
+      "ball_ref": "B1",
+      "from_ball_state_ref": "BALL_STATE_B1_S0",
+      "to_ball_state_ref": "BALL_STATE_B1_001",
+      "from_holder_ref": "CE",
+      "to_holder_ref": "L",
+      "path_ref": "PATH_VIS_A001_PASS_PATH",
+      "receiver_state_ref": "STATE_L_RECEPTION_A002",
+      "source_refs": [
+        "coach_input:span:3-27"
+      ]
     }
   ],
   "common_paths": [
@@ -541,11 +648,11 @@
           "type": "line",
           "start": [
             9,
-            13
+            12.886
           ],
           "end": [
             12,
-            10
+            9.886
           ]
         }
       ],
@@ -570,11 +677,11 @@
           "type": "line",
           "start": [
             14.4,
-            13
+            12.886
           ],
           "end": [
             12,
-            10
+            9.886
           ]
         }
       ],
@@ -600,33 +707,55 @@
           "type": "line",
           "start": [
             12,
-            10
+            9.886
           ],
           "end": [
-            10.28,
-            7.62
+            10.72,
+            8.45
           ]
         },
         {
           "type": "line",
           "start": [
-            10.28,
-            7.62
+            10.72,
+            8.45
           ],
           "end": [
-            8.85,
-            6.48
+            11.05,
+            7.9
           ]
         },
         {
           "type": "line",
           "start": [
-            8.85,
-            6.48
+            11.05,
+            7.9
+          ],
+          "end": [
+            10.92,
+            6.6
+          ]
+        },
+        {
+          "type": "line",
+          "start": [
+            10.92,
+            6.6
+          ],
+          "end": [
+            9.2,
+            6.727
+          ]
+        },
+        {
+          "type": "line",
+          "start": [
+            9.2,
+            6.727
           ],
           "end": [
             8,
-            5.5
+            6.727
           ]
         }
       ],
@@ -635,24 +764,32 @@
           "id": "PATH_VIS_A003_FEINT_PATH_COMMITMENT",
           "role": "commitment",
           "position": [
-            10.28,
-            7.62
+            10.72,
+            8.45
           ]
         },
         {
           "id": "PATH_VIS_A003_FEINT_PATH_DIRECTION_BREAK",
           "role": "direction_break",
           "position": [
-            10.28,
-            7.62
+            11.05,
+            7.9
+          ]
+        },
+        {
+          "id": "PATH_VIS_A003_FEINT_PATH_CLEARANCE",
+          "role": "clearance",
+          "position": [
+            10.92,
+            6.6
           ]
         },
         {
           "id": "PATH_VIS_A003_FEINT_PATH_EXIT",
           "role": "exit",
           "position": [
-            8.85,
-            6.48
+            9.2,
+            6.727
           ]
         }
       ],
@@ -664,6 +801,37 @@
         "coach_input:span:120-123"
       ],
       "action_ref": "A003"
+    }
+  ],
+  "relations": [
+    {
+      "id": "RELATION_A004",
+      "kind": "numerical_relation",
+      "subtype": "2x1",
+      "action_ref": "A004",
+      "primary_attacker_ref": "L",
+      "space_ref": "INT_12",
+      "participants": [
+        {
+          "participant_ref": "L",
+          "state_ref": "STATE_L_A003_EXIT",
+          "role": "primary_attacker"
+        },
+        {
+          "participant_ref": "PV",
+          "state_ref": "STATE_PV_S0",
+          "role": "support_attacker"
+        },
+        {
+          "participant_ref": "D1",
+          "state_ref": "STATE_D1_S0",
+          "role": "defender"
+        }
+      ],
+      "resolution": "open",
+      "source_refs": [
+        "coach_input:span:141-144"
+      ]
     }
   ],
   "branches": [],
@@ -760,8 +928,53 @@
       ]
     },
     {
+      "id": "OBLIGATION_GROUND_PATH_VIS_A002_MOVEMENT_PATH",
+      "kind": "ground_path_outside_goal_area",
+      "action_ref": "A002",
+      "target_ref": "VIS_A002_MOVEMENT_PATH",
+      "required": true,
+      "status": "resolved",
+      "geometry_refs": [
+        "geometry:common_path:PATH_VIS_A002_MOVEMENT_PATH"
+      ],
+      "source_refs": [
+        "coach_input:span:32-43",
+        "coach_input:span:68-71"
+      ]
+    },
+    {
       "id": "OBLIGATION_PRIMITIVE_VIS_A003_FEINT_PATH",
       "kind": "visual_primitive",
+      "action_ref": "A003",
+      "target_ref": "VIS_A003_FEINT_PATH",
+      "required": true,
+      "status": "resolved",
+      "geometry_refs": [
+        "geometry:common_path:PATH_VIS_A003_FEINT_PATH"
+      ],
+      "source_refs": [
+        "coach_input:span:73-85",
+        "coach_input:span:120-123"
+      ]
+    },
+    {
+      "id": "OBLIGATION_GROUND_PATH_VIS_A003_FEINT_PATH",
+      "kind": "ground_path_outside_goal_area",
+      "action_ref": "A003",
+      "target_ref": "VIS_A003_FEINT_PATH",
+      "required": true,
+      "status": "resolved",
+      "geometry_refs": [
+        "geometry:common_path:PATH_VIS_A003_FEINT_PATH"
+      ],
+      "source_refs": [
+        "coach_input:span:73-85",
+        "coach_input:span:120-123"
+      ]
+    },
+    {
+      "id": "OBLIGATION_FEINT_SHAPE_VIS_A003_FEINT_PATH",
+      "kind": "functional_feint_shape",
       "action_ref": "A003",
       "target_ref": "VIS_A003_FEINT_PATH",
       "required": true,
@@ -819,13 +1032,216 @@
         "coach_input:span:73-85",
         "coach_input:span:120-123"
       ]
+    },
+    {
+      "id": "OBLIGATION_BALL_B1",
+      "kind": "initial_ball_visible",
+      "action_ref": null,
+      "target_ref": "B1",
+      "required": true,
+      "status": "resolved",
+      "geometry_refs": [
+        "geometry:ball:BALL_VISUAL_B1_INITIAL"
+      ],
+      "source_refs": [
+        "coach_input:span:3-27"
+      ]
     }
   ],
   "diagnostics": [],
+  "validation": {
+    "renderability": "passed",
+    "geometry": "valid",
+    "tactical": "not_validated_by_coach",
+    "checks": [
+      {
+        "id": "CHECK_RENDERABLE",
+        "kind": "renderability",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "geometry",
+        "action_ref": null,
+        "message": "La geometria conté primitives renderitzables.",
+        "source_refs": [
+          "derived:generic_geometry"
+        ],
+        "details": {}
+      },
+      {
+        "id": "CHECK_GROUND_PHYSICAL_PATH_VIS_A002_MOVEMENT_PATH",
+        "kind": "ground_path_physical_area",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "PATH_VIS_A002_MOVEMENT_PATH",
+        "action_ref": "A002",
+        "message": "El recorregut terrestre queda fora de l’àrea física.",
+        "source_refs": [
+          "coach_input:span:32-43",
+          "coach_input:span:68-71"
+        ],
+        "details": {
+          "valid": true,
+          "minimum_clearance_m": 3.907,
+          "required_clearance_m": 0,
+          "nearest_point": [
+            12,
+            9.886
+          ],
+          "segment_index": 0
+        }
+      },
+      {
+        "id": "CHECK_GROUND_VISUAL_PATH_VIS_A002_MOVEMENT_PATH",
+        "kind": "ground_path_visual_clearance",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "PATH_VIS_A002_MOVEMENT_PATH",
+        "action_ref": "A002",
+        "message": "El símbol manté el marge visual provisional respecte de l’àrea.",
+        "source_refs": [
+          "coach_input:span:32-43",
+          "coach_input:span:68-71"
+        ],
+        "details": {
+          "valid": true,
+          "minimum_clearance_m": 3.907,
+          "required_clearance_m": 0.48,
+          "nearest_point": [
+            12,
+            9.886
+          ],
+          "segment_index": 0
+        }
+      },
+      {
+        "id": "CHECK_GROUND_PHYSICAL_PATH_VIS_A003_FEINT_PATH",
+        "kind": "ground_path_physical_area",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "PATH_VIS_A003_FEINT_PATH",
+        "action_ref": "A003",
+        "message": "El recorregut terrestre queda fora de l’àrea física.",
+        "source_refs": [
+          "coach_input:span:73-85",
+          "coach_input:span:120-123"
+        ],
+        "details": {
+          "valid": true,
+          "minimum_clearance_m": 0.6,
+          "required_clearance_m": 0,
+          "nearest_point": [
+            10.92,
+            6.6
+          ],
+          "segment_index": 2
+        }
+      },
+      {
+        "id": "CHECK_GROUND_VISUAL_PATH_VIS_A003_FEINT_PATH",
+        "kind": "ground_path_visual_clearance",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "PATH_VIS_A003_FEINT_PATH",
+        "action_ref": "A003",
+        "message": "El símbol manté el marge visual provisional respecte de l’àrea.",
+        "source_refs": [
+          "coach_input:span:73-85",
+          "coach_input:span:120-123"
+        ],
+        "details": {
+          "valid": true,
+          "minimum_clearance_m": 0.6,
+          "required_clearance_m": 0.48,
+          "nearest_point": [
+            10.92,
+            6.6
+          ],
+          "segment_index": 2
+        }
+      },
+      {
+        "id": "CHECK_FEINT_FUNCTIONS_PATH_VIS_A003_FEINT_PATH",
+        "kind": "functional_feint",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "PATH_VIS_A003_FEINT_PATH",
+        "action_ref": "A003",
+        "message": "La finta diferencia compromís, ruptura i evasió sense travessar el defensor.",
+        "source_refs": [
+          "coach_input:span:73-85",
+          "coach_input:span:120-123"
+        ],
+        "details": {
+          "commitment_break_distance_m": 0.641,
+          "direction_change_degrees": 36.67,
+          "defender_clearance_m": 0.83
+        }
+      },
+      {
+        "id": "CHECK_FEINT_EXIT_PATH_VIS_A003_FEINT_PATH",
+        "kind": "feint_exit_corridor",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "PATH_VIS_A003_FEINT_PATH",
+        "action_ref": "A003",
+        "message": "La sortida funcional entra al corredor de l’interval contigu.",
+        "source_refs": [
+          "coach_input:span:73-85",
+          "coach_input:span:120-123"
+        ],
+        "details": {
+          "target_space_ref": "INT_12",
+          "exit_position": [
+            9.2,
+            6.727
+          ]
+        }
+      },
+      {
+        "id": "CHECK_RELATION_RELATION_A004",
+        "kind": "numerical_relation_layout",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "RELATION_A004",
+        "action_ref": "A004",
+        "message": "Els dos atacants i el defensor formen un dilema local llegible sense tancar-ne la resolució.",
+        "source_refs": [
+          "coach_input:span:141-144"
+        ],
+        "details": {
+          "attacker_separation_m": 3.453,
+          "defender_distances_m": [
+            2.013,
+            1.452
+          ],
+          "attackers_outside_goal_area": true
+        }
+      },
+      {
+        "id": "CHECK_BALL_B1",
+        "kind": "ball_identity_and_visibility",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "B1",
+        "action_ref": null,
+        "message": "La pilota inicial és única i qualsevol passada conserva la mateixa identitat.",
+        "source_refs": [
+          "coach_input:span:3-27"
+        ],
+        "details": {
+          "visible_initial_instances": 1,
+          "linked_transfers": 1
+        }
+      }
+    ]
+  },
   "result": {
     "status": "ready",
-    "obligations_total": 6,
-    "obligations_resolved": 6,
+    "renderability_status": "passed",
+    "geometry_validation_status": "valid",
+    "tactical_validation_status": "not_validated_by_coach",
+    "obligations_total": 10,
+    "obligations_resolved": 10,
     "obligations_pending": 0,
     "incompatible_count": 0
   },
@@ -872,6 +1288,28 @@
       "source_refs": [
         "coach_input:span:152-157",
         "coach_input:span:145-157"
+      ]
+    },
+    {
+      "geometry_ref": "geometry:contextual_reference:CONTEXT_D3",
+      "source_refs": [
+        "coach_input:span:68-71",
+        "space:INT_23",
+        "canonical:interval:INT_23",
+        "docs/DOMAIN_MODEL.md#3-espais-i-intervals"
+      ]
+    },
+    {
+      "geometry_ref": "geometry:ball:BALL_VISUAL_B1_INITIAL",
+      "source_refs": [
+        "coach_input:span:3-27"
+      ]
+    },
+    {
+      "geometry_ref": "geometry:relation:RELATION_A004",
+      "action_ref": "A004",
+      "source_refs": [
+        "coach_input:span:141-144"
       ]
     },
     {

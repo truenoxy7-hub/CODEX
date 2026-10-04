@@ -11,12 +11,15 @@
     <script src="data/uvof015.case.js" defer></script>
     <script src="data/handball-knowledge.js" defer></script>
     <script src="data/visual-functional-dictionary.js" defer></script>
+    <script src="data/visual-style.js" defer></script>
     <script src="js/utils.js" defer></script>
     <script src="js/visual-grammar.js" defer></script>
     <script src="js/change-explainer.js" defer></script>
     <script src="js/geometry-dependencies.js" defer></script>
     <script src="js/corrections.js" defer></script>
     <script src="js/interpretation-provider.js" defer></script>
+    <script src="js/model-interpretation-provider.js" defer></script>
+    <script src="js/graphic-knowledge-base.js" defer></script>
     <script src="js/knowledge-resolver.js" defer></script>
     <script src="js/composition-graph.js" defer></script>
     <script src="js/state-registry.js" defer></script>
@@ -25,6 +28,7 @@
     <script src="js/composition-operators.js" defer></script>
     <script src="js/composition-preflight.js" defer></script>
     <script src="js/clarification-orchestrator.js" defer></script>
+    <script src="js/court-geometry.js" defer></script>
     <script src="js/generic-geometry-resolver.js" defer></script>
     <script src="js/representation-composer.js" defer></script>
     <script src="js/manual-geometry.js" defer></script>
@@ -77,7 +81,7 @@
       </aside>
 
       <section class="workspace-panel court-panel is-mobile-active" data-panel="court" aria-labelledby="court-title">
-        <div class="court-toolbar"><div><p class="kicker">2–3 · GENERAR I CORREGIR</p><h2 id="court-title">Pista</h2></div><div class="toolbar-actions"><div class="segmented" role="group" aria-label="Vista"><button class="is-active" type="button" data-view="corrected">Neta</button><button type="button" data-view="control">Editar</button><button type="button" data-view="compare">Comparar</button><button type="button" data-view="generated">Original</button></div><button id="undo" class="icon-button" type="button" aria-label="Desfer" disabled>↶</button><button id="redo" class="icon-button" type="button" aria-label="Refer" disabled>↷</button><button id="reset" class="button button-danger" type="button" disabled>Reiniciar</button></div></div>
+        <div class="court-toolbar"><div><p class="kicker">2–3 · GENERAR I CORREGIR</p><h2 id="court-title">Pista</h2></div><div class="toolbar-actions"><div class="segmented" role="group" aria-label="Vista"><button class="is-active" type="button" data-view="corrected">Neta</button><button type="button" data-view="control">Editar</button><button type="button" data-view="compare">Comparar</button><button type="button" data-view="generated">Original</button></div><button id="export-svg" class="button button-secondary" type="button" disabled>SVG</button><button id="export-png" class="button button-secondary" type="button" disabled>PNG</button><button id="undo" class="icon-button" type="button" aria-label="Desfer" disabled>↶</button><button id="redo" class="icon-button" type="button" aria-label="Refer" disabled>↷</button><button id="reset" class="button button-danger" type="button" disabled>Reiniciar</button></div></div>
         <div class="court-stage-wrap"><div id="court-stage" class="court-stage" aria-live="polite"></div><div id="no-geometry" class="no-geometry"><span>◇</span><strong>La pista encara és buida</strong><p>Genera la descripció. Si falta una dada, TRAÇA te la preguntarà.</p></div><div class="court-legend"><span><i class="legend-attacker"></i>Atacant</span><span><i class="legend-defender"></i>Defensor</span><span><i class="legend-line movement"></i>Moviment</span><span><i class="legend-line pass"></i>Passada</span><span><i class="legend-line shot"></i>Llançament</span></div></div>
         <div class="court-footer"><span id="court-help">Arrossega participants o estats futurs per corregir-los.</span><a href="https://www.ihf.info/sites/default/files/2025-07/09A%20-%20Rules%20of%20the%20Game_Indoor%20Handball_E.pdf" target="_blank" rel="noreferrer">Mides IHF 2025 ↗</a></div>
       </section>

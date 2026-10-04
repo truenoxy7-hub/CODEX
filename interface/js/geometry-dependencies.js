@@ -96,7 +96,7 @@
     return ids;
   }
 
-  function visibleFutureStates(geometry, selectedMap) {
+  function visibleTemporalStates(geometry, selectedMap) {
     const selected = selectedAlternativeIds(geometry, selectedMap);
     const visiblePaths = [...((geometry && geometry.common_paths) || [])];
     ((geometry && geometry.branches) || []).forEach((branch) => {
@@ -108,9 +108,13 @@
     });
     const connectedStates = new Set(visiblePaths.flatMap((path) => [path.from_state_ref, path.to_state_ref]).filter(Boolean));
     return ((geometry && geometry.participant_states) || []).filter((state) => {
-      return state.status === "future" && connectedStates.has(state.id);
+      return ["future", "past"].includes(state.status) && connectedStates.has(state.id);
     });
   }
 
-  return { stateMap, allPaths, sampledPoints, reconcileGeometry, derivedEffectsFor, visibleFutureStates };
+  function visibleFutureStates(geometry, selectedMap) {
+    return visibleTemporalStates(geometry, selectedMap).filter((state) => state.status === "future");
+  }
+
+  return { stateMap, allPaths, sampledPoints, reconcileGeometry, derivedEffectsFor, visibleTemporalStates, visibleFutureStates };
 });

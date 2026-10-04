@@ -1,8 +1,8 @@
 {
-  "$schema": "../../schema/traca.geometry.schema.v0.3.json",
+  "$schema": "../../schema/traca.geometry.schema.v0.4.json",
   "meta": {
     "format": "TRACA_general_geometry",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "case_id": "A1_PASS_RECEPTION",
     "source_revision": "fnv1a:98836507",
     "status": "resolved",
@@ -35,19 +35,41 @@
       -0.8,
       -1,
       21.6,
-      21.8
+      15.15
     ]
   },
   "layout_policy": {
-    "id": "generic_relational_layout_v0.3",
-    "version": "0.3.0",
+    "id": "generic_relational_layout_v0.4",
+    "version": "0.4.0",
     "status": "provisional_render_policy",
     "coordinate_system": "metres_origin_goal_line_left",
     "attack_direction": "negative_y",
     "notes": [
-      "Distribució derivada de delimitadors, espais, dependències d’acció i relacions numèriques.",
-      "Les distàncies són una política visual versionada i no coneixement tàctic."
+      "Distribució derivada de delimitadors, corredors d’interval, dependències d’acció i relacions numèriques connectades.",
+      "Les profunditats, separacions, marges de símbol i distàncies de contacte són política visual provisional.",
+      "La validesa geomètrica no concedeix validació tàctica de l’entrenador."
     ],
+    "parameters": {
+      "id": "generic_relational_layout_v0.4",
+      "version": "0.4.0",
+      "defensive_area_clearance_m": 1.5,
+      "minimum_defensive_depth_m": 6.8,
+      "reception_free_throw_offset_m": 0.9,
+      "ground_symbol_clearance_m": 0.48,
+      "surpass_depth_m": 0.5,
+      "staging_offset_y": 3,
+      "feint_contact_distance_m": 0.9,
+      "feint_break_lateral_m": 1.05,
+      "feint_break_depth_m": 0.4,
+      "feint_bypass_depth_m": 0.9,
+      "feint_exit_lateral_m": 0.8,
+      "feint_min_turn_degrees": 28,
+      "defender_path_clearance_m": 0.58,
+      "relation_support_distance_m": 1.45,
+      "relation_min_attacker_separation_m": 1.4,
+      "relation_max_defender_distance_m": 3.4,
+      "ball_offset_m": 0.48
+    },
     "decisions": [
       {
         "id": "LAYOUT_0001",
@@ -56,7 +78,7 @@
         "status": "provisional_visual_policy",
         "position": [
           11.7,
-          10
+          9.9
         ],
         "source_refs": [
           "action:A001",
@@ -71,7 +93,7 @@
         "status": "provisional_visual_policy",
         "position": [
           8.3,
-          13
+          12.9
         ],
         "source_refs": [
           "action:A001",
@@ -85,7 +107,7 @@
         "status": "provisional_visual_policy",
         "position": [
           14.1,
-          13
+          12.9
         ],
         "source_refs": [
           "action:A002",
@@ -106,7 +128,7 @@
       "label": "CE",
       "position": [
         8.3,
-        13
+        12.9
       ],
       "state_ref": "STATE_CE_S0",
       "status": "derived",
@@ -121,7 +143,7 @@
       "label": "L",
       "position": [
         14.1,
-        13
+        12.9
       ],
       "state_ref": "STATE_L_S0",
       "status": "derived",
@@ -132,6 +154,7 @@
       ]
     }
   ],
+  "contextual_references": [],
   "participant_states": [
     {
       "id": "STATE_CE_S0",
@@ -142,7 +165,7 @@
       "functional_position_ref": null,
       "position": [
         8.3,
-        13
+        12.9
       ],
       "status": "current",
       "authority": "coach_explicit_input",
@@ -161,7 +184,7 @@
       "functional_position_ref": null,
       "position": [
         11.7,
-        10
+        9.9
       ],
       "status": "future",
       "authority": "coach_explicit_input",
@@ -181,7 +204,7 @@
       "functional_position_ref": null,
       "position": [
         14.1,
-        13
+        12.9
       ],
       "status": "current",
       "authority": "coach_explicit_input",
@@ -191,6 +214,39 @@
       ],
       "layout_decision_ref": "LAYOUT_0003",
       "visibility": "normal"
+    }
+  ],
+  "balls": [
+    {
+      "id": "BALL_VISUAL_B1_INITIAL",
+      "ball_ref": "B1",
+      "ball_state_ref": "BALL_STATE_B1_S0",
+      "holder_ref": "CE",
+      "holder_state_ref": "STATE_CE_S0",
+      "position": [
+        7.82,
+        12.86
+      ],
+      "status": "held",
+      "visibility": "initial",
+      "source_refs": [
+        "coach_input:span:3-27"
+      ]
+    }
+  ],
+  "ball_flow": [
+    {
+      "id": "BALL_TRANSITION_A001",
+      "ball_ref": "B1",
+      "from_ball_state_ref": "BALL_STATE_B1_S0",
+      "to_ball_state_ref": "BALL_STATE_B1_001",
+      "from_holder_ref": "CE",
+      "to_holder_ref": "L",
+      "path_ref": "PATH_VIS_A001_PASS_PATH",
+      "receiver_state_ref": "STATE_L_RECEPTION_A002",
+      "source_refs": [
+        "coach_input:span:3-27"
+      ]
     }
   ],
   "common_paths": [
@@ -203,11 +259,11 @@
           "type": "line",
           "start": [
             8.3,
-            13
+            12.9
           ],
           "end": [
             11.7,
-            10
+            9.9
           ]
         }
       ],
@@ -232,11 +288,11 @@
           "type": "line",
           "start": [
             14.1,
-            13
+            12.9
           ],
           "end": [
             11.7,
-            10
+            9.9
           ]
         }
       ],
@@ -250,6 +306,7 @@
       "to_state_ref": "STATE_L_RECEPTION_A002"
     }
   ],
+  "relations": [],
   "branches": [],
   "dependencies": [
     {
@@ -310,6 +367,20 @@
       ]
     },
     {
+      "id": "OBLIGATION_GROUND_PATH_VIS_A002_MOVEMENT_PATH",
+      "kind": "ground_path_outside_goal_area",
+      "action_ref": "A002",
+      "target_ref": "VIS_A002_MOVEMENT_PATH",
+      "required": true,
+      "status": "resolved",
+      "geometry_refs": [
+        "geometry:common_path:PATH_VIS_A002_MOVEMENT_PATH"
+      ],
+      "source_refs": [
+        "coach_input:span:32-43"
+      ]
+    },
+    {
       "id": "OBLIGATION_RECEPTION_A002",
       "kind": "shared_reception_state",
       "action_ref": "A002",
@@ -322,13 +393,110 @@
       "source_refs": [
         "coach_input:span:32-43"
       ]
+    },
+    {
+      "id": "OBLIGATION_BALL_B1",
+      "kind": "initial_ball_visible",
+      "action_ref": null,
+      "target_ref": "B1",
+      "required": true,
+      "status": "resolved",
+      "geometry_refs": [
+        "geometry:ball:BALL_VISUAL_B1_INITIAL"
+      ],
+      "source_refs": [
+        "coach_input:span:3-27"
+      ]
     }
   ],
   "diagnostics": [],
+  "validation": {
+    "renderability": "passed",
+    "geometry": "valid",
+    "tactical": "not_validated_by_coach",
+    "checks": [
+      {
+        "id": "CHECK_RENDERABLE",
+        "kind": "renderability",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "geometry",
+        "action_ref": null,
+        "message": "La geometria conté primitives renderitzables.",
+        "source_refs": [
+          "derived:generic_geometry"
+        ],
+        "details": {}
+      },
+      {
+        "id": "CHECK_GROUND_PHYSICAL_PATH_VIS_A002_MOVEMENT_PATH",
+        "kind": "ground_path_physical_area",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "PATH_VIS_A002_MOVEMENT_PATH",
+        "action_ref": "A002",
+        "message": "El recorregut terrestre queda fora de l’àrea física.",
+        "source_refs": [
+          "coach_input:span:32-43"
+        ],
+        "details": {
+          "valid": true,
+          "minimum_clearance_m": 3.903,
+          "required_clearance_m": 0,
+          "nearest_point": [
+            11.7,
+            9.9
+          ],
+          "segment_index": 0
+        }
+      },
+      {
+        "id": "CHECK_GROUND_VISUAL_PATH_VIS_A002_MOVEMENT_PATH",
+        "kind": "ground_path_visual_clearance",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "PATH_VIS_A002_MOVEMENT_PATH",
+        "action_ref": "A002",
+        "message": "El símbol manté el marge visual provisional respecte de l’àrea.",
+        "source_refs": [
+          "coach_input:span:32-43"
+        ],
+        "details": {
+          "valid": true,
+          "minimum_clearance_m": 3.903,
+          "required_clearance_m": 0.48,
+          "nearest_point": [
+            11.7,
+            9.9
+          ],
+          "segment_index": 0
+        }
+      },
+      {
+        "id": "CHECK_BALL_B1",
+        "kind": "ball_identity_and_visibility",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "B1",
+        "action_ref": null,
+        "message": "La pilota inicial és única i qualsevol passada conserva la mateixa identitat.",
+        "source_refs": [
+          "coach_input:span:3-27"
+        ],
+        "details": {
+          "visible_initial_instances": 1,
+          "linked_transfers": 1
+        }
+      }
+    ]
+  },
   "result": {
     "status": "ready",
-    "obligations_total": 3,
-    "obligations_resolved": 3,
+    "renderability_status": "passed",
+    "geometry_validation_status": "valid",
+    "tactical_validation_status": "not_validated_by_coach",
+    "obligations_total": 5,
+    "obligations_resolved": 5,
     "obligations_pending": 0,
     "incompatible_count": 0
   },
@@ -343,6 +511,12 @@
       "geometry_ref": "geometry:entity:L",
       "source_refs": [
         "coach_input:span:20-27",
+        "coach_input:span:3-27"
+      ]
+    },
+    {
+      "geometry_ref": "geometry:ball:BALL_VISUAL_B1_INITIAL",
+      "source_refs": [
         "coach_input:span:3-27"
       ]
     },

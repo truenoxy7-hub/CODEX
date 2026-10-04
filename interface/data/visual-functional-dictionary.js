@@ -1,14 +1,14 @@
 (function (root, factory) {
-  const dictionary = factory();
-  if (typeof module === "object" && module.exports) module.exports = dictionary;
-  root.TRACA_VISUAL_FUNCTIONAL_DICTIONARY = dictionary;
+  const documentValue = factory();
+  if (typeof module === "object" && module.exports) module.exports = documentValue;
+  root.TRACA_VISUAL_FUNCTIONAL_DICTIONARY = documentValue;
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
   return {
-  "$schema": "../schema/traca.visual-functional-dictionary.schema.v0.1.json",
+  "$schema": "../schema/traca.visual-functional-dictionary.schema.v0.2.json",
   "meta": {
     "id": "TRACA_visual_functional_dictionary",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "status": "operational_with_audited_inventory",
     "reported_inventory_evidence_count": 103,
     "imported_inventory_evidence_count": 103,
@@ -23,6 +23,190 @@
     "repeated_observation",
     "candidate",
     "inference"
+  ],
+  "canonical_visual_reference": [
+    {
+      "id": "CVR_ATTACKER",
+      "concept": "attacker",
+      "label": "Atacant",
+      "dictionary_ref": "VF_ATTACKER",
+      "source_refs": [
+        "SRC_COACH_GRAPHIC_LEGEND"
+      ],
+      "evidence_refs": [
+        "E_LEGEND_ATTACKER"
+      ],
+      "status": "validated"
+    },
+    {
+      "id": "CVR_ATTACKER_WITH_BALL",
+      "concept": "attacker_with_ball",
+      "label": "Atacant amb pilota",
+      "dictionary_ref": "VF_ATTACKER_WITH_BALL",
+      "source_refs": [
+        "SRC_COACH_GRAPHIC_LEGEND"
+      ],
+      "evidence_refs": [
+        "E_LEGEND_BALL_OWNER"
+      ],
+      "status": "validated"
+    },
+    {
+      "id": "CVR_DEFENDER",
+      "concept": "defender",
+      "label": "Defensor",
+      "dictionary_ref": "VF_DEFENDER",
+      "source_refs": [
+        "SRC_COACH_GRAPHIC_LEGEND"
+      ],
+      "evidence_refs": [
+        "E_LEGEND_DEFENDER"
+      ],
+      "status": "validated"
+    },
+    {
+      "id": "CVR_MOVEMENT_WITHOUT_BALL",
+      "concept": "movement_without_ball",
+      "label": "Desplaçament sense pilota",
+      "dictionary_ref": "VF_MOVEMENT_WITHOUT_BALL",
+      "source_refs": [
+        "SRC_COACH_GRAPHIC_LEGEND"
+      ],
+      "evidence_refs": [
+        "E_LEGEND_MOVEMENT"
+      ],
+      "status": "validated"
+    },
+    {
+      "id": "CVR_PASS",
+      "concept": "pass",
+      "label": "Passada",
+      "dictionary_ref": "VF_PASS",
+      "source_refs": [
+        "SRC_COACH_GRAPHIC_LEGEND"
+      ],
+      "evidence_refs": [
+        "E_LEGEND_PASS"
+      ],
+      "status": "validated"
+    },
+    {
+      "id": "CVR_PASS_FEINT",
+      "concept": "pass_feint",
+      "label": "Finta de passada",
+      "dictionary_ref": "VF_PASS_FEINT",
+      "source_refs": [
+        "SRC_COACH_GRAPHIC_LEGEND"
+      ],
+      "evidence_refs": [
+        "E_LEGEND_PASS_FEINT"
+      ],
+      "status": "validated"
+    },
+    {
+      "id": "CVR_SHOT",
+      "concept": "shot",
+      "label": "Llançament",
+      "dictionary_ref": "VF_SHOT",
+      "source_refs": [
+        "SRC_COACH_GRAPHIC_LEGEND"
+      ],
+      "evidence_refs": [
+        "E_LEGEND_SHOT"
+      ],
+      "status": "validated"
+    },
+    {
+      "id": "CVR_SHOT_FEINT",
+      "concept": "shot_feint",
+      "label": "Finta de llançament",
+      "dictionary_ref": "VF_SHOT_FEINT",
+      "source_refs": [
+        "SRC_COACH_GRAPHIC_LEGEND"
+      ],
+      "evidence_refs": [
+        "E_LEGEND_SHOT_FEINT"
+      ],
+      "status": "validated"
+    },
+    {
+      "id": "CVR_FEINT",
+      "concept": "feint",
+      "label": "Finta",
+      "dictionary_ref": "VF_FEINT",
+      "source_refs": [
+        "SRC_COACH_GRAPHIC_LEGEND"
+      ],
+      "evidence_refs": [
+        "E_LEGEND_FEINT"
+      ],
+      "status": "validated"
+    },
+    {
+      "id": "CVR_BLOCK_SCREEN",
+      "concept": "block_screen",
+      "label": "Bloqueig ofensiu / pantalla",
+      "dictionary_ref": "VF_BLOCK_SCREEN",
+      "source_refs": [
+        "SRC_COACH_GRAPHIC_LEGEND"
+      ],
+      "evidence_refs": [
+        "E_LEGEND_BLOCK"
+      ],
+      "status": "validated"
+    },
+    {
+      "id": "CVR_DEFENSIVE_BLOCK",
+      "concept": "defensive_block",
+      "label": "Blocatge defensiu",
+      "dictionary_ref": "VF_DEFENSIVE_BLOCK",
+      "source_refs": [
+        "SRC_COACH_GRAPHIC_LEGEND"
+      ],
+      "evidence_refs": [
+        "E_LEGEND_DEFENSIVE_BLOCK"
+      ],
+      "status": "validated"
+    },
+    {
+      "id": "CVR_FUTURE_POSITION",
+      "concept": "future_position",
+      "label": "Posició futura",
+      "dictionary_ref": "VF_TEMPORAL_STATE",
+      "source_refs": [
+        "SRC_COACH_GRAPHIC_LEGEND"
+      ],
+      "evidence_refs": [
+        "E_LEGEND_TEMPORAL_STATE"
+      ],
+      "status": "validated"
+    },
+    {
+      "id": "CVR_PAST_POSITION",
+      "concept": "past_position",
+      "label": "Posició anterior",
+      "dictionary_ref": "VF_TEMPORAL_STATE",
+      "source_refs": [
+        "SRC_COACH_GRAPHIC_LEGEND"
+      ],
+      "evidence_refs": [
+        "E_LEGEND_TEMPORAL_STATE"
+      ],
+      "status": "validated"
+    },
+    {
+      "id": "CVR_DRIBBLE",
+      "concept": "dribble",
+      "label": "Desplaçament en bot",
+      "dictionary_ref": "VF_DRIBBLE",
+      "source_refs": [
+        "SRC_COACH_GRAPHIC_LEGEND"
+      ],
+      "evidence_refs": [
+        "E_LEGEND_DRIBBLE"
+      ],
+      "status": "validated"
+    }
   ],
   "sources": [
     {

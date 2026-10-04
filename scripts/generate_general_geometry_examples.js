@@ -8,6 +8,7 @@ const Composer = require("../interface/js/representation-composer.js");
 const Renderer = require("../interface/js/renderer.js");
 const Visual = require("../interface/js/visual-grammar.js");
 const profile = require("../config/handball-court.ihf-2025.json");
+const { MiniElement, MiniDocument } = require("./lib/minidom.js");
 
 const ROOT = path.resolve(__dirname, "..");
 const OUTPUT = path.join(ROOT, "examples", "general-geometry");
@@ -28,34 +29,6 @@ const CASES = [
     description: "El central passa al lateral. El lateral rep en carrera a l’interval 2–3, fa una finta contra D2 i surt cap a l’interval 1–2. Després juga un 2x1 amb el pivot contra D1."
   }
 ];
-
-function escaped(value) {
-  return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
-
-class MiniElement {
-  constructor(name, documentObject) {
-    this.name = name;
-    this.ownerDocument = documentObject;
-    this.attributes = {};
-    this.children = [];
-    this.dataset = {};
-    this.textContent = "";
-  }
-  setAttribute(name, value) { this.attributes[name] = String(value); }
-  appendChild(child) { this.children.push(child); return child; }
-  replaceChildren(...children) { this.children = children; }
-  serialize() {
-    const attributes = Object.entries(this.attributes).map(([name, value]) => ` ${name}="${escaped(value)}"`).join("");
-    const dataset = Object.entries(this.dataset).map(([name, value]) => ` data-${name.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}="${escaped(value)}"`).join("");
-    const content = `${this.textContent ? escaped(this.textContent) : ""}${this.children.map((child) => child.serialize()).join("")}`;
-    return `<${this.name}${attributes}${dataset}>${content}</${this.name}>`;
-  }
-}
-
-class MiniDocument {
-  createElementNS(_namespace, name) { return new MiniElement(name, this); }
-}
 
 function renderSvg(geometry) {
   const documentObject = new MiniDocument();

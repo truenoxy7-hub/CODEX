@@ -7,25 +7,36 @@
 - Corpus semàntic `TR-UVOF-001`–`TR-UVOF-015` i contracte
   `spatial-relations` v0.3.
 - Preflight qualitatiu pur amb estats `ready`, `partial` o `blocked`.
-- Perfil IHF, contracte geomètric general v0.3 i adaptador compatible amb la
+- Perfil IHF, contracte geomètric general v0.4 i adaptador compatible amb la
   geometria canònica v0.2 d’UVOF015.
 - UVOF015 conserva tres zones, sis espais, setze entitats, tres branques i
   dotze alternatives.
 - Els sis espais són relacions ocultes; només els límits físics de les tres
   zones poden aparèixer discretament a Control.
 - Participants amb estats persistents, trajectòries segmentades i passades
-  enllaçades a emissor/receptor; la finta conserva el trencament funcional.
+  enllaçades a emissor/receptor; la finta conserva compromís, trencament,
+  separació de l'oponent i sortida funcional.
 - Les posicions futures connectades a l’acció visible reutilitzen el símbol del
   participant sense farciment i amb contorn discontinu; passades i moviments queden ancorats al
   perímetre dels símbols d’origen i destí.
 - Cada recepció en carrera és un únic estat compartit: la cursa i la passada hi
   acaben, i la trajectòria posterior comença exactament des del mateix punt.
 - Resolver relacional A1–A3 sense coordenades manuals per a passada, recepció,
-  finta amb trencament funcional i 2x1 obert, inclosa la variant de costat.
+  finta amb canvi de direcció mesurable i 2x1 obert, inclosa la variant de
+  costat i invariant davant reordenacions o canvis d'identificador.
+- Mòdul únic de geometria de pista per a línies, arcs, distàncies i validació:
+  les trajectòries a terra no poden envair l'àrea de porteria ni travessar el
+  marge reservat als símbols.
+- La pilota inicial es representa una sola vegada i conserva la mateixa
+  identitat durant la passada; els delimitadors defensius estructurals són
+  referències contextuals, no participants actius.
+- `renderability`, `geometry_validation` i `tactical_validation` són garanties
+  separades. A1–A3 són renderitzables i geomètricament vàlids; la lectura
+  tàctica continua pendent de validació de l'entrenador.
 - Obligacions exhaustives per primitiva i relació, diagnòstics accionables i
   conflicte explícit quan una àncora manual contradiu el graf.
-- Tres exemples reproduïbles amb TacticalIR, geometria v0.3 i SVG a
-  `examples/general-geometry/`.
+- Tres exemples reproduïbles amb TacticalIR, geometria v0.4, SVG i comparació
+  visual amb v0.3 a `examples/general-geometry/`.
 
 ### MVP funcional v0.5
 
@@ -80,6 +91,15 @@
 - Biblioteca inspectable i resum «Què ha après TRAÇA?».
 - Diccionari visual-funcional amb les 103 evidències de l’inventari i 13
   evidències normatives de la llegenda, projectat a la gramàtica del renderer.
+- Referència visual v0.2 de 14 símbols, política d'estil central v0.1, mode
+  monocrom, metadades SVG i exportació SVG/PNG des del workspace.
+- Galeria reproduïble amb símbols, A1–A3 abans/després i diagnòstic dels 15
+  casos interns, sense presentar geometria absent com a resolta.
+- Adaptador selectiu per a una base gràfica externa: només registres activats
+  explícitament i confirmats poden entrar al runtime; candidats, ambigus i
+  superats són rebutjats com a autoritat operativa.
+- Adaptador de model configurable amb sortida estructurada i evidències. La
+  seva sortida continua sent una proposta provisional que requereix validació.
 - Persistència local i paquet portable `0.5.0`, compatible amb importacions
   `0.2.0`, `0.3.0` i `0.4.0`.
 - Fingerprint del text i estat `stale`: cap geometria anterior es pot guardar després de canviar la font.
@@ -97,6 +117,10 @@ treball, la seva geometria disponible, identitats, fonts i correccions pendents.
 
 ## PARTIAL
 
+- L'adaptador d'UVOF015 conserva les tres branques i dotze alternatives, però
+  el validador físic v0.4 detecta trajectòries històriques dins l'àrea de 6 m.
+  El cas queda explícitament `blocked` fins que se'n regeneri la geometria; no
+  hi ha excepcions per identificador d'exercici.
 - La cobertura estructural del corpus és 164/203 unitats (80,79%); el detall
   per exercici és a [`COMPOSER_COVERAGE.md`](COMPOSER_COVERAGE.md).
 - Bloqueig, permuta i lliscament poden obtenir geometria quan les posicions
@@ -115,15 +139,20 @@ treball, la seva geometria disponible, identitats, fonts i correccions pendents.
   lliscaments de pivot.
 - Decidir a la interpretació els actors/espais que falten en diversos casos;
   el compositor pregunta i s’atura.
+- Incorporar i executar els catàlegs `VAL-ENT-001–005`, `D01–D10`,
+  `R01–R20` i `T01–T20`: els fitxers
+  `TRACA_Base_coneixement_grafics_v0_1.json`, l'HTML associat i el manifest no
+  són presents al projecte ni als adjunts disponibles.
 
 ## FUTURE
 
-- interpretació tàctica general, LLM o embeddings;
+- connexió de credencials i servei real al provider de model configurable;
 - resolutor lingüístic general per a text nou;
 - ampliar la geometria genèrica a més relacions validades;
 - backend, base de dades remota, comptes o col·laboració;
 - promoció canònica i modificació del corpus des del navegador;
-- exportació PNG.
+- regeneració geomètrica del corpus quan les fonts disposin de coordenades o
+  relacions qualitatives suficients.
 
 ## Invariants de risc
 
@@ -137,8 +166,9 @@ override visual del cas ≠ regla visual global
 
 ## Pròxima fita
 
-Validar amb l'entrenador la política visual provisional dels casos A1–A3 i
-registrar les correccions com a coneixement local, no com a regla tàctica
-automàtica. Després, provar dades absents, conflicte de pilota, permuta i
-encreuament sense geometria i prioritzar els buits de
-`COMPOSER_COVERAGE.md` sense hardcodejar exercicis.
+Validar amb l'entrenador la política visual provisional, la làmina de 14
+símbols i els casos A1–A3, i
+regenerar la geometria històrica d'UVOF015 fora de l'àrea de 6 m. Les
+correccions aprovades es registraran com a coneixement local, no com a regla
+tàctica automàtica. Després, provar permuta i encreuament sense geometria i
+prioritzar els buits de `COMPOSER_COVERAGE.md` sense hardcodejar exercicis.

@@ -2,10 +2,11 @@
   const isNode = typeof module === "object" && module.exports;
   const utils = isNode ? require("./utils.js") : root.TRACA_UTILS;
   const interpretation = isNode ? require("./interpretation-provider.js") : root.TRACA_INTERPRETATION;
-  const api = factory(utils, interpretation);
+  const graphicKnowledge = isNode ? require("./graphic-knowledge-base.js") : root.TRACA_GRAPHIC_KNOWLEDGE_BASE;
+  const api = factory(utils, interpretation, graphicKnowledge);
   if (isNode) module.exports = api;
   root.TRACA_KNOWLEDGE_RESOLVER = api;
-})(typeof globalThis !== "undefined" ? globalThis : this, function (utils, interpretationApi) {
+})(typeof globalThis !== "undefined" ? globalThis : this, function (utils, interpretationApi, graphicKnowledgeApi) {
   "use strict";
 
   const AUTHORITY = {
@@ -125,6 +126,9 @@
 
   function resolve(currentCase, options) {
     const configuration = options || {};
+    const graphicKnowledge = configuration.graphicKnowledgeBase
+      ? graphicKnowledgeApi.adaptOperational(configuration.graphicKnowledgeBase, configuration.graphicKnowledgeActivation || { activated_records: [] })
+      : { status: "source_unavailable", facts: [], rejected: [], mass_import: false };
     const canonical = interpretationApi.canonicalCaseProvider(currentCase, configuration.canonicalCases || []);
     const visualRules = activeVisualRules(configuration.dictionary || { entries: [], evidence: [] });
     if (canonical) {
@@ -132,7 +136,8 @@
         ...canonical,
         providers: ["canonical_case_provider", "visual_functional_dictionary"],
         visual_rules: visualRules,
-        composition_knowledge: compositionKnowledge(configuration.library || {}),
+        composition_knowledge: [...compositionKnowledge(configuration.library || {}), ...graphicKnowledge.facts],
+        graphic_knowledge: graphicKnowledge,
         suggestions: [],
         authority_summary: { validated: canonical.concepts.length, provisional: 0, candidate: 0 }
       };
@@ -154,7 +159,8 @@
       unknown_concepts: base.unknown_concepts,
       unresolved,
       tactical_ir: utils.deepClone(base.tactical_ir),
-      composition_knowledge: compositionKnowledge(configuration.library || {}),
+      composition_knowledge: [...compositionKnowledge(configuration.library || {}), ...graphicKnowledge.facts],
+      graphic_knowledge: graphicKnowledge,
       suggestions,
       visual_rules: visualRules,
       authority_summary: {

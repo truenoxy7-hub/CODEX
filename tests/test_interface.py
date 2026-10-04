@@ -15,8 +15,11 @@ def test_universal_workspace_files_exist() -> None:
         "data/uvof015.case.js",
         "data/uvof015.geometry.js",
         "data/visual-functional-dictionary.js",
+        "data/visual-style.js",
         "js/change-explainer.js",
         "js/interpretation-provider.js",
+        "js/model-interpretation-provider.js",
+        "js/graphic-knowledge-base.js",
         "js/knowledge-resolver.js",
         "js/composition-graph.js",
         "js/state-registry.js",
@@ -25,6 +28,7 @@ def test_universal_workspace_files_exist() -> None:
         "js/composition-operators.js",
         "js/composition-preflight.js",
         "js/clarification-orchestrator.js",
+        "js/court-geometry.js",
         "js/generic-geometry-resolver.js",
         "js/representation-composer.js",
         "js/manual-geometry.js",
@@ -57,11 +61,14 @@ def test_interface_exposes_the_universal_supervised_loop() -> None:
     assert "Guardar en construcció" in html
     assert "TR-UVOF-015" in html
     assert 'src="js/interpretation-provider.js"' in html
+    assert 'src="js/model-interpretation-provider.js"' in html
+    assert 'src="js/graphic-knowledge-base.js"' in html
     assert 'src="js/knowledge-resolver.js"' in html
     assert 'src="js/composition-graph.js"' in html
     assert 'src="js/composition-operators.js"' in html
     assert 'src="js/composition-preflight.js"' in html
     assert 'src="js/clarification-orchestrator.js"' in html
+    assert 'src="js/court-geometry.js"' in html
     assert 'src="js/generic-geometry-resolver.js"' in html
     assert 'src="js/representation-composer.js"' in html
     assert 'src="js/inspection-ui.js"' in html
@@ -99,6 +106,8 @@ def test_all_geometry_views_and_explicit_promotion_are_visible() -> None:
     assert "Només les seleccionades" in html
     assert 'id="import-file"' in html
     assert 'id="export-case"' in html
+    assert 'id="export-svg"' in html
+    assert 'id="export-png"' in html
     assert "Diagnòstic de composició" in html
     for block in ("tacticalIR", "compositionPlan", "spatialConstraints", "questions", "ballFlow"):
         assert f'data-diagnostic-block="{block}"' in html

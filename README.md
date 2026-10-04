@@ -11,10 +11,10 @@ La primera família completa és `MITJANS 1V1 OFENSIUS`, amb `TR-UVOF-001` a
 
 Els quinze artefactes qualitatius han migrat al contracte
 `spatial-relations` v0.3. El preflight comprova traçabilitat, preservació i
-resolubilitat de l'entrada. El contracte geomètric v0.3 resol relacionalment la
-cadena passada–recepció–finta–2x1 sense coordenades manuals i adapta el primer
-resolver canònic d'UVOF015; un artefacte pot ser estructuralment vàlid i
-continuar `partial` o `blocked`.
+resolubilitat de l'entrada. El contracte geomètric v0.4 resol relacionalment la
+cadena passada–recepció–finta–2x1 sense coordenades manuals, valida la geometria
+física de la pista i adapta el primer resolver canònic d'UVOF015; un artefacte
+pot ser estructuralment vàlid i continuar `partial` o `blocked`.
 
 La font actual inclou el corpus canònic, els contractes, el diccionari visual-funcional i el bucle local supervisat:
 
@@ -41,6 +41,7 @@ La font actual inclou el corpus canònic, els contractes, el diccionari visual-f
 - `schema/traca.spatial-relations.schema.v0.2.json` (històric, read-only)
 - `scripts/spatial_preflight.py`
 - `config/handball-court.ihf-2025.json`
+- `schema/traca.geometry.schema.v0.4.json`
 - `schema/traca.geometry.schema.v0.3.json`
 - `schema/traca.geometry.schema.v0.2.json`
 - `schema/traca.geometry.schema.v0.1.json` (històric, read-only)
@@ -48,6 +49,8 @@ La font actual inclou el corpus canònic, els contractes, el diccionari visual-f
 - `scripts/resolve_geometry.py`
 - `scripts/generate_general_geometry_examples.js`
 - `examples/general-geometry/`
+- `examples/general-geometry/COMPARISON.md`
+- `examples/general-geometry/comparison.html`
 - `docs/DOMAIN_MODEL.md`
 - `docs/SPATIAL_RELATIONS_CONTRACT.md`
 - `docs/GEOMETRY_CONTRACT.md`
@@ -57,6 +60,10 @@ La font actual inclou el corpus canònic, els contractes, el diccionari visual-f
 - `docs/DECISIONS.md`
 - `docs/OPEN_QUESTIONS.md`
 - `knowledge/visual-functional-dictionary.v0.1.json`
+- `knowledge/visual-functional-dictionary.v0.2.json`
+- `config/visual-style.v0.1.json`
+- `examples/graphics-gallery/`
+- `docs/GRAPHICS_ENGINE.md`
 - `docs/KNOWLEDGE_RESOLVER.md`
 - `docs/REPRESENTATION_COMPOSER.md`
 
@@ -88,6 +95,13 @@ Equivalentment:
 ```bash
 python scripts/validate_semantic.py
 python -m pytest -q
+```
+
+La galeria integral es regenera amb:
+
+```bash
+python scripts/build_visual_dictionary_bundle.py
+node scripts/generate_graphics_gallery.js
 ```
 
 ## Workspace universal de l’MVP

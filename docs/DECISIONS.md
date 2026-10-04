@@ -558,3 +558,73 @@ conserva aproximació, compromís, trencament i sortida; el 2x1 situa els tres
 participants però resta obert. El resolver no afegeix una passada o un
 llançament final que el text no hagi declarat. UVOF015 entra al contracte v0.3
 mitjançant un adaptador que conserva totes les branques i alternatives v0.2.
+
+## D-062 — Una única geometria física de pista
+
+**Decisió:** línia d'àrea, línia de cop franc, pals, distàncies i comprovació
+de trajectòries comparteixen el mateix mòdul geomètric. La línia de 6 m es
+calcula amb el tram recte de 3 m i els dos arcs centrats als pals; el renderer i
+el validador no poden mantenir fórmules divergents.
+
+**Garantia:** una trajectòria a terra és invàlida si entra a l'àrea o si el
+centre d'un símbol incompleix el marge provisional declarat. L'adaptador antic
+d'UVOF015 també passa aquesta validació: una incompatibilitat històrica es fa
+visible i bloqueja el resultat, sense excepcions per `exercise_id`.
+
+## D-063 — Finta mesurable i relació numèrica estructural
+
+**Decisió:** la finta v0.4 conserva punts de compromís, trencament, separació i
+sortida. El validador mesura canvi de direcció, distància de compromís,
+separació respecte de l'oponent, espai objectiu i superació de línia.
+
+**Decisió:** el 2x1 es deriva de les arestes del graf. L'acció predecessora
+determina el portador principal; suport i defensor es col·loquen respecte
+d'aquesta relació. Reordenar llistes o canviar IDs opacs no pot alterar la
+geometria. La comprovació exigeix dos atacants, un defensor, connexió amb
+l'acció anterior i distàncies locals, però no inventa una passada final.
+
+## D-064 — Pilota i referències contextuals són capes diferents
+
+**Decisió:** una pilota inicial es dibuixa exactament una vegada i conserva
+identitat durant les transicions. Un delimitador necessari per definir un
+interval pot aparèixer com a `contextual_reference`, però no entra a la llista
+d'entitats actives ni ocupa un rol d'oponent.
+
+## D-065 — Tres nivells de validació geomètrica
+
+**Decisió:** `renderability`, validesa geomètrica i validació tàctica es
+publiquen separadament. Les dues primeres són comprovacions automàtiques; la
+tercera continua `not_validated_by_coach` fins a revisió explícita. Cap llindar
+provisional de disposició es promociona a coneixement tàctic per haver passat
+els tests.
+
+## D-066 — Referència visual canònica separada de les extensions
+
+**Decisió:** el diccionari v0.2 publica exactament catorze conceptes de la
+llegenda de l'entrenador. Porter, con, banc i cilindre són extensions TRAÇA i
+no s'atribueixen a aquella font. Color i monocrom comparteixen geometria,
+formes i semàntica.
+
+## D-067 — Un únic arbre SVG per pantalla i exportacions
+
+**Decisió:** pantalla, fitxer SVG i PNG parteixen del mateix render SVG. El PNG
+és una rasterització al navegador, no un segon renderer. El SVG incorpora
+identificador de cas, revisió font, versió geomètrica, política visual i estat
+de validació disponible.
+
+## D-068 — La base gràfica externa no s'importa massivament
+
+**Decisió:** una base de coneixement gràfic externa es valida i consulta, però
+només entra al runtime mitjançant un registre d'activació explícit a nivell
+d'assertion. Només estats confirmats són operatius. Observacions repetides,
+candidats, ambigus i superats continuen auditables però no omplen slots.
+
+**Limitació actual:** el paquet de base gràfica, el seu HTML i el manifest no
+són presents. Els catàlegs VAL-ENT, D, R i T no s'han inventat ni executat.
+
+## D-069 — Un model proposa; no valida
+
+**Decisió:** el provider de model és configurable i exigeix una estructura
+amb participants, accions i fragments d'evidència. Una resposta correcta es
+marca `model_proposal`, amb autoritat provisional i validació de l'entrenador
+obligatòria. Sense `invoke` configurat no hi ha cap crida ni èxit simulat.

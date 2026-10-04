@@ -20,7 +20,7 @@
   const store = window.TRACA_STORE.createWorkspaceStore({
     initialCase,
     initialGeometry: null,
-    visualGrammar: window.TRACA_VISUAL_GRAMMAR.createVisualGrammar(window.TRACA_VISUAL_FUNCTIONAL_DICTIONARY),
+    visualGrammar: window.TRACA_VISUAL_GRAMMAR.createVisualGrammar(window.TRACA_VISUAL_FUNCTIONAL_DICTIONARY, { style: window.TRACA_VISUAL_STYLE }),
     initialLibrary: persistedAtOpen && persistedAtOpen.knowledge_library
   });
   const editor = window.TRACA_EDITOR.createEditor({ container: $("#court-stage"), store });
@@ -34,7 +34,7 @@
     caseId: $("#case-id"), caseName: $("#case-name"), provider: $("#provider-label"), understood: $("#understood-list"),
     questions: $("#clarification-questions"), questionCount: $("#question-count"), suggestions: $("#resolver-suggestions"),
     derivationAlert: $("#derivation-alert"), courtStage: $("#court-stage"), noGeometry: $("#no-geometry"), courtHelp: $("#court-help"),
-    undo: $("#undo"), redo: $("#redo"), reset: $("#reset"), reusePrompt: $("#reuse-prompt"), saveMessage: $("#save-message"),
+    undo: $("#undo"), redo: $("#redo"), reset: $("#reset"), exportSvg: $("#export-svg"), exportPng: $("#export-png"), reusePrompt: $("#reuse-prompt"), saveMessage: $("#save-message"),
     toast: $("#toast"), announcer: $("#announcer"), exerciseList: $("#exercise-list"),
     inspectorEmpty: $("#inspector-empty"), inspectorForm: $("#inspector-form"), selectionType: $("#selection-type"),
     selectedId: $("#selected-id"), selectedRef: $("#selected-ref"), positionFields: $("#position-fields"),
@@ -175,6 +175,8 @@
     elements.undo.disabled = !snapshot.corrections.length;
     elements.redo.disabled = !snapshot.redoStack.length;
     elements.reset.disabled = !snapshot.corrections.length;
+    elements.exportSvg.disabled = !geometry;
+    elements.exportPng.disabled = !geometry;
     if (!geometry) return;
     if (!elements.courtStage.ownerDocument || typeof elements.courtStage.ownerDocument.createElementNS !== "function") return;
     window.TRACA_RENDERER.render(elements.courtStage, {
@@ -444,6 +446,26 @@
     } catch (_error) { toast("Completa els camps obligatoris."); }
   });
   $("#export-case").addEventListener("click", () => window.TRACA_IMPORT_EXPORT.downloadPackage(store.snapshot()));
+  elements.exportSvg.addEventListener("click", () => {
+    const svg = elements.courtStage.querySelector("svg");
+    if (!svg) return;
+    const snapshot = store.snapshot();
+    const stem = `${snapshot.currentCase.short_code || snapshot.currentCase.id || "traca"}-r${snapshot.derivations.geometry && snapshot.derivations.geometry.revision || 0}`;
+    window.TRACA_RENDERER.downloadSvg(svg, `${stem}.svg`, document);
+    toast("SVG exportat amb metadades de revisió.");
+  });
+  elements.exportPng.addEventListener("click", async () => {
+    const svg = elements.courtStage.querySelector("svg");
+    if (!svg) return;
+    const snapshot = store.snapshot();
+    const stem = `${snapshot.currentCase.short_code || snapshot.currentCase.id || "traca"}-r${snapshot.derivations.geometry && snapshot.derivations.geometry.revision || 0}`;
+    try {
+      await window.TRACA_RENDERER.downloadPng(svg, `${stem}.png`, snapshot.workingVisualGrammar.export, document);
+      toast("PNG exportat des del mateix SVG canònic.");
+    } catch (_error) {
+      toast("No s’ha pogut exportar el PNG en aquest navegador.");
+    }
+  });
   $$('[data-copy-diagnostic]').forEach((button) => button.addEventListener("click", async () => {
     const payload = diagnosticPayloads[button.dataset.copyDiagnostic];
     if (payload === null || payload === undefined) return;
