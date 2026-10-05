@@ -416,6 +416,74 @@
     "tactical": "not_validated_by_coach",
     "checks": [
       {
+        "id": "CHECK_POSITION_CE",
+        "kind": "participant_position_physical",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "CE",
+        "action_ref": null,
+        "message": "Posició física admissible.",
+        "source_refs": [
+          "coach_input:span:3-10"
+        ],
+        "details": {}
+      },
+      {
+        "id": "CHECK_POSITION_L",
+        "kind": "participant_position_physical",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "L",
+        "action_ref": null,
+        "message": "Posició física admissible.",
+        "source_refs": [
+          "coach_input:span:20-27",
+          "coach_input:span:3-27"
+        ],
+        "details": {}
+      },
+      {
+        "id": "CHECK_POSITION_STATE_CE_S0",
+        "kind": "participant_position_physical",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "STATE_CE_S0",
+        "action_ref": null,
+        "message": "Posició física admissible.",
+        "source_refs": [
+          "coach_input:span:3-10"
+        ],
+        "details": {}
+      },
+      {
+        "id": "CHECK_POSITION_STATE_L_RECEPTION_A002",
+        "kind": "participant_position_physical",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "STATE_L_RECEPTION_A002",
+        "action_ref": null,
+        "message": "Posició física admissible.",
+        "source_refs": [
+          "coach_input:span:3-27",
+          "coach_input:span:32-43"
+        ],
+        "details": {}
+      },
+      {
+        "id": "CHECK_POSITION_STATE_L_S0",
+        "kind": "participant_position_physical",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "STATE_L_S0",
+        "action_ref": null,
+        "message": "Posició física admissible.",
+        "source_refs": [
+          "coach_input:span:20-27",
+          "coach_input:span:3-27"
+        ],
+        "details": {}
+      },
+      {
         "id": "CHECK_RENDERABLE",
         "kind": "renderability",
         "status": "passed",
@@ -441,6 +509,7 @@
         ],
         "details": {
           "valid": true,
+          "within_sidelines": true,
           "minimum_clearance_m": 3.903,
           "required_clearance_m": 0,
           "nearest_point": [
@@ -463,6 +532,7 @@
         ],
         "details": {
           "valid": true,
+          "within_sidelines": true,
           "minimum_clearance_m": 3.903,
           "required_clearance_m": 0.48,
           "nearest_point": [

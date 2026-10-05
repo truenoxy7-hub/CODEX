@@ -196,4 +196,4 @@ const store=Store.createWorkspaceStore({{initialCase:{{id:'N',name:'N',descripti
 process.stdout.write(JSON.stringify({{uid:snapshot.currentCase.case_uid,drafts:snapshot.knowledgeLibrary.drafts.length,validated:snapshot.knowledgeLibrary.validated_cases.length,version:exported.version,hasDerivations:Boolean(exported.derivations),hasComposition:Boolean(exported.composition)}}));
 """)
 
-    assert result == {"uid": "CASE-migrated", "drafts": 1, "validated": 0, "version": "0.5.0", "hasDerivations": True, "hasComposition": True}
+    assert result == {"uid": "CASE-migrated", "drafts": 1, "validated": 0, "version": "0.6.0", "hasDerivations": True, "hasComposition": True}

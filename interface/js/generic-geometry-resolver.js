@@ -406,6 +406,19 @@
     ].filter(Boolean)));
     const paths = [...(geometry.common_paths || []), ...branchPaths];
     const groundPaths = paths.filter((path) => ["movement", "movement_without_ball", "run_without_ball", "continuation", "dribble", "feint"].includes(path.kind));
+    // Stationary participants and every temporal state are physical geometry too.
+    const entities = geometry.entities || [];
+    [...entities, ...(geometry.participant_states || [])].forEach((item) => {
+      const participant = entities.find((entity) => entity.id === item.participant_ref) || item;
+      if (!Array.isArray(item.position)) return;
+      const material = ["ball", "cone", "bench", "cylinder", "text", "label"].includes(participant.kind);
+      const exempt = material || participant.kind === "goalkeeper" || item.support === "airborne" && Boolean(item.source_refs && item.source_refs.length);
+      const [x, y] = item.position;
+      const bounds = x >= 0 && x <= geometry.court.width_m && y >= 0 && y <= (geometry.court.length_m || geometry.court.half_length_m);
+      const bottomArea = geometry.court.length_m && courtGeometry.isInsideGoalArea(profile, [x, geometry.court.length_m - y]);
+      const legal = bounds && (exempt || !courtGeometry.isInsideGoalArea(profile, item.position) && !bottomArea);
+      checks.push(validationCheck(`CHECK_POSITION_${item.id}`, "participant_position_physical", legal ? "passed" : "failed", item.id, legal ? "Posició física admissible." : "Posició fora de pista o dins de l’àrea sense excepció explícita.", item));
+    });
     checks.push(validationCheck(
       "CHECK_RENDERABLE",
       "renderability",
@@ -416,6 +429,11 @@
     ));
     groundPaths.forEach((path) => {
       const physical = courtGeometry.validateGroundPath(path, profile, { minimum_clearance_m: 0, maximum_step_m: 0.04, tolerance_m: 0.005 });
+      if (geometry.court.length_m) {
+        const reflected = { points: courtGeometry.samplePath(path, 0.025).map(sample => [sample.point[0], geometry.court.length_m - sample.point[1]]) };
+        const bottom = courtGeometry.validateGroundPath(reflected, profile, { minimum_clearance_m: 0, maximum_step_m: 0.04, tolerance_m: 0.005 });
+        if (!bottom.valid) { physical.valid = false; physical.bottom_goal_area = bottom; }
+      }
       checks.push(validationCheck(
         `CHECK_GROUND_PHYSICAL_${path.id}`,
         "ground_path_physical_area",
@@ -452,6 +470,15 @@
       const distinct = distinctDistance >= 0.45;
       const turns = turn >= policy.feint_min_turn_degrees;
       const clears = defenderClearance >= policy.defender_path_clearance_m;
+      const samples = courtGeometry.samplePath(path, 0.025).map((sample) => sample.point);
+      const start = samples[0];
+      const exitSide = Math.sign(exit.position[0] - opponent[0]);
+      const firstCrossing = samples.find((point, index) => index && point[1] <= opponent[1] && samples[index - 1][1] > opponent[1]);
+      const sequenceValid = Boolean(start && exitSide && directionBreak.position[1] > opponent[1]
+        && clearance.position[1] > opponent[1] && Math.sign(clearance.position[0] - opponent[0]) === exitSide
+        && firstCrossing && Math.sign(firstCrossing[0] - opponent[0]) === exitSide);
+      checks.push(validationCheck(`CHECK_FEINT_SEQUENCE_${path.id}`, "feint_sequence", sequenceValid ? "passed" : "failed", path.id,
+        sequenceValid ? "Compromís, canvi de costat davant del defensor i superació pel costat de sortida." : "La finta supera el defensor abans del canvi de costat.", path, { first_crossing: firstCrossing || null }));
       checks.push(validationCheck(
         `CHECK_FEINT_FUNCTIONS_${path.id}`,
         "functional_feint",
@@ -646,12 +673,12 @@
         const initialAnchor = layout.spaceAnchors.get(primitive.initial_space_ref), targetAnchor = layout.spaceAnchors.get(primitive.target_space_ref);
         if (!start || !end || !opponent || !initialAnchor || !targetAnchor) { addDiagnostic("GEOMETRY_FEINT_RELATION_MISSING", primitive, "La finta necessita origen, sortida, defensor i dos espais contigus resolts."); return; }
         const direction = Math.sign(targetAnchor[0] - initialAnchor[0]) || Math.sign(end[0] - start[0]) || 1;
-        const commitmentPoint = rounded([opponent[0] - direction * 0.72, opponent[1] + 0.95]);
-        const breakPoint = rounded([opponent[0] - direction * layout.policy.feint_break_lateral_m, opponent[1] + layout.policy.feint_break_depth_m]);
-        const bypassX = opponent[0] - direction * 0.92;
+        const commitmentPoint = rounded([opponent[0] - direction * 0.72, opponent[1] + 1.45]);
+        const breakPoint = rounded([opponent[0] - direction * layout.policy.feint_break_lateral_m, opponent[1] + 1.05]);
+        const bypassX = opponent[0] + direction * 1.05;
         const bypassPoint = rounded([
           bypassX,
-          Math.max(courtGeometry.minimumGroundCenterY(profile, bypassX, layout.policy.ground_symbol_clearance_m), opponent[1] - layout.policy.feint_bypass_depth_m)
+          Math.max(courtGeometry.minimumGroundCenterY(profile, bypassX, layout.policy.ground_symbol_clearance_m), opponent[1] + 1.0)
         ]);
         const exitX = opponent[0] + direction * layout.policy.feint_exit_lateral_m;
         const exitPoint = rounded([

@@ -1,0 +1,231 @@
+{
+  "fixture_only": true,
+  "coach_tactical_approval": false,
+  "criterion": {
+    "id": "CRITERION-97ab74fe-eb78-4d43-b890-85d0dc4c0588",
+    "version": 1,
+    "label": "PROVA TÈCNICA — distància relativa",
+    "definition": "Executor de prova; no consigna tàctica",
+    "state": "executable",
+    "approval": {
+      "author": "TEST_FIXTURE_NOT_COACH",
+      "source_revision": 2,
+      "date": "2026-10-05T15:28:56.289Z"
+    },
+    "scope": "matching_action_bindings",
+    "source_case_uid": "CASE-c4b40562-62d3-426e-bd97-c20c10683ac6",
+    "source_case_code": "DEMO-SOURCE",
+    "source_revision": 2,
+    "source_refs": [],
+    "correction_refs": [
+      "CORR-DEMO-SOURCE-0001"
+    ],
+    "evidence": {
+      "before": [
+        11.7,
+        9.9
+      ],
+      "after": [
+        12.2,
+        10.3
+      ],
+      "target": {
+        "layer": "geometry",
+        "ref": "geometry:participant_state:STATE_L_RECEPTION_A002",
+        "property": "position"
+      },
+      "author": "coach"
+    },
+    "bindings": {
+      "target": "to_state_ref",
+      "anchor": "from_state_ref",
+      "lateral_axis": "anchor_to_original_target"
+    },
+    "condition": {
+      "action_kind": "pass",
+      "distinct_states": true
+    },
+    "effect": {
+      "type": "relative_position",
+      "lateral_m": 3.8999999999999986,
+      "depth_m": -2.5999999999999996
+    },
+    "implementation": "supported",
+    "applications": []
+  },
+  "second_tactical_ir": {
+    "meta": {
+      "format": "TRACA_tactical_ir",
+      "version": "0.1.0",
+      "case_id": "DEMO-SECOND",
+      "source_revision": "fnv1a:98836507",
+      "knowledge_version": null
+    },
+    "participants": [
+      {
+        "id": "SECOND_CE",
+        "label": "SECOND_CE",
+        "role": "central",
+        "kind": "attacker",
+        "team": "attack",
+        "presence": "explicit",
+        "functional_participation": "declared",
+        "structural_delimiter_refs": [],
+        "authority": "coach_explicit_input",
+        "status": "explicit",
+        "source_refs": [
+          "coach_input:span:3-10"
+        ],
+        "position": [
+          9,
+          14
+        ]
+      },
+      {
+        "id": "SECOND_L",
+        "label": "SECOND_L",
+        "role": "lateral",
+        "kind": "attacker",
+        "team": "attack",
+        "presence": "explicit",
+        "functional_participation": "declared",
+        "structural_delimiter_refs": [],
+        "authority": "coach_explicit_input",
+        "status": "explicit",
+        "source_refs": [
+          "coach_input:span:20-27",
+          "coach_input:span:3-27"
+        ],
+        "position": [
+          16,
+          14
+        ]
+      }
+    ],
+    "participant_states": [],
+    "balls": [
+      {
+        "id": "SECOND_B1",
+        "holder_ref": "SECOND_CE",
+        "authority": "derived_from_validated_rule",
+        "status": "validated",
+        "source_refs": [
+          "coach_input:span:3-27"
+        ]
+      }
+    ],
+    "materials": [],
+    "spaces": [],
+    "actions": [
+      {
+        "type": "pass",
+        "actor_ref": "SECOND_CE",
+        "receiver_ref": "SECOND_L",
+        "ball_ref": "SECOND_B1",
+        "authority": "coach_explicit_input",
+        "status": "explicit",
+        "source_refs": [
+          "coach_input:span:3-27"
+        ],
+        "id": "SECOND_A001"
+      },
+      {
+        "type": "reception",
+        "actor_ref": "SECOND_L",
+        "mode": "in_motion",
+        "authority": "coach_explicit_input",
+        "status": "explicit",
+        "source_refs": [
+          "coach_input:span:32-43"
+        ],
+        "id": "SECOND_A002",
+        "after": [
+          "SECOND_A001"
+        ]
+      }
+    ],
+    "decisions": [],
+    "phases": [],
+    "ball_flow": [],
+    "relations": [
+      {
+        "id": "REL_A001_PERFORMS",
+        "type": "performs",
+        "from_ref": "SECOND_CE",
+        "to_ref": "SECOND_A001",
+        "authority": "coach_explicit_input",
+        "status": "explicit",
+        "source_refs": [
+          "coach_input:span:3-27"
+        ]
+      },
+      {
+        "id": "REL_A001_PASSES_TO",
+        "type": "passes_to",
+        "from_ref": "SECOND_CE",
+        "to_ref": "SECOND_L",
+        "authority": "coach_explicit_input",
+        "status": "explicit",
+        "source_refs": [
+          "coach_input:span:3-27"
+        ]
+      },
+      {
+        "id": "REL_A002_PERFORMS",
+        "type": "performs",
+        "from_ref": "SECOND_L",
+        "to_ref": "SECOND_A002",
+        "authority": "coach_explicit_input",
+        "status": "explicit",
+        "source_refs": [
+          "coach_input:span:32-43"
+        ]
+      },
+      {
+        "id": "REL_A002_FOLLOWS_1",
+        "type": "follows",
+        "from_ref": "SECOND_A001",
+        "to_ref": "SECOND_A002",
+        "authority": "coach_explicit_input",
+        "status": "explicit",
+        "source_refs": [
+          "coach_input:span:32-43"
+        ]
+      }
+    ]
+  },
+  "application": {
+    "criterion_ref": "CRITERION-97ab74fe-eb78-4d43-b890-85d0dc4c0588",
+    "version": 1,
+    "target_ref": "STATE_SECOND_L_RECEPTION_SECOND_A002",
+    "anchor_ref": "STATE_SECOND_CE_S0",
+    "path_ref": "PATH_VIS_SECOND_A001_PASS_PATH",
+    "before": [
+      12,
+      11
+    ],
+    "after": [
+      12.899999999999999,
+      11.4
+    ],
+    "source_refs": []
+  },
+  "mirror": {
+    "criterion_ref": "CRITERION-97ab74fe-eb78-4d43-b890-85d0dc4c0588",
+    "version": 1,
+    "target_ref": "STATE_SECOND_L_RECEPTION_SECOND_A002",
+    "anchor_ref": "STATE_SECOND_CE_S0",
+    "path_ref": "PATH_VIS_SECOND_A001_PASS_PATH",
+    "before": [
+      8,
+      11
+    ],
+    "after": [
+      7.100000000000001,
+      11.4
+    ],
+    "source_refs": []
+  },
+  "unapproved_applied": false,
+  "revoked_applied": false
+}

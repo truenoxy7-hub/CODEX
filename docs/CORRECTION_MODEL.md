@@ -1,5 +1,25 @@
 # Model de correcció
 
+## Historial i revisió 2
+
+El paquet v0.6 conserva l’overlay editable i l’historial atòmic (50 ordres),
+separats de l’original generat immutable. Un arrossegament produeix un sol
+esdeveniment, amb revisió d’origen, objectiu i efectes derivats sobre l’estat
+compartit. Cancel·lar/pèrdua de captura restaura; l’últim pointerup es registra.
+La transformació inversa queda congelada durant el gest per evitar que el
+panell contextual mogui una figura sense haver mogut el punter.
+
+Eliminar una dependència conserva referències irresoltes documentades i un
+desfer; no inventa un substitut. Les còpies/miralls remapegen la clausura de
+vincles, incloses accions anotades, sense aprovar-les com a tàctica nova.
+Regenerar és un merge de tres vies sobre els IDs: les correccions compatibles
+es conserven i els canvis incompatibles exigeixen elecció. La validació es
+recalcula després del merge, no es tracta com una correcció editable.
+
+Desar a SQLite no aprova. Les aprovacions d’acció tenen revisió i abast;
+canvis geomètrics o semàntics les invaliden, mentre etiquetes/aparença poden
+conservar-ne la traça. Els criteris reutilitzables s’aproven per separat.
+
 ## Esdeveniment
 
 Cada correcció compleix

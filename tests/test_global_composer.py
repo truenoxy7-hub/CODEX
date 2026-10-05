@@ -284,7 +284,7 @@ const second=Store.createWorkspaceStore({initialCase:{id:'NEW',name:'New',descri
 second.restorePackage(IO.parsePackage(JSON.stringify(payload)));
 process.stdout.write(JSON.stringify({version:payload.version,valid:IO.validatePackage(payload).valid,before:payload.composition.plan.meta.fingerprint,after:second.snapshot().composition.plan.meta.fingerprint,status:second.snapshot().composition.composition_status}));
 """)
-    assert result["version"] == "0.5.0"
+    assert result["version"] == "0.6.0"
     assert result["valid"] is True
     assert result["before"] == result["after"]
     assert result["status"] == "ready"

@@ -711,36 +711,36 @@
           ],
           "end": [
             9.28,
-            8.45
+            8.95
           ]
         },
         {
           "type": "line",
           "start": [
             9.28,
-            8.45
+            8.95
           ],
           "end": [
             8.95,
-            7.9
+            8.55
           ]
         },
         {
           "type": "line",
           "start": [
             8.95,
-            7.9
+            8.55
           ],
           "end": [
-            9.08,
-            6.6
+            11.05,
+            8.5
           ]
         },
         {
           "type": "line",
           "start": [
-            9.08,
-            6.6
+            11.05,
+            8.5
           ],
           "end": [
             10.8,
@@ -765,7 +765,7 @@
           "role": "commitment",
           "position": [
             9.28,
-            8.45
+            8.95
           ]
         },
         {
@@ -773,15 +773,15 @@
           "role": "direction_break",
           "position": [
             8.95,
-            7.9
+            8.55
           ]
         },
         {
           "id": "PATH_VIS_A003_FEINT_PATH_CLEARANCE",
           "role": "clearance",
           "position": [
-            9.08,
-            6.6
+            11.05,
+            8.5
           ]
         },
         {
@@ -1055,6 +1055,209 @@
     "tactical": "not_validated_by_coach",
     "checks": [
       {
+        "id": "CHECK_POSITION_CE",
+        "kind": "participant_position_physical",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "CE",
+        "action_ref": null,
+        "message": "Posició física admissible.",
+        "source_refs": [
+          "coach_input:span:3-10"
+        ],
+        "details": {}
+      },
+      {
+        "id": "CHECK_POSITION_D2",
+        "kind": "participant_position_physical",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "D2",
+        "action_ref": null,
+        "message": "Posició física admissible.",
+        "source_refs": [
+          "coach_input:span:93-95",
+          "coach_input:span:68-71",
+          "space:INT_12",
+          "canonical:interval:INT_12",
+          "docs/DOMAIN_MODEL.md#3-espais-i-intervals",
+          "coach_input:span:120-123",
+          "space:INT_23",
+          "canonical:interval:INT_23"
+        ],
+        "details": {}
+      },
+      {
+        "id": "CHECK_POSITION_D3",
+        "kind": "participant_position_physical",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "D3",
+        "action_ref": null,
+        "message": "Posició física admissible.",
+        "source_refs": [
+          "coach_input:span:165-167",
+          "coach_input:span:120-123",
+          "space:INT_23",
+          "canonical:interval:INT_23",
+          "docs/DOMAIN_MODEL.md#3-espais-i-intervals",
+          "coach_input:span:158-167"
+        ],
+        "details": {}
+      },
+      {
+        "id": "CHECK_POSITION_L",
+        "kind": "participant_position_physical",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "L",
+        "action_ref": null,
+        "message": "Posició física admissible.",
+        "source_refs": [
+          "coach_input:span:20-27",
+          "coach_input:span:3-27"
+        ],
+        "details": {}
+      },
+      {
+        "id": "CHECK_POSITION_PV",
+        "kind": "participant_position_physical",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "PV",
+        "action_ref": null,
+        "message": "Posició física admissible.",
+        "source_refs": [
+          "coach_input:span:152-157",
+          "coach_input:span:145-157"
+        ],
+        "details": {}
+      },
+      {
+        "id": "CHECK_POSITION_STATE_CE_S0",
+        "kind": "participant_position_physical",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "STATE_CE_S0",
+        "action_ref": null,
+        "message": "Posició física admissible.",
+        "source_refs": [
+          "coach_input:span:3-10"
+        ],
+        "details": {}
+      },
+      {
+        "id": "CHECK_POSITION_STATE_D1_S0",
+        "kind": "participant_position_physical",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "STATE_D1_S0",
+        "action_ref": null,
+        "message": "Posició física admissible.",
+        "source_refs": [
+          "coach_input:span:68-71",
+          "space:INT_12",
+          "canonical:interval:INT_12",
+          "docs/DOMAIN_MODEL.md#3-espais-i-intervals"
+        ],
+        "details": {}
+      },
+      {
+        "id": "CHECK_POSITION_STATE_D2_S0",
+        "kind": "participant_position_physical",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "STATE_D2_S0",
+        "action_ref": null,
+        "message": "Posició física admissible.",
+        "source_refs": [
+          "coach_input:span:93-95",
+          "coach_input:span:68-71",
+          "space:INT_12",
+          "canonical:interval:INT_12",
+          "docs/DOMAIN_MODEL.md#3-espais-i-intervals",
+          "coach_input:span:120-123",
+          "space:INT_23",
+          "canonical:interval:INT_23"
+        ],
+        "details": {}
+      },
+      {
+        "id": "CHECK_POSITION_STATE_D3_S0",
+        "kind": "participant_position_physical",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "STATE_D3_S0",
+        "action_ref": null,
+        "message": "Posició física admissible.",
+        "source_refs": [
+          "coach_input:span:165-167",
+          "coach_input:span:120-123",
+          "space:INT_23",
+          "canonical:interval:INT_23",
+          "docs/DOMAIN_MODEL.md#3-espais-i-intervals",
+          "coach_input:span:158-167"
+        ],
+        "details": {}
+      },
+      {
+        "id": "CHECK_POSITION_STATE_L_A003_EXIT",
+        "kind": "participant_position_physical",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "STATE_L_A003_EXIT",
+        "action_ref": null,
+        "message": "Posició física admissible.",
+        "source_refs": [
+          "coach_input:span:73-85",
+          "coach_input:span:120-123"
+        ],
+        "details": {}
+      },
+      {
+        "id": "CHECK_POSITION_STATE_L_RECEPTION_A002",
+        "kind": "participant_position_physical",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "STATE_L_RECEPTION_A002",
+        "action_ref": null,
+        "message": "Posició física admissible.",
+        "source_refs": [
+          "coach_input:span:3-27",
+          "coach_input:span:32-43",
+          "coach_input:span:68-71"
+        ],
+        "details": {}
+      },
+      {
+        "id": "CHECK_POSITION_STATE_L_S0",
+        "kind": "participant_position_physical",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "STATE_L_S0",
+        "action_ref": null,
+        "message": "Posició física admissible.",
+        "source_refs": [
+          "coach_input:span:20-27",
+          "coach_input:span:3-27"
+        ],
+        "details": {}
+      },
+      {
+        "id": "CHECK_POSITION_STATE_PV_S0",
+        "kind": "participant_position_physical",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "STATE_PV_S0",
+        "action_ref": null,
+        "message": "Posició física admissible.",
+        "source_refs": [
+          "coach_input:span:152-157",
+          "coach_input:span:145-157"
+        ],
+        "details": {}
+      },
+      {
         "id": "CHECK_RENDERABLE",
         "kind": "renderability",
         "status": "passed",
@@ -1081,6 +1284,7 @@
         ],
         "details": {
           "valid": true,
+          "within_sidelines": true,
           "minimum_clearance_m": 3.907,
           "required_clearance_m": 0,
           "nearest_point": [
@@ -1104,6 +1308,7 @@
         ],
         "details": {
           "valid": true,
+          "within_sidelines": true,
           "minimum_clearance_m": 3.907,
           "required_clearance_m": 0.48,
           "nearest_point": [
@@ -1127,13 +1332,14 @@
         ],
         "details": {
           "valid": true,
-          "minimum_clearance_m": 0.6,
+          "within_sidelines": true,
+          "minimum_clearance_m": 0.727,
           "required_clearance_m": 0,
           "nearest_point": [
-            9.08,
-            6.6
+            10.8,
+            6.727
           ],
-          "segment_index": 2
+          "segment_index": 3
         }
       },
       {
@@ -1150,13 +1356,33 @@
         ],
         "details": {
           "valid": true,
-          "minimum_clearance_m": 0.6,
+          "within_sidelines": true,
+          "minimum_clearance_m": 0.727,
           "required_clearance_m": 0.48,
           "nearest_point": [
-            9.08,
-            6.6
+            10.8,
+            6.727
           ],
-          "segment_index": 2
+          "segment_index": 3
+        }
+      },
+      {
+        "id": "CHECK_FEINT_SEQUENCE_PATH_VIS_A003_FEINT_PATH",
+        "kind": "feint_sequence",
+        "status": "passed",
+        "severity": "info",
+        "subject_ref": "PATH_VIS_A003_FEINT_PATH",
+        "action_ref": "A003",
+        "message": "Compromís, canvi de costat davant del defensor i superació pel costat de sortida.",
+        "source_refs": [
+          "coach_input:span:73-85",
+          "coach_input:span:120-123"
+        ],
+        "details": {
+          "first_crossing": [
+            10.90763888888889,
+            7.490375
+          ]
         }
       },
       {
@@ -1172,9 +1398,9 @@
           "coach_input:span:120-123"
         ],
         "details": {
-          "commitment_break_distance_m": 0.641,
-          "direction_change_degrees": 36.67,
-          "defender_clearance_m": 0.83
+          "commitment_break_distance_m": 0.519,
+          "direction_change_degrees": 128.16,
+          "defender_clearance_m": 0.9
         }
       },
       {

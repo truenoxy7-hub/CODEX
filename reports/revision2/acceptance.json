@@ -1,0 +1,2317 @@
+{
+  "format": "TRACA_revision2_results",
+  "date": "2026-10-05",
+  "technical_tests_not_coach_approval": true,
+  "pytest_total": 286,
+  "pytest_failed": 0,
+  "semantic_validation_exit": 0,
+  "source_hashes_match": 20,
+  "criteria": [
+    {
+      "id": "ED01",
+      "scenario": "Afegir i moure els sis tipus de figures, amb selecció directa i etiqueta.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_ed_atomic_undo_redo_roundtrip_for_all_manual_operations",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_ed_pointer_capture_offset_final_up_cancel_and_keyboard_guard",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_ed_transform_is_frozen_for_pointer_session_even_if_selection_changes_layout",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "A_MANUAL",
+          "result": "observed",
+          "details": "Sis tipus de figures, corbes quadràtiques amb tres controls, banc a 10° i atall de 5°, duplicació, simetria, eliminar/buidar i desfer/refer. Retrocés dins el text no elimina figures.",
+          "artifact": "screenshots/manual-board.jpg"
+        }
+      ],
+      "scope_or_gap": "Tacte físic i mòbil pendents."
+    },
+    {
+      "id": "ED02",
+      "scenario": "Editar els tres controls de corbes simples, i moure trajectòries lliures senceres.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_ed_quadratic_shared_endpoints_snap_and_clone_graph",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_ed_pointer_capture_offset_final_up_cancel_and_keyboard_guard",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "A_MANUAL",
+          "result": "observed",
+          "details": "Sis tipus de figures, corbes quadràtiques amb tres controls, banc a 10° i atall de 5°, duplicació, simetria, eliminar/buidar i desfer/refer. Retrocés dins el text no elimina figures.",
+          "artifact": "screenshots/manual-board.jpg"
+        },
+        {
+          "id": "B_A1",
+          "result": "observed",
+          "details": "B1 visible; arrossegament de recepció de [11.7,9.9] a [12.700100,10.380048] actualitza els extrems compartits de passada i cursa. S'ha corregit el hitbox del símbol futur buit."
+        }
+      ],
+      "scope_or_gap": "Corba sencera lliure no repetida a la UI després de l'últim ajust."
+    },
+    {
+      "id": "ED03",
+      "scenario": "Banc amb nansa, passos de 5°/10°, duplicació i simetria remapejada.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_ed_atomic_undo_redo_roundtrip_for_all_manual_operations",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_ed_copy_remaps_actions_ball_offset_and_delete_exposes_broken_relation",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "A_MANUAL",
+          "result": "observed",
+          "details": "Sis tipus de figures, corbes quadràtiques amb tres controls, banc a 10° i atall de 5°, duplicació, simetria, eliminar/buidar i desfer/refer. Retrocés dins el text no elimina figures.",
+          "artifact": "screenshots/manual-board.jpg"
+        }
+      ],
+      "scope_or_gap": "Nansa de gir pendent de repetició UI; botons i atall observats."
+    },
+    {
+      "id": "ED04",
+      "scenario": "Desfer/refer crear, moure, eliminar, girar, corbar, duplicar, simetria, buidar i regenerar.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_ed_atomic_undo_redo_roundtrip_for_all_manual_operations",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_gn_three_way_regeneration_preserves_edits_conflicts_late_and_undo",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_gn_failed_acceptance_is_retryable_and_case_open_cancels_old_response",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "A_MANUAL",
+          "result": "observed",
+          "details": "Sis tipus de figures, corbes quadràtiques amb tres controls, banc a 10° i atall de 5°, duplicació, simetria, eliminar/buidar i desfer/refer. Retrocés dins el text no elimina figures.",
+          "artifact": "screenshots/manual-board.jpg"
+        }
+      ],
+      "scope_or_gap": "Desfer/refer regeneració comprovat automàticament, no tot el circuit UI mixt."
+    },
+    {
+      "id": "ED05",
+      "scenario": "Zoom, mitja pista superior/inferior i pista completa.",
+      "status": "verificat",
+      "test_evidence": [
+        {
+          "name": "test_ed_transform_is_frozen_for_pointer_session_even_if_selection_changes_layout",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_ge_full_court_bottom_area_and_scoped_action_approval",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "A_VIEW",
+          "result": "observed",
+          "details": "Vista inferior amb zoom 150%: desplaçament de pantalla +37.5,+37.5 transforma correctament la posició de món aproximadament -1,-1; desfer recupera. Pista completa conserva figures."
+        }
+      ],
+      "scope_or_gap": ""
+    },
+    {
+      "id": "ED06",
+      "scenario": "Snap opcional a tram recte i arcs 6/9 m; cons als postes.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_ed_quadratic_shared_endpoints_snap_and_clone_graph",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [],
+      "scope_or_gap": "Snap cobert pel contracte geomètric; ús tàctil i UI no repetits."
+    },
+    {
+      "id": "ED07",
+      "scenario": "Cancel·lació, pèrdua de captura, darrer frame i atalls contextuals.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_ed_pointer_capture_offset_final_up_cancel_and_keyboard_guard",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_ed_transform_is_frozen_for_pointer_session_even_if_selection_changes_layout",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "A_MANUAL",
+          "result": "observed",
+          "details": "Sis tipus de figures, corbes quadràtiques amb tres controls, banc a 10° i atall de 5°, duplicació, simetria, eliminar/buidar i desfer/refer. Retrocés dins el text no elimina figures.",
+          "artifact": "screenshots/manual-board.jpg"
+        }
+      ],
+      "scope_or_gap": "Cancel·lació/pèrdua de captura cobertes automàticament."
+    },
+    {
+      "id": "SV01",
+      "scenario": "Guardar manual i automàtic, tancar, reiniciar servei i recuperar en sessió nova.",
+      "status": "verificat",
+      "test_evidence": [
+        {
+          "name": "test_sv_sqlite_restart_revision_conflicts_and_exact_backups",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_http_durable_recovery_conflict_and_historical_versions",
+          "class": "tests.test_revision2_service",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "DURABLE_RESTART",
+          "result": "observed",
+          "details": "Servei aturat i reiniciat; origen localhost sense cache recupera CASE-2026-0007. Comparació DOM editable exacta, 7 nodes. No és una recuperació només de localStorage."
+        }
+      ],
+      "scope_or_gap": ""
+    },
+    {
+      "id": "SV02",
+      "scenario": "Error de desament, desconnexió i dues pestanyes en conflicte.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_sv_client_offline_recovers_and_conflict_never_claims_saved",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_http_durable_recovery_conflict_and_historical_versions",
+          "class": "tests.test_revision2_service",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "TWO_SESSIONS",
+          "result": "observed",
+          "details": "Dos orígens de la mateixa instància guarden versions incompatibles; 409 mostra els dos SVG i Cap no s'ha eliminat. Conservar totes dues crea un cas nou amb UUID propi.",
+          "artifact": "screenshots/save-conflict.jpg"
+        }
+      ],
+      "scope_or_gap": "Desconnexió/quota cobertes amb doble client, conflicte amb servei real."
+    },
+    {
+      "id": "SV03",
+      "scenario": "Migrar paquets TRAÇA 0.2–0.5 i estat local.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_sv_all_package_versions_open_without_implicit_approval[0.2.0]",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_sv_all_package_versions_open_without_implicit_approval[0.3.0]",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_sv_all_package_versions_open_without_implicit_approval[0.4.0]",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_sv_all_package_versions_open_without_implicit_approval[0.5.0]",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_sv_all_package_versions_open_without_implicit_approval[0.6.0]",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_sv_sqlite_restart_revision_conflicts_and_exact_backups",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [],
+      "scope_or_gap": "Migració real idempotent i backup exercitats; importació via UI pendent."
+    },
+    {
+      "id": "SV04",
+      "scenario": "Guardar cas incomplet sense aprovar-lo.",
+      "status": "verificat",
+      "test_evidence": [
+        {
+          "name": "test_sv_stale_incomplete_drafts_and_revision_scoped_approval",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_ge_full_court_bottom_area_and_scoped_action_approval",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "A_MANUAL",
+          "result": "observed",
+          "details": "Sis tipus de figures, corbes quadràtiques amb tres controls, banc a 10° i atall de 5°, duplicació, simetria, eliminar/buidar i desfer/refer. Retrocés dins el text no elimina figures.",
+          "artifact": "screenshots/manual-board.jpg"
+        }
+      ],
+      "scope_or_gap": ""
+    },
+    {
+      "id": "EX01",
+      "scenario": "Exportar SVG/PNG amb corba i banc seleccionats i guia activa.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_ex_clean_export_dimensions_unique_ids_and_temporal_legend",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_ed_temporal_state_has_hitbox_only_in_edit_view",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "CLEAN_PNG",
+          "result": "observed",
+          "details": "Porta-retalls retorna image/png real. PNG de 600 px extret i inspeccionat: corbes i figures sense nanses ni guia. També observada denegació del porta-retalls i alternativa PNG; baixada d'aquesta alternativa no confirmada.",
+          "artifact": "exports/manual-fitxa.png"
+        }
+      ],
+      "scope_or_gap": "PNG real inspeccionat; baixada SVG UI no confirmada."
+    },
+    {
+      "id": "EX02",
+      "scenario": "Copiar imatge amb i sense permís/API de porta-retalls.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_ex_png_failures_clipboard_image_and_honest_fallback_release_urls",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "CLEAN_PNG",
+          "result": "observed",
+          "details": "Porta-retalls retorna image/png real. PNG de 600 px extret i inspeccionat: corbes i figures sense nanses ni guia. També observada denegació del porta-retalls i alternativa PNG; baixada d'aquesta alternativa no confirmada.",
+          "artifact": "exports/manual-fitxa.png"
+        }
+      ],
+      "scope_or_gap": "Imatge real copiada; alternativa PNG preparada, baixada no confirmada."
+    },
+    {
+      "id": "EX03",
+      "scenario": "Importar paquet editable i exportar a mida de fitxa.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_ed_atomic_undo_redo_roundtrip_for_all_manual_operations",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_ex_clean_export_dimensions_unique_ids_and_temporal_legend",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_sv_real_edited_package_and_corrections_satisfy_portable_schema",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "CLEAN_PNG",
+          "result": "observed",
+          "details": "Porta-retalls retorna image/png real. PNG de 600 px extret i inspeccionat: corbes i figures sense nanses ni guia. També observada denegació del porta-retalls i alternativa PNG; baixada d'aquesta alternativa no confirmada.",
+          "artifact": "exports/manual-fitxa.png"
+        }
+      ],
+      "scope_or_gap": "Roundtrip automatitzat; importació i monocrom a UI pendents."
+    },
+    {
+      "id": "TH01",
+      "scenario": "Seleccionar acció al text i element gràfic en ambdós sentits.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_th_confirmed_model_keeps_selectable_provisional_theory",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_ge_full_court_bottom_area_and_scoped_action_approval",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "B_MODEL",
+          "result": "observed",
+          "details": "Doble explícit, confirmació de la proposta i acceptació de la comparació de regeneració. La teoria conserva dues accions seleccionables provisionals. No és una connexió amb un model real.",
+          "artifact": "screenshots/model-confirmed.jpg"
+        },
+        {
+          "id": "B_A1",
+          "result": "observed",
+          "details": "B1 visible; arrossegament de recepció de [11.7,9.9] a [12.700100,10.380048] actualitza els extrems compartits de passada i cursa. S'ha corregit el hitbox del símbol futur buit."
+        }
+      ],
+      "scope_or_gap": "Selecció d'acció observada; totes les ambigüitats bidireccionals no repetides."
+    },
+    {
+      "id": "TH02",
+      "scenario": "Carregar imatge de referència i dibuix manual sense semàntica completa.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_sv_stale_incomplete_drafts_and_revision_scoped_approval",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_sv_real_edited_package_and_corrections_satisfy_portable_schema",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "A_MANUAL",
+          "result": "observed",
+          "details": "Sis tipus de figures, corbes quadràtiques amb tres controls, banc a 10° i atall de 5°, duplicació, simetria, eliminar/buidar i desfer/refer. Retrocés dins el text no elimina figures.",
+          "artifact": "screenshots/manual-board.jpg"
+        }
+      ],
+      "scope_or_gap": "Pissarra independent observada; càrrega d'imatge de referència pendent de circuit UI."
+    },
+    {
+      "id": "GN01",
+      "scenario": "Generar A1/A2/A3 des dels textos del prompt.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_a1_pass_and_reception_resolve_without_input_coordinates",
+          "class": "tests.test_general_geometry",
+          "passed": true
+        },
+        {
+          "name": "test_a2_demo_preserves_identity_ball_spaces_and_open_2x1",
+          "class": "tests.test_general_geometry",
+          "passed": true
+        },
+        {
+          "name": "test_a3_identifier_and_side_variants_use_relations_not_templates[False]",
+          "class": "tests.test_general_geometry",
+          "passed": true
+        },
+        {
+          "name": "test_a3_identifier_and_side_variants_use_relations_not_templates[True]",
+          "class": "tests.test_general_geometry",
+          "passed": true
+        },
+        {
+          "name": "test_a2_and_explicit_opposite_side_are_geometric_mirrors",
+          "class": "tests.test_general_geometry",
+          "passed": true
+        },
+        {
+          "name": "test_ge_full_curves_stationary_and_feint_sequence",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "B_A1",
+          "result": "observed",
+          "details": "B1 visible; arrossegament de recepció de [11.7,9.9] a [12.700100,10.380048] actualitza els extrems compartits de passada i cursa. S'ha corregit el hitbox del símbol futur buit."
+        },
+        {
+          "id": "B_A2",
+          "result": "observed",
+          "details": "Recepció, finta de cinc segments, PV i D3 presents; decisió oberta.",
+          "artifact": "screenshots/a2-generated.jpg"
+        },
+        {
+          "id": "B_A3",
+          "result": "observed",
+          "details": "Simetria del cas, PV/D1, canvi de costat abans de superar D2; no s'afegeix una passada o tir obligatoris.",
+          "artifact": "screenshots/a3-generated.jpg"
+        }
+      ],
+      "scope_or_gap": "Només famílies inicials compatibles, no generació universal."
+    },
+    {
+      "id": "GN02",
+      "scenario": "Moure recepció compartida i portador.",
+      "status": "verificat",
+      "test_evidence": [
+        {
+          "name": "test_ed_quadratic_shared_endpoints_snap_and_clone_graph",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_ed_copy_remaps_actions_ball_offset_and_delete_exposes_broken_relation",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "B_A1",
+          "result": "observed",
+          "details": "B1 visible; arrossegament de recepció de [11.7,9.9] a [12.700100,10.380048] actualitza els extrems compartits de passada i cursa. S'ha corregit el hitbox del símbol futur buit."
+        }
+      ],
+      "scope_or_gap": ""
+    },
+    {
+      "id": "GN03",
+      "scenario": "Regenerar amb correccions, conflicte, cancel·lació i resposta obsoleta.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_gn_three_way_regeneration_preserves_edits_conflicts_late_and_undo",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_gn_derived_validation_is_not_a_coach_regeneration_conflict",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_gn_failed_acceptance_is_retryable_and_case_open_cancels_old_response",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "B_MODEL",
+          "result": "observed",
+          "details": "Doble explícit, confirmació de la proposta i acceptació de la comparació de regeneració. La teoria conserva dues accions seleccionables provisionals. No és una connexió amb un model real.",
+          "artifact": "screenshots/model-confirmed.jpg"
+        }
+      ],
+      "scope_or_gap": "Correccions mixtes, respostes tardanes i undo provats automàticament; circuit UI complet pendent."
+    },
+    {
+      "id": "LR01",
+      "scenario": "Seleccionar correcció, proposar criteri tipat, aprovar i persistir.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_lr_typed_criterion_new_ids_positions_mirror_and_negative_cases",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_sv_real_edited_package_and_corrections_satisfy_portable_schema",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "C_LEARNING",
+          "result": "observed",
+          "details": "Correcció de recepció registrada, criteri relatiu tècnic aprovat, cas nou mostra Aplicat en aquest exercici i canvia realment la geometria. Revocació posterior no altera el dibuix antic ni s'aplica al següent.",
+          "artifact": "screenshots/criterion-second-case.jpg"
+        }
+      ],
+      "scope_or_gap": "Aprovació de prova explícita, no autoritat tàctica del corpus."
+    },
+    {
+      "id": "LR02",
+      "scenario": "Aplicar criteri geomètric a cas nou, IDs renombrats, posicions diferents i mirall declarat.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_lr_typed_criterion_new_ids_positions_mirror_and_negative_cases",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "C_LEARNING",
+          "result": "observed",
+          "details": "Correcció de recepció registrada, criteri relatiu tècnic aprovat, cas nou mostra Aplicat en aquest exercici i canvia realment la geometria. Revocació posterior no altera el dibuix antic ni s'aplica al següent.",
+          "artifact": "screenshots/criterion-second-case.jpg"
+        }
+      ],
+      "scope_or_gap": "Cas nou UI observat; IDs/posicions nous i mirall verificats amb demo executable."
+    },
+    {
+      "id": "LR03",
+      "scenario": "Contraexemple incompatible, candidat no aprovat, conflicte de regles i revocació.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_lr_typed_criterion_new_ids_positions_mirror_and_negative_cases",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_lr_result_constraints_feint_binding_and_revocation_reopen",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "C_LEARNING",
+          "result": "observed",
+          "details": "Correcció de recepció registrada, criteri relatiu tècnic aprovat, cas nou mostra Aplicat en aquest exercici i canvia realment la geometria. Revocació posterior no altera el dibuix antic ni s'aplica al següent.",
+          "artifact": "screenshots/criterion-second-case.jpg"
+        }
+      ],
+      "scope_or_gap": "Revocació observada; incompatibilitat i conflicte de regles exercitats automàticament."
+    },
+    {
+      "id": "LR04",
+      "scenario": "Criteri validat sense operador executor.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_lr_typed_criterion_new_ids_positions_mirror_and_negative_cases",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_lr_result_constraints_feint_binding_and_revocation_reopen",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [],
+      "scope_or_gap": "Contracte automàtic: aprovat sense executor no es declara aplicat."
+    },
+    {
+      "id": "KB01",
+      "scenario": "Carregar JSON 0.2.0 real i consultar VAL-ENT-004.",
+      "status": "verificat",
+      "test_evidence": [
+        {
+          "name": "test_kb_real_index_validation_scope_counts_and_selective_activation",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [],
+      "scope_or_gap": ""
+    },
+    {
+      "id": "KB02",
+      "scenario": "Activació selectiva, evidències i catàleg T01–T20.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_kb_real_index_validation_scope_counts_and_selective_activation",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_kb_activation_changes_only_optional_view_and_preserves_branches",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [],
+      "scope_or_gap": "Catàleg mapejat individualment; no es declaren T01–T20 tots executats."
+    },
+    {
+      "id": "GE01",
+      "scenario": "Reproduir atacant immòbil dins l’àrea i corba que hi entra.",
+      "status": "verificat",
+      "test_evidence": [
+        {
+          "name": "test_ge_full_curves_stationary_and_feint_sequence",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_ge_full_court_bottom_area_and_scoped_action_approval",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [],
+      "scope_or_gap": ""
+    },
+    {
+      "id": "GE02",
+      "scenario": "Comprovar finta d’A2/A3 sobre ordre i costat del creuament de la línia de D2.",
+      "status": "verificat",
+      "test_evidence": [
+        {
+          "name": "test_ge_full_curves_stationary_and_feint_sequence",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "B_A2",
+          "result": "observed",
+          "details": "Recepció, finta de cinc segments, PV i D3 presents; decisió oberta.",
+          "artifact": "screenshots/a2-generated.jpg"
+        },
+        {
+          "id": "B_A3",
+          "result": "observed",
+          "details": "Simetria del cas, PV/D1, canvi de costat abans de superar D2; no s'afegeix una passada o tir obligatoris.",
+          "artifact": "screenshots/a3-generated.jpg"
+        }
+      ],
+      "scope_or_gap": ""
+    },
+    {
+      "id": "VS01",
+      "scenario": "Làmina de 14 símbols i casos amb estats temporals.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_visual_dictionary_v02_validates_and_has_exactly_fourteen_canonical_symbols",
+          "class": "tests.test_integral_graphics_engine",
+          "passed": true
+        },
+        {
+          "name": "test_symbol_sheet_uses_all_canonical_references_and_is_readable_without_color",
+          "class": "tests.test_integral_graphics_engine",
+          "passed": true
+        },
+        {
+          "name": "test_ex_clean_export_dimensions_unique_ids_and_temporal_legend",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_ed_temporal_state_has_hitbox_only_in_edit_view",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_pass_display_is_trimmed_to_symbols_without_mutating_resolved_geometry",
+          "class": "tests.test_workspace",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "CLEAN_PNG",
+          "result": "observed",
+          "details": "Porta-retalls retorna image/png real. PNG de 600 px extret i inspeccionat: corbes i figures sense nanses ni guia. També observada denegació del porta-retalls i alternativa PNG; baixada d'aquesta alternativa no confirmada.",
+          "artifact": "exports/manual-fitxa.png"
+        }
+      ],
+      "scope_or_gap": "14 símbols i estats provats; comparació humana completa color/monocrom pendent."
+    },
+    {
+      "id": "RG01",
+      "scenario": "Corpus 15 casos, diverses pilotes, fases, decisions, material i identitats.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_rg_corpus_qualitative_scenes_preserve_full_sources_and_separate_balls",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_kb_activation_changes_only_optional_view_and_preserves_branches",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [],
+      "scope_or_gap": "15 fonts preservades; 46 escenes parcials en 12 casos, 0 exercicis complets pel compositor genèric."
+    },
+    {
+      "id": "UI01",
+      "scenario": "Sessions manuals A–C al navegador real i captura/exportació.",
+      "status": "parcial",
+      "test_evidence": [
+        {
+          "name": "test_ed_atomic_undo_redo_roundtrip_for_all_manual_operations",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_lr_typed_criterion_new_ids_positions_mirror_and_negative_cases",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_http_durable_recovery_conflict_and_historical_versions",
+          "class": "tests.test_revision2_service",
+          "passed": true
+        }
+      ],
+      "browser_evidence": [
+        {
+          "id": "A_MANUAL",
+          "result": "observed",
+          "details": "Sis tipus de figures, corbes quadràtiques amb tres controls, banc a 10° i atall de 5°, duplicació, simetria, eliminar/buidar i desfer/refer. Retrocés dins el text no elimina figures.",
+          "artifact": "screenshots/manual-board.jpg"
+        },
+        {
+          "id": "B_A1",
+          "result": "observed",
+          "details": "B1 visible; arrossegament de recepció de [11.7,9.9] a [12.700100,10.380048] actualitza els extrems compartits de passada i cursa. S'ha corregit el hitbox del símbol futur buit."
+        },
+        {
+          "id": "B_A2",
+          "result": "observed",
+          "details": "Recepció, finta de cinc segments, PV i D3 presents; decisió oberta.",
+          "artifact": "screenshots/a2-generated.jpg"
+        },
+        {
+          "id": "B_A3",
+          "result": "observed",
+          "details": "Simetria del cas, PV/D1, canvi de costat abans de superar D2; no s'afegeix una passada o tir obligatoris.",
+          "artifact": "screenshots/a3-generated.jpg"
+        },
+        {
+          "id": "C_LEARNING",
+          "result": "observed",
+          "details": "Correcció de recepció registrada, criteri relatiu tècnic aprovat, cas nou mostra Aplicat en aquest exercici i canvia realment la geometria. Revocació posterior no altera el dibuix antic ni s'aplica al següent.",
+          "artifact": "screenshots/criterion-second-case.jpg"
+        },
+        {
+          "id": "DURABLE_RESTART",
+          "result": "observed",
+          "details": "Servei aturat i reiniciat; origen localhost sense cache recupera CASE-2026-0007. Comparació DOM editable exacta, 7 nodes. No és una recuperació només de localStorage."
+        },
+        {
+          "id": "TWO_SESSIONS",
+          "result": "observed",
+          "details": "Dos orígens de la mateixa instància guarden versions incompatibles; 409 mostra els dos SVG i Cap no s'ha eliminat. Conservar totes dues crea un cas nou amb UUID propi.",
+          "artifact": "screenshots/save-conflict.jpg"
+        },
+        {
+          "id": "CLEAN_PNG",
+          "result": "observed",
+          "details": "Porta-retalls retorna image/png real. PNG de 600 px extret i inspeccionat: corbes i figures sense nanses ni guia. També observada denegació del porta-retalls i alternativa PNG; baixada d'aquesta alternativa no confirmada.",
+          "artifact": "exports/manual-fitxa.png"
+        }
+      ],
+      "scope_or_gap": "Circuits principals A–C observats; variants enumerades a browser-observations.json encara pendents."
+    }
+  ],
+  "test_catalog": [
+    {
+      "id": "T01",
+      "title": "Traducció de llegendes",
+      "case_refs": [
+        "D06",
+        "D07",
+        "D08",
+        "D10"
+      ],
+      "status": "pendent",
+      "external_fixture_executed": false,
+      "test_evidence": [],
+      "scope_or_gap": "No s'ha implementat el lector visual de llegendes externes S06/S09."
+    },
+    {
+      "id": "T02",
+      "title": "Recepció compartida i possessió",
+      "case_refs": [
+        "D01",
+        "D02",
+        "D03",
+        "D04",
+        "D05"
+      ],
+      "status": "parcial",
+      "external_fixture_executed": false,
+      "test_evidence": [
+        {
+          "name": "test_ed_quadratic_shared_endpoints_snap_and_clone_graph",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "scope_or_gap": "Recepció única/possessió A1 i dependències; no seqüència externa D02 e2–e6 completa."
+    },
+    {
+      "id": "T03",
+      "title": "Identitat persistent",
+      "case_refs": [
+        "D02",
+        "D08",
+        "D09"
+      ],
+      "status": "parcial",
+      "external_fixture_executed": false,
+      "test_evidence": [
+        {
+          "name": "test_ed_copy_remaps_actions_ball_offset_and_delete_exposes_broken_relation",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_rg_corpus_qualitative_scenes_preserve_full_sources_and_separate_balls",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "scope_or_gap": "Identitats persistents/còpia de graf; D08 A1/A1_F no traduït completament."
+    },
+    {
+      "id": "T04",
+      "title": "Variant versus seqüència",
+      "case_refs": [
+        "D03",
+        "D04",
+        "D06"
+      ],
+      "status": "parcial",
+      "external_fixture_executed": false,
+      "test_evidence": [
+        {
+          "name": "test_rg_corpus_qualitative_scenes_preserve_full_sources_and_separate_balls",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_kb_activation_changes_only_optional_view_and_preserves_branches",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "scope_or_gap": "Variants/fonts no aplanades; selector V_BASE del cas extern D03 pendent."
+    },
+    {
+      "id": "T05",
+      "title": "Informació no determinada",
+      "case_refs": [
+        "D02",
+        "D08",
+        "D09"
+      ],
+      "status": "parcial",
+      "external_fixture_executed": false,
+      "test_evidence": [
+        {
+          "name": "test_sv_stale_incomplete_drafts_and_revision_scoped_approval",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_rg_corpus_qualitative_scenes_preserve_full_sources_and_separate_balls",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "scope_or_gap": "Buits conservats i cap geometria forçada; adaptació completa D08 pendent."
+    },
+    {
+      "id": "T06",
+      "title": "Desencadenament sense ordre total inventat",
+      "case_refs": [
+        "D02",
+        "D05"
+      ],
+      "status": "pendent",
+      "external_fixture_executed": false,
+      "test_evidence": [],
+      "scope_or_gap": "Motor de desencadenaments externs A_prepares_pass no implementat."
+    },
+    {
+      "id": "T07",
+      "title": "Repeticions que se solapen",
+      "case_refs": [
+        "D01"
+      ],
+      "status": "pendent",
+      "external_fixture_executed": false,
+      "test_evidence": [],
+      "scope_or_gap": "Planificació de repeticions solapades amb recursos no implementada."
+    },
+    {
+      "id": "T08",
+      "title": "Inventari de pilotes",
+      "case_refs": [
+        "D01"
+      ],
+      "status": "parcial",
+      "external_fixture_executed": false,
+      "test_evidence": [
+        {
+          "name": "test_ed_copy_remaps_actions_ball_offset_and_delete_exposes_broken_relation",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_rg_corpus_qualitative_scenes_preserve_full_sources_and_separate_balls",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "scope_or_gap": "Pilotes i holder separats; inventari/activació de repeticions D01 pendents."
+    },
+    {
+      "id": "T09",
+      "title": "Recompte local",
+      "case_refs": [
+        "D03",
+        "D06",
+        "D07",
+        "D09",
+        "D10"
+      ],
+      "status": "parcial",
+      "external_fixture_executed": false,
+      "test_evidence": [
+        {
+          "name": "test_a2_demo_preserves_identity_ball_spaces_and_open_2x1",
+          "class": "tests.test_general_geometry",
+          "passed": true
+        },
+        {
+          "name": "test_a3_identifier_and_side_variants_use_relations_not_templates[False]",
+          "class": "tests.test_general_geometry",
+          "passed": true
+        },
+        {
+          "name": "test_a3_identifier_and_side_variants_use_relations_not_templates[True]",
+          "class": "tests.test_general_geometry",
+          "passed": true
+        },
+        {
+          "name": "test_a2_and_explicit_opposite_side_are_geometric_mirrors",
+          "class": "tests.test_general_geometry",
+          "passed": true
+        }
+      ],
+      "scope_or_gap": "2x1 local inicial; suport/porter del cas extern D06 no traduït completament."
+    },
+    {
+      "id": "T10",
+      "title": "Camins condicionals excloents",
+      "case_refs": [
+        "D03",
+        "D04"
+      ],
+      "status": "parcial",
+      "external_fixture_executed": false,
+      "test_evidence": [
+        {
+          "name": "test_rg_corpus_qualitative_scenes_preserve_full_sources_and_separate_balls",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_kb_activation_changes_only_optional_view_and_preserves_branches",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "scope_or_gap": "Decisions preservades; execució de tots els camins externs D04 pendent."
+    },
+    {
+      "id": "T11",
+      "title": "Dos N3 i un interval relatiu",
+      "case_refs": [
+        "D03"
+      ],
+      "status": "pendent",
+      "external_fixture_executed": false,
+      "test_evidence": [],
+      "scope_or_gap": "Intervals derivats dels dos delimitadors N3 externs no implementats."
+    },
+    {
+      "id": "T12",
+      "title": "Final imposat només dins aquella tasca",
+      "case_refs": [
+        "D04",
+        "D06"
+      ],
+      "status": "parcial",
+      "external_fixture_executed": false,
+      "test_evidence": [
+        {
+          "name": "test_a2_demo_preserves_identity_ball_spaces_and_open_2x1",
+          "class": "tests.test_general_geometry",
+          "passed": true
+        },
+        {
+          "name": "test_a3_identifier_and_side_variants_use_relations_not_templates[False]",
+          "class": "tests.test_general_geometry",
+          "passed": true
+        },
+        {
+          "name": "test_a3_identifier_and_side_variants_use_relations_not_templates[True]",
+          "class": "tests.test_general_geometry",
+          "passed": true
+        },
+        {
+          "name": "test_a2_and_explicit_opposite_side_are_geometric_mirrors",
+          "class": "tests.test_general_geometry",
+          "passed": true
+        },
+        {
+          "name": "test_rg_corpus_qualitative_scenes_preserve_full_sources_and_separate_balls",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "scope_or_gap": "2x1 obert no força PV; comparativa externa D04/D06 pendent."
+    },
+    {
+      "id": "T13",
+      "title": "Reflexió i mà dominant",
+      "case_refs": [
+        "D02",
+        "D05"
+      ],
+      "status": "parcial",
+      "external_fixture_executed": false,
+      "test_evidence": [
+        {
+          "name": "test_ed_quadratic_shared_endpoints_snap_and_clone_graph",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_lr_typed_criterion_new_ids_positions_mirror_and_negative_cases",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "scope_or_gap": "Reflexió relacional/IDs i criteri mirall; no traducció externa D02/D05 completa."
+    },
+    {
+      "id": "T14",
+      "title": "Bloqueig ofensiu tipat",
+      "case_refs": [
+        "D03",
+        "D07"
+      ],
+      "status": "parcial",
+      "external_fixture_executed": false,
+      "test_evidence": [
+        {
+          "name": "test_rg_corpus_qualitative_scenes_preserve_full_sources_and_separate_balls",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "scope_or_gap": "Accions tipades originals preservades; adaptador screen de D07 pendent."
+    },
+    {
+      "id": "T15",
+      "title": "Intercanvi d’assignacions",
+      "case_refs": [
+        "D07",
+        "D09"
+      ],
+      "status": "pendent",
+      "external_fixture_executed": false,
+      "test_evidence": [],
+      "scope_or_gap": "Intercanvi d'assignacions defensives de D07 no resolt."
+    },
+    {
+      "id": "T16",
+      "title": "Geometria amb incertesa",
+      "case_refs": [
+        "D08",
+        "D10"
+      ],
+      "status": "parcial",
+      "external_fixture_executed": false,
+      "test_evidence": [
+        {
+          "name": "test_rg_corpus_qualitative_scenes_preserve_full_sources_and_separate_balls",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "scope_or_gap": "No exigeix coordenades d'entrada ni les promou a semàntica; layout extern D10 pendent."
+    },
+    {
+      "id": "T17",
+      "title": "Escenes independents",
+      "case_refs": [
+        "D09",
+        "D10"
+      ],
+      "status": "parcial",
+      "external_fixture_executed": false,
+      "test_evidence": [
+        {
+          "name": "test_rg_corpus_qualitative_scenes_preserve_full_sources_and_separate_balls",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "scope_or_gap": "Subescenes separades del corpus; F60/F33 externs encara sense adaptador complet."
+    },
+    {
+      "id": "T18",
+      "title": "Funció dels cons",
+      "case_refs": [
+        "D04"
+      ],
+      "status": "parcial",
+      "external_fixture_executed": false,
+      "test_evidence": [
+        {
+          "name": "test_rg_corpus_qualitative_scenes_preserve_full_sources_and_separate_balls",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "scope_or_gap": "Funció material original preservada; C_BOUNDARY D04 extern pendent."
+    },
+    {
+      "id": "T19",
+      "title": "Evidència no equival a promoció",
+      "case_refs": [
+        "D01",
+        "D06",
+        "D08",
+        "D09"
+      ],
+      "status": "verificat",
+      "external_fixture_executed": true,
+      "test_evidence": [
+        {
+          "name": "test_kb_real_index_validation_scope_counts_and_selective_activation",
+          "class": "tests.test_revision2",
+          "passed": true
+        },
+        {
+          "name": "test_kb_activation_changes_only_optional_view_and_preserves_branches",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "scope_or_gap": "JSON real: candidates inoperants, runtime_import_allowed false i validacions prèvies selectives amb abast."
+    },
+    {
+      "id": "T20",
+      "title": "Intersecció sense operador tàctic",
+      "case_refs": [
+        "D02",
+        "D05",
+        "D08"
+      ],
+      "status": "parcial",
+      "external_fixture_executed": false,
+      "test_evidence": [
+        {
+          "name": "test_rg_corpus_qualitative_scenes_preserve_full_sources_and_separate_balls",
+          "class": "tests.test_revision2",
+          "passed": true
+        }
+      ],
+      "scope_or_gap": "No s'infereix tàctica de píxels/interseccions; trajectòries externes D08 no resoltes completament."
+    }
+  ],
+  "corpus_totals": {
+    "exercises": 15,
+    "semantic_units": 203,
+    "recognized_units": 175,
+    "recognized_ratio": 0.8621,
+    "relations_sufficient": 164,
+    "composition_ratio": 0.8079,
+    "generic_geometry_ready": 0,
+    "generic_geometry_partial": 12,
+    "generated_scenes": 46
+  },
+  "corpus_cases": [
+    {
+      "exercise_id": "TR-UVOF-001",
+      "semantic_units": 10,
+      "recognized_units": 8,
+      "relations_sufficient": 8,
+      "composition_coverage": 0.8,
+      "geometry_coverage": 1,
+      "operators": [
+        "feint",
+        "movement",
+        "numerical_relation",
+        "pass",
+        "reception"
+      ],
+      "missing_information": [
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional finta a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts.",
+        "Falta adaptar el marc relacional recuperacio_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives."
+      ],
+      "unsupported": [
+        "resolucio"
+      ],
+      "scenes": [
+        {
+          "id": "FP_SA1_B1",
+          "artifact": "TR-UVOF-001-scene-1.svg",
+          "scope": {
+            "phase_ref": "SA1",
+            "trajectory_ref": "SA1_B1",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "passada"
+            ],
+            "source_ref": "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_SA2_B2",
+          "artifact": "TR-UVOF-001-scene-2.svg",
+          "scope": {
+            "phase_ref": "SA2",
+            "trajectory_ref": "SA2_B2",
+            "ball_ref": "B2",
+            "qualifiers": [
+              "passada_curta"
+            ],
+            "source_ref": "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 2,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
+    },
+    {
+      "exercise_id": "TR-UVOF-002",
+      "semantic_units": 21,
+      "recognized_units": 20,
+      "relations_sufficient": 18,
+      "composition_coverage": 0.8571,
+      "geometry_coverage": 1,
+      "operators": [
+        "crossing",
+        "feint",
+        "movement",
+        "pass",
+        "reception"
+      ],
+      "missing_information": [
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional finta a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional continuitat a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional encreuament a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts."
+      ],
+      "unsupported": [
+        "resolucio"
+      ],
+      "scenes": [
+        {
+          "id": "FP_12_23_PASSADA_INICIAL",
+          "artifact": "TR-UVOF-002-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_12_23_INICI",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "company_del_costat_de_INT_12"
+            ],
+            "source_ref": "exercises/TR-UVOF-002/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_12_23_DEVOLUCIO",
+          "artifact": "TR-UVOF-002-scene-2.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_12_23_INICI",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "just_en_iniciar_canvi_de_direccio"
+            ],
+            "source_ref": "exercises/TR-UVOF-002/spatial-relations.json#/fluxos_pilota/1"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_12_23_CONTINUITAT_CE",
+          "artifact": "TR-UVOF-002-scene-3.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_12_23_AJUDA",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "CE_rep_de_cara"
+            ],
+            "source_ref": "exercises/TR-UVOF-002/spatial-relations.json#/fluxos_pilota/2"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_12_23_ENCREUAMENT_CE",
+          "artifact": "TR-UVOF-002-scene-4.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_12_23_NO_SUPERA",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-002/spatial-relations.json#/fluxos_pilota/3"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_23_12_PASSADA_INICIAL",
+          "artifact": "TR-UVOF-002-scene-5.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_23_12_INICI",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "company_del_costat_de_INT_23"
+            ],
+            "source_ref": "exercises/TR-UVOF-002/spatial-relations.json#/fluxos_pilota/4"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_23_12_DEVOLUCIO",
+          "artifact": "TR-UVOF-002-scene-6.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_23_12_INICI",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "just_en_iniciar_canvi_de_direccio"
+            ],
+            "source_ref": "exercises/TR-UVOF-002/spatial-relations.json#/fluxos_pilota/5"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_23_12_CONTINUITAT_EXT",
+          "artifact": "TR-UVOF-002-scene-7.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_23_12_AJUDA",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-002/spatial-relations.json#/fluxos_pilota/6"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_23_12_ENCREUAMENT_EXT",
+          "artifact": "TR-UVOF-002-scene-8.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_23_12_NO_SUPERA",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-002/spatial-relations.json#/fluxos_pilota/7"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 8,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
+    },
+    {
+      "exercise_id": "TR-UVOF-003",
+      "semantic_units": 23,
+      "recognized_units": 22,
+      "relations_sufficient": 18,
+      "composition_coverage": 0.7826,
+      "geometry_coverage": 0.375,
+      "operators": [
+        "block",
+        "crossing",
+        "movement",
+        "numerical_relation",
+        "pass"
+      ],
+      "missing_information": [
+        "PASS_BINDING_UNRESOLVED: autoritat_validada",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional continuitat a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional encreuament a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts."
+      ],
+      "unsupported": [
+        "resolucio"
+      ],
+      "scenes": [
+        {
+          "id": "FP_12_AJUDA_EXTREM",
+          "artifact": "TR-UVOF-003-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_SUPERA_12_AJUDA",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "resolucio_2x1_exterior",
+              "obligatoria_com_a_principi_de_joc"
+            ],
+            "source_ref": "exercises/TR-UVOF-003/spatial-relations.json#/fluxos_pilota/1"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_23_ENCREUAMENT_CE",
+          "artifact": "TR-UVOF-003-scene-2.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_NO_SUPERA_23_CANVI_BANDA",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-003/spatial-relations.json#/fluxos_pilota/2"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_12_ENCREUAMENT_EXT",
+          "artifact": "TR-UVOF-003-scene-3.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_NO_SUPERA_12_CANVI_BANDA",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-003/spatial-relations.json#/fluxos_pilota/5"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 3,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
+    },
+    {
+      "exercise_id": "TR-UVOF-004",
+      "semantic_units": 18,
+      "recognized_units": 15,
+      "relations_sufficient": 15,
+      "composition_coverage": 0.8333,
+      "geometry_coverage": 1,
+      "operators": [
+        "movement",
+        "numerical_relation",
+        "pass",
+        "reception"
+      ],
+      "missing_information": [
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts.",
+        "Falta adaptar el marc relacional continuitat a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives."
+      ],
+      "unsupported": [
+        "resolucio"
+      ],
+      "scenes": [
+        {
+          "id": "FP_EXT_1",
+          "artifact": "TR-UVOF-004-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PASSADA_EXT_12",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-004/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_EXT_2",
+          "artifact": "TR-UVOF-004-scene-2.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PASSADA_EXT_12",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "recepcio_en_carrera"
+            ],
+            "source_ref": "exercises/TR-UVOF-004/spatial-relations.json#/fluxos_pilota/1"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_CE_1",
+          "artifact": "TR-UVOF-004-scene-3.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PASSADA_CE_23",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-004/spatial-relations.json#/fluxos_pilota/2"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_CE_2",
+          "artifact": "TR-UVOF-004-scene-4.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PASSADA_CE_23",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "recepcio_en_carrera"
+            ],
+            "source_ref": "exercises/TR-UVOF-004/spatial-relations.json#/fluxos_pilota/3"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_CONT_EXT",
+          "artifact": "TR-UVOF-004-scene-5.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "CONTINUITAT_EXT",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "obligatoria_com_a_principi_de_joc"
+            ],
+            "source_ref": "exercises/TR-UVOF-004/spatial-relations.json#/fluxos_pilota/4"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_CONT_CE",
+          "artifact": "TR-UVOF-004-scene-6.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "CONTINUITAT_CE",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-004/spatial-relations.json#/fluxos_pilota/5"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 6,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
+    },
+    {
+      "exercise_id": "TR-UVOF-005",
+      "semantic_units": 6,
+      "recognized_units": 3,
+      "relations_sufficient": 3,
+      "composition_coverage": 0.5,
+      "geometry_coverage": 0,
+      "operators": [
+        "movement"
+      ],
+      "missing_information": [
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts.",
+        "No hi ha flux passador–receptor–pilota validat en aquest contracte; la situació completa requereix adaptar els seus operadors."
+      ],
+      "unsupported": [
+        "resolucio"
+      ],
+      "scenes": [],
+      "geometry_scenes": 0,
+      "geometry_status": "needs_operator_adapter",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
+    },
+    {
+      "exercise_id": "TR-UVOF-006",
+      "semantic_units": 20,
+      "recognized_units": 19,
+      "relations_sufficient": 16,
+      "composition_coverage": 0.8,
+      "geometry_coverage": 0.7777777777777778,
+      "operators": [
+        "crossing",
+        "movement",
+        "numerical_relation",
+        "pass",
+        "reception"
+      ],
+      "missing_information": [
+        "PASS_BINDING_UNRESOLVED: autoritat_validada",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts.",
+        "Falta adaptar el marc relacional continuitat a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional encreuament a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives."
+      ],
+      "unsupported": [
+        "resolucio"
+      ],
+      "scenes": [
+        {
+          "id": "FP_12_EXT",
+          "artifact": "TR-UVOF-006-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "SUPERA_12_AMB_AJUDA",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "obligatoria_com_a_principi_de_joc"
+            ],
+            "source_ref": "exercises/TR-UVOF-006/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_23_PV",
+          "artifact": "TR-UVOF-006-scene-2.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "SUPERA_23_AMB_AJUDA",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-006/spatial-relations.json#/fluxos_pilota/1"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_23_CE",
+          "artifact": "TR-UVOF-006-scene-3.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "NO_SUPERA_23_CANVI",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-006/spatial-relations.json#/fluxos_pilota/2"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_23_EXT",
+          "artifact": "TR-UVOF-006-scene-4.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "NO_SUPERA_23_CANVI",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-006/spatial-relations.json#/fluxos_pilota/3"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_23_RETORN",
+          "artifact": "TR-UVOF-006-scene-5.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "NO_SUPERA_23_CANVI",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "retorn_al_jugador_que_ocupa_central"
+            ],
+            "source_ref": "exercises/TR-UVOF-006/spatial-relations.json#/fluxos_pilota/4"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_12_EXT_ENCREUA",
+          "artifact": "TR-UVOF-006-scene-6.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "NO_SUPERA_12_CANVI",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-006/spatial-relations.json#/fluxos_pilota/6"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_12_RETORN",
+          "artifact": "TR-UVOF-006-scene-7.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "NO_SUPERA_12_CANVI",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "retorn_al_jugador_que_ocupa_central"
+            ],
+            "source_ref": "exercises/TR-UVOF-006/spatial-relations.json#/fluxos_pilota/7"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 7,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
+    },
+    {
+      "exercise_id": "TR-UVOF-007",
+      "semantic_units": 7,
+      "recognized_units": 5,
+      "relations_sufficient": 4,
+      "composition_coverage": 0.5714,
+      "geometry_coverage": 0,
+      "operators": [
+        "crossing",
+        "movement",
+        "numerical_relation"
+      ],
+      "missing_information": [
+        "Falta adaptar el marc relacional encreuament a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts.",
+        "Falta adaptar el marc relacional recuperacio_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "No hi ha flux passador–receptor–pilota validat en aquest contracte; la situació completa requereix adaptar els seus operadors."
+      ],
+      "unsupported": [
+        "resolucio"
+      ],
+      "scenes": [],
+      "geometry_scenes": 0,
+      "geometry_status": "needs_operator_adapter",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
+    },
+    {
+      "exercise_id": "TR-UVOF-008",
+      "semantic_units": 7,
+      "recognized_units": 6,
+      "relations_sufficient": 5,
+      "composition_coverage": 0.7143,
+      "geometry_coverage": 1,
+      "operators": [
+        "crossing",
+        "movement",
+        "pass"
+      ],
+      "missing_information": [
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts.",
+        "Falta adaptar el marc relacional encreuament a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives."
+      ],
+      "unsupported": [
+        "resolucio"
+      ],
+      "scenes": [
+        {
+          "id": "FP_F1_B1",
+          "artifact": "TR-UVOF-008-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "F1_B1",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "passada"
+            ],
+            "source_ref": "exercises/TR-UVOF-008/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 1,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
+    },
+    {
+      "exercise_id": "TR-UVOF-009",
+      "semantic_units": 16,
+      "recognized_units": 13,
+      "relations_sufficient": 13,
+      "composition_coverage": 0.8125,
+      "geometry_coverage": 1,
+      "operators": [
+        "movement",
+        "numerical_relation",
+        "pass",
+        "permutation",
+        "pivot_slide",
+        "reception"
+      ],
+      "missing_information": [
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts."
+      ],
+      "unsupported": [
+        "resolucio"
+      ],
+      "scenes": [
+        {
+          "id": "FP_L_EXT1",
+          "artifact": "TR-UVOF-009-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PERMUTA_CE_L",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-009/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_EXT1_CE",
+          "artifact": "TR-UVOF-009-scene-2.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PERMUTA_CE_L",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "recepcio_despres_de_la_permuta"
+            ],
+            "source_ref": "exercises/TR-UVOF-009/spatial-relations.json#/fluxos_pilota/1"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_PV_L",
+          "artifact": "TR-UVOF-009-scene-3.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FINAL_L_CENTRAL",
+            "ball_ref": "B2",
+            "qualifiers": [
+              "recepcio_a_posicio_central"
+            ],
+            "source_ref": "exercises/TR-UVOF-009/spatial-relations.json#/fluxos_pilota/2"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_EXT2_PV",
+          "artifact": "TR-UVOF-009-scene-4.svg",
+          "scope": {
+            "phase_ref": "F2",
+            "trajectory_ref": "LLISCAMENT_PV",
+            "ball_ref": "B3",
+            "qualifiers": [
+              "seguent_extrem_de_la_filera"
+            ],
+            "source_ref": "exercises/TR-UVOF-009/spatial-relations.json#/fluxos_pilota/3"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 4,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
+    },
+    {
+      "exercise_id": "TR-UVOF-010",
+      "semantic_units": 12,
+      "recognized_units": 11,
+      "relations_sufficient": 11,
+      "composition_coverage": 0.9167,
+      "geometry_coverage": 1,
+      "operators": [
+        "movement",
+        "pass",
+        "permutation",
+        "pivot_slide",
+        "reception"
+      ],
+      "missing_information": [
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts."
+      ],
+      "unsupported": [
+        "resolucio"
+      ],
+      "scenes": [
+        {
+          "id": "FP_LOPOSAT_L",
+          "artifact": "TR-UVOF-010-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PERMUTA_L_CE",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "passada_habilitadora_permuta"
+            ],
+            "source_ref": "exercises/TR-UVOF-010/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_PV_L",
+          "artifact": "TR-UVOF-010-scene-2.svg",
+          "scope": {
+            "phase_ref": "F2",
+            "trajectory_ref": "2X1_TANCAT",
+            "ball_ref": "B2",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-010/spatial-relations.json#/fluxos_pilota/1"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_L_PV",
+          "artifact": "TR-UVOF-010-scene-3.svg",
+          "scope": {
+            "phase_ref": "F2",
+            "trajectory_ref": "2X1_TANCAT",
+            "ball_ref": "B2",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-010/spatial-relations.json#/fluxos_pilota/2"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 3,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
+    },
+    {
+      "exercise_id": "TR-UVOF-011",
+      "semantic_units": 7,
+      "recognized_units": 7,
+      "relations_sufficient": 7,
+      "composition_coverage": 1,
+      "geometry_coverage": 1,
+      "operators": [
+        "movement",
+        "pass",
+        "permutation",
+        "reception"
+      ],
+      "missing_information": [
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives."
+      ],
+      "unsupported": [],
+      "scenes": [
+        {
+          "id": "FP_L_EXT",
+          "artifact": "TR-UVOF-011-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PERMUTA_L_CE_ESPECIFICA",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-011/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_EXT_L",
+          "artifact": "TR-UVOF-011-scene-2.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PERMUTA_L_CE_ESPECIFICA",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "recepcio_al_centre_despres_de_la_permuta"
+            ],
+            "source_ref": "exercises/TR-UVOF-011/spatial-relations.json#/fluxos_pilota/1"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 2,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
+    },
+    {
+      "exercise_id": "TR-UVOF-012",
+      "semantic_units": 16,
+      "recognized_units": 13,
+      "relations_sufficient": 13,
+      "composition_coverage": 0.8125,
+      "geometry_coverage": 0.75,
+      "operators": [
+        "movement",
+        "numerical_relation",
+        "pass",
+        "permutation",
+        "pivot_slide",
+        "reception"
+      ],
+      "missing_information": [
+        "PASS_BINDING_UNRESOLVED: autoritat_validada",
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts."
+      ],
+      "unsupported": [
+        "resolucio"
+      ],
+      "scenes": [
+        {
+          "id": "FP_LOPOSAT_L",
+          "artifact": "TR-UVOF-012-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PRIMER_2X1",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "passada_habilitadora_permuta"
+            ],
+            "source_ref": "exercises/TR-UVOF-012/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_EXT_CE",
+          "artifact": "TR-UVOF-012-scene-2.svg",
+          "scope": {
+            "phase_ref": "F2",
+            "trajectory_ref": "SEGON_2X1",
+            "ball_ref": "B2",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-012/spatial-relations.json#/fluxos_pilota/2"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_CE_EXT",
+          "artifact": "TR-UVOF-012-scene-3.svg",
+          "scope": {
+            "phase_ref": "F2",
+            "trajectory_ref": "SEGON_2X1",
+            "ball_ref": "B2",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-012/spatial-relations.json#/fluxos_pilota/3"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 3,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
+    },
+    {
+      "exercise_id": "TR-UVOF-013",
+      "semantic_units": 10,
+      "recognized_units": 9,
+      "relations_sufficient": 9,
+      "composition_coverage": 0.9,
+      "geometry_coverage": 0.5,
+      "operators": [
+        "movement",
+        "pass",
+        "permutation",
+        "pivot_slide",
+        "reception"
+      ],
+      "missing_information": [
+        "PASS_BINDING_UNRESOLVED: autoritat_validada",
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts."
+      ],
+      "unsupported": [
+        "resolucio"
+      ],
+      "scenes": [
+        {
+          "id": "FP_LOPOSAT_L",
+          "artifact": "TR-UVOF-013-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PERMUTA_I_PRIMER_PAL",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "passada_habilitadora_permuta"
+            ],
+            "source_ref": "exercises/TR-UVOF-013/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 1,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
+    },
+    {
+      "exercise_id": "TR-UVOF-014",
+      "semantic_units": 6,
+      "recognized_units": 6,
+      "relations_sufficient": 6,
+      "composition_coverage": 1,
+      "geometry_coverage": 0,
+      "operators": [
+        "movement",
+        "pass",
+        "permutation",
+        "reception"
+      ],
+      "missing_information": [
+        "PASS_BINDING_UNRESOLVED: autoritat_validada",
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "No hi ha flux passador–receptor–pilota validat en aquest contracte; la situació completa requereix adaptar els seus operadors."
+      ],
+      "unsupported": [],
+      "scenes": [],
+      "geometry_scenes": 0,
+      "geometry_status": "needs_operator_adapter",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
+    },
+    {
+      "exercise_id": "TR-UVOF-015",
+      "semantic_units": 24,
+      "recognized_units": 18,
+      "relations_sufficient": 18,
+      "composition_coverage": 0.75,
+      "geometry_coverage": 1,
+      "operators": [
+        "feint",
+        "movement",
+        "pass",
+        "reception"
+      ],
+      "missing_information": [
+        "Falta adaptar el marc relacional recuperacio_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts.",
+        "Falta adaptar el marc relacional finta a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives."
+      ],
+      "unsupported": [
+        "resolucio"
+      ],
+      "scenes": [
+        {
+          "id": "FP_AESQ_PESQ",
+          "artifact": "TR-UVOF-015-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "DUEL_ESQ",
+            "ball_ref": "B_ESQ",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-015/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_PESQ_AESQ",
+          "artifact": "TR-UVOF-015-scene-2.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "DUEL_ESQ",
+            "ball_ref": "B_ESQ",
+            "qualifiers": [
+              "recepcio_orientada_abans_del_1x1"
+            ],
+            "source_ref": "exercises/TR-UVOF-015/spatial-relations.json#/fluxos_pilota/1"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_ACE_PCE",
+          "artifact": "TR-UVOF-015-scene-3.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "DUEL_CE",
+            "ball_ref": "B_CE",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-015/spatial-relations.json#/fluxos_pilota/2"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_PCE_ACE",
+          "artifact": "TR-UVOF-015-scene-4.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "DUEL_CE",
+            "ball_ref": "B_CE",
+            "qualifiers": [
+              "recepcio_orientada_abans_del_1x1"
+            ],
+            "source_ref": "exercises/TR-UVOF-015/spatial-relations.json#/fluxos_pilota/3"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_ADRE_PDRE",
+          "artifact": "TR-UVOF-015-scene-5.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "DUEL_DRE",
+            "ball_ref": "B_DRE",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-015/spatial-relations.json#/fluxos_pilota/4"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_PDRE_ADRE",
+          "artifact": "TR-UVOF-015-scene-6.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "DUEL_DRE",
+            "ball_ref": "B_DRE",
+            "qualifiers": [
+              "recepcio_orientada_abans_del_1x1"
+            ],
+            "source_ref": "exercises/TR-UVOF-015/spatial-relations.json#/fluxos_pilota/5"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 6,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
+    }
+  ]
+}

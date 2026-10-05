@@ -1,0 +1,217 @@
+{
+  "format": "TRACA_editor_acceptance",
+  "version": "1.0.0",
+  "status": "specification_not_implementation_results",
+  "criteria": [
+    {
+      "id": "ED01",
+      "area": "Pissarra",
+      "scenario": "Afegir i moure els sis tipus de figures, amb selecció directa i etiqueta.",
+      "expected": "Ratolí i tacte; cap salt inicial del centre ni gest perdut.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "ED02",
+      "area": "Pissarra",
+      "scenario": "Editar els tres controls de corbes simples, i moure trajectòries lliures senceres.",
+      "expected": "Corba actualitzada durant el gest; controls només en selecció; ancoratges vinculats coherents.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "ED03",
+      "area": "Pissarra",
+      "scenario": "Banc amb nansa, passos de 5°/10°, duplicació i simetria remapejada.",
+      "expected": "Centre i dimensions preservats; vincles de còpia vàlids; un sol desfer.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "ED04",
+      "area": "Pissarra",
+      "scenario": "Desfer/refer crear, moure, eliminar, girar, corbar, duplicar, simetria, buidar i regenerar.",
+      "expected": "Cada gest és atòmic; desfer/refer restaura dades i relacions.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "ED05",
+      "area": "Pissarra",
+      "scenario": "Zoom, mitja pista superior/inferior i pista completa.",
+      "expected": "Transformació inversa de punter correcta; canvi de vista sense pèrdua o mutació tàctica.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "ED06",
+      "area": "Pissarra",
+      "scenario": "Snap opcional a tram recte i arcs 6/9 m; cons als postes.",
+      "expected": "Punts sobre el tram correcte en ambdues orientacions; cap projecció fora del domini.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "ED07",
+      "area": "Pissarra",
+      "scenario": "Cancel·lació, pèrdua de captura, darrer frame i atalls contextuals.",
+      "expected": "Gestions coherents; Supr/Retrocés dins inputs/selectors no esborra figures.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "SV01",
+      "area": "Persistència",
+      "scenario": "Guardar manual i automàtic, tancar, reiniciar servei i recuperar en sessió nova.",
+      "expected": "Dades i vincles equivalents; desament confirmat i versió identificable.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "SV02",
+      "area": "Persistència",
+      "scenario": "Error de desament, desconnexió i dues pestanyes en conflicte.",
+      "expected": "Mai fals Guardat; canvis recuperables; cap sobreescriptura silenciosa.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "SV03",
+      "area": "Persistència",
+      "scenario": "Migrar paquets TRAÇA 0.2–0.5 i estat local.",
+      "expected": "Còpia recuperable; migració idempotent; IDs, fonts, correccions i aprovacions preservats.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "SV04",
+      "area": "Persistència",
+      "scenario": "Guardar cas incomplet sense aprovar-lo.",
+      "expected": "Esborrany recuperable; aprovació limitada al seu abast; cap promoció implícita.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "EX01",
+      "area": "Exportació",
+      "scenario": "Exportar SVG/PNG amb corba i banc seleccionats i guia activa.",
+      "expected": "Cap control/guia/hitbox; es preserven tots els símbols tàctics, guions i etiquetes.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "EX02",
+      "area": "Exportació",
+      "scenario": "Copiar imatge amb i sense permís/API de porta-retalls.",
+      "expected": "Imatge real o alternativa PNG identificada; no confondre text amb imatge.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "EX03",
+      "area": "Exportació",
+      "scenario": "Importar paquet editable i exportar a mida de fitxa.",
+      "expected": "Recuperació estructurada; geometria fidel i llegible en color i monocrom.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "TH01",
+      "area": "Teoria",
+      "scenario": "Seleccionar acció al text i element gràfic en ambdós sentits.",
+      "expected": "Ressaltat i fonts correctes; pregunta només sobre ambigüitat pertinent.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "TH02",
+      "area": "Teoria",
+      "scenario": "Carregar imatge de referència i dibuix manual sense semàntica completa.",
+      "expected": "Origen preservat; element no vinculat es conserva; no inventa una interpretació aprovada.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "GN01",
+      "area": "Generació",
+      "scenario": "Generar A1/A2/A3 des dels textos del prompt.",
+      "expected": "B1 visible, recepció única, finta funcional, PV i defensor declarats, final obert.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "GN02",
+      "area": "Generació",
+      "scenario": "Moure recepció compartida i portador.",
+      "expected": "Passada/cursa/acció següent i pilota actualitzen dependències adequades en una transacció.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "GN03",
+      "area": "Generació",
+      "scenario": "Regenerar amb correccions, conflicte, cancel·lació i resposta obsoleta.",
+      "expected": "Treball preservat; comparació/elecció; revisions antigues no trepitgen les noves.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "LR01",
+      "area": "Aprenentatge",
+      "scenario": "Seleccionar correcció, proposar criteri tipat, aprovar i persistir.",
+      "expected": "Condicions, efecte, abast, evidències, versió i aprovació sobreviuen al desament.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "LR02",
+      "area": "Aprenentatge",
+      "scenario": "Aplicar criteri geomètric a cas nou, IDs renombrats, posicions diferents i mirall declarat.",
+      "expected": "Efecte geomètric observable per relacions i font visible; cap còpia de coordenades absolutes o ID del cas.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "LR03",
+      "area": "Aprenentatge",
+      "scenario": "Contraexemple incompatible, candidat no aprovat, conflicte de regles i revocació.",
+      "expected": "Abast respectat; candidat inoperant; conflicte explícit; revisions antigues conservades.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "LR04",
+      "area": "Aprenentatge",
+      "scenario": "Criteri validat sense operador executor.",
+      "expected": "Pendent d’implementació; no es presenta com a aplicat.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "KB01",
+      "area": "Coneixement",
+      "scenario": "Carregar JSON 0.2.0 real i consultar VAL-ENT-004.",
+      "expected": "Índexos sense duplicats falsos; test_catalog reconegut; retorna validació original i abast.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "KB02",
+      "area": "Coneixement",
+      "scenario": "Activació selectiva, evidències i catàleg T01–T20.",
+      "expected": "runtime_import_allowed false preservat; candidats/superades inoperants; Txx mapejats amb resultat individual.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "GE01",
+      "area": "Geometria",
+      "scenario": "Reproduir atacant immòbil dins l’àrea i corba que hi entra.",
+      "expected": "No valid/ready; esborrany editable conservat; excepcions només per tipus/context explícit.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "GE02",
+      "area": "Geometria",
+      "scenario": "Comprovar finta d’A2/A3 sobre ordre i costat del creuament de la línia de D2.",
+      "expected": "Canvi cap a l’interval contigu abans de superar; cap col·lisió ni entrada a l’àrea.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "VS01",
+      "area": "Visual",
+      "scenario": "Làmina de 14 símbols i casos amb estats temporals.",
+      "expected": "Llegenda respectada; passat a origen/futur a destí; etiquetes llegibles en color/monocrom.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "RG01",
+      "area": "Regressió",
+      "scenario": "Corpus 15 casos, diverses pilotes, fases, decisions, material i identitats.",
+      "expected": "Semàntica preservada; denominadors i diagnòstics honestos; absència de coordenades no és diagnòstic suficient.",
+      "status": "pending_implementation_and_execution"
+    },
+    {
+      "id": "UI01",
+      "area": "Circuit real",
+      "scenario": "Sessions manuals A–C al navegador real i captura/exportació.",
+      "expected": "Pissarra, persistència i aprenentatge integrats; no només mòduls o fixtures separats.",
+      "status": "pending_implementation_and_execution"
+    }
+  ]
+}

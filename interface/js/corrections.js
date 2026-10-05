@@ -117,6 +117,8 @@
     event.target_role = input.target_role || null;
     event.target_relation = input.target_relation || null;
     event.change_role = "primary";
+    event.source_revision = input.source_revision === undefined ? null : input.source_revision;
+    event.action_refs = utils.deepClone(input.action_refs || []);
     event.derived_effects = Array.isArray(input.derived_effects) ? utils.deepClone(input.derived_effects) : [];
     return event;
   }
@@ -132,5 +134,5 @@
     return { geometry, visualGrammar, applied: true };
   }
 
-  return { LAYERS, SCOPES, STATUSES, parseRef, readTarget, createEvent, applyEvent };
+  return { LAYERS, SCOPES, STATUSES, parseRef, readTarget, targetObject, createEvent, applyEvent };
 });

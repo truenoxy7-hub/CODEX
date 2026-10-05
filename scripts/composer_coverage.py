@@ -115,7 +115,7 @@ def report() -> dict[str, object]:
             "format": "TRACA_composer_coverage",
             "version": "0.1.0",
             "method": "generic classification of typed spatial transitions, ball flows, typed relations and special semantic actions; no exercise-specific rules",
-            "geometry_policy": "No corpus spatial file contains resolved coordinates; UVOF015 geometry is an independent regression fixture.",
+            "geometry_policy": "Classification only. generate_graphics_gallery.js executes the qualitative subgraph adapter and adds real partial geometry results; absent input coordinates are not a blocker.",
         },
         "totals": {
             "exercises": len(exercises),

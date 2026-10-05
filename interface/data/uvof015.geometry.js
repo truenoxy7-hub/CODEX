@@ -2,7 +2,7 @@ window.TRACA_UVOF015_GEOMETRY = {
   "$schema": "../../schema/traca.geometry.schema.v0.2.json",
   "meta": {
     "format": "TRACA_geometria_derivada",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "exercise_id": "TR-UVOF-015",
     "status": "derived_from_ready_contract",
     "source_spatial_ref": "exercises/TR-UVOF-015/spatial-relations.json",
@@ -38,7 +38,7 @@ window.TRACA_UVOF015_GEOMETRY = {
     ]
   },
   "layout_policy": {
-    "id": "uvof015_three_zones_v0.2",
+    "id": "uvof015_three_zones_v0.2.1",
     "status": "provisional_render_policy",
     "coordinate_system": "metres_origin_goal_line_left",
     "attack_direction": "negative_y",
@@ -687,7 +687,7 @@ window.TRACA_UVOF015_GEOMETRY = {
       "phase": "resolution",
       "position": [
         5.637,
-        5.75
+        5.891
       ],
       "status": "future",
       "visibility": "selected_alternative",
@@ -723,7 +723,7 @@ window.TRACA_UVOF015_GEOMETRY = {
       "phase": "resolution",
       "position": [
         5.637,
-        5.75
+        5.891
       ],
       "status": "future",
       "visibility": "selected_alternative",
@@ -840,7 +840,7 @@ window.TRACA_UVOF015_GEOMETRY = {
       "phase": "resolution",
       "position": [
         8.55,
-        5.75
+        6.55
       ],
       "status": "future",
       "visibility": "selected_alternative",
@@ -876,7 +876,7 @@ window.TRACA_UVOF015_GEOMETRY = {
       "phase": "resolution",
       "position": [
         11.45,
-        5.75
+        6.55
       ],
       "status": "future",
       "visibility": "selected_alternative",
@@ -912,7 +912,7 @@ window.TRACA_UVOF015_GEOMETRY = {
       "phase": "resolution",
       "position": [
         11.45,
-        5.75
+        6.55
       ],
       "status": "future",
       "visibility": "selected_alternative",
@@ -948,7 +948,7 @@ window.TRACA_UVOF015_GEOMETRY = {
       "phase": "resolution",
       "position": [
         8.55,
-        5.75
+        6.55
       ],
       "status": "future",
       "visibility": "selected_alternative",
@@ -1029,7 +1029,7 @@ window.TRACA_UVOF015_GEOMETRY = {
       "phase": "resolution",
       "position": [
         14.363,
-        5.75
+        5.891
       ],
       "status": "future",
       "visibility": "selected_alternative",
@@ -1137,7 +1137,7 @@ window.TRACA_UVOF015_GEOMETRY = {
       "phase": "resolution",
       "position": [
         14.363,
-        5.75
+        5.891
       ],
       "status": "future",
       "visibility": "selected_alternative",
@@ -1278,6 +1278,7 @@ window.TRACA_UVOF015_GEOMETRY = {
           "kind": "continuation",
           "action_type": "movement",
           "actor_ref": "A_ESQ",
+          "opponent_ref": "D_ESQ",
           "from_state_ref": "STATE_ESQ_A_RECEIVE_CONTINUA-A",
           "to_state_ref": "STATE_ESQ_A_FINAL_CONTINUA-A",
           "initial_space_ref": "E_ESQ_A",
@@ -1389,6 +1390,7 @@ window.TRACA_UVOF015_GEOMETRY = {
           "kind": "feint",
           "action_type": "movement",
           "actor_ref": "A_ESQ",
+          "opponent_ref": "D_ESQ",
           "from_state_ref": "STATE_ESQ_A_RECEIVE_FINTA-A-B",
           "to_state_ref": "STATE_ESQ_A_FINAL_FINTA-A-B",
           "initial_space_ref": "E_ESQ_A",
@@ -1402,63 +1404,93 @@ window.TRACA_UVOF015_GEOMETRY = {
               ],
               "control1": [
                 2.712,
-                9.75
+                10.0
               ],
               "control2": [
-                2.712,
-                8.55
+                3.455,
+                9.75
               ],
               "end": [
-                2.712,
-                7.9
+                3.455,
+                9.05
               ]
             },
             {
               "type": "line",
               "start": [
-                2.712,
-                7.9
+                3.455,
+                9.05
               ],
               "end": [
-                4.175,
-                7.25
+                3.125,
+                8.65
               ]
             },
             {
-              "type": "cubic",
+              "type": "line",
               "start": [
-                4.175,
-                7.25
+                3.125,
+                8.65
               ],
-              "control1": [
-                5.637,
-                6.95
-              ],
-              "control2": [
-                5.637,
-                6.2
+              "end": [
+                5.225,
+                8.6
+              ]
+            },
+            {
+              "type": "line",
+              "start": [
+                5.225,
+                8.6
               ],
               "end": [
                 5.637,
-                5.75
+                6.011
+              ]
+            },
+            {
+              "type": "line",
+              "start": [
+                5.637,
+                6.011
+              ],
+              "end": [
+                5.637,
+                5.891
               ]
             }
           ],
           "functional_points": [
             {
               "id": "FP_A_ESQ_FINTA_A_B_COMPROMIS",
+              "role": "commitment",
+              "position": [
+                3.455,
+                9.05
+              ]
+            },
+            {
+              "id": "FP_A_ESQ_FINTA_A_B_RUPTURA",
               "role": "direction_break",
               "position": [
-                2.712,
-                7.9
+                3.125,
+                8.65
+              ]
+            },
+            {
+              "id": "FP_A_ESQ_FINTA_A_B_EVASIO",
+              "role": "clearance",
+              "position": [
+                5.225,
+                8.6
               ]
             },
             {
               "id": "FP_A_ESQ_FINTA_A_B_SORTIDA",
               "role": "exit",
               "position": [
-                4.175,
-                7.25
+                5.637,
+                6.011
               ]
             }
           ],
@@ -1548,6 +1580,7 @@ window.TRACA_UVOF015_GEOMETRY = {
           "kind": "continuation",
           "action_type": "movement",
           "actor_ref": "A_ESQ",
+          "opponent_ref": "D_ESQ",
           "from_state_ref": "STATE_ESQ_A_RECEIVE_CONTINUA-B",
           "to_state_ref": "STATE_ESQ_A_FINAL_CONTINUA-B",
           "initial_space_ref": "E_ESQ_B",
@@ -1569,7 +1602,7 @@ window.TRACA_UVOF015_GEOMETRY = {
               ],
               "end": [
                 5.637,
-                5.75
+                5.891
               ]
             }
           ],
@@ -1659,6 +1692,7 @@ window.TRACA_UVOF015_GEOMETRY = {
           "kind": "feint",
           "action_type": "movement",
           "actor_ref": "A_ESQ",
+          "opponent_ref": "D_ESQ",
           "from_state_ref": "STATE_ESQ_A_RECEIVE_FINTA-B-A",
           "to_state_ref": "STATE_ESQ_A_FINAL_FINTA-B-A",
           "initial_space_ref": "E_ESQ_B",
@@ -1672,41 +1706,55 @@ window.TRACA_UVOF015_GEOMETRY = {
               ],
               "control1": [
                 5.637,
-                9.75
+                10.0
               ],
               "control2": [
-                5.637,
-                8.55
+                4.895,
+                9.75
               ],
               "end": [
-                5.637,
-                7.9
+                4.895,
+                9.05
               ]
             },
             {
               "type": "line",
               "start": [
-                5.637,
-                7.9
+                4.895,
+                9.05
               ],
               "end": [
-                4.175,
-                7.25
+                5.225,
+                8.65
               ]
             },
             {
-              "type": "cubic",
+              "type": "line",
               "start": [
-                4.175,
-                7.25
+                5.225,
+                8.65
               ],
-              "control1": [
-                2.712,
-                6.95
+              "end": [
+                3.125,
+                8.6
+              ]
+            },
+            {
+              "type": "line",
+              "start": [
+                3.125,
+                8.6
               ],
-              "control2": [
+              "end": [
                 2.712,
-                6.2
+                5.87
+              ]
+            },
+            {
+              "type": "line",
+              "start": [
+                2.712,
+                5.87
               ],
               "end": [
                 2.712,
@@ -1717,18 +1765,34 @@ window.TRACA_UVOF015_GEOMETRY = {
           "functional_points": [
             {
               "id": "FP_A_ESQ_FINTA_B_A_COMPROMIS",
+              "role": "commitment",
+              "position": [
+                4.895,
+                9.05
+              ]
+            },
+            {
+              "id": "FP_A_ESQ_FINTA_B_A_RUPTURA",
               "role": "direction_break",
               "position": [
-                5.637,
-                7.9
+                5.225,
+                8.65
+              ]
+            },
+            {
+              "id": "FP_A_ESQ_FINTA_B_A_EVASIO",
+              "role": "clearance",
+              "position": [
+                3.125,
+                8.6
               ]
             },
             {
               "id": "FP_A_ESQ_FINTA_B_A_SORTIDA",
               "role": "exit",
               "position": [
-                4.175,
-                7.25
+                2.712,
+                5.87
               ]
             }
           ],
@@ -1825,6 +1889,7 @@ window.TRACA_UVOF015_GEOMETRY = {
           "kind": "continuation",
           "action_type": "movement",
           "actor_ref": "A_CE",
+          "opponent_ref": "D_CE",
           "from_state_ref": "STATE_CE_A_RECEIVE_CONTINUA-A",
           "to_state_ref": "STATE_CE_A_FINAL_CONTINUA-A",
           "initial_space_ref": "E_CE_A",
@@ -1846,7 +1911,7 @@ window.TRACA_UVOF015_GEOMETRY = {
               ],
               "end": [
                 8.55,
-                5.75
+                6.55
               ]
             }
           ],
@@ -1936,6 +2001,7 @@ window.TRACA_UVOF015_GEOMETRY = {
           "kind": "feint",
           "action_type": "movement",
           "actor_ref": "A_CE",
+          "opponent_ref": "D_CE",
           "from_state_ref": "STATE_CE_A_RECEIVE_FINTA-A-B",
           "to_state_ref": "STATE_CE_A_FINAL_FINTA-A-B",
           "initial_space_ref": "E_CE_A",
@@ -1949,63 +2015,93 @@ window.TRACA_UVOF015_GEOMETRY = {
               ],
               "control1": [
                 8.55,
-                9.75
+                10.0
               ],
               "control2": [
-                8.55,
-                8.55
+                9.28,
+                9.75
               ],
               "end": [
-                8.55,
-                7.9
+                9.28,
+                9.05
               ]
             },
             {
               "type": "line",
               "start": [
-                8.55,
-                7.9
+                9.28,
+                9.05
               ],
               "end": [
-                10.0,
-                7.25
+                8.95,
+                8.65
               ]
             },
             {
-              "type": "cubic",
+              "type": "line",
               "start": [
-                10.0,
-                7.25
+                8.95,
+                8.65
               ],
-              "control1": [
-                11.45,
-                6.95
-              ],
-              "control2": [
-                11.45,
-                6.2
+              "end": [
+                11.05,
+                8.6
+              ]
+            },
+            {
+              "type": "line",
+              "start": [
+                11.05,
+                8.6
               ],
               "end": [
                 11.45,
-                5.75
+                6.67
+              ]
+            },
+            {
+              "type": "line",
+              "start": [
+                11.45,
+                6.67
+              ],
+              "end": [
+                11.45,
+                6.55
               ]
             }
           ],
           "functional_points": [
             {
               "id": "FP_A_CE_FINTA_A_B_COMPROMIS",
+              "role": "commitment",
+              "position": [
+                9.28,
+                9.05
+              ]
+            },
+            {
+              "id": "FP_A_CE_FINTA_A_B_RUPTURA",
               "role": "direction_break",
               "position": [
-                8.55,
-                7.9
+                8.95,
+                8.65
+              ]
+            },
+            {
+              "id": "FP_A_CE_FINTA_A_B_EVASIO",
+              "role": "clearance",
+              "position": [
+                11.05,
+                8.6
               ]
             },
             {
               "id": "FP_A_CE_FINTA_A_B_SORTIDA",
               "role": "exit",
               "position": [
-                10.0,
-                7.25
+                11.45,
+                6.67
               ]
             }
           ],
@@ -2095,6 +2191,7 @@ window.TRACA_UVOF015_GEOMETRY = {
           "kind": "continuation",
           "action_type": "movement",
           "actor_ref": "A_CE",
+          "opponent_ref": "D_CE",
           "from_state_ref": "STATE_CE_A_RECEIVE_CONTINUA-B",
           "to_state_ref": "STATE_CE_A_FINAL_CONTINUA-B",
           "initial_space_ref": "E_CE_B",
@@ -2116,7 +2213,7 @@ window.TRACA_UVOF015_GEOMETRY = {
               ],
               "end": [
                 11.45,
-                5.75
+                6.55
               ]
             }
           ],
@@ -2206,6 +2303,7 @@ window.TRACA_UVOF015_GEOMETRY = {
           "kind": "feint",
           "action_type": "movement",
           "actor_ref": "A_CE",
+          "opponent_ref": "D_CE",
           "from_state_ref": "STATE_CE_A_RECEIVE_FINTA-B-A",
           "to_state_ref": "STATE_CE_A_FINAL_FINTA-B-A",
           "initial_space_ref": "E_CE_B",
@@ -2219,63 +2317,93 @@ window.TRACA_UVOF015_GEOMETRY = {
               ],
               "control1": [
                 11.45,
-                9.75
+                10.0
               ],
               "control2": [
-                11.45,
-                8.55
+                10.72,
+                9.75
               ],
               "end": [
-                11.45,
-                7.9
+                10.72,
+                9.05
               ]
             },
             {
               "type": "line",
               "start": [
-                11.45,
-                7.9
+                10.72,
+                9.05
               ],
               "end": [
-                10.0,
-                7.25
+                11.05,
+                8.65
               ]
             },
             {
-              "type": "cubic",
+              "type": "line",
               "start": [
-                10.0,
-                7.25
+                11.05,
+                8.65
               ],
-              "control1": [
-                8.55,
-                6.95
-              ],
-              "control2": [
-                8.55,
-                6.2
+              "end": [
+                8.95,
+                8.6
+              ]
+            },
+            {
+              "type": "line",
+              "start": [
+                8.95,
+                8.6
               ],
               "end": [
                 8.55,
-                5.75
+                6.67
+              ]
+            },
+            {
+              "type": "line",
+              "start": [
+                8.55,
+                6.67
+              ],
+              "end": [
+                8.55,
+                6.55
               ]
             }
           ],
           "functional_points": [
             {
               "id": "FP_A_CE_FINTA_B_A_COMPROMIS",
+              "role": "commitment",
+              "position": [
+                10.72,
+                9.05
+              ]
+            },
+            {
+              "id": "FP_A_CE_FINTA_B_A_RUPTURA",
               "role": "direction_break",
               "position": [
-                11.45,
-                7.9
+                11.05,
+                8.65
+              ]
+            },
+            {
+              "id": "FP_A_CE_FINTA_B_A_EVASIO",
+              "role": "clearance",
+              "position": [
+                8.95,
+                8.6
               ]
             },
             {
               "id": "FP_A_CE_FINTA_B_A_SORTIDA",
               "role": "exit",
               "position": [
-                10.0,
-                7.25
+                8.55,
+                6.67
               ]
             }
           ],
@@ -2372,6 +2500,7 @@ window.TRACA_UVOF015_GEOMETRY = {
           "kind": "continuation",
           "action_type": "movement",
           "actor_ref": "A_DRE",
+          "opponent_ref": "D_DRE",
           "from_state_ref": "STATE_DRE_A_RECEIVE_CONTINUA-A",
           "to_state_ref": "STATE_DRE_A_FINAL_CONTINUA-A",
           "initial_space_ref": "E_DRE_A",
@@ -2393,7 +2522,7 @@ window.TRACA_UVOF015_GEOMETRY = {
               ],
               "end": [
                 14.363,
-                5.75
+                5.891
               ]
             }
           ],
@@ -2483,6 +2612,7 @@ window.TRACA_UVOF015_GEOMETRY = {
           "kind": "feint",
           "action_type": "movement",
           "actor_ref": "A_DRE",
+          "opponent_ref": "D_DRE",
           "from_state_ref": "STATE_DRE_A_RECEIVE_FINTA-A-B",
           "to_state_ref": "STATE_DRE_A_FINAL_FINTA-A-B",
           "initial_space_ref": "E_DRE_A",
@@ -2496,41 +2626,55 @@ window.TRACA_UVOF015_GEOMETRY = {
               ],
               "control1": [
                 14.363,
-                9.75
+                10.0
               ],
               "control2": [
-                14.363,
-                8.55
+                15.105,
+                9.75
               ],
               "end": [
-                14.363,
-                7.9
+                15.105,
+                9.05
               ]
             },
             {
               "type": "line",
               "start": [
-                14.363,
-                7.9
+                15.105,
+                9.05
               ],
               "end": [
-                15.825,
-                7.25
+                14.775,
+                8.65
               ]
             },
             {
-              "type": "cubic",
+              "type": "line",
               "start": [
-                15.825,
-                7.25
+                14.775,
+                8.65
               ],
-              "control1": [
-                17.288,
-                6.95
+              "end": [
+                16.875,
+                8.6
+              ]
+            },
+            {
+              "type": "line",
+              "start": [
+                16.875,
+                8.6
               ],
-              "control2": [
+              "end": [
                 17.288,
-                6.2
+                5.87
+              ]
+            },
+            {
+              "type": "line",
+              "start": [
+                17.288,
+                5.87
               ],
               "end": [
                 17.288,
@@ -2541,18 +2685,34 @@ window.TRACA_UVOF015_GEOMETRY = {
           "functional_points": [
             {
               "id": "FP_A_DRE_FINTA_A_B_COMPROMIS",
+              "role": "commitment",
+              "position": [
+                15.105,
+                9.05
+              ]
+            },
+            {
+              "id": "FP_A_DRE_FINTA_A_B_RUPTURA",
               "role": "direction_break",
               "position": [
-                14.363,
-                7.9
+                14.775,
+                8.65
+              ]
+            },
+            {
+              "id": "FP_A_DRE_FINTA_A_B_EVASIO",
+              "role": "clearance",
+              "position": [
+                16.875,
+                8.6
               ]
             },
             {
               "id": "FP_A_DRE_FINTA_A_B_SORTIDA",
               "role": "exit",
               "position": [
-                15.825,
-                7.25
+                17.288,
+                5.87
               ]
             }
           ],
@@ -2642,6 +2802,7 @@ window.TRACA_UVOF015_GEOMETRY = {
           "kind": "continuation",
           "action_type": "movement",
           "actor_ref": "A_DRE",
+          "opponent_ref": "D_DRE",
           "from_state_ref": "STATE_DRE_A_RECEIVE_CONTINUA-B",
           "to_state_ref": "STATE_DRE_A_FINAL_CONTINUA-B",
           "initial_space_ref": "E_DRE_B",
@@ -2753,6 +2914,7 @@ window.TRACA_UVOF015_GEOMETRY = {
           "kind": "feint",
           "action_type": "movement",
           "actor_ref": "A_DRE",
+          "opponent_ref": "D_DRE",
           "from_state_ref": "STATE_DRE_A_RECEIVE_FINTA-B-A",
           "to_state_ref": "STATE_DRE_A_FINAL_FINTA-B-A",
           "initial_space_ref": "E_DRE_B",
@@ -2766,63 +2928,93 @@ window.TRACA_UVOF015_GEOMETRY = {
               ],
               "control1": [
                 17.288,
-                9.75
+                10.0
               ],
               "control2": [
-                17.288,
-                8.55
+                16.545,
+                9.75
               ],
               "end": [
-                17.288,
-                7.9
+                16.545,
+                9.05
               ]
             },
             {
               "type": "line",
               "start": [
-                17.288,
-                7.9
+                16.545,
+                9.05
               ],
               "end": [
-                15.825,
-                7.25
+                16.875,
+                8.65
               ]
             },
             {
-              "type": "cubic",
+              "type": "line",
               "start": [
-                15.825,
-                7.25
+                16.875,
+                8.65
               ],
-              "control1": [
-                14.363,
-                6.95
-              ],
-              "control2": [
-                14.363,
-                6.2
+              "end": [
+                14.775,
+                8.6
+              ]
+            },
+            {
+              "type": "line",
+              "start": [
+                14.775,
+                8.6
               ],
               "end": [
                 14.363,
-                5.75
+                6.011
+              ]
+            },
+            {
+              "type": "line",
+              "start": [
+                14.363,
+                6.011
+              ],
+              "end": [
+                14.363,
+                5.891
               ]
             }
           ],
           "functional_points": [
             {
               "id": "FP_A_DRE_FINTA_B_A_COMPROMIS",
+              "role": "commitment",
+              "position": [
+                16.545,
+                9.05
+              ]
+            },
+            {
+              "id": "FP_A_DRE_FINTA_B_A_RUPTURA",
               "role": "direction_break",
               "position": [
-                17.288,
-                7.9
+                16.875,
+                8.65
+              ]
+            },
+            {
+              "id": "FP_A_DRE_FINTA_B_A_EVASIO",
+              "role": "clearance",
+              "position": [
+                14.775,
+                8.6
               ]
             },
             {
               "id": "FP_A_DRE_FINTA_B_A_SORTIDA",
               "role": "exit",
               "position": [
-                15.825,
-                7.25
+                14.363,
+                6.011
               ]
             }
           ],

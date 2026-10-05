@@ -15,4 +15,4 @@ geometry:
 	python scripts/resolve_geometry.py
 
 interface: geometry
-	python -m http.server 8000 --directory interface
+	python scripts/workspace_server.py

@@ -60,19 +60,19 @@ def test_interface_exposes_the_universal_supervised_loop() -> None:
     assert "Guardar exercici" in html
     assert "Guardar en construcció" in html
     assert "TR-UVOF-015" in html
-    assert 'src="js/interpretation-provider.js"' in html
-    assert 'src="js/model-interpretation-provider.js"' in html
-    assert 'src="js/graphic-knowledge-base.js"' in html
-    assert 'src="js/knowledge-resolver.js"' in html
-    assert 'src="js/composition-graph.js"' in html
-    assert 'src="js/composition-operators.js"' in html
-    assert 'src="js/composition-preflight.js"' in html
-    assert 'src="js/clarification-orchestrator.js"' in html
-    assert 'src="js/court-geometry.js"' in html
-    assert 'src="js/generic-geometry-resolver.js"' in html
-    assert 'src="js/representation-composer.js"' in html
-    assert 'src="js/inspection-ui.js"' in html
-    assert 'src="data/handball-knowledge.js"' in html
+    assert 'src="js/interpretation-provider.js?' in html
+    assert 'src="js/model-interpretation-provider.js?' in html
+    assert 'src="js/graphic-knowledge-base.js?' in html
+    assert 'src="js/knowledge-resolver.js?' in html
+    assert 'src="js/composition-graph.js?' in html
+    assert 'src="js/composition-operators.js?' in html
+    assert 'src="js/composition-preflight.js?' in html
+    assert 'src="js/clarification-orchestrator.js?' in html
+    assert 'src="js/court-geometry.js?' in html
+    assert 'src="js/generic-geometry-resolver.js?' in html
+    assert 'src="js/representation-composer.js?' in html
+    assert 'src="js/inspection-ui.js?' in html
+    assert 'src="data/handball-knowledge.js?' in html
     assert 'id="case-origin"' not in html
     assert 'id="case-tags"' not in html
     assert 'id="new-origin"' not in html

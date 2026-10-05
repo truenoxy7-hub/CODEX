@@ -1,180 +1,117 @@
 (function (root, factory) {
-  const isNode = typeof module === "object" && module.exports;
-  const corrections = isNode ? require("./corrections.js") : root.TRACA_CORRECTIONS;
-  const api = factory(corrections);
-  if (isNode) module.exports = api;
+  const node = typeof module === "object" && module.exports;
+  const api = factory(node ? require("./corrections.js") : root.TRACA_CORRECTIONS, node ? require("./whiteboard.js") : root.TRACA_WHITEBOARD, node ? require("./utils.js") : root.TRACA_UTILS);
+  if (node) module.exports = api;
   root.TRACA_EDITOR = api;
-})(typeof globalThis !== "undefined" ? globalThis : this, function (correctionsApi) {
+})(typeof globalThis !== "undefined" ? globalThis : this, function (corrections, board, utils) {
   "use strict";
-
-  function svgCoordinates(svg, event) {
-    const point = svg.createSVGPoint();
-    point.x = event.clientX;
-    point.y = event.clientY;
-    const converted = point.matrixTransform(svg.getScreenCTM().inverse());
-    return [Number(converted.x.toFixed(3)), Number(converted.y.toFixed(3))];
-  }
-
-  function sourceRefsFor(object) {
-    if (!object) return [];
-    if (Array.isArray(object.source_refs)) return object.source_refs.slice();
-    return object.source_ref ? [object.source_ref] : [];
-  }
-
-  function readPath(object, path) {
-    return String(path || "").split(".").filter(Boolean).reduce((value, key) => value == null ? undefined : value[key], object);
-  }
-
   function resolveSelection(snapshot, selection) {
-    if (!selection || !selection.ref) return null;
-    const parsed = correctionsApi.parseRef(selection.ref);
-    const geometry = snapshot.workingGeometry;
-    let object = null;
-    if (parsed.collection === "entity") object = (geometry.entities || []).find((item) => item.id === parsed.id);
-    if (parsed.collection === "zone") object = (geometry.zones || []).find((item) => item.id === parsed.id);
-    if (parsed.collection === "space") object = (geometry.spaces || []).find((item) => item.id === parsed.id);
-    if (parsed.collection === "participant_state") object = (geometry.participant_states || []).find((item) => item.id === parsed.id);
-    if (parsed.collection === "common_path") object = (geometry.common_paths || []).find((item) => item.id === parsed.id);
-    if (parsed.collection === "alternative") {
-      for (const branch of geometry.branches || []) {
-        object = (branch.alternatives || []).find((item) => item.id === parsed.id);
-        if (object) break;
-      }
-    }
-    if (parsed.collection === "return_pass") {
-      for (const branch of geometry.branches || []) {
-        object = (branch.alternatives || []).map((item) => item.return_pass).find((item) => item && item.id === parsed.id);
-        if (object) break;
-      }
-    }
-    if (parsed.collection === "approach_path") {
-      for (const branch of geometry.branches || []) {
-        object = (branch.alternatives || []).map((item) => item.approach_path).find((item) => item && item.id === parsed.id);
-        if (object) break;
-      }
-    }
-    return object ? { ...selection, parsed, object, source_refs: sourceRefsFor(object) } : null;
+    if (!snapshot.workingGeometry || !selection || !selection.ref) return null;
+    const object = board.target(snapshot.workingGeometry, selection.ref);
+    return object ? { ...selection, object, parsed: corrections.parseRef(selection.ref), source_refs: object.source_refs || (object.source_ref ? [object.source_ref] : []) } : null;
   }
-
+  function svgCoordinates(svg, event, inverse) {
+    const point = svg.createSVGPoint(); point.x = event.clientX; point.y = event.clientY;
+    const world = svg.querySelector("[data-world]") || svg;
+    const converted = point.matrixTransform(inverse || world.getScreenCTM().inverse());
+    return [converted.x, converted.y];
+  }
+  function keyboardAllowed(event, container) {
+    const t = event.target;
+    return container.contains(t) && !t.closest("input, textarea, select, [contenteditable=true], dialog") && !container.ownerDocument.querySelector("dialog[open]");
+  }
   function createEditor(options) {
-    const container = options.container;
-    const store = options.store;
-
-    function bind() {
-      const svg = container.querySelector("svg");
-      if (!svg) return;
-
-      container.querySelectorAll(".selectable").forEach((node) => {
-        node.addEventListener("click", (event) => {
-          event.stopPropagation();
-          store.setSelection({ ref: node.dataset.ref, kind: node.dataset.kind, property: node.dataset.pathSuffix || null });
-        });
-        node.addEventListener("keydown", (event) => {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            store.setSelection({ ref: node.dataset.ref, kind: node.dataset.kind, property: node.dataset.pathSuffix || null });
-          }
-        });
-      });
-      svg.addEventListener("click", (event) => {
-        if (event.target === svg || event.target.tagName === "rect") store.setSelection(null);
-      });
-
-      container.querySelectorAll(".entity-node, .participant-state-node").forEach((node) => {
-        node.addEventListener("pointerdown", (event) => {
-          if (event.button !== 0) return;
-          event.preventDefault();
-          event.stopPropagation();
-          const snapshot = store.snapshot();
-          const resolved = resolveSelection(snapshot, { ref: node.dataset.ref, kind: node.dataset.kind });
-          if (!resolved) return;
-          const start = svgCoordinates(svg, event);
-          const linkedState = node.dataset.stateRef && (snapshot.workingGeometry.participant_states || []).find((state) => state.id === node.dataset.stateRef);
-          const correctionObject = linkedState || resolved.object;
-          const correctionRef = linkedState ? `geometry:participant_state:${linkedState.id}` : node.dataset.ref;
-          const before = correctionObject.position.slice();
-          let after = before.slice();
-          node.setPointerCapture(event.pointerId);
-          function move(moveEvent) {
-            const current = svgCoordinates(svg, moveEvent);
-            after = [Number((before[0] + current[0] - start[0]).toFixed(3)), Number((before[1] + current[1] - start[1]).toFixed(3))];
-            node.setAttribute("transform", `translate(${after[0] - before[0]} ${after[1] - before[1]})`);
-          }
-          function end() {
-            node.removeEventListener("pointermove", move);
-            node.removeEventListener("pointerup", end);
-            node.removeEventListener("pointercancel", cancel);
-            if (before[0] !== after[0] || before[1] !== after[1]) {
-              const selection = { ref: node.dataset.ref, kind: node.dataset.kind };
-              store.applyCorrection({
-                target: { layer: "geometry", ref: correctionRef, property: "position" },
-                operation: "move", before, after, author: "coach", scope: "case",
-                reason: "Reposicionament manual d’un estat a la pista", source_refs: sourceRefsFor(correctionObject)
-              });
-              store.setSelection(selection);
-            }
-          }
-          function cancel() {
-            node.removeAttribute("transform");
-            node.removeEventListener("pointermove", move);
-            node.removeEventListener("pointerup", end);
-            node.removeEventListener("pointercancel", cancel);
-          }
-          node.addEventListener("pointermove", move);
-          node.addEventListener("pointerup", end);
-          node.addEventListener("pointercancel", cancel);
-        });
-      });
-
-      container.querySelectorAll(".path-handle").forEach((handle) => {
-        handle.addEventListener("pointerdown", (event) => {
-          if (event.button !== 0) return;
-          event.preventDefault();
-          event.stopPropagation();
-          const snapshot = store.snapshot();
-          const resolved = resolveSelection(snapshot, { ref: handle.dataset.ref, kind: "path" });
-          if (!resolved) return;
-          const propertyRoot = handle.dataset.property || "points";
-          const index = handle.dataset.index === undefined ? null : Number(handle.dataset.index);
-          const property = index === null ? propertyRoot : `${propertyRoot}.${index}`;
-          const point = readPath(resolved.object, property);
-          if (!Array.isArray(point)) return;
-          const before = point.slice();
-          let after = before.slice();
-          handle.setPointerCapture(event.pointerId);
-          function move(moveEvent) {
-            after = svgCoordinates(svg, moveEvent);
-            handle.setAttribute("cx", after[0]);
-            handle.setAttribute("cy", after[1]);
-          }
-          function end() {
-            handle.removeEventListener("pointermove", move);
-            handle.removeEventListener("pointerup", end);
-            handle.removeEventListener("pointercancel", cancel);
-            if (before[0] !== after[0] || before[1] !== after[1]) {
-              store.applyCorrection({
-                target: { layer: "geometry", ref: handle.dataset.ref, property },
-                operation: "move_vertex", before, after, author: "coach", scope: "case",
-                reason: "Ajust manual d’un punt de trajectòria", source_refs: resolved.source_refs
-              });
-            }
-          }
-          function cancel() {
-            handle.setAttribute("cx", before[0]);
-            handle.setAttribute("cy", before[1]);
-            handle.removeEventListener("pointermove", move);
-            handle.removeEventListener("pointerup", end);
-            handle.removeEventListener("pointercancel", cancel);
-          }
-          handle.addEventListener("pointermove", move);
-          handle.addEventListener("pointerup", end);
-          handle.addEventListener("pointercancel", cancel);
-        });
-      });
+    const { container, store } = options;
+    let bound = false, gesture = null, raf = null;
+    const notify = (error) => options.onError && options.onError(error.message || error);
+    function preview(geometry, selection) { if (options.onPreview) options.onPreview(geometry, selection); }
+    function calculate(event) {
+      const g = gesture, current = svgCoordinates(container.querySelector("svg"), event, g.inverse);
+      const delta = current.map((v, i) => v - g.start[i]);
+      if (Math.hypot(...delta) <= 0.015) { g.moved = false; g.latest = g.geometry; return g.geometry; }
+      let geometry;
+      if (g.rotation) {
+        geometry = utils.deepClone(g.geometry);
+        const item = board.target(geometry, g.ref);
+        const initialAngle = Math.atan2(g.start[1] - item.position[1], g.start[0] - item.position[0]);
+        item.angle = (g.object.angle || 0) + (Math.atan2(current[1] - item.position[1], current[0] - item.position[0]) - initialAngle) * 180 / Math.PI;
+      } else if (g.property) {
+        const original = utils.readPath(g.object, g.property);
+        geometry = board.handle(g.geometry, g.ref, g.property, original.map((v, i) => v + delta[i]));
+      } else geometry = board.move(g.geometry, g.ref, delta, g.ui);
+      g.latest = geometry; g.moved = Math.hypot(...delta) > 0.015;
+      return geometry;
     }
-
-    return { bind, resolveSelection: (selection) => resolveSelection(store.snapshot(), selection) };
+    function cancel(event) {
+      if (!gesture || event && event.pointerId !== undefined && event.pointerId !== gesture.pointerId) return;
+      const g = gesture; gesture = null;
+      if (raf) cancelAnimationFrame(raf); raf = null;
+      if (container.hasPointerCapture(g.pointerId)) container.releasePointerCapture(g.pointerId);
+      preview(store.snapshot().workingGeometry, store.snapshot().selectedElement);
+    }
+    function down(event) {
+      if (gesture || event.button !== 0 || event.isPrimary === false) return;
+      if (!["control", "corrected"].includes(store.snapshot().ui.view)) return;
+      const node = event.target.closest("[data-ref]");
+      if (!node || !container.contains(node)) { store.setSelection(null); container.focus({ preventScroll: true }); return; }
+      const snapshot = store.snapshot(), ref = node.dataset.ref;
+      const resolved = resolveSelection(snapshot, { ref }); if (!resolved) return;
+      event.preventDefault(); container.focus({ preventScroll: true });
+      const property = node.classList.contains("path-handle") ? `${node.dataset.property}${node.dataset.index === undefined ? "" : `.${node.dataset.index}`}` : null;
+      const svg = container.querySelector("svg"), world = svg.querySelector("[data-world]") || svg;
+      const inverse = world.getScreenCTM().inverse();
+      gesture = { pointerId: event.pointerId, start: svgCoordinates(svg, event, inverse), inverse, ref, object: resolved.object, geometry: snapshot.workingGeometry, ui: snapshot.ui, property, rotation: node.classList.contains("rotation-handle"), moved: false, revision: snapshot.revision };
+      container.setPointerCapture(event.pointerId);
+      store.setSelection({ ref, kind: node.dataset.kind || (property ? "path" : "entity") });
+      preview(snapshot.workingGeometry, { ref });
+    }
+    function move(event) {
+      if (!gesture || event.pointerId !== gesture.pointerId) return;
+      event.preventDefault();
+      try {
+        calculate(event);
+        if (!raf) raf = requestAnimationFrame(() => { raf = null; if (gesture) preview(gesture.latest, { ref: gesture.ref }); });
+      } catch (error) { cancel(event); notify(error); }
+    }
+    function up(event) {
+      if (!gesture || event.pointerId !== gesture.pointerId) return;
+      try {
+        const geometry = calculate(event), g = gesture;
+        if (raf) cancelAnimationFrame(raf); raf = null; gesture = null;
+        if (container.hasPointerCapture(event.pointerId)) container.releasePointerCapture(event.pointerId);
+        if (g.moved && store.snapshot().revision === g.revision) {
+          let ref = g.ref, property = g.rotation ? "angle" : g.property || (g.object.position ? "position" : "segments");
+          const linked = g.object.state_ref || (property === "segments.0.start" ? g.object.from_state_ref : property === `segments.${(g.object.segments || []).length - 1}.end` ? g.object.to_state_ref : null);
+          if (linked) { ref = `geometry:participant_state:${linked}`; property = "position"; }
+          const beforeObject = board.target(g.geometry, ref), afterObject = board.target(geometry, ref);
+          if (property === "segments" && !g.object.segments) property = "points";
+          store.commitGeometry(geometry, g.rotation ? "Rotació del banc" : "Correcció directa de la pissarra", {
+            target: { layer: "geometry", ref, property }, before: utils.readPath(beforeObject, property), after: utils.readPath(afterObject, property),
+            source_refs: g.object.source_refs || (g.object.source_ref ? [g.object.source_ref] : []), action_refs: [g.object.action_ref].filter(Boolean),
+            derived_effects: linked ? [{ target_ref: ref, property: "position", reason: "state_drives_geometry", explanation: "Estat compartit, trajectòries i pilota sincronitzats" }] : []
+          });
+        } else preview(store.snapshot().workingGeometry, { ref: g.ref });
+      } catch (error) { cancel(event); notify(error); }
+    }
+    function key(event) {
+      if (!keyboardAllowed(event, container)) return;
+      if (event.key === "Escape") { cancel(); store.setSelection(null); return; }
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "z") { event.preventDefault(); event.shiftKey ? store.redo() : store.undo(); return; }
+      const snapshot = store.snapshot(), selection = resolveSelection(snapshot, snapshot.selectedElement);
+      if (!selection) return;
+      if (["Delete", "Backspace"].includes(event.key)) { event.preventDefault(); store.commitGeometry(board.remove(snapshot.workingGeometry, selection.ref), "Eliminar element"); store.setSelection(null); }
+      if (["ArrowLeft", "ArrowRight"].includes(event.key) && selection.object.kind === "bench") {
+        event.preventDefault(); store.applyCorrection({ target: { layer: "geometry", ref: selection.ref, property: "angle" }, before: selection.object.angle || 0, after: (selection.object.angle || 0) + (event.key === "ArrowLeft" ? -5 : 5), reason: "Rotació del banc de 5°" });
+      }
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "d") { event.preventDefault(); store.commitGeometry(board.cloneSelection(snapshot.workingGeometry, [selection.ref], false).geometry, "Duplicar selecció"); }
+    }
+    function bind() {
+      if (bound) return; bound = true;
+      container.tabIndex = 0;
+      container.addEventListener("pointerdown", down); container.addEventListener("pointermove", move); container.addEventListener("pointerup", up);
+      container.addEventListener("pointercancel", cancel); container.addEventListener("lostpointercapture", cancel); container.addEventListener("keydown", key);
+    }
+    return { bind, cancel, get active() { return Boolean(gesture); }, resolveSelection: (selection) => resolveSelection(store.snapshot(), selection) };
   }
-
-  return { createEditor, resolveSelection };
+  return { createEditor, resolveSelection, svgCoordinates, keyboardAllowed };
 });

@@ -6,13 +6,16 @@
   const manual = isNode ? require("./manual-geometry.js") : root.TRACA_MANUAL_GEOMETRY;
   const promotion = isNode ? require("./promotion.js") : root.TRACA_PROMOTION;
   const preflight = isNode ? require("./workspace-preflight.js") : root.TRACA_WORKSPACE_PREFLIGHT;
-  const api = factory(utils, corrections, dependencies, manual, promotion, preflight);
+  const whiteboard = isNode ? require("./whiteboard.js") : root.TRACA_WHITEBOARD;
+  const regeneration = isNode ? require("./regeneration.js") : root.TRACA_REGENERATION;
+  const learning = isNode ? require("./learning-criteria.js") : root.TRACA_LEARNING_CRITERIA;
+  const api = factory(utils, corrections, dependencies, manual, promotion, preflight, whiteboard, regeneration, learning);
   if (isNode) module.exports = api;
   root.TRACA_STORE = api;
-})(typeof globalThis !== "undefined" ? globalThis : this, function (utils, correctionsApi, dependenciesApi, manualApi, promotionApi, preflightApi) {
+})(typeof globalThis !== "undefined" ? globalThis : this, function (utils, correctionsApi, dependenciesApi, manualApi, promotionApi, preflightApi, whiteboardApi, regenerationApi, learningApi) {
   "use strict";
 
-  const WORKSPACE_VERSION = "0.5.0";
+  const WORKSPACE_VERSION = "0.6.0";
 
   function emptyInterpretation() {
     return { provider: null, providers: [], status: "unknown", concepts: [], unknown_concepts: [], unresolved: [], notes: [] };
@@ -29,6 +32,8 @@
   function defaultLibrary() {
     return {
       drafts: [],
+      criteria: [],
+      activation_registry: { activated_records: [] },
       validated_cases: [],
       coach_validated_local_knowledge: [],
       evidence_records: [],
@@ -86,6 +91,9 @@
     let correctionSequence = 0;
     let caseSequence = 0;
     let promotionSequence = 0;
+    let editedGeometry = null;
+    let history = [], future = [], transactionDepth = 0;
+    let generationToken = null;
     const preparedInitialCase = {
       ...utils.deepClone(initialCase),
       case_uid: initialCase.case_uid || newIdentity(),
@@ -93,6 +101,10 @@
     };
     let state = {
       version: WORKSPACE_VERSION,
+      revision: 0,
+      actionApprovals: {},
+      referenceImages: [],
+      regeneration: null,
       currentCase: preparedInitialCase,
       interpretation: emptyInterpretation(),
       semanticModel: emptySemanticModel(),
@@ -114,7 +126,7 @@
       validatedGeometry: null,
       validatedVisualGrammar: null,
       knowledgeLibrary: { ...defaultLibrary(), ...utils.deepClone(options.initialLibrary || {}) },
-      ui: { mode: "description", view: generatedGeometry ? "corrected" : "control", bottomPanel: "history", mobilePanel: "court" }
+      ui: { mode: "description", view: "control", orientation: "top", snap: "off", zoom: 1, theme: "white", bottomPanel: "history", mobilePanel: "court" }
     };
 
     function snapshot() {
@@ -122,11 +134,16 @@
         ...state,
         generatedGeometry,
         coachReferenceGeometry,
-        baseVisualGrammar
+        baseVisualGrammar,
+        editedGeometry,
+        history: { past: history, future },
+        canUndo: history.length > 0,
+        canRedo: future.length > 0
       });
     }
 
     function emit() {
+      if (transactionDepth) return;
       const current = snapshot();
       listeners.forEach((listener) => listener(current));
     }
@@ -173,15 +190,15 @@
       state.interpretation = utils.deepClone(baseInterpretation);
       state.semanticModel = utils.deepClone(baseSemanticModel);
       state.spatialModel = utils.deepClone(baseSpatialModel);
-      state.workingGeometry = utils.deepClone(generatedGeometry || coachReferenceGeometry);
+      state.workingGeometry = utils.deepClone(editedGeometry || generatedGeometry || coachReferenceGeometry);
       state.workingVisualGrammar = utils.deepClone(baseVisualGrammar);
       state.caseVisualOverrides = [];
       state.corrections.forEach((event) => {
         if (event.target.layer === "semantic" || event.target.layer === "spatial") applyConceptual(event);
-        else if (state.workingGeometry || event.target.layer === "visual") correctionsApi.applyEvent(state.workingGeometry, state.workingVisualGrammar, event);
+        else if (!(editedGeometry && event.target.layer === "geometry") && (state.workingGeometry || event.target.layer === "visual")) correctionsApi.applyEvent(state.workingGeometry, state.workingVisualGrammar, event);
         if (event.target.layer === "visual") state.caseVisualOverrides.push({ event_ref: event.id, target: utils.deepClone(event.target), value: utils.deepClone(event.after) });
       });
-      if (state.workingGeometry) dependenciesApi.reconcileGeometry(state.workingGeometry);
+      if (state.workingGeometry) { dependenciesApi.reconcileGeometry(state.workingGeometry); state.workingGeometry.validation = preflightApi.validateGeometry(state.workingGeometry); }
       state.validation = { status: state.corrections.length ? "changes_pending" : "pending", validated_at: null, correction_count: state.corrections.length, counts_by_layer: {}, preflight: null };
       state.validatedGeometry = null;
       state.validatedVisualGrammar = null;
@@ -194,12 +211,15 @@
     }
 
     function nextCaseId() {
-      caseSequence += 1;
       const year = String(now()).slice(0, 4) || "LOCAL";
+      const previous = [...state.knowledgeLibrary.drafts, ...state.knowledgeLibrary.validated_cases].map(c => c.id).filter(id => id && id.startsWith(`CASE-${year}-`)).map(id => Number(id.split("-").at(-1)) || 0);
+      caseSequence = Math.max(caseSequence, ...previous, 0) + 1;
       return `CASE-${year}-${String(caseSequence).padStart(4, "0")}`;
     }
 
     function resetCaseState(currentCase, geometry, resolver) {
+      editedGeometry = null; history = []; future = []; generationToken = null;
+      state.actionApprovals = {}; state.referenceImages = []; state.regeneration = null;
       generatedGeometry = geometry ? utils.deepFreeze(utils.deepClone(geometry)) : null;
       coachReferenceGeometry = null;
       baseInterpretation = emptyInterpretation();
@@ -296,11 +316,21 @@
     }
 
     function setCompositionResult(result, resolver) {
+      if (result.model_provenance && result.tactical_ir) {
+        const ir = result.tactical_ir;
+        const concepts = ["participants", "materials", "spaces", "actions"].flatMap(key => (ir[key] || []).map(item => ({ id: item.id, label: item.label || item.type || item.role || "Element", category: key === "participants" ? "participant_role" : key === "materials" ? "material" : key === "spaces" ? "space" : "action", knowledge_state: "provisional", source: "coach_confirmed_model_proposal" })));
+        setInterpretation({ provider: result.model_provenance.mode === "test_double" ? "Doble de prova confirmat" : "Model confirmat", status: "provisional", tactical_ir: ir, concepts, unresolved: result.unresolved || [], suggested_tags: [] });
+      }
+      if (result.geometry && !result.learning) {
+        result = utils.deepClone(result);
+        result.learning = learningApi.apply(result.geometry, state.knowledgeLibrary.criteria, { case_uid: state.currentCase.case_uid, revision: state.revision });
+        result.geometry = result.learning.geometry;
+      }
       const revision = utils.fingerprint(state.currentCase.description);
       state.composition = {
         status: result.status,
         composition_status: result.composition_status || result.status,
-        geometry_status: result.geometry_status || (result.geometry ? "ready" : "unavailable"),
+        geometry_status: result.geometry?.validation?.geometry === "invalid" ? "invalid" : result.geometry_status || (result.geometry ? "ready" : "unavailable"),
         questions: utils.deepClone(result.questions || []),
         active_question: utils.deepClone(result.active_question || null),
         auto_derivations: utils.deepClone(result.auto_derivations || []),
@@ -312,10 +342,13 @@
         plan: utils.deepClone(result.plan || null),
         preflight: utils.deepClone(result.preflight || null),
         relation: utils.deepClone(result.relation || null)
+        ,learning: utils.deepClone(result.learning || null),
+        model_provenance: utils.deepClone(result.model_provenance || null),
+        knowledge_assertions: utils.deepClone(result.knowledge_assertions || [])
       };
       if (result.geometry) {
         generatedGeometry = utils.deepFreeze(utils.deepClone(result.geometry));
-        coachReferenceGeometry = null;
+        if (!editedGeometry) coachReferenceGeometry = null;
         state.workingGeometry = utils.deepClone(generatedGeometry);
         state.selectedAlternatives = defaultAlternatives(generatedGeometry);
         state.geometryState = { status: "generated", resolver: resolver || "primitive_composer" };
@@ -323,8 +356,8 @@
         state.completeness.geometry = "available";
         recompute(false);
       } else {
-        generatedGeometry = null;
-        state.workingGeometry = utils.deepClone(coachReferenceGeometry);
+        // An unresolved new interpretation must not erase the existing board.
+        state.workingGeometry = utils.deepClone(editedGeometry || generatedGeometry || coachReferenceGeometry);
         state.geometryState = { status: coachReferenceGeometry ? "coach_reference" : "unavailable", resolver: null };
         state.derivations.geometry = { derives_from: revision, status: "unavailable" };
         state.completeness.geometry = "unavailable";
@@ -358,9 +391,14 @@
         timestamp: input.timestamp || now(),
         target,
         before,
+        source_revision: state.revision,
         derived_effects: input.derived_effects || derivedEffects,
         coach_explanation: input.coach_explanation || input.reason || ""
       });
+      if (target.layer === "geometry") {
+        editedGeometry = utils.deepClone(state.workingGeometry);
+        correctionsApi.applyEvent(editedGeometry, state.workingVisualGrammar, event);
+      }
       state.corrections.push(event);
       state.redoStack = [];
       recompute(false);
@@ -416,9 +454,9 @@
     }
 
     function addManualPrimitive(input) {
-      if (!coachReferenceGeometry) throw new Error("COACH_REFERENCE_NOT_STARTED");
-      coachReferenceGeometry = manualApi.addPrimitive(coachReferenceGeometry, input);
-      const latest = input.primitive_type === "entity" ? coachReferenceGeometry.entities.at(-1) : input.primitive_type === "path" ? coachReferenceGeometry.common_paths.at(-1) : coachReferenceGeometry.zones.at(-1);
+      if (!state.workingGeometry) startCoachReference(options.courtProfile);
+      editedGeometry = manualApi.addPrimitive(state.workingGeometry, input);
+      const latest = input.primitive_type === "entity" ? editedGeometry.entities.at(-1) : input.primitive_type === "path" ? editedGeometry.common_paths.at(-1) : editedGeometry.zones.at(-1);
       state.coachObservations.push({ id: `OBS-${String(state.coachObservations.length + 1).padStart(3, "0")}`, type: "coach_reference_placement", statement: `${latest.id} s’ha afegit a la referència manual.`, target_ref: `coach_reference:${latest.id}`, status: "case_only", created_at: now() });
       recompute(false);
       emit();
@@ -426,8 +464,8 @@
     }
 
     function removeManualPrimitive(id) {
-      if (!coachReferenceGeometry) throw new Error("COACH_REFERENCE_NOT_STARTED");
-      coachReferenceGeometry = manualApi.removePrimitive(coachReferenceGeometry, id);
+      if (!state.workingGeometry) return false;
+      editedGeometry = whiteboardApi.remove(state.workingGeometry, `geometry:entity:${id}`);
       if (state.selectedElement && state.selectedElement.ref.endsWith(`:${id}`)) state.selectedElement = null;
       state.coachObservations.push({
         id: `OBS-${String(state.coachObservations.length + 1).padStart(3, "0")}`,
@@ -464,7 +502,10 @@
     }
 
     function undo() {
-      if (!state.corrections.length) return false;
+      if (history.length) {
+        const entry = history.pop(); future.push(entry); restoreFrame(entry.before); emit(); return true;
+      }
+      if (editedGeometry || !state.corrections.length) return false;
       state.redoStack.push(state.corrections.pop());
       recompute();
       emit();
@@ -472,7 +513,10 @@
     }
 
     function redo() {
-      if (!state.redoStack.length) return false;
+      if (future.length) {
+        const entry = future.pop(); history.push(entry); restoreFrame(entry.after); emit(); return true;
+      }
+      if (editedGeometry || !state.redoStack.length) return false;
       state.corrections.push(state.redoStack.pop());
       recompute();
       emit();
@@ -480,6 +524,7 @@
     }
 
     function reset() {
+      editedGeometry = null;
       state.corrections = [];
       state.redoStack = [];
       state.selectedElement = null;
@@ -556,7 +601,10 @@
         validation: utils.deepClone(state.validation),
         corrections: utils.deepClone(state.corrections),
         coach_observations: utils.deepClone(state.coachObservations),
-        geometry: utils.deepClone(state.validatedGeometry || state.workingGeometry)
+        geometry: utils.deepClone(state.workingGeometry),
+        selected_alternatives: utils.deepClone(state.selectedAlternatives)
+        ,edited_geometry: utils.deepClone(editedGeometry), ui: utils.deepClone(state.ui), reference_images: utils.deepClone(state.referenceImages), action_approvals: utils.deepClone(state.actionApprovals), revision: state.revision,
+        base_visual_grammar: utils.deepClone(baseVisualGrammar), history: utils.deepClone({ past: history, future })
       };
     }
 
@@ -564,10 +612,10 @@
       const record = caseRecord(optionsInput && optionsInput.status || (state.validation.status === "validated_case" ? "validated" : "in_construction"));
       const destination = record.status === "validated" ? "validated_cases" : "drafts";
       const opposite = destination === "validated_cases" ? "drafts" : "validated_cases";
-      const index = state.knowledgeLibrary[destination].findIndex((item) => item.case_uid === record.case_uid || item.id === record.id);
+      const index = state.knowledgeLibrary[destination].findIndex((item) => item.case_uid ? item.case_uid === record.case_uid : item.id === record.id);
       if (index >= 0) state.knowledgeLibrary[destination][index] = record;
       else state.knowledgeLibrary[destination].push(record);
-      state.knowledgeLibrary[opposite] = state.knowledgeLibrary[opposite].filter((item) => item.case_uid !== record.case_uid && item.id !== record.id);
+      state.knowledgeLibrary[opposite] = state.knowledgeLibrary[opposite].filter((item) => item.case_uid ? item.case_uid !== record.case_uid : item.id !== record.id);
       const unresolvedRecord = {
         id: `UNRESOLVED-${state.currentCase.id}`,
         source_case_id: state.currentCase.id,
@@ -588,8 +636,14 @@
 
     function loadSavedCase(record) {
       if (!record || !record.case) throw new Error("SAVED_CASE_INVALID");
+      generationToken = null; state.regeneration = null; state.selectedElement = null;
       generatedGeometry = record.generated_geometry ? utils.deepFreeze(utils.deepClone(record.generated_geometry)) : null;
       coachReferenceGeometry = utils.deepClone(record.coach_reference_geometry || (!generatedGeometry ? record.geometry : null));
+      editedGeometry = utils.deepClone(record.edited_geometry || null);
+      history = utils.deepClone(record.history && record.history.past || []); future = utils.deepClone(record.history && record.history.future || []);
+      state.revision = record.revision || 0;
+      state.ui = { ...state.ui, ...(record.ui || {}) }; state.referenceImages = utils.deepClone(record.reference_images || []); state.actionApprovals = utils.deepClone(record.action_approvals || {});
+      if (record.base_visual_grammar) baseVisualGrammar = utils.deepFreeze(utils.deepClone(record.base_visual_grammar));
       baseInterpretation = utils.deepClone(record.interpretation || emptyInterpretation());
       baseSemanticModel = utils.deepClone(record.semantic_model || emptySemanticModel());
       baseSpatialModel = utils.deepClone(record.spatial_model || emptySpatialModel());
@@ -606,7 +660,7 @@
       state.completeness = utils.deepClone(record.completeness || { semantic: "unknown", spatial: "unknown", geometry: generatedGeometry || coachReferenceGeometry ? "available" : "unavailable", visual_validation: "not_reviewed" });
       state.derivations = utils.deepClone(record.derivations || derivationState(state.currentCase.description, Boolean(generatedGeometry || coachReferenceGeometry)));
       state.geometryState = utils.deepClone(record.geometry_state || { status: generatedGeometry ? "generated" : coachReferenceGeometry ? "coach_reference" : "unavailable", resolver: null });
-      state.selectedAlternatives = defaultAlternatives(generatedGeometry || coachReferenceGeometry);
+      state.selectedAlternatives = utils.deepClone(record.selected_alternatives || defaultAlternatives(generatedGeometry || coachReferenceGeometry));
       correctionSequence = state.corrections.length;
       recompute(false);
       if (record.validation && record.validation.status === "validated_case") {
@@ -715,9 +769,14 @@
     }
 
     function restorePackage(payload) {
-      if (!payload || payload.format !== "TRACA_training_case" || !["0.2.0", "0.3.0", "0.4.0", "0.5.0"].includes(payload.version)) throw new Error("TRAINING_CASE_PACKAGE_INVALID");
+      if (!payload || payload.format !== "TRACA_training_case" || !["0.2.0", "0.3.0", "0.4.0", "0.5.0", "0.6.0"].includes(payload.version)) throw new Error("TRAINING_CASE_PACKAGE_INVALID");
+      generationToken = null; state.regeneration = null; state.selectedElement = null;
       generatedGeometry = payload.generated_geometry ? utils.deepFreeze(utils.deepClone(payload.generated_geometry)) : null;
       coachReferenceGeometry = utils.deepClone(payload.coach_reference_geometry || null);
+      editedGeometry = utils.deepClone(payload.edited_geometry || null);
+      history = utils.deepClone(payload.history && payload.history.past || []); future = utils.deepClone(payload.history && payload.history.future || []);
+      state.revision = payload.revision || 0; state.ui = { ...state.ui, ...(payload.ui || {}) };
+      state.referenceImages = utils.deepClone(payload.reference_images || []); state.actionApprovals = utils.deepClone(payload.action_approvals || {});
       baseVisualGrammar = utils.deepFreeze(utils.deepClone(payload.base_visual_grammar || payload.generated_visual_grammar || options.visualGrammar));
       baseInterpretation = utils.deepClone(payload.interpretation || emptyInterpretation());
       baseSemanticModel = utils.deepClone(payload.semantic_model || emptySemanticModel());
@@ -739,6 +798,13 @@
         });
         importedLibrary.validated_cases = validated;
       }
+      // Opening an older exercise must not undo newer approvals or revocations.
+      const criteria = new Map((importedLibrary.criteria || []).map((c) => [c.id, c]));
+      (state.knowledgeLibrary.criteria || []).forEach((c) => {
+        const imported = criteria.get(c.id);
+        if (!imported || c.revoked || !imported.revoked && c.approval) criteria.set(c.id, c);
+      });
+      importedLibrary.criteria = [...criteria.values()];
       state.knowledgeLibrary = importedLibrary;
       state.selectedAlternatives = utils.deepClone(payload.selected_alternatives || defaultAlternatives(generatedGeometry));
       state.geometryState = utils.deepClone(payload.geometry_state || { status: geometryStatus(generatedGeometry, coachReferenceGeometry, state.corrections, false), resolver: generatedGeometry ? "imported" : null });
@@ -756,15 +822,115 @@
       emit();
     }
 
-    if (options.persistedState && options.persistedState.format === "TRACA_training_case") restorePackage(options.persistedState);
+    function frame() {
+      const { knowledgeLibrary, regeneration, referenceImages, ...caseState } = state;
+      return utils.deepClone({ state: caseState, generatedGeometry, coachReferenceGeometry, editedGeometry, baseVisualGrammar, baseInterpretation, baseSemanticModel, baseSpatialModel });
+    }
+    function restoreFrame(value, rollback) {
+      const revision = rollback ? value.state.revision : state.revision + 1;
+      state = { ...utils.deepClone(value.state), knowledgeLibrary: state.knowledgeLibrary, referenceImages: state.referenceImages, revision, regeneration: rollback ? state.regeneration : null, actionApprovals: rollback ? value.state.actionApprovals : {}, validation: rollback ? value.state.validation : { ...value.state.validation, status: "changes_pending" } };
+      generatedGeometry = utils.deepClone(value.generatedGeometry); coachReferenceGeometry = utils.deepClone(value.coachReferenceGeometry); editedGeometry = utils.deepClone(value.editedGeometry);
+      baseVisualGrammar = utils.deepClone(value.baseVisualGrammar); baseInterpretation = utils.deepClone(value.baseInterpretation); baseSemanticModel = utils.deepClone(value.baseSemanticModel); baseSpatialModel = utils.deepClone(value.baseSpatialModel);
+      if (!rollback) generationToken = null;
+    }
+    function command(name, fn) {
+      return (...args) => {
+        const before = frame(); transactionDepth += 1;
+        let result;
+        try { result = fn(...args); } catch (error) { restoreFrame(before, true); throw error; } finally { transactionDepth -= 1; }
+        if (!utils.sameValue(before, frame())) {
+          const appearanceOnly = name === "attachReference" || name === "applyCorrection" && (args[0]?.target?.layer === "visual" || args[0]?.target?.property === "label");
+          state.revision += 1;
+          state.actionApprovals = appearanceOnly ? Object.fromEntries(Object.entries(state.actionApprovals).map(([id, approval]) => [id, { ...approval, carried_from_revision: approval.revision, revision: state.revision }])) : {};
+          state.validation.status = "changes_pending";
+          history.push({ label: name, before, after: frame(), timestamp: now() }); history = history.slice(-50); future = [];
+        }
+        emit(); return result;
+      };
+    }
+    function commitGeometry(geometry, label, detail) {
+      const before = utils.deepClone(state.workingGeometry);
+      editedGeometry = dependenciesApi.reconcileGeometry(utils.deepClone(geometry));
+      const input = detail || { target: { layer: "geometry", ref: "geometry:workspace:layout", property: "geometry" }, before, after: editedGeometry };
+      if (!utils.sameValue(input.before, input.after)) {
+        correctionSequence += 1;
+        state.corrections.push(correctionsApi.createEvent({ ...input, id: utils.durableId("CORR"), timestamp: now(), source_revision: state.revision, reason: label || "Edició manual", operation: input.operation || "replace" }));
+      }
+      recompute(false); emit();
+    }
+    function beginRegeneration() {
+      generationToken = { id: utils.durableId("GEN"), case_uid: state.currentCase.case_uid, revision: state.revision, source: utils.fingerprint(state.currentCase.description) };
+      state.regeneration = { status: "pending", token: generationToken }; emit(); return utils.deepClone(generationToken);
+    }
+    function proposeRegeneration(token, result) {
+      if (!generationToken || token.id !== generationToken.id || token.case_uid !== state.currentCase.case_uid || token.revision !== state.revision || token.source !== utils.fingerprint(state.currentCase.description)) return { status: "obsolete" };
+      if (result.geometry) { result = utils.deepClone(result); result.learning = learningApi.apply(result.geometry, state.knowledgeLibrary.criteria, { case_uid: state.currentCase.case_uid, revision: state.revision }); result.geometry = result.learning.geometry; }
+      const merge = result.geometry ? regenerationApi.merge(generatedGeometry || coachReferenceGeometry, state.workingGeometry, result.geometry) : { geometry: state.workingGeometry, conflicts: [] };
+      state.regeneration = { status: "review", token, result: utils.deepClone(result), ...merge };
+      emit(); return utils.deepClone(state.regeneration);
+    }
+    function acceptRegeneration(choices) {
+      const proposal = state.regeneration;
+      if (!proposal || proposal.status !== "review" || proposal.token.revision !== state.revision) throw Error("REGENERATION_OBSOLETE");
+      if (proposal.result.geometry) {
+        const merge = regenerationApi.merge(generatedGeometry || coachReferenceGeometry, state.workingGeometry, proposal.result.geometry, choices);
+        if (merge.conflicts.some((c) => c.decision === "defer")) throw Error("REGENERATION_CONFLICTS_PENDING");
+        editedGeometry = merge.geometry;
+      }
+      setCompositionResult(proposal.result, "reviewed_regeneration"); state.regeneration = null; generationToken = null;
+    }
+    function cancelRegeneration() { generationToken = null; state.regeneration = null; emit(); }
+    function approveAction(id, author) {
+      const action = (state.composition.plan && state.composition.plan.actions || state.semanticModel.actions || []).find(a => a.id === id);
+      if (!action || action.status === "unresolved" || state.derivations.semantic.status === "stale") throw Error("ACTION_APPROVAL_BLOCKED");
+      const paths = dependenciesApi.allPaths(state.workingGeometry).filter(p => p.action_ref === id);
+      const affected = new Set(paths.flatMap(p => [p.id, p.actor_ref, p.from_state_ref, p.to_state_ref]));
+      if (preflightApi.run(snapshot()).diagnostics.some(d => d.level === "error" && affected.has(d.target_ref))) throw Error("ACTION_APPROVAL_BLOCKED");
+      state.actionApprovals[id] = { action_ref: id, revision: state.revision, scope: paths.length ? ["semantic", "geometry"] : ["semantic"], author: author || "coach", approved_at: now() }; emit();
+    }
+    function attachReference(image) { state.referenceImages.push({ ...utils.deepClone(image), id: utils.durableId("REF"), interpretation_status: "not_interpreted", attached_at: now() }); emit(); }
+    function registerCriterion(correctionId, input) {
+      const event = state.corrections.find((c) => c.id === correctionId); if (!event) throw Error("CORRECTION_REQUIRED");
+      const criterion = learningApi.derive(snapshot(), event, { ...input, id: utils.durableId("CRITERION") });
+      state.knowledgeLibrary.criteria.push(criterion); emit(); return utils.deepClone(criterion);
+    }
+    function approveCriterion(id, author) {
+      const index = state.knowledgeLibrary.criteria.findIndex((c) => c.id === id); if (index < 0) throw Error("CRITERION_NOT_FOUND");
+      generationToken = null; state.regeneration = null;
+      state.knowledgeLibrary.criteria[index] = learningApi.approve(state.knowledgeLibrary.criteria[index], author || "coach", state.revision); emit(); return utils.deepClone(state.knowledgeLibrary.criteria[index]);
+    }
+    function revokeCriterion(id) {
+      const criterion = state.knowledgeLibrary.criteria.find((c) => c.id === id); if (!criterion) return;
+      generationToken = null; state.regeneration = null;
+      criterion.revoked = { author: "coach", at: now() }; emit();
+    }
+    function activateKnowledge(id, enabled, fact) {
+      const registry = state.knowledgeLibrary.activation_registry;
+      registry.activated_records = registry.activated_records.filter((item) => item !== id);
+      if (enabled) registry.activated_records.push(id);
+      if (id === "VAL-ENT-004" && fact?.id === id && fact.status === "prior_explicit_coach_validation_documented") {
+        state.ui.optionalAlternatives = enabled ? "semantic_only" : "preview";
+        state.ui.alternativesAuthority = enabled ? { assertion_ref: id, source_refs: fact.source_refs, scope: fact.scope } : null;
+      }
+      emit();
+    }
 
-    return {
+    if (options.persistedState && options.persistedState.format === "TRACA_training_case") restorePackage(options.persistedState);
+    else recompute(false);
+
+    const api = {
       snapshot, subscribe, createCase, loadCanonicalCase, updateCase, setInterpretation,
       applyCorrection, addSemanticItem, updateSemanticItem, defineUnknownConcept, addUnknownConcept,
       setCompositionResult, setClarificationAnswer,
       startCoachReference, addManualPrimitive, removeManualPrimitive, recordCoachObservation, undo, redo, reset, setSelection, setUi, setAlternative,
-      updateCorrectionExplanation, runPreflight, validate, saveCase, saveExercise, loadSavedCase, addCoachValidatedKnowledge, createPromotion, whatLearned, restorePackage
+      updateCorrectionExplanation, runPreflight, validate, saveCase, saveExercise, loadSavedCase, addCoachValidatedKnowledge, createPromotion, whatLearned, restorePackage,
+      commitGeometry, beginRegeneration, proposeRegeneration, acceptRegeneration, cancelRegeneration, approveAction, attachReference,
+      registerCriterion, approveCriterion, revokeCriterion, activateKnowledge
     };
+    ["applyCorrection", "addManualPrimitive", "removeManualPrimitive", "commitGeometry", "startCoachReference", "reset", "setCompositionResult", "acceptRegeneration", "addSemanticItem", "attachReference"].forEach((name) => { api[name] = command(name, api[name]); });
+    // Text changes invalidate revision-scoped approvals and pending async responses without adding a history entry per keystroke.
+    api.updateCase = (patch) => { if (!utils.sameValue(Object.fromEntries(Object.keys(patch).map((k) => [k, state.currentCase[k]])), patch)) { state.revision += 1; state.actionApprovals = {}; } updateCase(patch); };
+    return api;
   }
 
   return { WORKSPACE_VERSION, emptyInterpretation, emptySemanticModel, emptySpatialModel, defaultLibrary, derivationState, createWorkspaceStore };

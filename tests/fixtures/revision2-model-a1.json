@@ -1,0 +1,13 @@
+{
+  "fixture_only": true,
+  "participants": [
+    {"id": "MODEL_CE", "label": "CE", "kind": "attacker", "role": "central", "team": "attack"},
+    {"id": "MODEL_L", "label": "L", "kind": "attacker", "role": "lateral", "team": "attack"}
+  ],
+  "balls": [{"id": "MODEL_B1", "holder_ref": "MODEL_CE"}],
+  "actions": [
+    {"id": "MODEL_PASS", "type": "pass", "actor_ref": "MODEL_CE", "receiver_ref": "MODEL_L", "ball_ref": "MODEL_B1", "evidence_spans": ["El central passa al lateral."]},
+    {"id": "MODEL_RECEIVE", "type": "reception", "actor_ref": "MODEL_L", "mode": "in_motion", "after": ["MODEL_PASS"], "evidence_spans": ["El lateral rep en carrera."]}
+  ],
+  "unresolved": []
+}

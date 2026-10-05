@@ -185,7 +185,7 @@ const adapted=Resolver.adaptLegacyGeometry(legacy);
 process.stdout.write(JSON.stringify({adapted,branches:adapted.branches.length,alternatives:adapted.branches.reduce((total,branch)=>total+branch.alternatives.length,0)}));
 """)
 
-    assert result["adapted"]["meta"]["adapted_from"]["version"] == "0.2.0"
+    assert result["adapted"]["meta"]["adapted_from"]["version"] == "0.2.1"
     assert result["branches"] == 3
     assert result["alternatives"] == 12
     assert len(result["adapted"]["balls"]) == 3

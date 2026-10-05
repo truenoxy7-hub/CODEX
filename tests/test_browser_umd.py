@@ -31,7 +31,7 @@ class _ScriptSourceParser(HTMLParser):
             return
         source = dict(attrs).get("src")
         if source:
-            self.sources.append(source)
+            self.sources.append(source.split("?", 1)[0])
 
 
 def _node() -> str:
@@ -92,6 +92,7 @@ class FakeElement {{
     (this.listeners[type] || []).forEach(listener=>listener(event));
   }}
   appendChild(child) {{ this.children.push(child); return child; }}
+  replaceChildren(...children) {{ this.children=children; }}
   insertAdjacentHTML(_position, html) {{ this.innerHTML += html; }}
   querySelector(selector) {{ return this.ownerDocument.element(`${{this.selector}} ${{selector}}`); }}
   querySelectorAll(_selector) {{ return []; }}
@@ -137,6 +138,8 @@ const context=vm.createContext({{
   crypto:{{randomUUID:()=>`00000000-0000-4000-8000-${{String(++uuid).padStart(12,'0')}}`}},
   setTimeout:()=>1,
   clearTimeout:()=>{{}},
+  fetch:()=>new Promise(()=>{{}}),
+  addEventListener:()=>{{}},
   Blob:class Blob {{}},
   URL:{{createObjectURL:()=>"blob:test",revokeObjectURL:()=>{{}}}},
   FileReader:class FileReader {{}}
@@ -168,6 +171,8 @@ const requiredGlobals=[
 ];
 
 function generate(text) {{
+  // Independent cases; revision 2 reviews regeneration of an existing board.
+  document.element('#new-case').dispatch('click');
   document.element('#description').value=text;
   document.element('#generate-case').dispatch('click');
   return {{

@@ -628,3 +628,29 @@ són presents. Els catàlegs VAL-ENT, D, R i T no s'han inventat ni executat.
 amb participants, accions i fragments d'evidència. Una resposta correcta es
 marca `model_proposal`, amb autoritat provisional i validació de l'entrenador
 obligatòria. Sense `invoke` configurat no hi ha cap crida ni èxit simulat.
+
+## D-070 — Revisió 2: editor abans que generador universal
+
+**Decisió:** portar els gestos de `HandballGenerator.original.jsx` a l’editor
+SVG existent, una sola font d’estat i renderer compartit. Dibuix manual sense
+semàntica resolta, historial atòmic, exportació neta i merge de regeneració.
+La revisió vigent és la del paquet de 04/10/2026 i substitueix les prioritats
+anteriors. No es reescriu el framework ni s’inventa geometria per ID de cas.
+
+## D-071 — Font durable local i conflictes conservats
+
+**Decisió:** servei Python stdlib només loopback amb SQLite transaccional,
+versions esperades, historial recuperable i còpies de les dues variants dels
+conflictes. localStorage és cua/còpia, no sincronització confirmada. Paquets
+0.2–0.5 migrats amb original exacte i importació idempotent; exportació v0.6.
+Sense comptes ni desplegament remot; origen/Host/token s’exigeixen per escriure.
+
+## D-072 — Font real i aprenentatge tipat acotat
+
+**Decisió:** conservar el paquet intacte i les aprovacions documentades per
+afirmació. Això supera la limitació d’absència de fonts de D-068. VAL-ENT-004
+pot activar només una política de vista, mai eliminar decisions. Un criteri
+de correcció té condició, bindings i efecte tipats: posició relativa o
+comprovació funcional de finta. Candidats/efectes desconeguts no s’executen;
+conflictes i errors físics es rebutgen. Revocacions no esborren història.
+Les aprovacions de proves no són aprovacions tàctiques de l’entrenador.

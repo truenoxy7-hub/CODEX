@@ -56,7 +56,26 @@ La descripció té un fingerprint. Interpretació, model semàntic, model espaci
 
 L’exportació conserva cas i identitat durable, text, interpretació, models, estat del resolutor, derivacions i fingerprints, preguntes i respostes, resultat del compositor, geometries, gramàtica, correccions, observacions, validació, alternatives i biblioteca.
 
-Les versions `0.2.0`, `0.3.0` i `0.4.0` s’importen. En les dues primeres, els registres antics no validats que vivien a `validated_cases` passen a `drafts`; s’afegeixen identitat durable i estat de derivació. L’exportació següent sempre és `0.5.0` i pot conservar el `CompositionPlan` auditable.
+Les versions `0.2.0`–`0.5.0` s’importen. En les dues primeres, els registres antics no validats que vivien a `validated_cases` passen a `drafts`; s’afegeixen identitat durable i estat de derivació. L’exportació següent sempre és `0.6.0` i conserva pla, overlay editable, historial, referències i aprovacions amb revisió.
+
+## Criteri tipat de la revisió 2
+
+Seleccionar una correcció → proposar condició/efecte → previsualitzar abans i
+després → aprovació explícita → guardar. Una correcció de posició sobre un
+destí vinculat deriva distàncies laterals/profunditat relatives a l’origen de
+la mateixa acció; el nou cas resol els seus propis IDs i costat. No reutilitza
+coordenades absolutes del cas original. L’altre executor comprova l’ordre
+funcional de la finta, sense inventar-la. Efectes arbitraris no s’executen.
+
+Els candidats resten inoperants. Criteris aprovats sense executor es mostren
+pendents d’implementació. Efectes divergents sobre el mateix estat generen un
+conflicte; efectes que creen errors geomètrics nous es rebutgen mantenint la
+geometria anterior. La font, versió i efecte queden al cas nou i a la UI.
+Revocar atura futurs usos, no esborra aplicacions històriques. Obrir una versió
+antiga dins el workspace no desfà una revocació posterior coneguda.
+
+La biblioteca viatja al paquet i al servei amb el cas; no hi ha un registre
+multiusuari de criteris ni revocacions sincronitzades entre sessions ja obertes.
 
 El coneixement validat pot omplir un slot obligatori del compositor quan
 declara abast compatible, autoritat operacional i fonts. Un candidat només es

@@ -1,9 +1,10 @@
 (function (root, factory) {
   const dependencies = typeof module === "object" && module.exports ? require("./geometry-dependencies.js") : root.TRACA_GEOMETRY_DEPENDENCIES;
-  const api = factory(dependencies);
+  const geometryValidator = typeof module === "object" && module.exports ? require("./generic-geometry-resolver.js") : root.TRACA_GENERIC_GEOMETRY_RESOLVER;
+  const api = factory(dependencies, geometryValidator);
   if (typeof module === "object" && module.exports) module.exports = api;
   root.TRACA_WORKSPACE_PREFLIGHT = api;
-})(typeof globalThis !== "undefined" ? globalThis : this, function (dependenciesApi) {
+})(typeof globalThis !== "undefined" ? globalThis : this, function (dependenciesApi, geometryValidator) {
   "use strict";
 
   function diagnostic(level, code, message, options) {
@@ -11,7 +12,7 @@
   }
 
   function pointOutside(point, court) {
-    return !Array.isArray(point) || point.length !== 2 || point[0] < 0 || point[0] > court.width_m || point[1] < 0 || point[1] > court.half_length_m;
+    return !Array.isArray(point) || point.length !== 2 || !point.every(Number.isFinite) || point[0] < 0 || point[0] > court.width_m || point[1] < 0 || point[1] > (court.length_m || court.half_length_m);
   }
 
   function hasDirectionalChange(points) {
@@ -34,7 +35,7 @@
   function run(snapshot) {
     const diagnostics = [];
     const staleLayers = Object.entries(snapshot.derivations || {}).filter(([key, value]) => key !== "source" && value && value.status === "stale").map(([key]) => key);
-    if (staleLayers.length) diagnostics.push(diagnostic("error", "SOURCE_DERIVATION_STALE", `El text ha canviat i ${staleLayers.join(", ")} encara provenen de la versió anterior. Torna a generar abans de guardar.`, { actions: ["Tornar a generar"] }));
+    if (staleLayers.length) diagnostics.push(diagnostic("error", "SOURCE_DERIVATION_STALE", `El text ha canviat i els resultats encara provenen de la versió anterior. Pots guardar l’esborrany; actualitza la proposta abans de validar.`, { actions: ["Tornar a generar"] }));
     if (!snapshot.currentCase || !String(snapshot.currentCase.description || "").trim()) {
       diagnostics.push(diagnostic("error", "CASE_DESCRIPTION_REQUIRED", "El cas no té descripció. Afegeix el text que l’entrenador vol treballar."));
     }
@@ -46,6 +47,9 @@
     }
     const geometry = snapshot.workingGeometry || snapshot.coachReferenceGeometry;
     if (geometry && geometry.court) {
+      geometryValidator.validateResolvedGeometry(geometry).checks.filter(check => check.status === "failed").forEach(check => {
+        diagnostics.push(diagnostic(check.kind === "ground_path_visual_clearance" ? "warning" : "error", `GEOMETRY_${check.kind.toUpperCase()}`, check.message, { target_ref: check.subject_ref, actions: ["Corregir el gràfic"] }));
+      });
       const identityItems = [
         ...(geometry.entities || []),
         ...(geometry.participant_states || []),
@@ -56,6 +60,7 @@
         ...(geometry.branches || []).flatMap((branch) => (branch.alternatives || []).flatMap((alternative) => [alternative, alternative.approach_path, alternative.return_pass].filter(Boolean)))
       ];
       const identityCounts = identityItems.reduce((counts, item) => ({ ...counts, [item.id]: (counts[item.id] || 0) + 1 }), {});
+      [...identityItems, ...(geometry.relations || []), ...(geometry.balls || [])].filter(item => item.unresolved_refs?.length).forEach(item => diagnostics.push(diagnostic("error", "DELETED_BINDING_UNRESOLVED", "S’ha eliminat un element vinculat. Repara el vincle abans d’aprovar; el dibuix es pot guardar.", { target_ref: item.id, actions: ["Desfer", "Revisar el vincle"] })));
       Object.entries(identityCounts).filter(([, count]) => count > 1).forEach(([id]) => diagnostics.push(diagnostic("error", "DUPLICATE_GEOMETRY_ID", `L’identificador ${id} està duplicat. Cada element gràfic necessita una identitat estable.`, { target_ref: `geometry:identity:${id}`, actions: ["Reanomenar un dels elements"] })));
       (geometry.entities || []).forEach((entity) => {
         if (pointOutside(entity.position, geometry.court)) diagnostics.push(diagnostic("error", "ENTITY_OUT_OF_COURT", `${entity.id} ha quedat fora dels límits de la pista.`, { target_ref: `geometry:entity:${entity.id}`, actions: ["Corregir el gràfic"] }));
@@ -114,5 +119,5 @@
     };
   }
 
-  return { run, hasDirectionalChange, crossesDefensiveLine };
+  return { run, hasDirectionalChange, crossesDefensiveLine, validateGeometry: geometryValidator.validateResolvedGeometry };
 });

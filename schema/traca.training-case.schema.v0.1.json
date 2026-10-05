@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://traca.local/schema/traca.training-case.schema.v0.1.json",
-  "title": "TRAÇA portable training case v0.5",
+  "title": "TRAÇA portable training case v0.6 (legacy import v0.2–0.5)",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -15,7 +15,13 @@
   ],
   "properties": {
     "format": { "const": "TRACA_training_case" },
-    "version": { "const": "0.5.0" },
+    "version": { "const": "0.6.0" },
+    "revision": { "type": "integer", "minimum": 0 },
+    "edited_geometry": { "type": ["object", "null"] },
+    "history": { "type": "object", "required": ["past", "future"], "properties": { "past": { "type": "array" }, "future": { "type": "array" } } },
+    "ui": { "type": "object" },
+    "reference_images": { "type": "array" },
+    "action_approvals": { "type": "object" },
     "metadata": {
       "type": "object",
       "additionalProperties": false,

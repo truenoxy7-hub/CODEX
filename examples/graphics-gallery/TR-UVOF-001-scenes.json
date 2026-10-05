@@ -1,0 +1,3962 @@
+{
+  "status": "partial",
+  "scenes": [
+    {
+      "id": "FP_SA1_B1",
+      "scope": {
+        "phase_ref": "SA1",
+        "trajectory_ref": "SA1_B1",
+        "ball_ref": "B1",
+        "qualifiers": [
+          "passada"
+        ],
+        "source_ref": "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+      },
+      "tacticalIR": {
+        "meta": {
+          "format": "TRACA_tactical_ir",
+          "version": "0.1.0",
+          "case_id": "TR-UVOF-001",
+          "source_revision": "corpus_validated",
+          "knowledge_version": "corpus"
+        },
+        "participants": [
+          {
+            "id": "CE",
+            "label": "CE",
+            "role": "central",
+            "kind": "attacker",
+            "team": "attack",
+            "authority": "coach_explicit_input",
+            "status": "validated",
+            "source_refs": [
+              "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+            ]
+          },
+          {
+            "id": "L",
+            "label": "L",
+            "role": "lateral",
+            "kind": "attacker",
+            "team": "attack",
+            "authority": "coach_explicit_input",
+            "status": "validated",
+            "source_refs": [
+              "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+            ]
+          }
+        ],
+        "participant_states": [],
+        "balls": [
+          {
+            "id": "B1",
+            "holder_ref": "CE",
+            "authority": "coach_explicit_input",
+            "status": "validated",
+            "source_refs": [
+              "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+            ]
+          }
+        ],
+        "materials": [],
+        "spaces": [],
+        "actions": [
+          {
+            "id": "FP_SA1_B1:pass",
+            "type": "pass",
+            "actor_ref": "CE",
+            "receiver_ref": "L",
+            "ball_ref": "B1",
+            "authority": "coach_explicit_input",
+            "status": "validated",
+            "source_refs": [
+              "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+            ]
+          }
+        ],
+        "decisions": [],
+        "phases": [],
+        "ball_flow": [],
+        "relations": []
+      },
+      "artifact": "TR-UVOF-001-scene-1.svg",
+      "result": {
+        "status": "ready",
+        "composition_status": "ready",
+        "geometry_status": "ready",
+        "geometry": {
+          "$schema": "../../schema/traca.geometry.schema.v0.4.json",
+          "meta": {
+            "format": "TRACA_general_geometry",
+            "version": "0.4.0",
+            "case_id": "TR-UVOF-001",
+            "source_revision": "corpus_validated",
+            "status": "resolved",
+            "authority": "provisional_visual_policy",
+            "composition_fingerprint": "fnv1a:e10bd731",
+            "canonical_promotion": false,
+            "court_profile_ref": "IHF_INDOOR_HANDBALL_COURT_2025@1.0.0"
+          },
+          "court": {
+            "width_m": 20,
+            "half_length_m": 20,
+            "goal": {
+              "width_m": 3,
+              "height_m": 2,
+              "post_width_m": 0.08
+            },
+            "markings": {
+              "goal_area_radius_m": 6,
+              "goal_area_straight_m": 3,
+              "free_throw_distance_m": 9,
+              "free_throw_segment_m": 0.15,
+              "free_throw_gap_m": 0.15,
+              "penalty_line_distance_m": 7,
+              "penalty_line_length_m": 1,
+              "goalkeeper_line_distance_m": 4,
+              "goalkeeper_line_length_m": 0.15,
+              "throw_off_diameter_m": 4
+            },
+            "view_box": [
+              -0.8,
+              -1,
+              21.6,
+              15.15
+            ]
+          },
+          "layout_policy": {
+            "id": "generic_relational_layout_v0.4",
+            "version": "0.4.0",
+            "status": "provisional_render_policy",
+            "coordinate_system": "metres_origin_goal_line_left",
+            "attack_direction": "negative_y",
+            "notes": [
+              "Distribució derivada de delimitadors, corredors d’interval, dependències d’acció i relacions numèriques connectades.",
+              "Les profunditats, separacions, marges de símbol i distàncies de contacte són política visual provisional.",
+              "La validesa geomètrica no concedeix validació tàctica de l’entrenador."
+            ],
+            "parameters": {
+              "id": "generic_relational_layout_v0.4",
+              "version": "0.4.0",
+              "defensive_area_clearance_m": 1.5,
+              "minimum_defensive_depth_m": 6.8,
+              "reception_free_throw_offset_m": 0.9,
+              "ground_symbol_clearance_m": 0.48,
+              "surpass_depth_m": 0.5,
+              "staging_offset_y": 3,
+              "feint_contact_distance_m": 0.9,
+              "feint_break_lateral_m": 1.05,
+              "feint_break_depth_m": 0.4,
+              "feint_bypass_depth_m": 0.9,
+              "feint_exit_lateral_m": 0.8,
+              "feint_min_turn_degrees": 28,
+              "defender_path_clearance_m": 0.58,
+              "relation_support_distance_m": 1.45,
+              "relation_min_attacker_separation_m": 1.4,
+              "relation_max_defender_distance_m": 3.4,
+              "ball_offset_m": 0.48
+            },
+            "decisions": [
+              {
+                "id": "LAYOUT_0001",
+                "type": "pass_relation_receiver",
+                "target_ref": "STATE_L_FP_SA1_B1_PASS_RECEPTION",
+                "status": "provisional_visual_policy",
+                "position": [
+                  11.7,
+                  9.9
+                ],
+                "source_refs": [
+                  "action:FP_SA1_B1:pass",
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+                ]
+              },
+              {
+                "id": "LAYOUT_0002",
+                "type": "pass_relation_sender",
+                "target_ref": "STATE_CE_S0",
+                "status": "provisional_visual_policy",
+                "position": [
+                  8.3,
+                  12.9
+                ],
+                "source_refs": [
+                  "action:FP_SA1_B1:pass",
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+                ]
+              }
+            ]
+          },
+          "zones": [],
+          "spaces": [],
+          "objects": [],
+          "phases": [],
+          "entities": [
+            {
+              "id": "CE",
+              "kind": "attacker",
+              "label": "CE",
+              "position": [
+                8.3,
+                12.9
+              ],
+              "state_ref": "STATE_CE_S0",
+              "status": "derived",
+              "presence": "explicit",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ]
+            },
+            {
+              "id": "L",
+              "kind": "attacker",
+              "label": "L",
+              "position": [
+                11.7,
+                9.9
+              ],
+              "state_ref": "STATE_L_FP_SA1_B1_PASS_RECEPTION",
+              "status": "derived",
+              "presence": "explicit",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ]
+            }
+          ],
+          "contextual_references": [],
+          "participant_states": [
+            {
+              "id": "STATE_CE_S0",
+              "participant_ref": "CE",
+              "state_key": "S0",
+              "phase_ref": null,
+              "space_ref": null,
+              "functional_position_ref": null,
+              "position": [
+                8.3,
+                12.9
+              ],
+              "status": "current",
+              "authority": "coach_explicit_input",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ],
+              "layout_decision_ref": "LAYOUT_0002",
+              "visibility": "normal"
+            },
+            {
+              "id": "STATE_L_FP_SA1_B1_PASS_RECEPTION",
+              "participant_ref": "L",
+              "state_key": "FP_SA1_B1:pass:reception",
+              "phase_ref": null,
+              "space_ref": null,
+              "functional_position_ref": null,
+              "position": [
+                11.7,
+                9.9
+              ],
+              "status": "future",
+              "authority": "coach_explicit_input",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ],
+              "layout_decision_ref": "LAYOUT_0001",
+              "visibility": "normal"
+            }
+          ],
+          "balls": [
+            {
+              "id": "BALL_VISUAL_B1_INITIAL",
+              "ball_ref": "B1",
+              "ball_state_ref": "BALL_STATE_B1_S0",
+              "holder_ref": "CE",
+              "holder_state_ref": "STATE_CE_S0",
+              "position": [
+                7.82,
+                12.86
+              ],
+              "status": "held",
+              "visibility": "initial",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ]
+            }
+          ],
+          "ball_flow": [
+            {
+              "id": "BALL_TRANSITION_FP_SA1_B1:pass",
+              "ball_ref": "B1",
+              "from_ball_state_ref": "BALL_STATE_B1_S0",
+              "to_ball_state_ref": "BALL_STATE_B1_001",
+              "from_holder_ref": "CE",
+              "to_holder_ref": "L",
+              "path_ref": "PATH_VIS_FP_SA1_B1:pass_PASS_PATH",
+              "receiver_state_ref": "STATE_L_FP_SA1_B1_PASS_RECEPTION",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ]
+            }
+          ],
+          "common_paths": [
+            {
+              "id": "PATH_VIS_FP_SA1_B1:pass_PASS_PATH",
+              "kind": "pass",
+              "action_type": "pass",
+              "segments": [
+                {
+                  "type": "line",
+                  "start": [
+                    8.3,
+                    12.9
+                  ],
+                  "end": [
+                    11.7,
+                    9.9
+                  ]
+                }
+              ],
+              "functional_points": [],
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ],
+              "action_ref": "FP_SA1_B1:pass",
+              "ball_ref": "B1",
+              "from_participant_ref": "CE",
+              "from_state_ref": "STATE_CE_S0",
+              "to_participant_ref": "L",
+              "to_state_ref": "STATE_L_FP_SA1_B1_PASS_RECEPTION",
+              "anchor_mode": "symbol_perimeter"
+            }
+          ],
+          "relations": [],
+          "branches": [],
+          "dependencies": [
+            {
+              "id": "DEP_STATE_CE_S0",
+              "trigger_ref": "geometry:participant_state:STATE_CE_S0",
+              "effect_refs": [
+                "geometry:entity:CE",
+                "geometry:common_path:PATH_VIS_FP_SA1_B1:pass_PASS_PATH"
+              ],
+              "rule": "state_drives_geometry"
+            },
+            {
+              "id": "DEP_STATE_L_FP_SA1_B1_PASS_RECEPTION",
+              "trigger_ref": "geometry:participant_state:STATE_L_FP_SA1_B1_PASS_RECEPTION",
+              "effect_refs": [
+                "geometry:entity:L",
+                "geometry:common_path:PATH_VIS_FP_SA1_B1:pass_PASS_PATH"
+              ],
+              "rule": "state_drives_geometry"
+            }
+          ],
+          "obligations": [
+            {
+              "id": "OBLIGATION_PRIMITIVE_VIS_FP_SA1_B1:pass_PASS_PATH",
+              "kind": "visual_primitive",
+              "action_ref": "FP_SA1_B1:pass",
+              "target_ref": "VIS_FP_SA1_B1:pass_PASS_PATH",
+              "required": true,
+              "status": "resolved",
+              "geometry_refs": [
+                "geometry:common_path:PATH_VIS_FP_SA1_B1:pass_PASS_PATH"
+              ],
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ]
+            },
+            {
+              "id": "OBLIGATION_BALL_B1",
+              "kind": "initial_ball_visible",
+              "action_ref": null,
+              "target_ref": "B1",
+              "required": true,
+              "status": "resolved",
+              "geometry_refs": [
+                "geometry:ball:BALL_VISUAL_B1_INITIAL"
+              ],
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ]
+            }
+          ],
+          "diagnostics": [],
+          "validation": {
+            "renderability": "passed",
+            "geometry": "valid",
+            "tactical": "not_validated_by_coach",
+            "checks": [
+              {
+                "id": "CHECK_POSITION_CE",
+                "kind": "participant_position_physical",
+                "status": "passed",
+                "severity": "info",
+                "subject_ref": "CE",
+                "action_ref": null,
+                "message": "Posició física admissible.",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+                ],
+                "details": {}
+              },
+              {
+                "id": "CHECK_POSITION_L",
+                "kind": "participant_position_physical",
+                "status": "passed",
+                "severity": "info",
+                "subject_ref": "L",
+                "action_ref": null,
+                "message": "Posició física admissible.",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+                ],
+                "details": {}
+              },
+              {
+                "id": "CHECK_POSITION_STATE_CE_S0",
+                "kind": "participant_position_physical",
+                "status": "passed",
+                "severity": "info",
+                "subject_ref": "STATE_CE_S0",
+                "action_ref": null,
+                "message": "Posició física admissible.",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+                ],
+                "details": {}
+              },
+              {
+                "id": "CHECK_POSITION_STATE_L_FP_SA1_B1_PASS_RECEPTION",
+                "kind": "participant_position_physical",
+                "status": "passed",
+                "severity": "info",
+                "subject_ref": "STATE_L_FP_SA1_B1_PASS_RECEPTION",
+                "action_ref": null,
+                "message": "Posició física admissible.",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+                ],
+                "details": {}
+              },
+              {
+                "id": "CHECK_RENDERABLE",
+                "kind": "renderability",
+                "status": "passed",
+                "severity": "info",
+                "subject_ref": "geometry",
+                "action_ref": null,
+                "message": "La geometria conté primitives renderitzables.",
+                "source_refs": [
+                  "derived:generic_geometry"
+                ],
+                "details": {}
+              },
+              {
+                "id": "CHECK_BALL_B1",
+                "kind": "ball_identity_and_visibility",
+                "status": "passed",
+                "severity": "info",
+                "subject_ref": "B1",
+                "action_ref": null,
+                "message": "La pilota inicial és única i qualsevol passada conserva la mateixa identitat.",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+                ],
+                "details": {
+                  "visible_initial_instances": 1,
+                  "linked_transfers": 1
+                }
+              }
+            ]
+          },
+          "result": {
+            "status": "ready",
+            "renderability_status": "passed",
+            "geometry_validation_status": "valid",
+            "tactical_validation_status": "not_validated_by_coach",
+            "obligations_total": 2,
+            "obligations_resolved": 2,
+            "obligations_pending": 0,
+            "incompatible_count": 0
+          },
+          "traceability": [
+            {
+              "geometry_ref": "geometry:entity:CE",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ]
+            },
+            {
+              "geometry_ref": "geometry:entity:L",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ]
+            },
+            {
+              "geometry_ref": "geometry:ball:BALL_VISUAL_B1_INITIAL",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ]
+            },
+            {
+              "geometry_ref": "geometry:common_path:PATH_VIS_FP_SA1_B1:pass_PASS_PATH",
+              "action_ref": "FP_SA1_B1:pass",
+              "primitive_ref": "VIS_FP_SA1_B1:pass_PASS_PATH",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ]
+            }
+          ]
+        },
+        "plan": {
+          "meta": {
+            "format": "TRACA_composition_plan",
+            "version": "0.1.0",
+            "source_revision": "corpus_validated",
+            "knowledge_version": "corpus",
+            "fingerprint": "fnv1a:e10bd731",
+            "deterministic": true
+          },
+          "graph": {
+            "meta": {
+              "format": "TRACA_composition_graph",
+              "version": "0.1.0",
+              "source_revision": "corpus_validated"
+            },
+            "nodes": [
+              {
+                "id": "B1",
+                "node_type": "BallState",
+                "payload_ref": "balls:B1",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+                ],
+                "authority": "coach_explicit_input",
+                "status": "validated"
+              },
+              {
+                "id": "CE",
+                "node_type": "Participant",
+                "payload_ref": "participants:CE",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+                ],
+                "authority": "coach_explicit_input",
+                "status": "validated"
+              },
+              {
+                "id": "FP_SA1_B1:pass",
+                "node_type": "ActionInstance",
+                "payload_ref": "actions:FP_SA1_B1:pass",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+                ],
+                "authority": "coach_explicit_input",
+                "status": "validated"
+              },
+              {
+                "id": "L",
+                "node_type": "Participant",
+                "payload_ref": "participants:L",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+                ],
+                "authority": "coach_explicit_input",
+                "status": "validated"
+              }
+            ],
+            "edges": [
+              {
+                "id": "EDGE_FP_SA1_B1:pass_actor_ref",
+                "type": "actor",
+                "from_ref": "FP_SA1_B1:pass",
+                "to_ref": "CE",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+                ],
+                "authority": "coach_explicit_input",
+                "status": "validated"
+              },
+              {
+                "id": "EDGE_FP_SA1_B1:pass_ball_ref",
+                "type": "ball_before",
+                "from_ref": "FP_SA1_B1:pass",
+                "to_ref": "B1",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+                ],
+                "authority": "coach_explicit_input",
+                "status": "validated"
+              },
+              {
+                "id": "EDGE_FP_SA1_B1:pass_receiver_ref",
+                "type": "target",
+                "from_ref": "FP_SA1_B1:pass",
+                "to_ref": "L",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+                ],
+                "authority": "coach_explicit_input",
+                "status": "validated"
+              }
+            ]
+          },
+          "operators": [
+            "pass"
+          ],
+          "actions": [
+            {
+              "id": "FP_SA1_B1:pass",
+              "semantic_type": "pass",
+              "subtype": null,
+              "operator_id": "pass",
+              "status": "composed",
+              "phase_ref": null,
+              "after": [],
+              "simultaneous_with": [],
+              "actor_ref": "CE",
+              "receiver_ref": "L",
+              "from_state_ref": "STATE_CE_S0",
+              "to_state_ref": "STATE_L_FP_SA1_B1_PASS_RECEPTION",
+              "ball_transition_ref": "BALL_TRANSITION_FP_SA1_B1:pass",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ],
+              "authority": "coach_explicit_input",
+              "trace": {
+                "semantic_action_ref": "FP_SA1_B1:pass",
+                "rule_ref": "operator:pass@0.1.0"
+              }
+            }
+          ],
+          "participant_states": [
+            {
+              "id": "STATE_CE_S0",
+              "participant_ref": "CE",
+              "state_key": "S0",
+              "phase_ref": null,
+              "space_ref": null,
+              "functional_position_ref": null,
+              "position": null,
+              "status": "current",
+              "authority": "coach_explicit_input",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ]
+            },
+            {
+              "id": "STATE_L_FP_SA1_B1_PASS_RECEPTION",
+              "participant_ref": "L",
+              "state_key": "FP_SA1_B1:pass:reception",
+              "phase_ref": null,
+              "space_ref": null,
+              "functional_position_ref": null,
+              "position": null,
+              "status": "future",
+              "authority": "coach_explicit_input",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ]
+            },
+            {
+              "id": "STATE_L_S0",
+              "participant_ref": "L",
+              "state_key": "S0",
+              "phase_ref": null,
+              "space_ref": null,
+              "functional_position_ref": null,
+              "position": null,
+              "status": "current",
+              "authority": "coach_explicit_input",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ]
+            }
+          ],
+          "ball_flow": {
+            "states": [
+              {
+                "id": "BALL_STATE_B1_S0",
+                "ball_ref": "B1",
+                "holder_ref": "CE",
+                "status": "held",
+                "action_ref": null,
+                "authority": "coach_explicit_input",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+                ]
+              },
+              {
+                "id": "BALL_STATE_B1_001",
+                "ball_ref": "B1",
+                "holder_ref": "L",
+                "status": "held",
+                "action_ref": "FP_SA1_B1:pass",
+                "authority": "coach_explicit_input",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+                ]
+              }
+            ],
+            "transitions": [
+              {
+                "id": "BALL_TRANSITION_FP_SA1_B1:pass",
+                "action_ref": "FP_SA1_B1:pass",
+                "type": "pass",
+                "ball_ref": "B1",
+                "from_state_ref": "BALL_STATE_B1_S0",
+                "to_state_ref": "BALL_STATE_B1_001",
+                "from_holder_ref": "CE",
+                "to_holder_ref": "L",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+                ]
+              }
+            ],
+            "diagnostics": []
+          },
+          "constraints": [],
+          "constraint_conflicts": [],
+          "visual_primitives": [
+            {
+              "id": "VIS_FP_SA1_B1:pass_PASS_PATH",
+              "type": "pass_path",
+              "action_ref": "FP_SA1_B1:pass",
+              "ball_ref": "B1",
+              "from_participant_ref": "CE",
+              "from_state_ref": "STATE_CE_S0",
+              "to_participant_ref": "L",
+              "to_state_ref": "STATE_L_FP_SA1_B1_PASS_RECEPTION",
+              "dictionary_ref": "VF_PASS",
+              "anchor_mode": "symbol_perimeter",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ],
+              "trace": {
+                "action_ref": "FP_SA1_B1:pass",
+                "dictionary_ref": "VF_PASS"
+              }
+            }
+          ],
+          "missing_slots": [],
+          "questions": [],
+          "applied_knowledge": [],
+          "coverage": {
+            "actions_total": 1,
+            "actions_composed": 1,
+            "actions_unresolved": 0,
+            "actions_unsupported": 0,
+            "ratio": 1,
+            "label": "1/1"
+          },
+          "traceability": [
+            {
+              "plan_ref": "composition:action:FP_SA1_B1:pass",
+              "semantic_ref": "FP_SA1_B1:pass",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ]
+            }
+          ],
+          "preflight": {
+            "status": "ready",
+            "can_compose": true,
+            "can_resolve_geometry": true,
+            "diagnostics": []
+          },
+          "composition_status": "ready",
+          "geometry_status": "ready",
+          "geometry_coverage": {
+            "visual_primitives_total": 1,
+            "visual_primitives_resolved": 1,
+            "visual_primitives_unresolved": 0,
+            "obligations_total": 2,
+            "obligations_resolved": 2,
+            "obligations_pending": 0
+          }
+        },
+        "questions": [],
+        "active_question": null,
+        "auto_derivations": [],
+        "applied_answers": [],
+        "tactical_ir": {
+          "meta": {
+            "format": "TRACA_tactical_ir",
+            "version": "0.1.0",
+            "source_revision": "corpus_validated",
+            "knowledge_version": "corpus",
+            "case_id": "TR-UVOF-001"
+          },
+          "participants": [
+            {
+              "id": "CE",
+              "label": "CE",
+              "role": "central",
+              "kind": "attacker",
+              "team": "attack",
+              "authority": "coach_explicit_input",
+              "status": "validated",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ]
+            },
+            {
+              "id": "L",
+              "label": "L",
+              "role": "lateral",
+              "kind": "attacker",
+              "team": "attack",
+              "authority": "coach_explicit_input",
+              "status": "validated",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ]
+            }
+          ],
+          "participant_states": [],
+          "balls": [
+            {
+              "id": "B1",
+              "holder_ref": "CE",
+              "authority": "coach_explicit_input",
+              "status": "validated",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ]
+            }
+          ],
+          "materials": [],
+          "spaces": [],
+          "actions": [
+            {
+              "id": "FP_SA1_B1:pass",
+              "type": "pass",
+              "actor_ref": "CE",
+              "receiver_ref": "L",
+              "ball_ref": "B1",
+              "authority": "coach_explicit_input",
+              "status": "validated",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+              ]
+            }
+          ],
+          "decisions": [],
+          "phases": [],
+          "ball_flow": [],
+          "relations": []
+        },
+        "used_primitives": [
+          "pass_path"
+        ],
+        "coverage": {
+          "actions_total": 1,
+          "actions_composed": 1,
+          "actions_unresolved": 0,
+          "actions_unsupported": 0,
+          "ratio": 1,
+          "label": "1/1"
+        },
+        "unresolved": [],
+        "preflight": {
+          "status": "ready",
+          "can_compose": true,
+          "can_resolve_geometry": true,
+          "diagnostics": []
+        }
+      }
+    },
+    {
+      "id": "FP_SA2_B2",
+      "scope": {
+        "phase_ref": "SA2",
+        "trajectory_ref": "SA2_B2",
+        "ball_ref": "B2",
+        "qualifiers": [
+          "passada_curta"
+        ],
+        "source_ref": "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+      },
+      "tacticalIR": {
+        "meta": {
+          "format": "TRACA_tactical_ir",
+          "version": "0.1.0",
+          "case_id": "TR-UVOF-001",
+          "source_revision": "corpus_validated",
+          "knowledge_version": "corpus"
+        },
+        "participants": [
+          {
+            "id": "EXT",
+            "label": "EXT",
+            "role": "extrem",
+            "kind": "attacker",
+            "team": "attack",
+            "authority": "coach_explicit_input",
+            "status": "validated",
+            "source_refs": [
+              "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+            ]
+          },
+          {
+            "id": "L",
+            "label": "L",
+            "role": "lateral",
+            "kind": "attacker",
+            "team": "attack",
+            "authority": "coach_explicit_input",
+            "status": "validated",
+            "source_refs": [
+              "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+            ]
+          }
+        ],
+        "participant_states": [],
+        "balls": [
+          {
+            "id": "B2",
+            "holder_ref": "EXT",
+            "authority": "coach_explicit_input",
+            "status": "validated",
+            "source_refs": [
+              "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+            ]
+          }
+        ],
+        "materials": [],
+        "spaces": [],
+        "actions": [
+          {
+            "id": "FP_SA2_B2:pass",
+            "type": "pass",
+            "actor_ref": "EXT",
+            "receiver_ref": "L",
+            "ball_ref": "B2",
+            "authority": "coach_explicit_input",
+            "status": "validated",
+            "source_refs": [
+              "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+            ]
+          }
+        ],
+        "decisions": [],
+        "phases": [],
+        "ball_flow": [],
+        "relations": []
+      },
+      "artifact": "TR-UVOF-001-scene-2.svg",
+      "result": {
+        "status": "ready",
+        "composition_status": "ready",
+        "geometry_status": "ready",
+        "geometry": {
+          "$schema": "../../schema/traca.geometry.schema.v0.4.json",
+          "meta": {
+            "format": "TRACA_general_geometry",
+            "version": "0.4.0",
+            "case_id": "TR-UVOF-001",
+            "source_revision": "corpus_validated",
+            "status": "resolved",
+            "authority": "provisional_visual_policy",
+            "composition_fingerprint": "fnv1a:ab6b3b8b",
+            "canonical_promotion": false,
+            "court_profile_ref": "IHF_INDOOR_HANDBALL_COURT_2025@1.0.0"
+          },
+          "court": {
+            "width_m": 20,
+            "half_length_m": 20,
+            "goal": {
+              "width_m": 3,
+              "height_m": 2,
+              "post_width_m": 0.08
+            },
+            "markings": {
+              "goal_area_radius_m": 6,
+              "goal_area_straight_m": 3,
+              "free_throw_distance_m": 9,
+              "free_throw_segment_m": 0.15,
+              "free_throw_gap_m": 0.15,
+              "penalty_line_distance_m": 7,
+              "penalty_line_length_m": 1,
+              "goalkeeper_line_distance_m": 4,
+              "goalkeeper_line_length_m": 0.15,
+              "throw_off_diameter_m": 4
+            },
+            "view_box": [
+              -0.8,
+              -1,
+              21.6,
+              15.15
+            ]
+          },
+          "layout_policy": {
+            "id": "generic_relational_layout_v0.4",
+            "version": "0.4.0",
+            "status": "provisional_render_policy",
+            "coordinate_system": "metres_origin_goal_line_left",
+            "attack_direction": "negative_y",
+            "notes": [
+              "Distribució derivada de delimitadors, corredors d’interval, dependències d’acció i relacions numèriques connectades.",
+              "Les profunditats, separacions, marges de símbol i distàncies de contacte són política visual provisional.",
+              "La validesa geomètrica no concedeix validació tàctica de l’entrenador."
+            ],
+            "parameters": {
+              "id": "generic_relational_layout_v0.4",
+              "version": "0.4.0",
+              "defensive_area_clearance_m": 1.5,
+              "minimum_defensive_depth_m": 6.8,
+              "reception_free_throw_offset_m": 0.9,
+              "ground_symbol_clearance_m": 0.48,
+              "surpass_depth_m": 0.5,
+              "staging_offset_y": 3,
+              "feint_contact_distance_m": 0.9,
+              "feint_break_lateral_m": 1.05,
+              "feint_break_depth_m": 0.4,
+              "feint_bypass_depth_m": 0.9,
+              "feint_exit_lateral_m": 0.8,
+              "feint_min_turn_degrees": 28,
+              "defender_path_clearance_m": 0.58,
+              "relation_support_distance_m": 1.45,
+              "relation_min_attacker_separation_m": 1.4,
+              "relation_max_defender_distance_m": 3.4,
+              "ball_offset_m": 0.48
+            },
+            "decisions": [
+              {
+                "id": "LAYOUT_0001",
+                "type": "pass_relation_receiver",
+                "target_ref": "STATE_L_FP_SA2_B2_PASS_RECEPTION",
+                "status": "provisional_visual_policy",
+                "position": [
+                  11.7,
+                  9.9
+                ],
+                "source_refs": [
+                  "action:FP_SA2_B2:pass",
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+                ]
+              },
+              {
+                "id": "LAYOUT_0002",
+                "type": "pass_relation_sender",
+                "target_ref": "STATE_EXT_S0",
+                "status": "provisional_visual_policy",
+                "position": [
+                  8.3,
+                  12.9
+                ],
+                "source_refs": [
+                  "action:FP_SA2_B2:pass",
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+                ]
+              }
+            ]
+          },
+          "zones": [],
+          "spaces": [],
+          "objects": [],
+          "phases": [],
+          "entities": [
+            {
+              "id": "EXT",
+              "kind": "attacker",
+              "label": "EXT",
+              "position": [
+                8.3,
+                12.9
+              ],
+              "state_ref": "STATE_EXT_S0",
+              "status": "derived",
+              "presence": "explicit",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ]
+            },
+            {
+              "id": "L",
+              "kind": "attacker",
+              "label": "L",
+              "position": [
+                11.7,
+                9.9
+              ],
+              "state_ref": "STATE_L_FP_SA2_B2_PASS_RECEPTION",
+              "status": "derived",
+              "presence": "explicit",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ]
+            }
+          ],
+          "contextual_references": [],
+          "participant_states": [
+            {
+              "id": "STATE_EXT_S0",
+              "participant_ref": "EXT",
+              "state_key": "S0",
+              "phase_ref": null,
+              "space_ref": null,
+              "functional_position_ref": null,
+              "position": [
+                8.3,
+                12.9
+              ],
+              "status": "current",
+              "authority": "coach_explicit_input",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ],
+              "layout_decision_ref": "LAYOUT_0002",
+              "visibility": "normal"
+            },
+            {
+              "id": "STATE_L_FP_SA2_B2_PASS_RECEPTION",
+              "participant_ref": "L",
+              "state_key": "FP_SA2_B2:pass:reception",
+              "phase_ref": null,
+              "space_ref": null,
+              "functional_position_ref": null,
+              "position": [
+                11.7,
+                9.9
+              ],
+              "status": "future",
+              "authority": "coach_explicit_input",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ],
+              "layout_decision_ref": "LAYOUT_0001",
+              "visibility": "normal"
+            }
+          ],
+          "balls": [
+            {
+              "id": "BALL_VISUAL_B2_INITIAL",
+              "ball_ref": "B2",
+              "ball_state_ref": "BALL_STATE_B2_S0",
+              "holder_ref": "EXT",
+              "holder_state_ref": "STATE_EXT_S0",
+              "position": [
+                7.82,
+                12.86
+              ],
+              "status": "held",
+              "visibility": "initial",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ]
+            }
+          ],
+          "ball_flow": [
+            {
+              "id": "BALL_TRANSITION_FP_SA2_B2:pass",
+              "ball_ref": "B2",
+              "from_ball_state_ref": "BALL_STATE_B2_S0",
+              "to_ball_state_ref": "BALL_STATE_B2_001",
+              "from_holder_ref": "EXT",
+              "to_holder_ref": "L",
+              "path_ref": "PATH_VIS_FP_SA2_B2:pass_PASS_PATH",
+              "receiver_state_ref": "STATE_L_FP_SA2_B2_PASS_RECEPTION",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ]
+            }
+          ],
+          "common_paths": [
+            {
+              "id": "PATH_VIS_FP_SA2_B2:pass_PASS_PATH",
+              "kind": "pass",
+              "action_type": "pass",
+              "segments": [
+                {
+                  "type": "line",
+                  "start": [
+                    8.3,
+                    12.9
+                  ],
+                  "end": [
+                    11.7,
+                    9.9
+                  ]
+                }
+              ],
+              "functional_points": [],
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ],
+              "action_ref": "FP_SA2_B2:pass",
+              "ball_ref": "B2",
+              "from_participant_ref": "EXT",
+              "from_state_ref": "STATE_EXT_S0",
+              "to_participant_ref": "L",
+              "to_state_ref": "STATE_L_FP_SA2_B2_PASS_RECEPTION",
+              "anchor_mode": "symbol_perimeter"
+            }
+          ],
+          "relations": [],
+          "branches": [],
+          "dependencies": [
+            {
+              "id": "DEP_STATE_EXT_S0",
+              "trigger_ref": "geometry:participant_state:STATE_EXT_S0",
+              "effect_refs": [
+                "geometry:entity:EXT",
+                "geometry:common_path:PATH_VIS_FP_SA2_B2:pass_PASS_PATH"
+              ],
+              "rule": "state_drives_geometry"
+            },
+            {
+              "id": "DEP_STATE_L_FP_SA2_B2_PASS_RECEPTION",
+              "trigger_ref": "geometry:participant_state:STATE_L_FP_SA2_B2_PASS_RECEPTION",
+              "effect_refs": [
+                "geometry:entity:L",
+                "geometry:common_path:PATH_VIS_FP_SA2_B2:pass_PASS_PATH"
+              ],
+              "rule": "state_drives_geometry"
+            }
+          ],
+          "obligations": [
+            {
+              "id": "OBLIGATION_PRIMITIVE_VIS_FP_SA2_B2:pass_PASS_PATH",
+              "kind": "visual_primitive",
+              "action_ref": "FP_SA2_B2:pass",
+              "target_ref": "VIS_FP_SA2_B2:pass_PASS_PATH",
+              "required": true,
+              "status": "resolved",
+              "geometry_refs": [
+                "geometry:common_path:PATH_VIS_FP_SA2_B2:pass_PASS_PATH"
+              ],
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ]
+            },
+            {
+              "id": "OBLIGATION_BALL_B2",
+              "kind": "initial_ball_visible",
+              "action_ref": null,
+              "target_ref": "B2",
+              "required": true,
+              "status": "resolved",
+              "geometry_refs": [
+                "geometry:ball:BALL_VISUAL_B2_INITIAL"
+              ],
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ]
+            }
+          ],
+          "diagnostics": [],
+          "validation": {
+            "renderability": "passed",
+            "geometry": "valid",
+            "tactical": "not_validated_by_coach",
+            "checks": [
+              {
+                "id": "CHECK_POSITION_EXT",
+                "kind": "participant_position_physical",
+                "status": "passed",
+                "severity": "info",
+                "subject_ref": "EXT",
+                "action_ref": null,
+                "message": "Posició física admissible.",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+                ],
+                "details": {}
+              },
+              {
+                "id": "CHECK_POSITION_L",
+                "kind": "participant_position_physical",
+                "status": "passed",
+                "severity": "info",
+                "subject_ref": "L",
+                "action_ref": null,
+                "message": "Posició física admissible.",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+                ],
+                "details": {}
+              },
+              {
+                "id": "CHECK_POSITION_STATE_EXT_S0",
+                "kind": "participant_position_physical",
+                "status": "passed",
+                "severity": "info",
+                "subject_ref": "STATE_EXT_S0",
+                "action_ref": null,
+                "message": "Posició física admissible.",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+                ],
+                "details": {}
+              },
+              {
+                "id": "CHECK_POSITION_STATE_L_FP_SA2_B2_PASS_RECEPTION",
+                "kind": "participant_position_physical",
+                "status": "passed",
+                "severity": "info",
+                "subject_ref": "STATE_L_FP_SA2_B2_PASS_RECEPTION",
+                "action_ref": null,
+                "message": "Posició física admissible.",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+                ],
+                "details": {}
+              },
+              {
+                "id": "CHECK_RENDERABLE",
+                "kind": "renderability",
+                "status": "passed",
+                "severity": "info",
+                "subject_ref": "geometry",
+                "action_ref": null,
+                "message": "La geometria conté primitives renderitzables.",
+                "source_refs": [
+                  "derived:generic_geometry"
+                ],
+                "details": {}
+              },
+              {
+                "id": "CHECK_BALL_B2",
+                "kind": "ball_identity_and_visibility",
+                "status": "passed",
+                "severity": "info",
+                "subject_ref": "B2",
+                "action_ref": null,
+                "message": "La pilota inicial és única i qualsevol passada conserva la mateixa identitat.",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+                ],
+                "details": {
+                  "visible_initial_instances": 1,
+                  "linked_transfers": 1
+                }
+              }
+            ]
+          },
+          "result": {
+            "status": "ready",
+            "renderability_status": "passed",
+            "geometry_validation_status": "valid",
+            "tactical_validation_status": "not_validated_by_coach",
+            "obligations_total": 2,
+            "obligations_resolved": 2,
+            "obligations_pending": 0,
+            "incompatible_count": 0
+          },
+          "traceability": [
+            {
+              "geometry_ref": "geometry:entity:EXT",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ]
+            },
+            {
+              "geometry_ref": "geometry:entity:L",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ]
+            },
+            {
+              "geometry_ref": "geometry:ball:BALL_VISUAL_B2_INITIAL",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ]
+            },
+            {
+              "geometry_ref": "geometry:common_path:PATH_VIS_FP_SA2_B2:pass_PASS_PATH",
+              "action_ref": "FP_SA2_B2:pass",
+              "primitive_ref": "VIS_FP_SA2_B2:pass_PASS_PATH",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ]
+            }
+          ]
+        },
+        "plan": {
+          "meta": {
+            "format": "TRACA_composition_plan",
+            "version": "0.1.0",
+            "source_revision": "corpus_validated",
+            "knowledge_version": "corpus",
+            "fingerprint": "fnv1a:ab6b3b8b",
+            "deterministic": true
+          },
+          "graph": {
+            "meta": {
+              "format": "TRACA_composition_graph",
+              "version": "0.1.0",
+              "source_revision": "corpus_validated"
+            },
+            "nodes": [
+              {
+                "id": "B2",
+                "node_type": "BallState",
+                "payload_ref": "balls:B2",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+                ],
+                "authority": "coach_explicit_input",
+                "status": "validated"
+              },
+              {
+                "id": "EXT",
+                "node_type": "Participant",
+                "payload_ref": "participants:EXT",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+                ],
+                "authority": "coach_explicit_input",
+                "status": "validated"
+              },
+              {
+                "id": "FP_SA2_B2:pass",
+                "node_type": "ActionInstance",
+                "payload_ref": "actions:FP_SA2_B2:pass",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+                ],
+                "authority": "coach_explicit_input",
+                "status": "validated"
+              },
+              {
+                "id": "L",
+                "node_type": "Participant",
+                "payload_ref": "participants:L",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+                ],
+                "authority": "coach_explicit_input",
+                "status": "validated"
+              }
+            ],
+            "edges": [
+              {
+                "id": "EDGE_FP_SA2_B2:pass_actor_ref",
+                "type": "actor",
+                "from_ref": "FP_SA2_B2:pass",
+                "to_ref": "EXT",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+                ],
+                "authority": "coach_explicit_input",
+                "status": "validated"
+              },
+              {
+                "id": "EDGE_FP_SA2_B2:pass_ball_ref",
+                "type": "ball_before",
+                "from_ref": "FP_SA2_B2:pass",
+                "to_ref": "B2",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+                ],
+                "authority": "coach_explicit_input",
+                "status": "validated"
+              },
+              {
+                "id": "EDGE_FP_SA2_B2:pass_receiver_ref",
+                "type": "target",
+                "from_ref": "FP_SA2_B2:pass",
+                "to_ref": "L",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+                ],
+                "authority": "coach_explicit_input",
+                "status": "validated"
+              }
+            ]
+          },
+          "operators": [
+            "pass"
+          ],
+          "actions": [
+            {
+              "id": "FP_SA2_B2:pass",
+              "semantic_type": "pass",
+              "subtype": null,
+              "operator_id": "pass",
+              "status": "composed",
+              "phase_ref": null,
+              "after": [],
+              "simultaneous_with": [],
+              "actor_ref": "EXT",
+              "receiver_ref": "L",
+              "from_state_ref": "STATE_EXT_S0",
+              "to_state_ref": "STATE_L_FP_SA2_B2_PASS_RECEPTION",
+              "ball_transition_ref": "BALL_TRANSITION_FP_SA2_B2:pass",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ],
+              "authority": "coach_explicit_input",
+              "trace": {
+                "semantic_action_ref": "FP_SA2_B2:pass",
+                "rule_ref": "operator:pass@0.1.0"
+              }
+            }
+          ],
+          "participant_states": [
+            {
+              "id": "STATE_EXT_S0",
+              "participant_ref": "EXT",
+              "state_key": "S0",
+              "phase_ref": null,
+              "space_ref": null,
+              "functional_position_ref": null,
+              "position": null,
+              "status": "current",
+              "authority": "coach_explicit_input",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ]
+            },
+            {
+              "id": "STATE_L_FP_SA2_B2_PASS_RECEPTION",
+              "participant_ref": "L",
+              "state_key": "FP_SA2_B2:pass:reception",
+              "phase_ref": null,
+              "space_ref": null,
+              "functional_position_ref": null,
+              "position": null,
+              "status": "future",
+              "authority": "coach_explicit_input",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ]
+            },
+            {
+              "id": "STATE_L_S0",
+              "participant_ref": "L",
+              "state_key": "S0",
+              "phase_ref": null,
+              "space_ref": null,
+              "functional_position_ref": null,
+              "position": null,
+              "status": "current",
+              "authority": "coach_explicit_input",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ]
+            }
+          ],
+          "ball_flow": {
+            "states": [
+              {
+                "id": "BALL_STATE_B2_S0",
+                "ball_ref": "B2",
+                "holder_ref": "EXT",
+                "status": "held",
+                "action_ref": null,
+                "authority": "coach_explicit_input",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+                ]
+              },
+              {
+                "id": "BALL_STATE_B2_001",
+                "ball_ref": "B2",
+                "holder_ref": "L",
+                "status": "held",
+                "action_ref": "FP_SA2_B2:pass",
+                "authority": "coach_explicit_input",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+                ]
+              }
+            ],
+            "transitions": [
+              {
+                "id": "BALL_TRANSITION_FP_SA2_B2:pass",
+                "action_ref": "FP_SA2_B2:pass",
+                "type": "pass",
+                "ball_ref": "B2",
+                "from_state_ref": "BALL_STATE_B2_S0",
+                "to_state_ref": "BALL_STATE_B2_001",
+                "from_holder_ref": "EXT",
+                "to_holder_ref": "L",
+                "source_refs": [
+                  "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+                ]
+              }
+            ],
+            "diagnostics": []
+          },
+          "constraints": [],
+          "constraint_conflicts": [],
+          "visual_primitives": [
+            {
+              "id": "VIS_FP_SA2_B2:pass_PASS_PATH",
+              "type": "pass_path",
+              "action_ref": "FP_SA2_B2:pass",
+              "ball_ref": "B2",
+              "from_participant_ref": "EXT",
+              "from_state_ref": "STATE_EXT_S0",
+              "to_participant_ref": "L",
+              "to_state_ref": "STATE_L_FP_SA2_B2_PASS_RECEPTION",
+              "dictionary_ref": "VF_PASS",
+              "anchor_mode": "symbol_perimeter",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ],
+              "trace": {
+                "action_ref": "FP_SA2_B2:pass",
+                "dictionary_ref": "VF_PASS"
+              }
+            }
+          ],
+          "missing_slots": [],
+          "questions": [],
+          "applied_knowledge": [],
+          "coverage": {
+            "actions_total": 1,
+            "actions_composed": 1,
+            "actions_unresolved": 0,
+            "actions_unsupported": 0,
+            "ratio": 1,
+            "label": "1/1"
+          },
+          "traceability": [
+            {
+              "plan_ref": "composition:action:FP_SA2_B2:pass",
+              "semantic_ref": "FP_SA2_B2:pass",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ]
+            }
+          ],
+          "preflight": {
+            "status": "ready",
+            "can_compose": true,
+            "can_resolve_geometry": true,
+            "diagnostics": []
+          },
+          "composition_status": "ready",
+          "geometry_status": "ready",
+          "geometry_coverage": {
+            "visual_primitives_total": 1,
+            "visual_primitives_resolved": 1,
+            "visual_primitives_unresolved": 0,
+            "obligations_total": 2,
+            "obligations_resolved": 2,
+            "obligations_pending": 0
+          }
+        },
+        "questions": [],
+        "active_question": null,
+        "auto_derivations": [],
+        "applied_answers": [],
+        "tactical_ir": {
+          "meta": {
+            "format": "TRACA_tactical_ir",
+            "version": "0.1.0",
+            "source_revision": "corpus_validated",
+            "knowledge_version": "corpus",
+            "case_id": "TR-UVOF-001"
+          },
+          "participants": [
+            {
+              "id": "EXT",
+              "label": "EXT",
+              "role": "extrem",
+              "kind": "attacker",
+              "team": "attack",
+              "authority": "coach_explicit_input",
+              "status": "validated",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ]
+            },
+            {
+              "id": "L",
+              "label": "L",
+              "role": "lateral",
+              "kind": "attacker",
+              "team": "attack",
+              "authority": "coach_explicit_input",
+              "status": "validated",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ]
+            }
+          ],
+          "participant_states": [],
+          "balls": [
+            {
+              "id": "B2",
+              "holder_ref": "EXT",
+              "authority": "coach_explicit_input",
+              "status": "validated",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ]
+            }
+          ],
+          "materials": [],
+          "spaces": [],
+          "actions": [
+            {
+              "id": "FP_SA2_B2:pass",
+              "type": "pass",
+              "actor_ref": "EXT",
+              "receiver_ref": "L",
+              "ball_ref": "B2",
+              "authority": "coach_explicit_input",
+              "status": "validated",
+              "source_refs": [
+                "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+              ]
+            }
+          ],
+          "decisions": [],
+          "phases": [],
+          "ball_flow": [],
+          "relations": []
+        },
+        "used_primitives": [
+          "pass_path"
+        ],
+        "coverage": {
+          "actions_total": 1,
+          "actions_composed": 1,
+          "actions_unresolved": 0,
+          "actions_unsupported": 0,
+          "ratio": 1,
+          "label": "1/1"
+        },
+        "unresolved": [],
+        "preflight": {
+          "status": "ready",
+          "can_compose": true,
+          "can_resolve_geometry": true,
+          "diagnostics": []
+        }
+      }
+    }
+  ],
+  "unresolved": [
+    {
+      "ref": "exercises/TR-UVOF-001/spatial-relations.json#T_SA1_RECEPCIO",
+      "code": "QUALITATIVE_OPERATOR_BINDING_PENDING",
+      "type": "recepcio",
+      "reason": "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives."
+    },
+    {
+      "ref": "exercises/TR-UVOF-001/spatial-relations.json#T_SA1_FINTA",
+      "code": "QUALITATIVE_OPERATOR_BINDING_PENDING",
+      "type": "finta",
+      "reason": "Falta adaptar el marc relacional finta a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives."
+    },
+    {
+      "ref": "exercises/TR-UVOF-001/spatial-relations.json#T_SA1_RESOLUCIO",
+      "code": "OPEN_RESOLUTION_PRESERVED",
+      "type": "resolucio",
+      "reason": "La decisió conserva passada/llançament/continuïtat oberts."
+    },
+    {
+      "ref": "exercises/TR-UVOF-001/spatial-relations.json#T_SA2_RECUPERACIO",
+      "code": "QUALITATIVE_OPERATOR_BINDING_PENDING",
+      "type": "recuperacio_sense_pilota",
+      "reason": "Falta adaptar el marc relacional recuperacio_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives."
+    },
+    {
+      "ref": "exercises/TR-UVOF-001/spatial-relations.json#T_SA2_ATAC",
+      "code": "QUALITATIVE_OPERATOR_BINDING_PENDING",
+      "type": "atac_espai",
+      "reason": "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives."
+    },
+    {
+      "ref": "exercises/TR-UVOF-001/spatial-relations.json#T_SA2_RESOLUCIO",
+      "code": "OPEN_RESOLUTION_PRESERVED",
+      "type": "resolucio",
+      "reason": "La decisió conserva passada/llançament/continuïtat oberts."
+    }
+  ],
+  "preserved": {
+    "semantic": {
+      "id": "TR-UVOF-001",
+      "nom": "Finta 1–2 a 2–3 i recuperació per al 2x1 exterior",
+      "estat": "validat_entrenador",
+      "tipus_exercici": "analitic",
+      "origen": {
+        "full": "FITXA ORIGINAL / BATERÍA D'ACTIVITATS",
+        "fila": 4,
+        "formula": "=INDEX(UVUOF;1)",
+        "text_original": "El treball consisteix en un treball a dues bandes, on en la primera acció amb 1v1 sobre el banc cap al centre juguem un 2v1 amb PV, i recuperem per rebre del extrem donant importància a la trajectòria per jugar un 2v1 amb extrems"
+      },
+      "organitzacio": {
+        "bandes": 2,
+        "execucio": "parallela_i_simetrica"
+      },
+      "participants": [
+        {
+          "id": "CE",
+          "rol_inicial": "central",
+          "equip": "atac"
+        },
+        {
+          "id": "L",
+          "rol_inicial": "lateral",
+          "equip": "atac"
+        },
+        {
+          "id": "PV",
+          "rol_inicial": "pivot",
+          "equip": "atac"
+        },
+        {
+          "id": "EXT",
+          "rol_inicial": "extrem",
+          "equip": "atac"
+        },
+        {
+          "id": "D1",
+          "rol_inicial": "primer_defensor",
+          "equip": "defensa"
+        },
+        {
+          "id": "D3",
+          "rol_inicial": "tercer_defensor",
+          "equip": "defensa"
+        }
+      ],
+      "materials": [
+        {
+          "id": "BANC",
+          "tipus": "banc",
+          "funcio": "substitut_oposicional_actiu_del_segon_defensor"
+        },
+        {
+          "id": "C1_C2",
+          "tipus": "cons",
+          "funcio": "limits_espacials"
+        },
+        {
+          "id": "C3",
+          "tipus": "con",
+          "funcio": "referencia_posicional_passiva_del_segon_defensor"
+        }
+      ],
+      "pilotes": [
+        {
+          "id": "B1",
+          "posseidor_inicial": "CE"
+        },
+        {
+          "id": "B2",
+          "posseidor_inicial": "EXT"
+        }
+      ],
+      "fases": [
+        {
+          "id": "SA1",
+          "objectiu": "Superar el segon defensor simulat i generar un 2x1 amb el pivot.",
+          "accions": [
+            {
+              "ordre": 1,
+              "actor": "L",
+              "accio": "rebre_en_carrera_a_interval_1-2",
+              "estat_coneixement": "validat"
+            },
+            {
+              "ordre": 2,
+              "actor": "L",
+              "accio": "finta_en_U_de_1-2_a_2-3",
+              "estat_coneixement": "validat"
+            },
+            {
+              "ordre": 3,
+              "actor": "L",
+              "accio": "superar_segon_defensor_simulat",
+              "estat_coneixement": "validat"
+            }
+          ],
+          "fluxos_pilota": [
+            {
+              "pilota_id": "B1",
+              "posseidor_inicial": "CE",
+              "accio": "passada",
+              "posseidor_final": "L"
+            }
+          ],
+          "decisions": [
+            {
+              "id": "D_SA1",
+              "condicio": "tercer_defensor_compromes",
+              "caracter": "disponible",
+              "opcions": [
+                "finalitzacio_lateral",
+                "passada_pivot"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "SA2",
+          "objectiu": "Recuperar sense pilota i atacar directament el carril 1–2.",
+          "accions": [
+            {
+              "ordre": 1,
+              "actor": "L",
+              "accio": "recuperar_sense_pilota_per_darrere_del_banc",
+              "estat_coneixement": "validat"
+            },
+            {
+              "ordre": 2,
+              "actor": "L",
+              "accio": "rebre_orientat_sense_bot",
+              "estat_coneixement": "condicio_tasca"
+            },
+            {
+              "ordre": 3,
+              "actor": "L",
+              "accio": "atacar_directament_interval_1-2",
+              "estat_coneixement": "validat"
+            }
+          ],
+          "fluxos_pilota": [
+            {
+              "pilota_id": "B2",
+              "posseidor_inicial": "EXT",
+              "accio": "passada_curta",
+              "posseidor_final": "L"
+            }
+          ],
+          "decisions": [
+            {
+              "id": "D_SA2",
+              "condicio": "primer_defensor_compromes",
+              "caracter": "disponible",
+              "opcions": [
+                "finalitzacio_lateral",
+                "passada_extrem"
+              ]
+            }
+          ]
+        }
+      ],
+      "invariants": [
+        "SA1 és una finta i SA2 és un atac directe, no una finta",
+        "el mateix lateral manté la identitat entre les dues subaccions",
+        "l'extrem manté amplitud"
+      ],
+      "condicions_tasca": [
+        "SA2_sense_bot"
+      ],
+      "validacions_entrenador": [
+        "banc_com_a_segon_defensor",
+        "finta_1-2_a_2-3",
+        "2x1_amb_pivot_i_2x1_amb_extrem"
+      ]
+    },
+    "spatial": {
+      "meta": {
+        "format": "TRACA_relacions_espacials",
+        "versio_contracte": "0.3.0",
+        "versio_instancia": "0.3.0",
+        "estat": "derivat_semantica_validada",
+        "separacio_capes": {
+          "semantica_tactica": "referenciada_no_duplicada",
+          "relacions_espacials": "incloses",
+          "geometria_resolta": "no_inclosa",
+          "renderitzat": "no_generat"
+        }
+      },
+      "font_semantica": {
+        "exercici_id": "TR-UVOF-001",
+        "fitxers": [
+          "exercises/TR-UVOF-001/semantic.json",
+          "corpus/uvof.semantic.json"
+        ],
+        "plantilla": "banda_esquerra",
+        "simetria": "dues_bandes_paraleles"
+      },
+      "nodes": [
+        {
+          "id": "CE",
+          "classe": "participant",
+          "referencia_semantica": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/0",
+          "rol": "central_passador",
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "L",
+          "classe": "participant",
+          "referencia_semantica": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/1",
+          "rol": "lateral_executor",
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "PV",
+          "classe": "participant",
+          "referencia_semantica": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/2",
+          "rol": "pivot",
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "EXT",
+          "classe": "participant",
+          "referencia_semantica": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/3",
+          "rol": "extrem",
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "D_Z1",
+          "classe": "participant",
+          "referencia_semantica": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/4",
+          "rol": "tercer_defensor",
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "D_Z2",
+          "classe": "participant",
+          "referencia_semantica": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/5",
+          "rol": "primer_defensor",
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "BANC",
+          "classe": "material",
+          "referencia_semantica": "exercises/TR-UVOF-001/semantic.json#/model_exercici/materials/0",
+          "rol": "segon_defensor_simulat",
+          "funcio": "substitut_oposicional_actiu",
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "C1",
+          "classe": "material",
+          "referencia_semantica": "exercises/TR-UVOF-001/semantic.json#/model_exercici/materials/1",
+          "funcio": "limit_espacial",
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "C2",
+          "classe": "material",
+          "referencia_semantica": "exercises/TR-UVOF-001/semantic.json#/model_exercici/materials/2",
+          "funcio": "limit_espacial",
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "C3",
+          "classe": "material",
+          "referencia_semantica": "exercises/TR-UVOF-001/semantic.json#/model_exercici/materials/3",
+          "rol": "segon_defensor_absent",
+          "funcio": "referencia_posicional_passiva",
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "D1_SA1_IMPLICIT",
+          "classe": "defensor_implicit",
+          "rol": "primer_defensor_no_representat",
+          "funcio": "delimitar_interval_1-2_de_SA1",
+          "estat_coneixement": "derivat"
+        },
+        {
+          "id": "D3_INTERIOR_SA1_IMPLICIT",
+          "classe": "defensor_implicit",
+          "rol": "tercer_defensor_interior_no_representat",
+          "funcio": "delimitar_interval_complementari_del_pivot",
+          "estat_coneixement": "derivat"
+        },
+        {
+          "id": "LINIA_FONS",
+          "classe": "referencia_reglamentaria",
+          "funcio": "limit_exterior_de_lespai_de_finalitzacio",
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "AREA_6M",
+          "classe": "referencia_reglamentaria",
+          "funcio": "marc_de_lespai_de_finalitzacio",
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "PORTERIA_ADVERSARIA",
+          "classe": "referencia_reglamentaria",
+          "funcio": "orientacio_general_de_latac",
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "EIX_CENTRAL",
+          "classe": "referencia_funcional",
+          "funcio": "referencia_per_guanyar_angle",
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "FINAL_EXTERIOR_AREA",
+          "classe": "referencia_funcional",
+          "funcio": "limit_exterior_de_Z2",
+          "estat_coneixement": "derivat"
+        },
+        {
+          "id": "B1",
+          "classe": "pilota",
+          "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/0/pilotes/0",
+          "funcio": "pilota_semantica_B1",
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "B2",
+          "classe": "pilota",
+          "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/0/pilotes/1",
+          "funcio": "pilota_semantica_B2",
+          "estat_coneixement": "validat"
+        }
+      ],
+      "espais": [
+        {
+          "id": "INT_1",
+          "classe": "interval",
+          "referencia_semantica": "exercises/TR-UVOF-001/semantic.json#/model_exercici/espais_i_intervals/0",
+          "nom_canonic": "interval_1-2",
+          "alies": [
+            "carril"
+          ],
+          "definicio": {
+            "operador": "entre",
+            "arguments": [
+              "D1_SA1_IMPLICIT",
+              "BANC"
+            ]
+          },
+          "contiguitats": [
+            {
+              "espai": "INT_2",
+              "referent_compartit": "BANC"
+            }
+          ],
+          "fases_actives": [
+            "SA1"
+          ],
+          "estat_coneixement": "derivat"
+        },
+        {
+          "id": "INT_2",
+          "classe": "interval",
+          "referencia_semantica": "exercises/TR-UVOF-001/semantic.json#/model_exercici/espais_i_intervals/1",
+          "nom_canonic": "interval_2-3",
+          "definicio": {
+            "operador": "entre",
+            "arguments": [
+              "BANC",
+              "D_Z1"
+            ]
+          },
+          "contiguitats": [
+            {
+              "espai": "INT_1",
+              "referent_compartit": "BANC"
+            },
+            {
+              "espai": "INT_PV_SA1",
+              "referent_compartit": "D_Z1"
+            }
+          ],
+          "fases_actives": [
+            "SA1"
+          ],
+          "estat_coneixement": "derivat"
+        },
+        {
+          "id": "INT_PV_SA1",
+          "classe": "interval",
+          "nom_canonic": "interval_3-3",
+          "definicio": {
+            "operador": "entre",
+            "arguments": [
+              "D_Z1",
+              "D3_INTERIOR_SA1_IMPLICIT"
+            ]
+          },
+          "contiguitats": [
+            {
+              "espai": "INT_2",
+              "referent_compartit": "D_Z1"
+            }
+          ],
+          "fases_actives": [
+            "SA1"
+          ],
+          "estat_coneixement": "derivat"
+        },
+        {
+          "id": "Z1",
+          "classe": "zona_resolucio",
+          "referencia_semantica": "exercises/TR-UVOF-001/semantic.json#/model_exercici/espais_i_intervals/2",
+          "definicio": {
+            "operador": "delimitat_per",
+            "arguments": [
+              "C1",
+              "C2"
+            ]
+          },
+          "fases_actives": [
+            "SA1"
+          ],
+          "estat_coneixement": "derivat"
+        },
+        {
+          "id": "CORREDOR_RECUPERACIO",
+          "classe": "corredor",
+          "referencia_semantica": "exercises/TR-UVOF-001/semantic.json#/model_exercici/espais_i_intervals/3",
+          "definicio": {
+            "operador": "darrere_de",
+            "arguments": [
+              "BANC"
+            ]
+          },
+          "fases_actives": [
+            "SA2"
+          ],
+          "estat_coneixement": "derivat"
+        },
+        {
+          "id": "INT_3",
+          "classe": "posicio_funcional",
+          "referencia_semantica": "exercises/TR-UVOF-001/semantic.json#/model_exercici/espais_i_intervals/4",
+          "nom_canonic": "espai_recepcio_orientada_SA2",
+          "definicio": {
+            "operador": "proper_a",
+            "arguments": [
+              "EXT"
+            ]
+          },
+          "fases_actives": [
+            "SA2"
+          ],
+          "estat_coneixement": "derivat"
+        },
+        {
+          "id": "INT_4",
+          "classe": "interval",
+          "referencia_semantica": "exercises/TR-UVOF-001/semantic.json#/model_exercici/espais_i_intervals/5",
+          "nom_canonic": "interval_1-2",
+          "alies": [
+            "carril"
+          ],
+          "definicio": {
+            "operador": "entre",
+            "arguments": [
+              "D_Z2",
+              "C3"
+            ]
+          },
+          "fases_actives": [
+            "SA2"
+          ],
+          "estat_coneixement": "derivat"
+        },
+        {
+          "id": "ESPAI_EXTREM_Z2",
+          "classe": "espai_finalitzacio_extrem",
+          "referencia_semantica": "exercises/TR-UVOF-001/semantic.json#/model_exercici/espais_i_intervals/6",
+          "nom_canonic": "espai_finalitzacio_extrem",
+          "alies": [
+            "0-1"
+          ],
+          "definicio": {
+            "operador": "entre",
+            "arguments": [
+              "LINIA_FONS",
+              "D_Z2"
+            ]
+          },
+          "restriccions": [
+            {
+              "operador": "interior_de",
+              "arguments": [
+                "AREA_6M"
+              ]
+            }
+          ],
+          "fases_actives": [
+            "SA1",
+            "SA2"
+          ],
+          "estat_coneixement": "derivat"
+        },
+        {
+          "id": "Z2",
+          "classe": "zona_resolucio",
+          "referencia_semantica": "exercises/TR-UVOF-001/semantic.json#/model_exercici/espais_i_intervals/7",
+          "definicio": {
+            "operador": "delimitat_per",
+            "arguments": [
+              "C3",
+              "FINAL_EXTERIOR_AREA"
+            ]
+          },
+          "fases_actives": [
+            "SA2"
+          ],
+          "estat_coneixement": "derivat"
+        }
+      ],
+      "estats": [
+        {
+          "id": "SA1_RECEPCIO",
+          "fase_ref": "SA1",
+          "moment": "recepcio",
+          "relacions": [
+            {
+              "subjecte": "L",
+              "predicat": "ocupa",
+              "objectes": [
+                "INT_1"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "PV",
+              "predicat": "ocupa",
+              "objectes": [
+                "INT_PV_SA1"
+              ],
+              "caracter": "preferent",
+              "estat_coneixement": "derivat"
+            },
+            {
+              "subjecte": "EXT",
+              "predicat": "mante_amplitud_a",
+              "objectes": [
+                "ESPAI_EXTREM_Z2"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "SA1_SUPERACIO",
+          "fase_ref": "SA1",
+          "moment": "superacio",
+          "relacions": [
+            {
+              "subjecte": "L",
+              "predicat": "ataca",
+              "objectes": [
+                "INT_2"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "L",
+              "predicat": "travessa_linia_defensiva_de",
+              "objectes": [
+                "BANC"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "PV",
+              "predicat": "evita_superposicio_amb",
+              "objectes": [
+                "L"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "PV",
+              "predicat": "adapta_posicio_respecte_a",
+              "objectes": [
+                "L"
+              ],
+              "caracter": "preferent",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "SA1_RESOLUCIO",
+          "fase_ref": "SA1",
+          "moment": "resolucio",
+          "relacions": [
+            {
+              "subjecte": "L",
+              "predicat": "ataca",
+              "objectes": [
+                "Z1"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "L",
+              "predicat": "relacionat_en_2x1_amb",
+              "objectes": [
+                "PV",
+                "D_Z1"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "PV",
+              "predicat": "disponible_per_rebre_a",
+              "objectes": [
+                "INT_PV_SA1"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "derivat"
+            }
+          ]
+        },
+        {
+          "id": "SA2_RECUPERACIO",
+          "fase_ref": "SA2",
+          "moment": "desenvolupament",
+          "relacions": [
+            {
+              "subjecte": "L",
+              "predicat": "darrere_de",
+              "objectes": [
+                "BANC"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "EXT",
+              "predicat": "mante_amplitud_a",
+              "objectes": [
+                "ESPAI_EXTREM_Z2"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "SA2_RECEPCIO",
+          "fase_ref": "SA2",
+          "moment": "recepcio",
+          "relacions": [
+            {
+              "subjecte": "L",
+              "predicat": "ocupa",
+              "objectes": [
+                "INT_3"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "L",
+              "predicat": "orientat_cap_a",
+              "objectes": [
+                "PORTERIA_ADVERSARIA"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "EXT",
+              "predicat": "mante_amplitud_a",
+              "objectes": [
+                "ESPAI_EXTREM_Z2"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "SA2_ATAC",
+          "fase_ref": "SA2",
+          "moment": "desenvolupament",
+          "relacions": [
+            {
+              "subjecte": "L",
+              "predicat": "ataca",
+              "objectes": [
+                "INT_4"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "EXT",
+              "predicat": "mante_amplitud_a",
+              "objectes": [
+                "ESPAI_EXTREM_Z2"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "EXT",
+              "predicat": "adapta_posicio_respecte_a",
+              "objectes": [
+                "L"
+              ],
+              "caracter": "preferent",
+              "estat_coneixement": "validat"
+            }
+          ]
+        },
+        {
+          "id": "SA2_RESOLUCIO",
+          "fase_ref": "SA2",
+          "moment": "resolucio",
+          "relacions": [
+            {
+              "subjecte": "L",
+              "predicat": "relacionat_en_2x1_amb",
+              "objectes": [
+                "EXT",
+                "D_Z2"
+              ],
+              "caracter": "obligatori",
+              "estat_coneixement": "validat"
+            },
+            {
+              "subjecte": "L",
+              "predicat": "ataca",
+              "objectes": [
+                "Z2"
+              ],
+              "caracter": "disponible",
+              "estat_coneixement": "validat"
+            }
+          ]
+        }
+      ],
+      "transicions": [
+        {
+          "id": "T_SA1_RECEPCIO",
+          "fase_ref": "SA1",
+          "ordre": 1,
+          "actor": "L",
+          "tipus": "recepcio",
+          "cap_a": "INT_1",
+          "accio_semantica_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/subaccions/0/sequencia_obligatoria/0",
+          "qualificadors": [
+            "en_carrera"
+          ],
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "T_SA1_FINTA",
+          "fase_ref": "SA1",
+          "ordre": 2,
+          "actor": "L",
+          "tipus": "finta",
+          "des_de": "INT_1",
+          "cap_a": "INT_2",
+          "referencia_oposicional": "BANC",
+          "accio_semantica_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/subaccions/0/sequencia_obligatoria/1",
+          "qualificadors": [
+            "forma_funcional_U",
+            "comprometre_defensor",
+            "canvi_direccio",
+            "canvi_ritme",
+            "superar_linia_defensiva"
+          ],
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "T_SA1_RESOLUCIO",
+          "fase_ref": "SA1",
+          "ordre": 3,
+          "actor": "L",
+          "tipus": "resolucio",
+          "des_de": "INT_2",
+          "cap_a": "Z1",
+          "accio_semantica_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/subaccions/0/sequencia_obligatoria/2",
+          "qualificadors": [
+            "2x1_amb_pivot",
+            "solucio_no_predeterminada"
+          ],
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "T_SA2_RECUPERACIO",
+          "fase_ref": "SA2",
+          "ordre": 1,
+          "actor": "L",
+          "tipus": "recuperacio_sense_pilota",
+          "des_de": "Z1",
+          "via": [
+            "CORREDOR_RECUPERACIO"
+          ],
+          "cap_a": "INT_3",
+          "referencia_oposicional": "BANC",
+          "accio_semantica_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/subaccions/1/sequencia_obligatoria/0",
+          "qualificadors": [
+            "sense_pilota",
+            "per_darrere_del_banc"
+          ],
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "T_SA2_ATAC",
+          "fase_ref": "SA2",
+          "ordre": 2,
+          "actor": "L",
+          "tipus": "atac_espai",
+          "des_de": "INT_3",
+          "cap_a": "INT_4",
+          "accio_semantica_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/subaccions/1/sequencia_obligatoria/2",
+          "qualificadors": [
+            "recepcio_orientada",
+            "sense_bot",
+            "atac_directe_no_finta"
+          ],
+          "estat_coneixement": "validat"
+        },
+        {
+          "id": "T_SA2_RESOLUCIO",
+          "fase_ref": "SA2",
+          "ordre": 3,
+          "actor": "L",
+          "tipus": "resolucio",
+          "des_de": "INT_4",
+          "cap_a": "Z2",
+          "accio_semantica_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/subaccions/1/sequencia_obligatoria/3",
+          "qualificadors": [
+            "2x1_amb_extrem",
+            "solucio_no_predeterminada"
+          ],
+          "estat_coneixement": "validat"
+        }
+      ],
+      "branques_decisionals": [
+        {
+          "id": "BRANCA_SA1_2X1_PIVOT",
+          "fase_ref": "SA1",
+          "caracter": "disponible",
+          "resolucio": "no_predeterminada",
+          "alternatives": [
+            {
+              "id": "SA1_FINALITZA_L",
+              "condicio": "L_conserva_avantatge_de_finalitzacio",
+              "efectes_espacials": [
+                {
+                  "subjecte": "L",
+                  "predicat": "ataca",
+                  "objectes": [
+                    "Z1"
+                  ],
+                  "caracter": "disponible",
+                  "estat_coneixement": "validat"
+                }
+              ]
+            },
+            {
+              "id": "SA1_PASSADA_PV",
+              "condicio": "D_Z1_tanca_L_i_queda_compromes",
+              "efectes_espacials": [
+                {
+                  "subjecte": "PV",
+                  "predicat": "disponible_per_rebre_a",
+                  "objectes": [
+                    "INT_PV_SA1"
+                  ],
+                  "caracter": "disponible",
+                  "estat_coneixement": "derivat"
+                }
+              ]
+            }
+          ],
+          "decisio_semantica_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/subaccions/0/situacio_decisional"
+        },
+        {
+          "id": "BRANCA_SA2_2X1_EXTREM",
+          "fase_ref": "SA2",
+          "caracter": "disponible",
+          "resolucio": "no_predeterminada",
+          "alternatives": [
+            {
+              "id": "SA2_FINALITZA_L",
+              "condicio": "D_Z2_no_tanca",
+              "efectes_espacials": [
+                {
+                  "subjecte": "L",
+                  "predicat": "ataca",
+                  "objectes": [
+                    "Z2"
+                  ],
+                  "caracter": "disponible",
+                  "estat_coneixement": "validat"
+                }
+              ]
+            },
+            {
+              "id": "SA2_PASSADA_EXT",
+              "condicio": "D_Z2_tanca_i_queda_compromes",
+              "efectes_espacials": [
+                {
+                  "subjecte": "EXT",
+                  "predicat": "ataca",
+                  "objectes": [
+                    "Z2"
+                  ],
+                  "caracter": "disponible",
+                  "estat_coneixement": "validat"
+                },
+                {
+                  "subjecte": "EXT",
+                  "predicat": "orientat_cap_a",
+                  "objectes": [
+                    "EIX_CENTRAL"
+                  ],
+                  "caracter": "obligatori",
+                  "estat_coneixement": "validat"
+                }
+              ]
+            }
+          ],
+          "decisio_semantica_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/subaccions/1/situacio_decisional"
+        }
+      ],
+      "invariants": [
+        {
+          "code": "SP-NO-COORDS",
+          "operador": "sense_coordenades",
+          "subjectes": [
+            "L"
+          ],
+          "ambit": "document_complet",
+          "missatge": "La capa relacional no pot contenir coordenades ni geometria resolta."
+        },
+        {
+          "code": "SP-L-IDENTITY",
+          "operador": "identitat_persistent",
+          "subjectes": [
+            "L"
+          ],
+          "ambit": "SA1_i_SA2",
+          "missatge": "L és el mateix participant a totes dues subaccions."
+        },
+        {
+          "code": "SP-FEINT-ADJACENCY",
+          "operador": "contiguitat_amb_referent_compartit",
+          "subjectes": [
+            "INT_1",
+            "INT_2",
+            "BANC"
+          ],
+          "ambit": "SA1",
+          "missatge": "La finta connecta intervals contigus que comparteixen el segon defensor simulat."
+        },
+        {
+          "code": "SP-PIVOT-NO-OVERLAP",
+          "operador": "no_superposicio",
+          "subjectes": [
+            "L",
+            "PV"
+          ],
+          "ambit": "SA1",
+          "missatge": "Lateral i pivot no poden acabar ocupant el mateix interval."
+        },
+        {
+          "code": "SP-EXT-WIDTH",
+          "operador": "mantenir_amplitud",
+          "subjectes": [
+            "EXT",
+            "ESPAI_EXTREM_Z2"
+          ],
+          "ambit": "SA1_i_SA2",
+          "missatge": "L'extrem conserva amplitud per poder anticipar la passada i finalitzar."
+        },
+        {
+          "code": "SP-L-PATH",
+          "operador": "transicio_connectada",
+          "subjectes": [
+            "L"
+          ],
+          "ambit": "SA1_i_SA2",
+          "missatge": "La destinació de cada tram és compatible amb l'origen del tram següent."
+        },
+        {
+          "code": "SP-OPEN-DECISIONS",
+          "operador": "decisio_no_predeterminada",
+          "subjectes": [
+            "L",
+            "PV",
+            "EXT"
+          ],
+          "ambit": "resolucions_2x1",
+          "missatge": "El contracte conserva alternatives i no imposa una única resolució."
+        }
+      ],
+      "governanca": {
+        "autoritat": "semantica_validada_per_entrenador",
+        "politica_inferencia": "tota_inferencia_no_validada_es_provisional",
+        "sortida_permesa": "graf_relacional_sense_coordenades"
+      },
+      "semantic_source": {
+        "exercise_id": "TR-UVOF-001",
+        "status": "canonical",
+        "candidates": [
+          {
+            "id": "detailed",
+            "artifact": "exercises/TR-UVOF-001/semantic.json",
+            "selector": "",
+            "version": "1.1.0",
+            "digest": "sha256:a4790148885aff93a5c43def79ac1d9edd57be5944602a8984b2025a78f328af",
+            "canonical": true,
+            "validation_status": "validated"
+          },
+          {
+            "id": "corpus",
+            "artifact": "corpus/uvof.semantic.json",
+            "selector": "/exercicis/0",
+            "version": "1.6.0",
+            "digest": "sha256:715b11d49b39ac313369e3a97ed5cad848708cd95a63b61669be4dc783a06968",
+            "canonical": false,
+            "validation_status": "validated"
+          }
+        ]
+      },
+      "fluxos_pilota": [
+        {
+          "id": "FP_SA1_B1",
+          "fase_ref": "SA1",
+          "trajectoria_id": "SA1_B1",
+          "ordre": 1,
+          "pilota_id": "B1",
+          "posseidor_inicial": "CE",
+          "accio": "passada",
+          "posseidor_final": "L",
+          "qualificadors": [
+            "passada"
+          ],
+          "estat_coneixement": "validat",
+          "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/0/fases/0/fluxos_pilota/0"
+        },
+        {
+          "id": "FP_SA2_B2",
+          "fase_ref": "SA2",
+          "trajectoria_id": "SA2_B2",
+          "ordre": 1,
+          "pilota_id": "B2",
+          "posseidor_inicial": "EXT",
+          "accio": "passada",
+          "posseidor_final": "L",
+          "qualificadors": [
+            "passada_curta"
+          ],
+          "estat_coneixement": "validat",
+          "referencia_semantica": "corpus/uvof.semantic.json#/exercicis/0/fases/1/fluxos_pilota/0"
+        }
+      ],
+      "namespace": {
+        "base": "traca:TR-UVOF-001",
+        "entities": [
+          {
+            "ref": "traca:TR-UVOF-001:node:CE",
+            "kind": "participant",
+            "local_id": "CE",
+            "knowledge_status": "validat",
+            "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/0"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:node:L",
+            "kind": "participant",
+            "local_id": "L",
+            "knowledge_status": "validat",
+            "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/1"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:node:PV",
+            "kind": "participant",
+            "local_id": "PV",
+            "knowledge_status": "validat",
+            "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/2"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:node:EXT",
+            "kind": "participant",
+            "local_id": "EXT",
+            "knowledge_status": "validat",
+            "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/3"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:node:D_Z1",
+            "kind": "participant",
+            "local_id": "D_Z1",
+            "knowledge_status": "validat",
+            "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/4"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:node:D_Z2",
+            "kind": "participant",
+            "local_id": "D_Z2",
+            "knowledge_status": "validat",
+            "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/5"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:node:BANC",
+            "kind": "material",
+            "local_id": "BANC",
+            "knowledge_status": "validat",
+            "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/materials/0"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:node:C1",
+            "kind": "material",
+            "local_id": "C1",
+            "knowledge_status": "validat",
+            "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/materials/1"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:node:C2",
+            "kind": "material",
+            "local_id": "C2",
+            "knowledge_status": "validat",
+            "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/materials/2"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:node:C3",
+            "kind": "material",
+            "local_id": "C3",
+            "knowledge_status": "validat",
+            "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/materials/3"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:node:D1_SA1_IMPLICIT",
+            "kind": "reference",
+            "local_id": "D1_SA1_IMPLICIT",
+            "knowledge_status": "derivat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:node:D3_INTERIOR_SA1_IMPLICIT",
+            "kind": "reference",
+            "local_id": "D3_INTERIOR_SA1_IMPLICIT",
+            "knowledge_status": "derivat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:node:LINIA_FONS",
+            "kind": "reference",
+            "local_id": "LINIA_FONS",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:node:AREA_6M",
+            "kind": "reference",
+            "local_id": "AREA_6M",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:node:PORTERIA_ADVERSARIA",
+            "kind": "reference",
+            "local_id": "PORTERIA_ADVERSARIA",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:node:EIX_CENTRAL",
+            "kind": "reference",
+            "local_id": "EIX_CENTRAL",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:node:FINAL_EXTERIOR_AREA",
+            "kind": "reference",
+            "local_id": "FINAL_EXTERIOR_AREA",
+            "knowledge_status": "derivat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:node:B1",
+            "kind": "ball",
+            "local_id": "B1",
+            "knowledge_status": "validat",
+            "source_ref": "corpus/uvof.semantic.json#/exercicis/0/pilotes/0"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:node:B2",
+            "kind": "ball",
+            "local_id": "B2",
+            "knowledge_status": "validat",
+            "source_ref": "corpus/uvof.semantic.json#/exercicis/0/pilotes/1"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:space:INT_1",
+            "kind": "space",
+            "local_id": "INT_1",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:space:INT_2",
+            "kind": "space",
+            "local_id": "INT_2",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:space:INT_PV_SA1",
+            "kind": "space",
+            "local_id": "INT_PV_SA1",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:space:Z1",
+            "kind": "space",
+            "local_id": "Z1",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:space:CORREDOR_RECUPERACIO",
+            "kind": "space",
+            "local_id": "CORREDOR_RECUPERACIO",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:space:INT_3",
+            "kind": "space",
+            "local_id": "INT_3",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:space:INT_4",
+            "kind": "space",
+            "local_id": "INT_4",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:space:ESPAI_EXTREM_Z2",
+            "kind": "space",
+            "local_id": "ESPAI_EXTREM_Z2",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:space:Z2",
+            "kind": "space",
+            "local_id": "Z2",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:state:SA1_RECEPCIO",
+            "kind": "state",
+            "local_id": "SA1_RECEPCIO",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:state:SA1_SUPERACIO",
+            "kind": "state",
+            "local_id": "SA1_SUPERACIO",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:state:SA1_RESOLUCIO",
+            "kind": "state",
+            "local_id": "SA1_RESOLUCIO",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:state:SA2_RECUPERACIO",
+            "kind": "state",
+            "local_id": "SA2_RECUPERACIO",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:state:SA2_RECEPCIO",
+            "kind": "state",
+            "local_id": "SA2_RECEPCIO",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:state:SA2_ATAC",
+            "kind": "state",
+            "local_id": "SA2_ATAC",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:state:SA2_RESOLUCIO",
+            "kind": "state",
+            "local_id": "SA2_RESOLUCIO",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:transition:T_SA1_RECEPCIO",
+            "kind": "transition",
+            "local_id": "T_SA1_RECEPCIO",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:transition:T_SA1_FINTA",
+            "kind": "transition",
+            "local_id": "T_SA1_FINTA",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:transition:T_SA1_RESOLUCIO",
+            "kind": "transition",
+            "local_id": "T_SA1_RESOLUCIO",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:transition:T_SA2_RECUPERACIO",
+            "kind": "transition",
+            "local_id": "T_SA2_RECUPERACIO",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:transition:T_SA2_ATAC",
+            "kind": "transition",
+            "local_id": "T_SA2_ATAC",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:transition:T_SA2_RESOLUCIO",
+            "kind": "transition",
+            "local_id": "T_SA2_RESOLUCIO",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:flow:FP_SA1_B1",
+            "kind": "ball_flow",
+            "local_id": "FP_SA1_B1",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:flow:FP_SA2_B2",
+            "kind": "ball_flow",
+            "local_id": "FP_SA2_B2",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:branch:BRANCA_SA1_2X1_PIVOT",
+            "kind": "decision_branch",
+            "local_id": "BRANCA_SA1_2X1_PIVOT",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:alternative:SA1_FINALITZA_L",
+            "kind": "decision_alternative",
+            "local_id": "SA1_FINALITZA_L",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:alternative:SA1_PASSADA_PV",
+            "kind": "decision_alternative",
+            "local_id": "SA1_PASSADA_PV",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:branch:BRANCA_SA2_2X1_EXTREM",
+            "kind": "decision_branch",
+            "local_id": "BRANCA_SA2_2X1_EXTREM",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:alternative:SA2_FINALITZA_L",
+            "kind": "decision_alternative",
+            "local_id": "SA2_FINALITZA_L",
+            "knowledge_status": "validat"
+          },
+          {
+            "ref": "traca:TR-UVOF-001:alternative:SA2_PASSADA_EXT",
+            "kind": "decision_alternative",
+            "local_id": "SA2_PASSADA_EXT",
+            "knowledge_status": "validat"
+          }
+        ]
+      },
+      "bindings": [],
+      "participant_semantics": [
+        {
+          "participant_ref": "traca:TR-UVOF-001:node:CE",
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/0",
+          "team": {
+            "value": "atac",
+            "status": "validated"
+          },
+          "canonical_role": {
+            "value": "central_passador",
+            "status": "validated"
+          },
+          "side": {
+            "value": null,
+            "status": "unknown"
+          },
+          "temporal_role": {
+            "value": null,
+            "status": "unknown"
+          },
+          "exercise_function": {
+            "value": "donar_la_primera_passada",
+            "status": "validated"
+          }
+        },
+        {
+          "participant_ref": "traca:TR-UVOF-001:node:L",
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/1",
+          "team": {
+            "value": "atac",
+            "status": "validated"
+          },
+          "canonical_role": {
+            "value": "lateral_executor",
+            "status": "validated"
+          },
+          "side": {
+            "value": null,
+            "status": "unknown"
+          },
+          "temporal_role": {
+            "value": null,
+            "status": "unknown"
+          },
+          "exercise_function": {
+            "value": "executar el 1x1, recuperar sense pilota i participar en les dues superioritats",
+            "status": "validated"
+          }
+        },
+        {
+          "participant_ref": "traca:TR-UVOF-001:node:PV",
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/2",
+          "team": {
+            "value": "atac",
+            "status": "validated"
+          },
+          "canonical_role": {
+            "value": "pivot",
+            "status": "validated"
+          },
+          "side": {
+            "value": null,
+            "status": "unknown"
+          },
+          "temporal_role": {
+            "value": null,
+            "status": "unknown"
+          },
+          "exercise_function": {
+            "value": "crear_la_primera_relacio_2x1",
+            "status": "validated"
+          }
+        },
+        {
+          "participant_ref": "traca:TR-UVOF-001:node:EXT",
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/3",
+          "team": {
+            "value": "atac",
+            "status": "validated"
+          },
+          "canonical_role": {
+            "value": "extrem",
+            "status": "validated"
+          },
+          "side": {
+            "value": null,
+            "status": "unknown"
+          },
+          "temporal_role": {
+            "value": null,
+            "status": "unknown"
+          },
+          "exercise_function": {
+            "value": "mantenir amplitud, donar la segona passada i crear la segona relacio 2x1",
+            "status": "validated"
+          }
+        },
+        {
+          "participant_ref": "traca:TR-UVOF-001:node:D_Z1",
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/4",
+          "team": {
+            "value": "defensa",
+            "status": "validated"
+          },
+          "canonical_role": {
+            "value": "tercer_defensor",
+            "status": "validated"
+          },
+          "side": {
+            "value": null,
+            "status": "unknown"
+          },
+          "temporal_role": {
+            "value": null,
+            "status": "unknown"
+          },
+          "exercise_function": {
+            "value": "defensar el 2x1 lateral_pivot",
+            "status": "validated"
+          }
+        },
+        {
+          "participant_ref": "traca:TR-UVOF-001:node:D_Z2",
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/5",
+          "team": {
+            "value": "defensa",
+            "status": "validated"
+          },
+          "canonical_role": {
+            "value": "primer_defensor",
+            "status": "validated"
+          },
+          "side": {
+            "value": null,
+            "status": "unknown"
+          },
+          "temporal_role": {
+            "value": null,
+            "status": "unknown"
+          },
+          "exercise_function": {
+            "value": "defensar el 2x1 lateral_extrem",
+            "status": "validated"
+          }
+        }
+      ],
+      "participant_groups": [],
+      "material_semantics": [
+        {
+          "material_ref": "traca:TR-UVOF-001:node:BANC",
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/materials/0",
+          "instance_function": "substitut_oposicional_actiu",
+          "capabilities": [
+            "instance_function:substitut_oposicional_actiu"
+          ],
+          "knowledge_status": "validat"
+        },
+        {
+          "material_ref": "traca:TR-UVOF-001:node:C1",
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/materials/1",
+          "instance_function": "limit_espacial",
+          "capabilities": [
+            "instance_function:limit_espacial"
+          ],
+          "knowledge_status": "validat"
+        },
+        {
+          "material_ref": "traca:TR-UVOF-001:node:C2",
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/materials/2",
+          "instance_function": "limit_espacial",
+          "capabilities": [
+            "instance_function:limit_espacial"
+          ],
+          "knowledge_status": "validat"
+        },
+        {
+          "material_ref": "traca:TR-UVOF-001:node:C3",
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/materials/3",
+          "instance_function": "referencia_posicional_passiva",
+          "capabilities": [
+            "instance_function:referencia_posicional_passiva",
+            "delimita_espai:SA2"
+          ],
+          "knowledge_status": "validat"
+        }
+      ],
+      "typed_relations": [
+        {
+          "id": "REL_2X1_1",
+          "kind": "2x1",
+          "primary_attacker_ref": "traca:TR-UVOF-001:node:L",
+          "supporting_attacker_ref": "traca:TR-UVOF-001:node:PV",
+          "defender_ref": "traca:TR-UVOF-001:node:D_Z1",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/estats/2/relacions/1",
+          "knowledge_status": "validat"
+        },
+        {
+          "id": "REL_2X1_2",
+          "kind": "2x1",
+          "primary_attacker_ref": "traca:TR-UVOF-001:node:L",
+          "supporting_attacker_ref": "traca:TR-UVOF-001:node:EXT",
+          "defender_ref": "traca:TR-UVOF-001:node:D_Z2",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/estats/6/relacions/0",
+          "knowledge_status": "validat"
+        }
+      ],
+      "typed_conditions": [
+        {
+          "id": "COND_1",
+          "kind": "observation",
+          "expression": "L_conserva_avantatge_de_finalitzacio",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/branques_decisionals/0/alternatives/0/condicio",
+          "status": "validated"
+        },
+        {
+          "id": "COND_2",
+          "kind": "observation",
+          "expression": "D_Z1_tanca_L_i_queda_compromes",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/branques_decisionals/0/alternatives/1/condicio",
+          "status": "validated"
+        },
+        {
+          "id": "COND_3",
+          "kind": "observation",
+          "expression": "D_Z2_no_tanca",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/branques_decisionals/1/alternatives/0/condicio",
+          "status": "validated"
+        },
+        {
+          "id": "COND_4",
+          "kind": "observation",
+          "expression": "D_Z2_tanca_i_queda_compromes",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/branques_decisionals/1/alternatives/1/condicio",
+          "status": "validated"
+        }
+      ],
+      "operator_frames": [
+        {
+          "id": "FRAME_Z1_1",
+          "space_ref": "traca:TR-UVOF-001:space:Z1",
+          "definition_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/3/definicio",
+          "operator": "delimitat_per",
+          "axis": "relational",
+          "viewpoint": "attacking_team",
+          "distance_class": "not_applicable",
+          "closure": "semantic_boundary_set",
+          "status": "complete"
+        },
+        {
+          "id": "FRAME_CORREDOR_RECUPERACIO_2",
+          "space_ref": "traca:TR-UVOF-001:space:CORREDOR_RECUPERACIO",
+          "definition_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/4/definicio",
+          "operator": "darrere_de",
+          "axis": "attack_relative",
+          "viewpoint": "attacking_team",
+          "distance_class": "not_applicable",
+          "closure": "not_applicable",
+          "status": "complete"
+        },
+        {
+          "id": "FRAME_INT_3_3",
+          "space_ref": "traca:TR-UVOF-001:space:INT_3",
+          "definition_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/5/definicio",
+          "operator": "proper_a",
+          "axis": "relational",
+          "viewpoint": "subject_relative",
+          "distance_class": "functional",
+          "closure": "not_applicable",
+          "status": "complete"
+        },
+        {
+          "id": "FRAME_ESPAI_EXTREM_Z2_4",
+          "space_ref": "traca:TR-UVOF-001:space:ESPAI_EXTREM_Z2",
+          "definition_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/7/restriccions/0",
+          "operator": "interior_de",
+          "axis": "attack_relative",
+          "viewpoint": "attacking_team",
+          "distance_class": "not_applicable",
+          "closure": "referenced_boundary",
+          "status": "complete"
+        },
+        {
+          "id": "FRAME_Z2_5",
+          "space_ref": "traca:TR-UVOF-001:space:Z2",
+          "definition_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/8/definicio",
+          "operator": "delimitat_per",
+          "axis": "relational",
+          "viewpoint": "attacking_team",
+          "distance_class": "not_applicable",
+          "closure": "semantic_boundary_set",
+          "status": "complete"
+        }
+      ],
+      "decision_mappings": [
+        {
+          "decision_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/0/decisions/0",
+          "branch_refs": [],
+          "options": [
+            {
+              "option_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/0/decisions/0/opcions/0",
+              "alternative_refs": [],
+              "status": "preserved_symbolically"
+            },
+            {
+              "option_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/0/decisions/0/opcions/1",
+              "alternative_refs": [],
+              "status": "preserved_symbolically"
+            }
+          ]
+        },
+        {
+          "decision_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/1/decisions/0",
+          "branch_refs": [],
+          "options": [
+            {
+              "option_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/1/decisions/0/opcions/0",
+              "alternative_refs": [],
+              "status": "preserved_symbolically"
+            },
+            {
+              "option_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/1/decisions/0/opcions/1",
+              "alternative_refs": [],
+              "status": "preserved_symbolically"
+            }
+          ]
+        }
+      ],
+      "dependencies": [
+        {
+          "from_ref": "traca:TR-UVOF-001:space:INT_1",
+          "to_ref": "traca:TR-UVOF-001:node:D1_SA1_IMPLICIT",
+          "kind": "defined_by",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/0/definicio"
+        },
+        {
+          "from_ref": "traca:TR-UVOF-001:space:INT_1",
+          "to_ref": "traca:TR-UVOF-001:node:BANC",
+          "kind": "defined_by",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/0/definicio"
+        },
+        {
+          "from_ref": "traca:TR-UVOF-001:space:INT_2",
+          "to_ref": "traca:TR-UVOF-001:node:BANC",
+          "kind": "defined_by",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/1/definicio"
+        },
+        {
+          "from_ref": "traca:TR-UVOF-001:space:INT_2",
+          "to_ref": "traca:TR-UVOF-001:node:D_Z1",
+          "kind": "defined_by",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/1/definicio"
+        },
+        {
+          "from_ref": "traca:TR-UVOF-001:space:INT_PV_SA1",
+          "to_ref": "traca:TR-UVOF-001:node:D_Z1",
+          "kind": "defined_by",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/2/definicio"
+        },
+        {
+          "from_ref": "traca:TR-UVOF-001:space:INT_PV_SA1",
+          "to_ref": "traca:TR-UVOF-001:node:D3_INTERIOR_SA1_IMPLICIT",
+          "kind": "defined_by",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/2/definicio"
+        },
+        {
+          "from_ref": "traca:TR-UVOF-001:space:Z1",
+          "to_ref": "traca:TR-UVOF-001:node:C1",
+          "kind": "defined_by",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/3/definicio"
+        },
+        {
+          "from_ref": "traca:TR-UVOF-001:space:Z1",
+          "to_ref": "traca:TR-UVOF-001:node:C2",
+          "kind": "defined_by",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/3/definicio"
+        },
+        {
+          "from_ref": "traca:TR-UVOF-001:space:CORREDOR_RECUPERACIO",
+          "to_ref": "traca:TR-UVOF-001:node:BANC",
+          "kind": "defined_by",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/4/definicio"
+        },
+        {
+          "from_ref": "traca:TR-UVOF-001:space:INT_3",
+          "to_ref": "traca:TR-UVOF-001:node:EXT",
+          "kind": "defined_by",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/5/definicio"
+        },
+        {
+          "from_ref": "traca:TR-UVOF-001:space:INT_4",
+          "to_ref": "traca:TR-UVOF-001:node:D_Z2",
+          "kind": "defined_by",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/6/definicio"
+        },
+        {
+          "from_ref": "traca:TR-UVOF-001:space:INT_4",
+          "to_ref": "traca:TR-UVOF-001:node:C3",
+          "kind": "defined_by",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/6/definicio"
+        },
+        {
+          "from_ref": "traca:TR-UVOF-001:space:ESPAI_EXTREM_Z2",
+          "to_ref": "traca:TR-UVOF-001:node:LINIA_FONS",
+          "kind": "defined_by",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/7/definicio"
+        },
+        {
+          "from_ref": "traca:TR-UVOF-001:space:ESPAI_EXTREM_Z2",
+          "to_ref": "traca:TR-UVOF-001:node:D_Z2",
+          "kind": "defined_by",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/7/definicio"
+        },
+        {
+          "from_ref": "traca:TR-UVOF-001:space:ESPAI_EXTREM_Z2",
+          "to_ref": "traca:TR-UVOF-001:node:AREA_6M",
+          "kind": "defined_by",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/7/restriccions/0"
+        },
+        {
+          "from_ref": "traca:TR-UVOF-001:space:Z2",
+          "to_ref": "traca:TR-UVOF-001:node:C3",
+          "kind": "defined_by",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/8/definicio"
+        },
+        {
+          "from_ref": "traca:TR-UVOF-001:space:Z2",
+          "to_ref": "traca:TR-UVOF-001:node:FINAL_EXTERIOR_AREA",
+          "kind": "defined_by",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/espais/8/definicio"
+        },
+        {
+          "from_ref": "traca:TR-UVOF-001:node:L",
+          "to_ref": "traca:TR-UVOF-001:space:INT_1",
+          "kind": "relational_constraint",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/estats/0/relacions/0"
+        },
+        {
+          "from_ref": "traca:TR-UVOF-001:node:PV",
+          "to_ref": "traca:TR-UVOF-001:space:INT_PV_SA1",
+          "kind": "relational_constraint",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/estats/0/relacions/1"
+        },
+        {
+          "from_ref": "traca:TR-UVOF-001:node:L",
+          "to_ref": "traca:TR-UVOF-001:space:INT_3",
+          "kind": "relational_constraint",
+          "origin_ref": "exercises/TR-UVOF-001/spatial-relations.json#/estats/4/relacions/0"
+        }
+      ],
+      "replication": {
+        "mode": "dues_bandes_paraleles",
+        "status": "unresolved",
+        "identity_mapping": [],
+        "required_for_preflight": false
+      },
+      "unresolved_items": [],
+      "compatibility": {
+        "migrated_from": "0.2.0",
+        "v02_status": "historical_read_only",
+        "policy": "no_implicit_downgrade"
+      },
+      "semantic_coverage": [
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/participants/0",
+          "kind": "participant",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:CE"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/participants/1",
+          "kind": "participant",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:L"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/participants/2",
+          "kind": "participant",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:PV"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/participants/3",
+          "kind": "participant",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:EXT"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/participants/4",
+          "kind": "participant",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:D_Z2"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/participants/5",
+          "kind": "participant",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:D_Z1"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/materials/0",
+          "kind": "material",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:BANC"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/materials/1",
+          "kind": "material",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:C1",
+            "traca:TR-UVOF-001:node:C2"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/materials/2",
+          "kind": "material",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:C3"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/pilotes/0",
+          "kind": "ball",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:B1"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/pilotes/1",
+          "kind": "ball",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:B2"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/0/accions/0",
+          "kind": "action",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:transition:T_SA1_RECEPCIO"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/0/accions/1",
+          "kind": "action",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:transition:T_SA1_FINTA"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/0/accions/2",
+          "kind": "action",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:transition:T_SA1_FINTA"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/0/fluxos_pilota/0",
+          "kind": "ball_flow",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:flow:FP_SA1_B1"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/0/decisions/0",
+          "kind": "decision",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:branch:BRANCA_SA1_2X1_PIVOT"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/0/decisions/0/opcions/0",
+          "kind": "decision_option",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:alternative:SA1_FINALITZA_L"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/0/decisions/0/opcions/1",
+          "kind": "decision_option",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:alternative:SA1_PASSADA_PV"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/1/accions/0",
+          "kind": "action",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:transition:T_SA2_RECUPERACIO"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/1/accions/1",
+          "kind": "action",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:state:SA2_RECEPCIO"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/1/accions/2",
+          "kind": "action",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:transition:T_SA2_ATAC"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/1/fluxos_pilota/0",
+          "kind": "ball_flow",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:flow:FP_SA2_B2"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/1/decisions/0",
+          "kind": "decision",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:branch:BRANCA_SA2_2X1_EXTREM"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/1/decisions/0/opcions/0",
+          "kind": "decision_option",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:alternative:SA2_FINALITZA_L"
+          ]
+        },
+        {
+          "source_ref": "corpus/uvof.semantic.json#/exercicis/0/fases/1/decisions/0/opcions/1",
+          "kind": "decision_option",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:alternative:SA2_PASSADA_EXT"
+          ]
+        },
+        {
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/0",
+          "kind": "participant",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:CE"
+          ]
+        },
+        {
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/1",
+          "kind": "participant",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:L"
+          ]
+        },
+        {
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/2",
+          "kind": "participant",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:PV"
+          ]
+        },
+        {
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/3",
+          "kind": "participant",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:EXT"
+          ]
+        },
+        {
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/4",
+          "kind": "participant",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:D_Z1"
+          ]
+        },
+        {
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/participants_plantilla/5",
+          "kind": "participant",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:D_Z2"
+          ]
+        },
+        {
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/materials/0",
+          "kind": "material",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:BANC"
+          ]
+        },
+        {
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/materials/1",
+          "kind": "material",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:C1"
+          ]
+        },
+        {
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/materials/2",
+          "kind": "material",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:C2"
+          ]
+        },
+        {
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/materials/3",
+          "kind": "material",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:node:C3"
+          ]
+        },
+        {
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/subaccions/0/sequencia_obligatoria/0",
+          "kind": "action",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:transition:T_SA1_RECEPCIO"
+          ]
+        },
+        {
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/subaccions/0/sequencia_obligatoria/1",
+          "kind": "action",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:transition:T_SA1_FINTA"
+          ]
+        },
+        {
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/subaccions/0/sequencia_obligatoria/2",
+          "kind": "action",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:transition:T_SA1_RESOLUCIO"
+          ]
+        },
+        {
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/subaccions/1/sequencia_obligatoria/0",
+          "kind": "action",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:transition:T_SA2_RECUPERACIO"
+          ]
+        },
+        {
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/subaccions/1/sequencia_obligatoria/1",
+          "kind": "action",
+          "preservation": "preserved_symbolically",
+          "spatial_refs": []
+        },
+        {
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/subaccions/1/sequencia_obligatoria/2",
+          "kind": "action",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:transition:T_SA2_ATAC"
+          ]
+        },
+        {
+          "source_ref": "exercises/TR-UVOF-001/semantic.json#/model_exercici/subaccions/1/sequencia_obligatoria/3",
+          "kind": "action",
+          "preservation": "mapped",
+          "spatial_refs": [
+            "traca:TR-UVOF-001:transition:T_SA2_RESOLUCIO"
+          ]
+        }
+      ],
+      "integrity": {
+        "algorithm": "sha256",
+        "spatial_digest": "sha256:f47663894e7e128257a8b0f8bbac358846ee483481839adc69246cb190bd91fc"
+      }
+    }
+  }
+}

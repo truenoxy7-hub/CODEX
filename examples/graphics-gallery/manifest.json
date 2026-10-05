@@ -5,10 +5,11 @@
   "dictionary": "knowledge/visual-functional-dictionary.v0.2.json",
   "visual_style": "config/visual-style.v0.1.json",
   "source_availability": {
-    "graphic_knowledge_json": "not_found",
-    "graphic_knowledge_html": "not_found",
-    "manifest": "not_found",
-    "coach_legend_png": "inspected_external_attachment"
+    "graphic_knowledge_json": "sources/revision2/TRACA_Base_coneixement_grafics_v0_1.json",
+    "graphic_knowledge_html": "available_in_package",
+    "manifest": "verified_20_of_20_sha256",
+    "coach_legend_png": "inspected_from_package",
+    "original_editor": "available_in_package"
   },
   "artifacts": [
     "symbol-sheet-color.svg",

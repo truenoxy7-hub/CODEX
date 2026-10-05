@@ -1,0 +1,122 @@
+{
+  "format": "TRACA_codex_handoff",
+  "version": "2.0.0",
+  "date": "2026-10-04",
+  "entrypoint": "TRACA_Prompt_Codex_implementacio_integral.md",
+  "repo": "truenoxy7-hub/CODEX",
+  "reviewed_branch": "codex/traca-geometry-a1-a3-refinement",
+  "reviewed_commit": "8074dc56efd73e62f8764bc14a6264215daad005",
+  "knowledge_version": "0.2.0",
+  "original_editor_source": "user_pasted_React_component_2026-10-04",
+  "editor_source_check": "JSX transformation passed; interactive behavior not executed",
+  "baseline_tests_from_prior_review": 255,
+  "reproduced_defects": {
+    "classes": 3,
+    "cases": 4
+  },
+  "new_acceptance_criteria": 30,
+  "new_implementation_status": "requested_not_implemented_in_this_handoff",
+  "image_provenance": "SVGs from reviewed Git commit; PNGs rasterized with Sharp/librsvg. No browser UI screenshots.",
+  "files": [
+    {
+      "path": "README_Codex.md",
+      "size_bytes": 2249,
+      "sha256": "5ae3924090eec002cd3dccbd6e7beb8fc906818b62b1d5067892b7dbf0aacf81"
+    },
+    {
+      "path": "TRACA_Prompt_Codex_implementacio_integral.md",
+      "size_bytes": 32677,
+      "sha256": "ffa21eb25a4d68c95e9456092489af50b0141076fb2cc4cedf56fcc213115ab0"
+    },
+    {
+      "path": "TRACA_Base_coneixement_grafics_v0_1.json",
+      "size_bytes": 301010,
+      "sha256": "4ac72bc7649a131a07824277f9bd7602fd4241228ec4961fbd39cb188f8d1bf8"
+    },
+    {
+      "path": "TRACA_Base_coneixement_grafics_v0_1.html",
+      "size_bytes": 2421884,
+      "sha256": "2ac21503834ca75ae3ded352ae2ec36bb55acde7ea64b0f28ba5f370279510ee"
+    },
+    {
+      "path": "AEB796E5-F49A-4466-A62E-79AA36F44AD4.png",
+      "size_bytes": 874857,
+      "sha256": "1682f59c2c8742f510594a24a12db53655dccd4ed439883c8d366e5c11548b50"
+    },
+    {
+      "path": "editor_reference/HandballGenerator.original.jsx",
+      "size_bytes": 42863,
+      "sha256": "b472333983401f6b9b111c651b3970111f1fac359d7530ca5fc3e1560990008e"
+    },
+    {
+      "path": "editor_reference/README.md",
+      "size_bytes": 2937,
+      "sha256": "72477eb8e9fe43d39cacd35ab9a3e2b56d3c62ccd814ee1f4c4b02be94173b8b"
+    },
+    {
+      "path": "history/TRACA_Prompt_Codex_2026-10-03.md",
+      "size_bytes": 32619,
+      "sha256": "bc3201a5cbe515e7311d9fb167554be8010f7b514ed5ca61236ed7ebecd1e734"
+    },
+    {
+      "path": "review/a1-pass-reception-8074dc5.png",
+      "size_bytes": 75684,
+      "sha256": "e682952f3d900d55b6f5abf3cbf7ee42a0e72d88e12bdff1f1da64708d15ad18"
+    },
+    {
+      "path": "review/a1-pass-reception-8074dc5.svg",
+      "size_bytes": 6242,
+      "sha256": "bec042e3de3a3c592c63cc54767ab2c09d404d71cf07327bc84ac1669f1067d5"
+    },
+    {
+      "path": "review/a2-reception-feint-2x1-8074dc5.png",
+      "size_bytes": 92380,
+      "sha256": "cb37f94a2632dd794655409ad65f43b29eda005a498b360e22ad2f1595a01a4f"
+    },
+    {
+      "path": "review/a2-reception-feint-2x1-8074dc5.svg",
+      "size_bytes": 8821,
+      "sha256": "3a0989dbe7c7aa9432acc40218b576a6fa2944f238417527bc4cf744eab37ff3"
+    },
+    {
+      "path": "review/a3-opposite-side-8074dc5.png",
+      "size_bytes": 92464,
+      "sha256": "b7c1715c10aa1078906b6c6be285d8f75fd4515c96cf1482111b90e05d572a4a"
+    },
+    {
+      "path": "review/a3-opposite-side-8074dc5.svg",
+      "size_bytes": 8810,
+      "sha256": "6d311af3b23ffd2579cf5cffdf99a7dfae4c6b9258705172b565a3a262400d22"
+    },
+    {
+      "path": "review/acceptance.json",
+      "size_bytes": 9377,
+      "sha256": "367ae880f777cdc335468de197162f1c49ff99c2a744cff8e4ba3a6f54a44db1"
+    },
+    {
+      "path": "review/baseline-findings.json",
+      "size_bytes": 9300,
+      "sha256": "17f0383061e55d21327c0633c28cc6f146c52dfb024f713307cfdef122772f7f"
+    },
+    {
+      "path": "review/original-source-check.json",
+      "size_bytes": 302,
+      "sha256": "d31040d33d2a889c524ce4dd109bee213af2adda5a0d0d2eac25f3490be4668d"
+    },
+    {
+      "path": "review/reproduce_findings.cjs",
+      "size_bytes": 4310,
+      "sha256": "eeeed4019e4968e1d8aaa13a9f3e1e43ebfabd0c9a293b7d26bfa0ed9d451e70"
+    },
+    {
+      "path": "review/symbol-sheet-color-8074dc5.png",
+      "size_bytes": 90894,
+      "sha256": "3b208255867c5adc80421f290c5166b97eac945dfa7f0feaff401c8e2d4ef6c3"
+    },
+    {
+      "path": "review/symbol-sheet-color-8074dc5.svg",
+      "size_bytes": 14566,
+      "sha256": "f20da2f0c9fac66e462df5249eee88288c53a376f37238be7f65eacd6d8fa430"
+    }
+  ]
+}

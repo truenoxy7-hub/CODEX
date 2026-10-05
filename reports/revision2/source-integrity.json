@@ -1,0 +1,86 @@
+{
+  "files": [
+    {
+      "path": "README_Codex.md",
+      "sha256_matches": true
+    },
+    {
+      "path": "TRACA_Prompt_Codex_implementacio_integral.md",
+      "sha256_matches": true
+    },
+    {
+      "path": "TRACA_Base_coneixement_grafics_v0_1.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "TRACA_Base_coneixement_grafics_v0_1.html",
+      "sha256_matches": true
+    },
+    {
+      "path": "AEB796E5-F49A-4466-A62E-79AA36F44AD4.png",
+      "sha256_matches": true
+    },
+    {
+      "path": "editor_reference/HandballGenerator.original.jsx",
+      "sha256_matches": true
+    },
+    {
+      "path": "editor_reference/README.md",
+      "sha256_matches": true
+    },
+    {
+      "path": "history/TRACA_Prompt_Codex_2026-10-03.md",
+      "sha256_matches": true
+    },
+    {
+      "path": "review/a1-pass-reception-8074dc5.png",
+      "sha256_matches": true
+    },
+    {
+      "path": "review/a1-pass-reception-8074dc5.svg",
+      "sha256_matches": true
+    },
+    {
+      "path": "review/a2-reception-feint-2x1-8074dc5.png",
+      "sha256_matches": true
+    },
+    {
+      "path": "review/a2-reception-feint-2x1-8074dc5.svg",
+      "sha256_matches": true
+    },
+    {
+      "path": "review/a3-opposite-side-8074dc5.png",
+      "sha256_matches": true
+    },
+    {
+      "path": "review/a3-opposite-side-8074dc5.svg",
+      "sha256_matches": true
+    },
+    {
+      "path": "review/acceptance.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "review/baseline-findings.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "review/original-source-check.json",
+      "sha256_matches": true
+    },
+    {
+      "path": "review/reproduce_findings.cjs",
+      "sha256_matches": true
+    },
+    {
+      "path": "review/symbol-sheet-color-8074dc5.png",
+      "sha256_matches": true
+    },
+    {
+      "path": "review/symbol-sheet-color-8074dc5.svg",
+      "sha256_matches": true
+    }
+  ],
+  "inaccessible_sources": [],
+  "matches": 20
+}

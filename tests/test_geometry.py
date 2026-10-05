@@ -135,7 +135,7 @@ def test_paths_are_state_linked_functional_segments_and_feints_keep_the_break() 
             assert states[alternative["return_pass"]["from_state_ref"]]["participant_ref"] == alternative["return_pass"]["from_participant_ref"]
             assert states[alternative["return_pass"]["to_state_ref"]]["participant_ref"] == alternative["return_pass"]["to_participant_ref"]
             if alternative["kind"] == "feint":
-                assert [segment["type"] for segment in alternative["segments"]] == ["cubic", "line", "cubic"]
+                assert [segment["type"] for segment in alternative["segments"]] == ["cubic", "line", "line", "line", "line"]
                 assert any(point["role"] == "direction_break" for point in alternative["functional_points"])
 
 

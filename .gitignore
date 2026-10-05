@@ -3,5 +3,6 @@ __pycache__/
 *.pyc
 .venv/
 .DS_Store
+.traca-data/
 corpus/*.validation.json
 exercises/*/spatial-relations.validation.json

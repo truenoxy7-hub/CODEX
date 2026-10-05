@@ -1,0 +1,352 @@
+{
+  "format": "TRACA_review_reproductions",
+  "version": "1.0.0",
+  "baseline_commit": "8074dc56efd73e62f8764bc14a6264215daad005",
+  "results": [
+    {
+      "id": "REVIEW_KB_REAL_SCHEMA",
+      "executed": true,
+      "expected": "Actual 0.2.0 source is structurally accepted; index entries resolve to existing cases; test_catalog is recognized.",
+      "observed": {
+        "valid": true,
+        "errors": [],
+        "warnings": [],
+        "summary": {
+          "records": 212,
+          "unique_ids": 212,
+          "evidence_status_counts": {
+            "CONFIRMADA PER AMBDÓS": 10,
+            "OBSERVACIÓ REPETIDA": 30,
+            "CANDIDAT": 13,
+            "CONFIRMADA PER ENTRENADOR": 16,
+            "AMBIGUA": 26,
+            "SUPERADA": 8
+          },
+          "runtime_import_allowed": false
+        }
+      },
+      "defect_reproduced": false,
+      "actual_test_catalog_size": 20,
+      "actual_coach_validation_ids": [
+        "VAL-ENT-001",
+        "VAL-ENT-002",
+        "VAL-ENT-003",
+        "VAL-ENT-004",
+        "VAL-ENT-005"
+      ]
+    },
+    {
+      "id": "REVIEW_STATIONARY_PLAYER_IN_AREA",
+      "executed": true,
+      "expected": "CE is a stationary field attacker inside the central goal area; result must not claim valid/ready geometry. Preserve it as an editable diagnosed draft.",
+      "observed": {
+        "composition": "ready",
+        "geometry_status": "blocked",
+        "validation": {
+          "renderability": "passed",
+          "geometry": "invalid",
+          "tactical": "not_validated_by_coach",
+          "checks": [
+            {
+              "id": "CHECK_POSITION_CE",
+              "kind": "participant_position_physical",
+              "status": "failed",
+              "severity": "error",
+              "subject_ref": "CE",
+              "action_ref": null,
+              "message": "Posició fora de pista o dins de l’àrea sense excepció explícita.",
+              "source_refs": [
+                "coach_input:span:3-10"
+              ],
+              "details": {}
+            },
+            {
+              "id": "CHECK_POSITION_L",
+              "kind": "participant_position_physical",
+              "status": "passed",
+              "severity": "info",
+              "subject_ref": "L",
+              "action_ref": null,
+              "message": "Posició física admissible.",
+              "source_refs": [
+                "coach_input:span:20-27",
+                "coach_input:span:3-27"
+              ],
+              "details": {}
+            },
+            {
+              "id": "CHECK_POSITION_STATE_CE_S0",
+              "kind": "participant_position_physical",
+              "status": "failed",
+              "severity": "error",
+              "subject_ref": "STATE_CE_S0",
+              "action_ref": null,
+              "message": "Posició fora de pista o dins de l’àrea sense excepció explícita.",
+              "source_refs": [
+                "coach_input:span:3-10"
+              ],
+              "details": {}
+            },
+            {
+              "id": "CHECK_POSITION_STATE_L_RECEPTION_A002",
+              "kind": "participant_position_physical",
+              "status": "passed",
+              "severity": "info",
+              "subject_ref": "STATE_L_RECEPTION_A002",
+              "action_ref": null,
+              "message": "Posició física admissible.",
+              "source_refs": [
+                "coach_input:span:3-27",
+                "coach_input:span:32-43"
+              ],
+              "details": {}
+            },
+            {
+              "id": "CHECK_POSITION_STATE_L_S0",
+              "kind": "participant_position_physical",
+              "status": "passed",
+              "severity": "info",
+              "subject_ref": "STATE_L_S0",
+              "action_ref": null,
+              "message": "Posició física admissible.",
+              "source_refs": [
+                "coach_input:span:20-27",
+                "coach_input:span:3-27"
+              ],
+              "details": {}
+            },
+            {
+              "id": "CHECK_RENDERABLE",
+              "kind": "renderability",
+              "status": "passed",
+              "severity": "info",
+              "subject_ref": "geometry",
+              "action_ref": null,
+              "message": "La geometria conté primitives renderitzables.",
+              "source_refs": [
+                "derived:generic_geometry"
+              ],
+              "details": {}
+            },
+            {
+              "id": "CHECK_GROUND_PHYSICAL_PATH_VIS_A002_MOVEMENT_PATH",
+              "kind": "ground_path_physical_area",
+              "status": "passed",
+              "severity": "info",
+              "subject_ref": "PATH_VIS_A002_MOVEMENT_PATH",
+              "action_ref": "A002",
+              "message": "El recorregut terrestre queda fora de l’àrea física.",
+              "source_refs": [
+                "coach_input:span:32-43"
+              ],
+              "details": {
+                "valid": true,
+                "within_sidelines": true,
+                "minimum_clearance_m": 4.191,
+                "required_clearance_m": 0,
+                "nearest_point": [
+                  13,
+                  10
+                ],
+                "segment_index": 0
+              }
+            },
+            {
+              "id": "CHECK_GROUND_VISUAL_PATH_VIS_A002_MOVEMENT_PATH",
+              "kind": "ground_path_visual_clearance",
+              "status": "passed",
+              "severity": "info",
+              "subject_ref": "PATH_VIS_A002_MOVEMENT_PATH",
+              "action_ref": "A002",
+              "message": "El símbol manté el marge visual provisional respecte de l’àrea.",
+              "source_refs": [
+                "coach_input:span:32-43"
+              ],
+              "details": {
+                "valid": true,
+                "within_sidelines": true,
+                "minimum_clearance_m": 4.191,
+                "required_clearance_m": 0.48,
+                "nearest_point": [
+                  13,
+                  10
+                ],
+                "segment_index": 0
+              }
+            },
+            {
+              "id": "CHECK_BALL_B1",
+              "kind": "ball_identity_and_visibility",
+              "status": "passed",
+              "severity": "info",
+              "subject_ref": "B1",
+              "action_ref": null,
+              "message": "La pilota inicial és única i qualsevol passada conserva la mateixa identitat.",
+              "source_refs": [
+                "coach_input:span:3-27"
+              ],
+              "details": {
+                "visible_initial_instances": 1,
+                "linked_transfers": 1
+              }
+            }
+          ]
+        },
+        "positions": [
+          {
+            "id": "STATE_CE_S0",
+            "position": [
+              10,
+              5.5
+            ]
+          },
+          {
+            "id": "STATE_L_RECEPTION_A002",
+            "position": [
+              13,
+              10
+            ]
+          },
+          {
+            "id": "STATE_L_S0",
+            "position": [
+              15,
+              12
+            ]
+          }
+        ]
+      },
+      "defect_reproduced": false
+    },
+    {
+      "id": "REVIEW_FEINT_SEQUENCE_a2-reception-feint-2x1",
+      "executed": true,
+      "expected": "In these declared opposite-interval cases, attack the contiguous interval before surpassing D2. Validate order and side, not only the endpoint.",
+      "observed": {
+        "defender": [
+          10,
+          7.5
+        ],
+        "start": [
+          8,
+          9.886
+        ],
+        "end": [
+          12,
+          6.727
+        ],
+        "functional_points": [
+          {
+            "id": "PATH_VIS_A003_FEINT_PATH_COMMITMENT",
+            "role": "commitment",
+            "position": [
+              9.28,
+              8.95
+            ]
+          },
+          {
+            "id": "PATH_VIS_A003_FEINT_PATH_DIRECTION_BREAK",
+            "role": "direction_break",
+            "position": [
+              8.95,
+              8.55
+            ]
+          },
+          {
+            "id": "PATH_VIS_A003_FEINT_PATH_CLEARANCE",
+            "role": "clearance",
+            "position": [
+              11.05,
+              8.5
+            ]
+          },
+          {
+            "id": "PATH_VIS_A003_FEINT_PATH_EXIT",
+            "role": "exit",
+            "position": [
+              10.8,
+              6.727
+            ]
+          }
+        ],
+        "crossings": [
+          {
+            "segment": 3,
+            "position": [
+              10.908996051889453,
+              7.5
+            ],
+            "toward_goal": true
+          }
+        ],
+        "reported_geometry": "valid"
+      },
+      "defect_reproduced": false
+    },
+    {
+      "id": "REVIEW_FEINT_SEQUENCE_a3-opposite-side",
+      "executed": true,
+      "expected": "In these declared opposite-interval cases, attack the contiguous interval before surpassing D2. Validate order and side, not only the endpoint.",
+      "observed": {
+        "defender": [
+          10,
+          7.5
+        ],
+        "start": [
+          12,
+          9.886
+        ],
+        "end": [
+          8,
+          6.727
+        ],
+        "functional_points": [
+          {
+            "id": "PATH_VIS_A003_FEINT_PATH_COMMITMENT",
+            "role": "commitment",
+            "position": [
+              10.72,
+              8.95
+            ]
+          },
+          {
+            "id": "PATH_VIS_A003_FEINT_PATH_DIRECTION_BREAK",
+            "role": "direction_break",
+            "position": [
+              11.05,
+              8.55
+            ]
+          },
+          {
+            "id": "PATH_VIS_A003_FEINT_PATH_CLEARANCE",
+            "role": "clearance",
+            "position": [
+              8.95,
+              8.5
+            ]
+          },
+          {
+            "id": "PATH_VIS_A003_FEINT_PATH_EXIT",
+            "role": "exit",
+            "position": [
+              9.2,
+              6.727
+            ]
+          }
+        ],
+        "crossings": [
+          {
+            "segment": 3,
+            "position": [
+              9.091003948110547,
+              7.5
+            ],
+            "toward_goal": true
+          }
+        ],
+        "reported_geometry": "valid"
+      },
+      "defect_reproduced": false
+    }
+  ]
+}

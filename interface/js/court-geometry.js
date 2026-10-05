@@ -10,6 +10,7 @@
     if (source.court) {
       return {
         width_m: source.court.width_m,
+        length_m: source.court.length_m,
         half_length_m: source.court.half_length_m,
         goal: source.goal,
         markings: source.markings
@@ -71,11 +72,16 @@
       + coefficients[3] * segment.end[axis]);
   }
 
+  function quadraticPoint(segment, ratio) {
+    return [0, 1].map((axis) => (1 - ratio) ** 2 * segment.start[axis] + 2 * (1 - ratio) * ratio * segment.control[axis] + ratio ** 2 * segment.end[axis]);
+  }
+
   function pointDistance(left, right) {
     return Math.hypot(left[0] - right[0], left[1] - right[1]);
   }
 
   function segmentLengthEstimate(segment) {
+    if (segment.type === "quadratic") return pointDistance(segment.start, segment.control) + pointDistance(segment.control, segment.end);
     if (segment.type !== "cubic") return pointDistance(segment.start, segment.end);
     return pointDistance(segment.start, segment.control1)
       + pointDistance(segment.control1, segment.control2)
@@ -85,13 +91,14 @@
   function samplePath(path, maximumStep) {
     const step = maximumStep || 0.08;
     const result = [];
-    (path && path.segments || []).forEach((segment, segmentIndex) => {
+    const segments = path && (path.segments || (path.points || []).slice(1).map((end, i) => ({ type: "line", start: path.points[i], end }))) || [];
+    segments.forEach((segment, segmentIndex) => {
       const count = Math.max(1, Math.ceil(segmentLengthEstimate(segment) / step));
       for (let index = 0; index <= count; index += 1) {
         if (segmentIndex && !index) continue;
         const ratio = index / count;
         result.push({
-          point: segment.type === "cubic" ? cubicPoint(segment, ratio) : linePoint(segment, ratio),
+          point: segment.type === "cubic" ? cubicPoint(segment, ratio) : segment.type === "quadratic" ? quadraticPoint(segment, ratio) : linePoint(segment, ratio),
           segment_index: segmentIndex,
           ratio
         });
@@ -106,12 +113,16 @@
     const samples = samplePath(path, configuration.maximum_step_m || 0.06);
     let minimum = Infinity;
     let nearest = null;
+    const court = courtData(source);
+    let inBounds = true;
     samples.forEach((sample) => {
+      if (sample.point[0] < 0 || sample.point[0] > court.width_m || sample.point[1] < 0 || sample.point[1] > (court.length_m || court.half_length_m)) inBounds = false;
       const clearance = goalAreaClearance(source, sample.point);
       if (clearance < minimum) { minimum = clearance; nearest = sample; }
     });
     return {
-      valid: Boolean(samples.length) && minimum >= requiredClearance - (configuration.tolerance_m || 0.01),
+      valid: Boolean(samples.length) && inBounds && minimum >= requiredClearance - (configuration.tolerance_m || 0.01),
+      within_sidelines: inBounds,
       minimum_clearance_m: Number((Number.isFinite(minimum) ? minimum : 0).toFixed(3)),
       required_clearance_m: requiredClearance,
       nearest_point: nearest ? nearest.point.map((value) => Number(value.toFixed(3))) : null,

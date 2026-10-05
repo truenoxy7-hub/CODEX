@@ -35,21 +35,35 @@ selectiva. `runtime_import_allowed: true`, IDs duplicats o autoritat operativa
 en registres no confirmats són errors. Un registre confirmat tampoc entra si no
 figura a `activated_records`.
 
-Els fitxers externs esmentats a l'encàrrec no eren disponibles. Per això no
-s'han reconstruït VAL-ENT-001–005, D01–D10, R01–R20 ni T01–T20. Quan s'aporti
-el paquet, s'ha d'afegir com a font i executar els catàlegs reals abans de
-promoure cap asserció.
+El paquet complet és a `sources/revision2/` intacte. El loader reconeix els
+catàlegs reals, conserva els estats d’evidència i resol els índexs per pointer.
+VAL-ENT-004 conserva l’aprovació original i l’abast: activar-la pot ometre
+branques opcionals de la vista, sense esborrar alternatives de la semàntica.
+No es promocionen en bloc candidats ni evidències superades. Els resultats
+individuals T01–T20 consten a `reports/revision2/acceptance.json`.
 
 ## Model configurable
 
 `interface/js/model-interpretation-provider.js` rep una funció `invoke`
 injectada. Rebutja accions sense `evidence_spans` i mai etiqueta la resposta
 com a coneixement validat. La interfície local continua operativa sense servei
-ni credencials.
+ni credencials. El servei ofereix `/api/interpret`, validació d’origen i token
+de sessió. `TRACA_MODEL_URL`, `TRACA_MODEL_KEY` i `TRACA_MODEL_NAME` viuen només
+al servidor. L’URL ha de ser HTTPS o loopback, i rebre un POST JSON
+`{description, model}` amb resposta estructurada del contracte del provider.
+La proposta exigeix evidències de text, IDs/vincles vàlids i confirmació
+explícita abans de la composició. Sense configurar, retorna una indisponibilitat
+controlada; el generador local i l’editor continuen funcionant. El doble de prova
+`--model-fixture tests/fixtures/revision2-model-a1.json` es distingeix a la UI;
+no s’ha verificat una crida a un model real perquè no hi ha credencials.
 
 ## Exportació
 
 Els botons SVG i PNG s'activen només quan hi ha geometria vigent. El nom conté
 el cas i la revisió. Les metadades de l'SVG identifiquen la versió geomètrica,
 la política visual i l'estat tàctic conegut. El PNG conserva el mateix aspecte
-perquè rasteritza l'SVG actual.
+perquè rasteritza un SVG net del mateix renderer, no el DOM d’edició.
+Nanses, hitboxes, selecció i guies s’exclouen; es mantenen els estats tàctics
+discontinus. PNG de 600/1200 px, color/monocrom i còpia d’imatge real, amb
+descàrrega alternativa explícita quan manca permís. L’enllaç de l’última
+exportació roman accessible fins a preparar-ne una altra.

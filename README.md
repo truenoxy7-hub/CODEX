@@ -81,7 +81,9 @@ text de l'entrenador o font original
 → guardat i aprenentatge explícit
 ```
 
-Una previsualització provisional no és un artefacte canònic. Canviar el text invalida totes les derivacions anteriors i obliga a regenerar abans de guardar.
+Una previsualització provisional no és un artefacte canònic. Canviar el text
+invalida les derivacions anteriors: es pot guardar i recuperar l'esborrany,
+però cal revisar o regenerar abans d'aprovar-lo.
 
 ## Validació local
 
@@ -123,9 +125,28 @@ provisional. No és un intèrpret o resolutor tàctic universal.
 make interface
 ```
 
-La interfície queda disponible a `http://localhost:8000` i també es pot obrir
-directament. L’estat s’emmagatzema només a `localStorage` i es pot
-exportar/importar com un paquet JSON v0.5, acceptant 0.2, 0.3 i 0.4. L’abast es documenta a
+La interfície queda disponible a `http://127.0.0.1:8000`. La revisió 2 incorpora
+una pissarra manual independent del generador, historial atòmic, revisions
+durables a SQLite i criteris geomètrics tipats amb aprovació explícita.
+El servei `scripts/workspace_server.py` és la font principal: desa a
+`.traca-data/workspace.sqlite3` (exclòs de Git). No cal cap credencial per editar
+o guardar. No obris `interface/index.html` amb `file://` per al treball durable.
+`localStorage` conserva només la cua pendent i la còpia de recuperació.
+El paquet JSON editable v0.6 accepta importacions 0.2–0.5; la migració del servei
+guarda l’original exacte i és idempotent. Guarda no equival a aprovar.
+
+Alternativa sense Make, des de l’arrel del repositori:
+
+```bash
+python3 scripts/workspace_server.py --port 8000
+```
+
+Obre l’adreça anterior, afegeix figures/traços o escriu la descripció i genera.
+«Exercicis» recupera casos i revisions; les versions antigues s’obren com una
+nova revisió. El mirall es previsualitza; les regeneracions exigeixen resoldre
+els conflictes. La pissarra segueix editable quan la interpretació és parcial.
+Resultats i limitacions individuals: [`reports/revision2/RESULTATS.md`](reports/revision2/RESULTATS.md).
+L’abast es documenta a
 [`docs/MVP.md`](docs/MVP.md) i
 [`docs/UNIVERSAL_CASE_WORKFLOW.md`](docs/UNIVERSAL_CASE_WORKFLOW.md).
 

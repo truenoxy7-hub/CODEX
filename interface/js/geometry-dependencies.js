@@ -38,6 +38,11 @@
       if (!segmentIndex) points.push(segment.start.slice());
       if (segment.type === "cubic") {
         for (let index = 1; index <= samples; index += 1) points.push(cubicPoint(segment, index / samples));
+      } else if (segment.type === "quadratic") {
+        for (let index = 1; index <= samples; index += 1) {
+          const t = index / samples;
+          points.push([0, 1].map((axis) => (1 - t) ** 2 * segment.start[axis] + 2 * (1 - t) * t * segment.control[axis] + t ** 2 * segment.end[axis]));
+        }
       } else {
         points.push(segment.end.slice());
       }
@@ -55,10 +60,11 @@
       path.segments[index].start = path.segments[index - 1].end.slice();
     }
     if (path.kind === "feint") {
-      const directionBreak = (path.functional_points || []).find((point) => point.role === "direction_break");
-      const exit = (path.functional_points || []).find((point) => point.role === "exit");
-      if (directionBreak && path.segments[0]) directionBreak.position = path.segments[0].end.slice();
-      if (exit && path.segments[1]) exit.position = path.segments[1].end.slice();
+      const roles = path.segments.length >= 5 ? ["commitment", "direction_break", "clearance", "exit"] : ["direction_break", "exit"];
+      roles.forEach((role, index) => {
+        const point = (path.functional_points || []).find((item) => item.role === role);
+        if (point && path.segments[index]) point.position = path.segments[index].end.slice();
+      });
     }
   }
 
@@ -70,6 +76,13 @@
       if (state) entity.position = state.position.slice();
     });
     allPaths(geometry).forEach((path) => reconcilePath(path, states));
+    (geometry.balls || []).forEach((ball) => {
+      const holder = states.get(ball.holder_state_ref);
+      if (holder) {
+        const offset = ball.holder_offset || [0.38, -0.3];
+        ball.position = holder.position.map((value, axis) => value + offset[axis]);
+      }
+    });
     return geometry;
   }
 

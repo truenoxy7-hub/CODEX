@@ -1,0 +1,29 @@
+{
+  "format": "TRACA_actual_browser_observations",
+  "revision": 2,
+  "date": "2026-10-05",
+  "provenance": "Observacions de l'app real en navegador controlat, no inferides de pytest ni dels SVG del paquet.",
+  "test_service": "127.0.0.1:8765 i localhost:8765; SQLite tècnica /private/tmp/traca-revision2-dev/workspace.sqlite3",
+  "test_authority": "Criteris i doble de model etiquetats PROVA TÈCNICA. Cap aprovació tàctica nova del corpus. La instància de lliurament no utilitza aquest doble ni aquesta base.",
+  "observations": [
+    {"id":"A_MANUAL","result":"observed","details":"Sis tipus de figures, corbes quadràtiques amb tres controls, banc a 10° i atall de 5°, duplicació, simetria, eliminar/buidar i desfer/refer. Retrocés dins el text no elimina figures.","artifact":"screenshots/manual-board.jpg"},
+    {"id":"A_VIEW","result":"observed","details":"Vista inferior amb zoom 150%: desplaçament de pantalla +37.5,+37.5 transforma correctament la posició de món aproximadament -1,-1; desfer recupera. Pista completa conserva figures."},
+    {"id":"B_A1","result":"observed","details":"B1 visible; arrossegament de recepció de [11.7,9.9] a [12.700100,10.380048] actualitza els extrems compartits de passada i cursa. S'ha corregit el hitbox del símbol futur buit."},
+    {"id":"B_A2","result":"observed","details":"Recepció, finta de cinc segments, PV i D3 presents; decisió oberta.","artifact":"screenshots/a2-generated.jpg"},
+    {"id":"B_A3","result":"observed","details":"Simetria del cas, PV/D1, canvi de costat abans de superar D2; no s'afegeix una passada o tir obligatoris.","artifact":"screenshots/a3-generated.jpg"},
+    {"id":"B_MODEL","result":"observed","details":"Doble explícit, confirmació de la proposta i acceptació de la comparació de regeneració. La teoria conserva dues accions seleccionables provisionals. No és una connexió amb un model real.","artifact":"screenshots/model-confirmed.jpg"},
+    {"id":"C_LEARNING","result":"observed","details":"Correcció de recepció registrada, criteri relatiu tècnic aprovat, cas nou mostra Aplicat en aquest exercici i canvia realment la geometria. Revocació posterior no altera el dibuix antic ni s'aplica al següent.","artifact":"screenshots/criterion-second-case.jpg"},
+    {"id":"DURABLE_RESTART","result":"observed","details":"Servei aturat i reiniciat; origen localhost sense cache recupera CASE-2026-0007. Comparació DOM editable exacta, 7 nodes. No és una recuperació només de localStorage."},
+    {"id":"TWO_SESSIONS","result":"observed","details":"Dos orígens de la mateixa instància guarden versions incompatibles; 409 mostra els dos SVG i Cap no s'ha eliminat. Conservar totes dues crea un cas nou amb UUID propi.","artifact":"screenshots/save-conflict.jpg"},
+    {"id":"CLEAN_PNG","result":"observed","details":"Porta-retalls retorna image/png real. PNG de 600 px extret i inspeccionat: corbes i figures sense nanses ni guia. També observada denegació del porta-retalls i alternativa PNG; baixada d'aquesta alternativa no confirmada.","artifact":"exports/manual-fitxa.png"}
+  ],
+  "not_observed": [
+    "Tacte en dispositiu físic i layout mòbil; només proves de pointerType touch i estils.",
+    "Arrossegament de corba lliure sencera, snap i nansa del banc en navegador després de l'última correcció; operacions cobertes per proves automàtiques.",
+    "Regeneració amb totes les correccions mixtes en una única sessió UI; fusió/conflicte/cancel·lació/respostes obsoletes coberts automàticament.",
+    "Importació d'imatge i paquet i consulta d'una versió històrica a la UI; contractes exercitats amb proves, no circuit UI complet.",
+    "Baixada SVG/paquet via navegador: espera de baixada interrompuda. Exportador compartit i fitxers SVG de demostració verificats fora del navegador.",
+    "Últims ajustos cosmètics i enllaç permanent de baixada no repetits a la UI: es va perdre la superfície de navegador i Chrome requeria permisos de control.",
+    "Model remot real: no s'han proporcionat credencials. Servei sense configurar deixa funcionar la pissarra manual."
+  ]
+}

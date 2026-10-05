@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import sys
 from copy import deepcopy
 from pathlib import Path
@@ -314,6 +315,11 @@ def resolve_uvof015_geometry(
             )
             initial_x = space_centers[initial_space]
             target_x = space_centers[target_space]
+            post_left = (court_profile["court"]["width_m"] - court_profile["goal"]["width_m"]) / 2
+            post_right = post_left + court_profile["goal"]["width_m"]
+            lateral_distance = max(post_left - target_x, target_x - post_right, 0)
+            visual_radius = court_profile["markings"]["goal_area_radius_m"] + 0.55
+            final_y = max(5.75, math.sqrt(max(0, visual_radius**2 - lateral_distance**2)))
             token = alternative["id"].removeprefix(f"A_{spec['suffix']}_")
             transition_id = f"T_{spec['transition_prefix']}_{token}"
             transition_position, transition = transition_index[transition_id]
@@ -332,24 +338,31 @@ def resolve_uvof015_geometry(
             participant_states.extend(
                 [
                     {"id": receive_state, "participant_ref": spec["attacker"], "state_id": f"receive_{state_token.lower()}", "phase": "reception", "position": _point(initial_x, 10.75), "status": "future", "visibility": "selected_alternative", "alternative_refs": alternative_refs, "source_refs": [transition_source]},
-                    {"id": final_state, "participant_ref": spec["attacker"], "state_id": f"final_{state_token.lower()}", "phase": "resolution", "position": _point(target_x, 5.75), "status": "future", "visibility": "selected_alternative", "alternative_refs": alternative_refs, "source_refs": [transition_source]},
+                    {"id": final_state, "participant_ref": spec["attacker"], "state_id": f"final_{state_token.lower()}", "phase": "resolution", "position": _point(target_x, final_y), "status": "future", "visibility": "selected_alternative", "alternative_refs": alternative_refs, "source_refs": [transition_source]},
                 ]
             )
             if is_feint:
-                commitment = _point(initial_x, 7.9)
-                exit_point = _point((initial_x + target_x) / 2, 7.25)
+                direction = 1 if target_x > initial_x else -1
+                commitment = _point(defender_x - direction * 0.72, defender_y + 1.45)
+                direction_break = _point(defender_x - direction * 1.05, defender_y + 1.05)
+                clearance = _point(defender_x + direction * 1.05, defender_y + 1.0)
+                exit_point = _point(target_x, final_y + 0.12)
                 segments = [
-                    _cubic(_point(initial_x, 10.75), _point(initial_x, 9.75), _point(initial_x, 8.55), commitment),
-                    _line(commitment, exit_point),
-                    _cubic(exit_point, _point(target_x, 6.95), _point(target_x, 6.2), _point(target_x, 5.75)),
+                    _cubic(_point(initial_x, 10.75), _point(initial_x, 10.0), _point(commitment[0], 9.75), commitment),
+                    _line(commitment, direction_break),
+                    _line(direction_break, clearance),
+                    _line(clearance, exit_point),
+                    _line(exit_point, _point(target_x, final_y)),
                 ]
                 functional_points = [
-                    {"id": f"FP_{alternative['id']}_COMPROMIS", "role": "direction_break", "position": commitment},
+                    {"id": f"FP_{alternative['id']}_COMPROMIS", "role": "commitment", "position": commitment},
+                    {"id": f"FP_{alternative['id']}_RUPTURA", "role": "direction_break", "position": direction_break},
+                    {"id": f"FP_{alternative['id']}_EVASIO", "role": "clearance", "position": clearance},
                     {"id": f"FP_{alternative['id']}_SORTIDA", "role": "exit", "position": exit_point},
                 ]
             else:
                 segments = [
-                    _cubic(_point(initial_x, 10.75), _point(initial_x, 9.55), _point(target_x, 7.05), _point(target_x, 5.75)),
+                    _cubic(_point(initial_x, 10.75), _point(initial_x, 9.55), _point(target_x, max(7.05, final_y + 0.15)), _point(target_x, final_y)),
                 ]
                 functional_points = []
             approach_path_id = f"PATH_{alternative['id']}_CURSA_RECEPCIO"
@@ -362,6 +375,7 @@ def resolve_uvof015_geometry(
                     "kind": "feint" if is_feint else "continuation",
                     "action_type": "movement",
                     "actor_ref": spec["attacker"],
+                    "opponent_ref": spec["defender"],
                     "from_state_ref": receive_state,
                     "to_state_ref": final_state,
                     "initial_space_ref": initial_space,
@@ -442,7 +456,7 @@ def resolve_uvof015_geometry(
         "$schema": "../../schema/traca.geometry.schema.v0.2.json",
         "meta": {
             "format": "TRACA_geometria_derivada",
-            "version": "0.2.0",
+            "version": "0.2.1",
             "exercise_id": "TR-UVOF-015",
             "status": "derived_from_ready_contract",
             "source_spatial_ref": "exercises/TR-UVOF-015/spatial-relations.json",
@@ -458,7 +472,7 @@ def resolve_uvof015_geometry(
             "view_box": [-0.8, -1.0, 21.6, 21.8],
         },
         "layout_policy": {
-            "id": "uvof015_three_zones_v0.2",
+            "id": "uvof015_three_zones_v0.2.1",
             "status": "provisional_render_policy",
             "coordinate_system": "metres_origin_goal_line_left",
             "attack_direction": "negative_y",

@@ -20,10 +20,11 @@
   const store = window.TRACA_STORE.createWorkspaceStore({
     initialCase,
     initialGeometry: null,
+    courtProfile: window.TRACA_COURT_PROFILE,
     visualGrammar: window.TRACA_VISUAL_GRAMMAR.createVisualGrammar(window.TRACA_VISUAL_FUNCTIONAL_DICTIONARY, { style: window.TRACA_VISUAL_STYLE }),
     initialLibrary: persistedAtOpen && persistedAtOpen.knowledge_library
   });
-  const editor = window.TRACA_EDITOR.createEditor({ container: $("#court-stage"), store });
+  const editor = window.TRACA_EDITOR.createEditor({ container: $("#court-stage"), store, onError: (message) => toast(message === "LINKED_PATH_REQUIRES_DETACH" ? "Aquest traç comparteix estats. Mou-ne un extrem o prem Desvincular traç per traslladar-lo sencer." : message), onPreview: (geometry, selection) => drawBoard(store.snapshot(), geometry, selection) });
   let toastTimer = null;
   let handledCorrectionCount = 0;
   let pendingReusable = [];
@@ -78,11 +79,14 @@
       canonicalCases: canonicalExamples.map((item) => item.caseData),
       canonicalKnowledge: window.TRACA_LOCAL_KNOWLEDGE,
       dictionary: window.TRACA_VISUAL_FUNCTIONAL_DICTIONARY,
-      library: snapshot.knowledgeLibrary
+      library: snapshot.knowledgeLibrary,
+      graphicKnowledgeBase: workspaceUi.knowledge,
+      graphicKnowledgeActivation: snapshot.knowledgeLibrary.activation_registry
     };
   }
 
   function generateCurrentCase() {
+    if ($("#interpretation-mode").value === "model") { workspaceUi.generateModel(readCaseForm()); return; }
     store.updateCase(readCaseForm());
     let snapshot = store.snapshot();
     if (!snapshot.currentCase.description.trim()) {
@@ -101,7 +105,12 @@
         answers: snapshot.clarificationAnswers,
         courtProfile: window.TRACA_COURT_PROFILE
       });
-      store.setCompositionResult(composition, "global_composition_pipeline");
+      workspaceUi.decorateGeneration(composition);
+      const previous = store.snapshot();
+      if (previous.workingGeometry && ((previous.workingGeometry.entities || []).length || (previous.workingGeometry.common_paths || []).length)) {
+        const token = store.beginRegeneration();
+        store.proposeRegeneration(token, composition);
+      } else store.setCompositionResult(composition, "global_composition_pipeline");
       const message = composition.composition_status === "blocked"
         ? "Hi ha una contradicció entre relacions validades. Cal revisar-la abans de continuar."
         : composition.composition_status === "needs_input"
@@ -126,7 +135,8 @@
     const stale = Object.entries(snapshot.derivations || {}).some(([key, value]) => key !== "source" && value.status === "stale");
     elements.derivationAlert.hidden = !stale;
     elements.saveMessage.className = "save-message";
-    if (stale) elements.saveMessage.textContent = "El text ha canviat: torna a generar abans de guardar.";
+    if (stale) elements.saveMessage.textContent = "El text ha canviat. El dibuix anterior es conserva i es pot guardar com a esborrany.";
+    else elements.saveMessage.textContent = "Pots guardar un esborrany encara que quedin parts pendents.";
   }
 
   function renderUnderstanding(snapshot) {
@@ -160,11 +170,11 @@
   }
 
   function geometryForView(snapshot) {
-    if (snapshot.derivations.geometry && snapshot.derivations.geometry.status === "stale") return null;
     return snapshot.ui.view === "generated" ? snapshot.generatedGeometry : snapshot.workingGeometry;
   }
 
   function renderCourt(snapshot) {
+    if (editor.active) return;
     const geometry = geometryForView(snapshot);
     elements.courtStage.hidden = !geometry;
     elements.noGeometry.hidden = Boolean(geometry);
@@ -172,25 +182,33 @@
       button.classList.toggle("is-active", button.dataset.view === snapshot.ui.view);
       button.disabled = ["generated", "compare"].includes(button.dataset.view) && !snapshot.generatedGeometry;
     });
-    elements.undo.disabled = !snapshot.corrections.length;
-    elements.redo.disabled = !snapshot.redoStack.length;
+    elements.undo.disabled = !snapshot.canUndo;
+    elements.redo.disabled = !snapshot.canRedo;
     elements.reset.disabled = !snapshot.corrections.length;
     elements.exportSvg.disabled = !geometry;
     elements.exportPng.disabled = !geometry;
     if (!geometry) return;
     if (!elements.courtStage.ownerDocument || typeof elements.courtStage.ownerDocument.createElementNS !== "function") return;
+    drawBoard(snapshot, geometry, snapshot.selectedElement);
+    if (snapshot.ui.view === "control" || snapshot.ui.view === "corrected") editor.bind();
+    elements.courtHelp.textContent = "Arrossega per moure. Selecciona un traç per editar-lo. Desfer: ⌘/Ctrl+Z. Girar banc: ← → (5°).";
+  }
+
+  function drawBoard(snapshot, geometry, selection) {
+    if (!geometry) return;
     window.TRACA_RENDERER.render(elements.courtStage, {
       geometry,
       visualGrammar: snapshot.workingVisualGrammar,
       selectedAlternatives: snapshot.selectedAlternatives,
-      selection: snapshot.selectedElement,
+      selection,
+      board: snapshot.ui,
+      monochrome: snapshot.ui.theme === "mono",
       view: snapshot.ui.view === "control" ? "control" : "clean",
       comparisonGeometry: snapshot.ui.view === "compare" ? snapshot.generatedGeometry : null
     });
-    if (snapshot.ui.view === "control" || snapshot.ui.view === "corrected") editor.bind();
-    elements.courtHelp.textContent = snapshot.coachReferenceGeometry && !snapshot.generatedGeometry
-      ? "Referència manual: moure no crea coneixement tàctic. No és generatedGeometry."
-      : "Arrossega una icona o un estat futur; les trajectòries i passades vinculades s’actualitzen juntes.";
+    const zoom = snapshot.ui.zoom || 1;
+    const fit = snapshot.ui.orientation === "full" ? 28 : 54;
+    elements.courtStage.style.width = `min(${zoom * 100}%, ${zoom * fit}vh)`;
   }
 
   function primitiveForSelection(resolved, snapshot) {
@@ -301,7 +319,7 @@
     elements.reusePrompt.hidden = !snapshot.corrections.length || snapshot.corrections.length <= handledCorrectionCount;
     const repeated = store.whatLearned().repetition_suggestions || [];
     const copy = elements.reusePrompt.querySelector("p");
-    if (copy) copy.textContent = repeated.length ? repeated[0].message : "Cap correcció es converteix en regla automàticament.";
+    if (copy) copy.textContent = repeated.length ? "Hi ha correccions semblants en altres casos. Pots revisar-ne l’abast abans de reutilitzar-les." : "Tria una correcció per preparar-ne un criteri reutilitzable.";
   }
 
   function render(snapshot) {
@@ -329,10 +347,13 @@
     const snapshot = store.snapshot();
     const section = (title, key) => `<section class="exercise-group"><h3>${title}</h3>${(snapshot.knowledgeLibrary[key] || []).map((record, index) => `<button class="exercise-row" type="button" data-library-key="${key}" data-library-index="${index}"><span><strong>${escape(record.name || record.id)}</strong><small>${escape(record.short_code || record.id)} · ${escape(record.saved_at || "")}</small></span><span>Obrir →</span></button>`).join("") || '<p class="empty-copy">Cap cas.</p>'}</section>`;
     elements.exerciseList.innerHTML = section("Esborranys", "drafts") + section("Validats", "validated_cases");
-    elements.exerciseList.querySelectorAll("[data-library-key]").forEach((button) => button.addEventListener("click", () => {
+    elements.exerciseList.querySelectorAll("[data-library-key]").forEach((button) => button.addEventListener("click", async () => {
       const current = store.snapshot();
       const record = current.knowledgeLibrary[button.dataset.libraryKey][Number(button.dataset.libraryIndex)];
-      store.loadSavedCase(record); syncCaseForm(store.snapshot()); $("#exercises-dialog").close(); toast("Exercici obert.");
+      editor.cancel();
+      try { store.restorePackage(await persistence.open(record.case_uid)); }
+      catch (_error) { store.loadSavedCase(record); }
+      syncCaseForm(store.snapshot()); $("#exercises-dialog").close(); toast("Exercici obert.");
     }));
   }
 
@@ -357,29 +378,38 @@
   $("#save-exercise").addEventListener("click", () => {
     store.updateCase(readCaseForm());
     try {
-      store.saveExercise("coach");
-      pendingReusable.forEach((item) => store.addCoachValidatedKnowledge(item));
-      if (pendingReusable.length) store.saveCase({ status: "validated" });
-      const learned = pendingReusable.length;
-      pendingReusable = [];
-      handledCorrectionCount = store.snapshot().corrections.length;
-      const savedSnapshot = store.snapshot();
-      const unresolvedCount = (savedSnapshot.interpretation.unresolved || []).length + (savedSnapshot.interpretation.unknown_concepts || []).length;
-      elements.saveMessage.className = "save-message is-success";
-      const pendingText = unresolvedCount ? ` Queden ${unresolvedCount} punt${unresolvedCount === 1 ? "" : "s"} sense resoldre.` : "";
-      elements.saveMessage.textContent = (learned ? `Exercici validat i guardat. ${learned} criteri reutilitzable ja pot ajudar en casos futurs.` : "Exercici validat i guardat.") + pendingText;
-      toast(elements.saveMessage.textContent);
+      store.saveCase();
+      persistence.flush().then((saved) => { if (saved) toast("Esborrany guardat al servei local. No implica validació."); });
     } catch (error) {
-      const report = error.report || store.runPreflight();
-      const first = report.diagnostics.find((item) => item.level === "error");
       elements.saveMessage.className = "save-message is-error";
-      elements.saveMessage.textContent = first ? first.message : "No s’ha pogut guardar aquesta versió.";
+      elements.saveMessage.textContent = `No s’ha pogut guardar: ${error.message}`;
       toast(elements.saveMessage.textContent);
     }
   });
-  $("#save-draft").addEventListener("click", () => { store.updateCase(readCaseForm()); store.saveCase({ status: "in_construction" }); toast("Esborrany guardat, encara no validat."); });
-  $("#new-case").addEventListener("click", () => { store.createCase({ name: "Cas sense títol", description: "", notes: "" }); pendingReusable = []; handledCorrectionCount = 0; syncCaseForm(store.snapshot()); elements.description.focus(); toast("Nou cas en blanc."); });
-  $("#exercises").addEventListener("click", () => { renderExercises(); $("#exercises-dialog").showModal(); });
+  $("#save-draft").addEventListener("click", async () => { store.updateCase(readCaseForm()); store.saveCase({ status: "in_construction" }); const saved = await persistence.flush(); toast(saved ? "Esborrany guardat al servei, encara no validat." : "Esborrany pendent de desament. Consulta l’estat de connexió."); });
+  $("#new-case").addEventListener("click", () => { store.saveCase(); store.createCase({ name: "Cas sense títol", description: "", notes: "" }); store.startCoachReference(window.TRACA_COURT_PROFILE); pendingReusable = []; handledCorrectionCount = 0; syncCaseForm(store.snapshot()); toast("Nova pissarra en blanc."); });
+  $("#exercises").addEventListener("click", async () => {
+    renderExercises(); $("#exercises-dialog").showModal();
+    try {
+      const records = await persistence.list();
+      const section = document.createElement("section"); section.innerHTML = '<h3>Guardats al servei local</h3>';
+      records.forEach((record) => {
+        const button = document.createElement("button"); button.className = "exercise-row"; button.textContent = `${record.case.name || "Sense títol"} · ${record.case.short_code || record.case.id} · revisió ${record.revision}`;
+        button.onclick = async () => { try { editor.cancel(); store.restorePackage(await persistence.open(record.uid)); syncCaseForm(store.snapshot()); $("#exercises-dialog").close(); } catch (_error) { toast("No s’ha pogut obrir el cas. El treball actual es conserva."); } };
+        const versions = document.createElement("details"), summary = document.createElement("summary"); summary.textContent = "Versions anteriors"; versions.appendChild(summary);
+        versions.ontoggle = async () => {
+          if (!versions.open || versions.dataset.loaded) return;
+          try {
+            const items = await persistence.versions(record.uid);
+            items.forEach(item => { const restore = document.createElement("button"); restore.className = "exercise-row"; restore.textContent = `Restaurar revisió ${item.revision} · ${new Date(item.updated).toLocaleString("ca")}`; restore.onclick = async () => { try { editor.cancel(); store.restorePackage(await persistence.openVersion(record.uid, item.revision)); syncCaseForm(store.snapshot()); $("#exercises-dialog").close(); toast("Versió recuperada. Els canvis es desaran com una revisió nova."); } catch (_error) { toast("No s’ha pogut recuperar la versió. La pissarra actual es conserva."); } }; versions.appendChild(restore); });
+            versions.dataset.loaded = "true";
+          } catch (_error) { toast("No s’han pogut consultar les versions. Torna-ho a provar."); }
+        };
+        section.appendChild(button); section.appendChild(versions);
+      });
+      elements.exerciseList.prepend(section);
+    } catch (_error) { toast("Servei no disponible; es mostren les còpies locals."); }
+  });
   $$('[data-close-dialog]').forEach((button) => button.addEventListener("click", () => button.closest("dialog").close()));
   $$('[data-view]').forEach((button) => button.addEventListener("click", () => { if (!button.disabled) store.setUi({ view: button.dataset.view }); }));
   $$('[data-dock]').forEach((button) => button.addEventListener("click", () => {
@@ -389,16 +419,15 @@
   elements.undo.addEventListener("click", () => store.undo()); elements.redo.addEventListener("click", () => store.redo()); elements.reset.addEventListener("click", () => store.reset());
 
   $("#reuse-case-only").addEventListener("click", () => {
-    store.recordCoachObservation({ statement: "Les correccions actuals s’apliquen només a aquest cas.", status: "case_only" });
-    handledCorrectionCount = store.snapshot().corrections.length; renderReuse(store.snapshot()); toast("Canvi conservat només en aquest cas.");
+    handledCorrectionCount = store.snapshot().corrections.length; renderReuse(store.snapshot());
   });
-  $("#reuse-rule").addEventListener("click", () => $("#reuse-dialog").showModal());
+  $("#reuse-rule").addEventListener("click", () => workspaceUi.openReuse());
   $("#reuse-form").addEventListener("submit", (event) => {
     event.preventDefault();
     const label = $("#reuse-label").value.trim(), definition = $("#reuse-definition").value.trim();
     if (!label || !definition) return;
-    pendingReusable.push({ label, definition, aliases: $("#reuse-aliases").value.split(",").map((item) => item.trim()).filter(Boolean), category: $("#reuse-category").value, correction_refs: store.snapshot().corrections.map((item) => item.id) });
-    handledCorrectionCount = store.snapshot().corrections.length; $("#reuse-dialog").close(); event.currentTarget.reset(); renderReuse(store.snapshot()); toast("El criteri s’activarà només quan guardis i validis el cas.");
+    workspaceUi.saveReuse({ label, definition });
+    handledCorrectionCount = store.snapshot().corrections.length; $("#reuse-dialog").close(); event.currentTarget.reset(); renderReuse(store.snapshot());
   });
 
   elements.inspectorForm.addEventListener("submit", (event) => {
@@ -447,20 +476,18 @@
   });
   $("#export-case").addEventListener("click", () => window.TRACA_IMPORT_EXPORT.downloadPackage(store.snapshot()));
   elements.exportSvg.addEventListener("click", () => {
-    const svg = elements.courtStage.querySelector("svg");
-    if (!svg) return;
     const snapshot = store.snapshot();
-    const stem = `${snapshot.currentCase.short_code || snapshot.currentCase.id || "traca"}-r${snapshot.derivations.geometry && snapshot.derivations.geometry.revision || 0}`;
+    const svg = window.TRACA_RENDERER.cleanSvg(snapshot, document, { monochrome: $("#export-mono").checked });
+    const stem = `${snapshot.currentCase.short_code || snapshot.currentCase.id || "traca"}-r${snapshot.revision || 0}`;
     window.TRACA_RENDERER.downloadSvg(svg, `${stem}.svg`, document);
     toast("SVG exportat amb metadades de revisió.");
   });
   elements.exportPng.addEventListener("click", async () => {
-    const svg = elements.courtStage.querySelector("svg");
-    if (!svg) return;
     const snapshot = store.snapshot();
-    const stem = `${snapshot.currentCase.short_code || snapshot.currentCase.id || "traca"}-r${snapshot.derivations.geometry && snapshot.derivations.geometry.revision || 0}`;
+    const svg = window.TRACA_RENDERER.cleanSvg(snapshot, document, { monochrome: $("#export-mono").checked });
+    const stem = `${snapshot.currentCase.short_code || snapshot.currentCase.id || "traca"}-r${snapshot.revision || 0}`;
     try {
-      await window.TRACA_RENDERER.downloadPng(svg, `${stem}.png`, snapshot.workingVisualGrammar.export, document);
+      await window.TRACA_RENDERER.downloadPng(svg, `${stem}.png`, { width: Number($("#export-size").value), pixelRatio: 1 }, document);
       toast("PNG exportat des del mateix SVG canònic.");
     } catch (_error) {
       toast("No s’ha pogut exportar el PNG en aquest navegador.");
@@ -491,10 +518,27 @@
   $("#import-trigger").addEventListener("click", () => elements.importFile.click());
   elements.importFile.addEventListener("change", async () => { const file = elements.importFile.files[0]; if (!file) return; try { store.restorePackage(window.TRACA_IMPORT_EXPORT.parsePackage(await file.text())); syncCaseForm(store.snapshot()); toast("Cas importat i migrat si era necessari."); } catch (error) { toast(`Importació rebutjada: ${error.message}`); } finally { elements.importFile.value = ""; } });
 
+  let booting = true;
+  const persistence = window.TRACA_PERSISTENCE.createClient({ onStatus: (status) => {
+    $("#durable-status").textContent = status.message;
+    $("#durable-status").dataset.status = status.status;
+    $("#retry-save").hidden = !["offline", "error"].includes(status.status);
+    if (status.conflict) workspaceUi.showConflict(status.conflict);
+  } });
+  const workspaceUi = window.TRACA_WORKSPACE_UI.create({ store, editor, persistence, toast, syncCaseForm, drawBoard });
+  $("#retry-save").onclick = async () => { persistence.schedule(window.TRACA_IMPORT_EXPORT.exportPackage(store.snapshot())); await persistence.flush(); };
+  window.TRACA_WORKSPACE = { store, editor, persistence };
   store.subscribe((snapshot) => {
-    window.TRACA_PERSISTENCE.save(window.TRACA_IMPORT_EXPORT.exportPackage(snapshot));
-    render(snapshot);
+    if (!booting) persistence.schedule(window.TRACA_IMPORT_EXPORT.exportPackage(snapshot));
+    render(snapshot); workspaceUi.render(snapshot);
   });
   syncCaseForm(store.snapshot());
   render(store.snapshot());
+  document.body.classList.add("workspace-loading");
+  persistence.initialize().then((payload) => {
+    if (payload) store.restorePackage(payload);
+    if (!store.snapshot().workingGeometry) store.startCoachReference(window.TRACA_COURT_PROFILE);
+    syncCaseForm(store.snapshot()); booting = false; document.body.classList.remove("workspace-loading");
+    workspaceUi.render(store.snapshot()); persistence.schedule(window.TRACA_IMPORT_EXPORT.exportPackage(store.snapshot())); persistence.flush();
+  }).catch((error) => { booting = false; document.body.classList.remove("workspace-loading"); toast(`Recuperació pendent: ${error.message}`); });
 })();

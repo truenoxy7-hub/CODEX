@@ -29,6 +29,7 @@
     "traceability"
   ],
   "properties": {
+    "learning_applied": { "type": "array", "items": { "type": "object", "required": ["criterion_ref", "version", "path_ref"] } },
     "$schema": {"const": "../../schema/traca.geometry.schema.v0.4.json"},
     "meta": {
       "type": "object",

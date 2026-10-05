@@ -10,9 +10,24 @@ El resultat actual és:
 - 203 unitats estructurades disponibles;
 - 175/203 (86,21%) amb família d’operador reconeguda;
 - 164/203 (80,79%) amb relacions mínimes suficients per a composició;
-- 0/203 amb geometria genèrica completa des d’aquesta banca.
+- 0/15 exercicis complets amb geometria genèrica de tots els operadors;
+- 46 escenes de passada/recepció generades en 12/15 exercicis, amb vincles
+  qualitatius validats, sense coordenades d’entrada (`corpus-adapter.js`).
 
-El 0% geomètric és deliberat: els contractes espacials declaren `geometria_resolta: no_inclosa`. UVOF015 conserva el seu resolver i `geometry.json` com a regressió independent; no es compta com a prova que el resolutor genèric pugui inventar coordenades.
+El camp històric `geometria_resolta: no_inclosa` no bloqueja el resolver: no
+tenir coordenades d’entrada no és faltar coneixement. L’adaptador resol
+subgrafs passador–receptor–pilota i recepcions compartides quan la font les
+declara. Cada flux és una escena independent; no aplana alternatives,
+repeticions ni pilotes. Les zones i altres operadors del cas complet encara
+no són adaptats: les escenes no es certifiquen com a representació de tot
+l’exercici. Fonts completes i diagnòstics a `examples/graphics-gallery/coverage.json`.
+La columna Geometry de la taula següent mesura només cobertura completa de
+les unitats; no nega aquestes escenes parcials.
+
+Escenes parcials per cas 001–015: **2, 8, 3, 6, 0, 7, 0, 1, 4, 3, 2, 3, 1, 0, 6**.
+005, 007 i 014 no tenen subgraf de passada amb vincles validats compatible
+amb aquest adaptador. UVOF015 conserva a més el resolver canònic v0.2.1
+com a regressió independent, amb tres zones i dotze alternatives.
 
 ## Matriu d’operadors
 

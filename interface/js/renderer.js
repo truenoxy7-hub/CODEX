@@ -9,6 +9,7 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function (visualApi, dependenciesApi, courtGeometryApi) {
   "use strict";
   const SVG_NS = "http://www.w3.org/2000/svg";
+  let renderSequence = 0;
 
   function pathData(pathOrPoints) {
     if (Array.isArray(pathOrPoints)) {
@@ -20,6 +21,7 @@
     const commands = [`M ${segments[0].start[0]} ${segments[0].start[1]}`];
     segments.forEach((segment) => {
       if (segment.type === "cubic") commands.push(`C ${segment.control1[0]} ${segment.control1[1]} ${segment.control2[0]} ${segment.control2[1]} ${segment.end[0]} ${segment.end[1]}`);
+      else if (segment.type === "quadratic") commands.push(`Q ${segment.control[0]} ${segment.control[1]} ${segment.end[0]} ${segment.end[1]}`);
       else commands.push(`L ${segment.end[0]} ${segment.end[1]}`);
     });
     return commands.join(" ");
@@ -67,10 +69,11 @@
     return node;
   }
 
-  function addMetadata(documentObject, svg, geometry, grammar) {
+  function addMetadata(documentObject, svg, geometry, grammar, exported) {
     const metadata = append(documentObject, svg, "metadata", { id: "traca-export-metadata" });
     metadata.textContent = JSON.stringify({
       format: "TRACA_rendered_graphic",
+      ...(exported || {}),
       case_ref: geometry.meta && (geometry.meta.case_id || geometry.meta.exercise_id) || null,
       source_revision: geometry.meta && geometry.meta.source_revision || null,
       geometry_version: geometry.meta && geometry.meta.version || null,
@@ -89,17 +92,19 @@
     append(documentObject, marker, "path", { d: "M 0 0 L 10 5 L 0 10 z", fill: color });
   }
 
-  function addCourt(documentObject, svg, court, grammar) {
+  function addCourt(documentObject, svg, court, grammar, skipDefs) {
     const style = grammar && grammar.court || {};
     const posts = courtGeometryApi.goalPosts(court);
     const goalLeft = posts.left;
     const goalRight = posts.right;
+    if (!skipDefs) {
     const defs = append(documentObject, svg, "defs");
     const clip = append(documentObject, defs, "clipPath", { id: "court-clip" });
     append(documentObject, clip, "rect", { x: 0, y: 0, width: court.width_m, height: court.half_length_m });
     addMarker(documentObject, defs, "traca-arrow-dark", grammar.paths.movement.stroke, grammar.arrows);
     addMarker(documentObject, defs, "traca-arrow-pass", grammar.paths.pass.stroke, grammar.arrows);
     addMarker(documentObject, defs, "traca-arrow-shot", grammar.paths.shot.stroke, grammar.arrows);
+    }
 
     append(documentObject, svg, "rect", { x: 0, y: 0, width: 20, height: 20, fill: style.floor || "#fbfaf7" });
     for (let x = 1; x < 20; x += 1.5) {
@@ -187,7 +192,7 @@
     const style = grammar.paths[primitive] || grammar.paths.movement;
     const ref = targetRef(collection, path.id);
     const marker = style.marker === "arrow"
-      ? primitive === "pass" ? "url(#traca-arrow-pass)" : primitive === "shot" ? "url(#traca-arrow-shot)" : "url(#traca-arrow-dark)"
+      ? ["pass", "pass_feint"].includes(primitive) ? "url(#traca-arrow-pass)" : ["shot", "shot_feint"].includes(primitive) ? "url(#traca-arrow-shot)" : "url(#traca-arrow-dark)"
       : null;
     const renderedPath = visiblePath(path, geometry || {}, grammar, primitive);
     const renderedData = style.path_mode === "wavy_segments" || style.line === "wavy"
@@ -205,6 +210,7 @@
       "marker-end": marker, class: `selectable exercise-path${selectedClass(selection, ref)}`,
       "data-ref": ref, "data-kind": "path", "data-path-suffix": suffix || (path.segments ? "segments" : "points")
     });
+    if (view === "control") append(documentObject, svg, "path", { d: renderedData, fill: "none", stroke: "transparent", "stroke-width": 0.7, class: "path-hit selectable", "data-edit-only": "true", "data-ref": ref, "data-kind": "path", "pointer-events": "stroke" });
     const sampled = dependenciesApi.sampledPoints(renderedPath, 10);
     if (style.cancellation_mark && sampled.length) {
       const middle = sampled[Math.floor(sampled.length / 2)];
@@ -221,10 +227,12 @@
     if (view === "control" && selection && selection.ref === ref) {
       if (path.segments) (path.segments || []).forEach((segment, index) => {
         const handles = [];
+        if (!index) handles.push(["start", segment.start]);
         if (segment.type === "cubic") handles.push(["control1", segment.control1], ["control2", segment.control2]);
-        if (index < path.segments.length - 1 || !path.to_state_ref) handles.push(["end", segment.end]);
+        if (segment.type === "quadratic") handles.push(["control", segment.control]);
+        handles.push(["end", segment.end]);
         handles.forEach(([property, point]) => append(documentObject, svg, "circle", {
-          cx: point[0], cy: point[1], r: 0.14, fill: "#fff", stroke: "#173f33", "stroke-width": 0.055,
+          cx: point[0], cy: point[1], r: 0.25, fill: "#fff", stroke: "#173f33", "stroke-width": 0.075,
           class: "path-handle", "data-ref": ref, "data-property": `segments.${index}.${property}`
         }));
       });
@@ -249,7 +257,13 @@
     const y = entity.position[1];
     const radius = style.radius || 0.34;
     const outlineWidth = grammar.meta.mode === "monochrome" || ["attacker", "defender", "passer", "pivot", "goalkeeper", "generic_participant"].includes(entity.kind) ? 0.055 : 0.045;
-    if (style.shape === "text") {
+    append(documentObject, group, "circle", { cx: x, cy: y, r: 0.58, fill: "transparent", "pointer-events": "all" });
+    if (entity.kind === "bench") {
+      group.setAttribute("transform", `rotate(${entity.angle || 0} ${x} ${y})`);
+      append(documentObject, group, "rect", { x: x - (entity.length || 3.5) / 2, y: y - (entity.width || 0.5) / 2, width: entity.length || 3.5, height: entity.width || 0.5, rx: 0.08, fill: style.fill, stroke: style.stroke, "stroke-width": 0.07 });
+    } else if (entity.kind === "cylinder") {
+      append(documentObject, group, "circle", { cx: x, cy: y, r: 0.4, fill: grammar.meta.mode === "monochrome" ? "#fff" : "#ffd54f", stroke: grammar.meta.mode === "monochrome" ? "#111" : "#b52c25", "stroke-width": 0.16 });
+    } else if (style.shape === "text") {
       const text = append(documentObject, group, "text", { x, y, "text-anchor": "middle", fill: style.text, "font-size": 0.34, "font-weight": 750 });
       text.textContent = entity.label || entity.id;
     } else if (style.shape === "triangle") {
@@ -262,6 +276,12 @@
     if (entity.label && style.shape !== "text") {
       const label = append(documentObject, group, "text", { x, y: y + (grammar.labels && grammar.labels.offset_y || 0.11), "text-anchor": "middle", fill: style.text, "font-size": grammar.labels && grammar.labels.participant_size || 0.31, "font-weight": grammar.labels && grammar.labels.weight || 800, "pointer-events": "none" });
       label.textContent = entity.label;
+    }
+    if (entity.kind === "bench" && selection && selection.ref === ref) {
+      const angle = (entity.angle || 0) * Math.PI / 180, length = (entity.length || 3.5) / 2 + 0.65;
+      const hx = x + Math.cos(angle) * length, hy = y + Math.sin(angle) * length;
+      append(documentObject, svg, "line", { x1: x, y1: y, x2: hx, y2: hy, stroke: "#173f33", "stroke-width": 0.06, "stroke-dasharray": "0.15 0.15", "data-edit-only": "true" });
+      append(documentObject, svg, "circle", { cx: hx, cy: hy, r: 0.3, fill: "#fff", stroke: "#173f33", "stroke-width": 0.08, class: "rotation-handle", "data-ref": ref, "data-property": "angle", "data-edit-only": "true" });
     }
   }
 
@@ -320,6 +340,7 @@
       "data-temporal-status": state.status
     });
     const x = state.position[0], y = state.position[1];
+    if (interactive) append(documentObject, group, "circle", { cx: x, cy: y, r: Math.max(0.58, style.radius || 0), fill: "transparent", "pointer-events": "all", class: "entity-hitbox" });
     if (style.shape === "text") {
       const text = append(documentObject, group, "text", { x, y, "text-anchor": "middle", fill: style.text, "fill-opacity": 0.55, "font-size": 0.34, "font-weight": 750 });
       text.textContent = participant.label || participant.id;
@@ -332,7 +353,7 @@
       append(documentObject, group, "circle", { cx: x, cy: y, r: style.radius || 0.34, fill: temporal.fill, stroke: style.stroke, "stroke-opacity": temporal.stroke_opacity, "stroke-width": temporal.stroke_width, "stroke-dasharray": temporal.dash });
     }
     if (participant.label && style.shape !== "text") {
-      const label = append(documentObject, group, "text", { x, y: y + (grammar.labels && grammar.labels.offset_y || 0.11), "text-anchor": "middle", fill: style.text, "fill-opacity": 0.68, "font-size": grammar.labels && grammar.labels.participant_size || 0.31, "font-weight": grammar.labels && grammar.labels.weight || 800, "pointer-events": "none" });
+      const label = append(documentObject, group, "text", { x, y: y + (grammar.labels && grammar.labels.offset_y || 0.11), "text-anchor": "middle", fill: "#17241f", "fill-opacity": 1, "font-size": grammar.labels && grammar.labels.participant_size || 0.31, "font-weight": grammar.labels && grammar.labels.weight || 800, "pointer-events": "none" });
       label.textContent = participant.label;
     }
   }
@@ -359,20 +380,29 @@
   function render(container, options) {
     const documentObject = container.ownerDocument;
     const geometry = options.geometry;
-    const grammar = options.visualGrammar;
+    const grammar = JSON.parse(JSON.stringify(options.monochrome ? visualApi.createVisualGrammar(null, { mode: "monochrome" }) : options.visualGrammar));
+    const board = options.board || {};
+    if (board.theme === "blue" && !options.monochrome) grammar.court = { ...grammar.court, floor: "#1e6fbf", goal_area_fill: "#109e70", line: "#ffffff", floor_detail: "#1e6fbf", goal: "#ffffff" };
     const view = options.view || "control";
-    const selection = options.selection;
-    const alternatives = selectedAlternatives(geometry, options.selectedAlternatives || {});
+    const selection = view === "clean" ? null : options.selection;
+    const displayGeometry = board.optionalAlternatives === "semantic_only" ? { ...geometry, branches: [] } : geometry;
+    const alternatives = selectedAlternatives(displayGeometry, options.selectedAlternatives || {});
     const geometryLabel = geometry.meta.exercise_id || geometry.meta.case_id || "cas sense identificador";
     container.replaceChildren();
-    const svg = append(documentObject, container, "svg", {
-      viewBox: geometry.court.view_box.join(" "), class: `traca-court view-${view}`,
+    const viewBox = board.orientation ? [-0.8, -1, 21.6, board.orientation === "full" ? 41.8 : 21.8] : geometry.court.view_box;
+    const rootSvg = append(documentObject, container, "svg", {
+      viewBox: viewBox.join(" "), class: `traca-court view-${view}`, xmlns: SVG_NS, width: 1200, height: Math.round(1200 * viewBox[3] / viewBox[2]), "font-family": "Arial, sans-serif",
       role: "img", "aria-label": `Representació editable de ${geometryLabel}`
     });
-    addMetadata(documentObject, svg, geometry, grammar);
+    const svg = append(documentObject, rootSvg, "g", { "data-world": "true", transform: board.orientation === "bottom" ? "rotate(180 10 10)" : null });
+    addMetadata(documentObject, svg, geometry, grammar, options.exportMetadata);
     addCourt(documentObject, svg, geometry.court, grammar);
+    if (board.orientation === "full") {
+      const otherHalf = append(documentObject, svg, "g", { transform: "translate(20 40) rotate(180)" });
+      addCourt(documentObject, otherHalf, geometry.court, grammar, true);
+    }
     if (options.comparisonGeometry) addGhostGeometry(documentObject, svg, options.comparisonGeometry, options.selectedAlternatives || {});
-    if (view === "control") addControlOverlays(documentObject, svg, geometry, grammar, selection);
+    if (view === "control" && options.technicalOverlays) addControlOverlays(documentObject, svg, geometry, grammar, selection);
     (geometry.common_paths || []).forEach((path) => addPath(documentObject, svg, path, "common_path", grammar, selection, view, null, geometry));
     alternatives.forEach((alternative) => {
       if (alternative.approach_path) {
@@ -386,13 +416,24 @@
       addPath(documentObject, svg, alternative, "alternative", grammar, selection, view, alternative.segments ? "segments" : "points", geometry);
     });
     const temporalStates = dependenciesApi.visibleTemporalStates
-      ? dependenciesApi.visibleTemporalStates(geometry, options.selectedAlternatives || {})
-      : dependenciesApi.visibleFutureStates(geometry, options.selectedAlternatives || {});
+      ? dependenciesApi.visibleTemporalStates(displayGeometry, options.selectedAlternatives || {})
+      : dependenciesApi.visibleFutureStates(displayGeometry, options.selectedAlternatives || {});
     temporalStates.forEach((state) => addTemporalState(documentObject, svg, state, geometry, grammar, selection, view));
     (geometry.contextual_references || []).forEach((reference) => addContextualReference(documentObject, svg, reference, grammar));
     (geometry.entities || []).forEach((entity) => addEntity(documentObject, svg, entity, grammar, selection));
     (geometry.balls || []).filter((ball) => ball.visibility === "initial").forEach((ball) => addBall(documentObject, svg, ball, grammar));
-    return svg;
+    uniqueIds(rootSvg);
+    if (board.orientation === "bottom") walk(svg, (node) => {
+      if ((node.tagName || node.name) === "text") node.setAttribute("transform", `rotate(180 ${node.getAttribute("x") || 0} ${node.getAttribute("y") || 0})`);
+    });
+    return rootSvg;
+  }
+
+  function walk(node, visitor) { visitor(node); Array.from(node.children || []).forEach((child) => walk(child, visitor)); }
+  function uniqueIds(svg) {
+    const prefix = `traca-${++renderSequence}-`, map = {};
+    walk(svg, (node) => { const id = node.getAttribute("id"); if (id) { map[id] = prefix + id; node.setAttribute("id", map[id]); } });
+    walk(svg, (node) => ["marker-end", "clip-path"].forEach((key) => { const value = node.getAttribute(key); if (value) node.setAttribute(key, value.replace(/url\(#([^)]*)\)/g, (_, id) => `url(#${map[id] || id})`)); }));
   }
 
   function renderSymbolSheet(container, options) {
@@ -470,8 +511,8 @@
       } else if (["future_position", "past_position"].includes(concept)) {
         const participant = { id: `TEMP_${index}`, kind: concept === "past_position" ? "defender" : "attacker", label: "", position: [iconEnd, y] };
         const temporalGeometry = { entities: [participant] };
-        addTemporalState(documentObject, group, { id: `STATE_${index}`, participant_ref: participant.id, position: [iconEnd, y], status: concept === "past_position" ? "past" : "future" }, temporalGeometry, grammar, null, "clean");
-        simplePath("movement_without_ball", [{ type: "line", start: [iconStart, y], end: [iconEnd - 0.45, y] }]);
+        addTemporalState(documentObject, group, { id: `STATE_${index}`, participant_ref: participant.id, position: [concept === "past_position" ? iconStart : iconEnd, y], status: concept === "past_position" ? "past" : "future" }, temporalGeometry, grammar, null, "clean");
+        simplePath("movement_without_ball", [{ type: "line", start: [concept === "past_position" ? iconStart + 0.45 : iconStart, y], end: [concept === "past_position" ? iconEnd : iconEnd - 0.45, y] }]);
       }
       const label = append(documentObject, group, "text", { x: x + 3.45, y: y + 0.1, fill: "#17241f", "font-size": grammar.labels.legend_size || 0.34, "font-weight": 720 });
       label.textContent = reference.label || fallbackLabels[concept];
@@ -508,11 +549,17 @@
     anchor.href = url;
     anchor.download = filename;
     anchor.click();
-    URL.revokeObjectURL(url);
+    const visible = targetDocument.querySelector && targetDocument.querySelector("#last-export");
+    if (visible) {
+      if (visible.href && visible.href.startsWith("blob:")) URL.revokeObjectURL(visible.href);
+      visible.href = url; visible.download = filename; visible.textContent = `Descarregar ${filename}`; visible.hidden = false;
+    } else setTimeout(() => URL.revokeObjectURL(url), 2500);
   }
 
   function downloadSvg(svg, filename, documentObject) {
-    downloadBlob(new Blob([serializeSvg(svg)], { type: "image/svg+xml;charset=utf-8" }), filename, documentObject);
+    const blob = new Blob([serializeSvg(svg)], { type: "image/svg+xml;charset=utf-8" });
+    downloadBlob(blob, filename, documentObject);
+    return blob;
   }
 
   function pngBlob(svg, options) {
@@ -527,6 +574,7 @@
     canvas.width = width * ratio;
     canvas.height = height * ratio;
     const context = canvas.getContext("2d");
+    if (!context) return Promise.reject(new Error("PNG_CANVAS_UNAVAILABLE"));
     context.scale(ratio, ratio);
     context.fillStyle = configuration.background || "#ffffff";
     context.fillRect(0, 0, width, height);
@@ -535,9 +583,10 @@
     return new Promise((resolve, reject) => {
       const image = new Image();
       image.onload = () => {
-        context.drawImage(image, 0, 0, width, height);
-        URL.revokeObjectURL(url);
-        canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error("PNG_EXPORT_FAILED")), "image/png");
+        try {
+          context.drawImage(image, 0, 0, width, height);
+          canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error("PNG_EXPORT_FAILED")), "image/png");
+        } catch (error) { reject(error); } finally { URL.revokeObjectURL(url); }
       };
       image.onerror = () => { URL.revokeObjectURL(url); reject(new Error("PNG_EXPORT_SVG_LOAD_FAILED")); };
       image.src = url;
@@ -547,7 +596,20 @@
   async function downloadPng(svg, filename, options, documentObject) {
     const blob = await pngBlob(svg, options);
     downloadBlob(blob, filename, documentObject || svg.ownerDocument);
+    return blob;
   }
 
-  return { pathData, wavyPathData, pathForDisplay: visiblePath, selectedAlternatives, render, renderSymbolSheet, serializeSvg, pngBlob, downloadSvg, downloadPng };
+  function cleanSvg(snapshot, documentObject, configuration) {
+    const container = documentObject.createElement("div");
+    return render(container, { geometry: snapshot.workingGeometry, visualGrammar: snapshot.workingVisualGrammar, selectedAlternatives: snapshot.selectedAlternatives, view: "clean", board: snapshot.ui, exportMetadata: { case_uid: snapshot.currentCase.case_uid, workspace_revision: snapshot.revision, source_fingerprint: snapshot.derivations?.source?.revision }, ...(configuration || {}) });
+  }
+  async function copyPng(svg, filename, options) {
+    const blob = await pngBlob(svg, options);
+    try {
+      if (typeof ClipboardItem === "undefined" || !navigator.clipboard || !navigator.clipboard.write) throw Error("IMAGE_CLIPBOARD_UNAVAILABLE");
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]); return { status: "copied_image" };
+    } catch (_error) { downloadBlob(blob, filename || "traca.png", svg.ownerDocument); return { status: "downloaded_fallback", blob }; }
+  }
+
+  return { pathData, wavyPathData, pathForDisplay: visiblePath, selectedAlternatives, render, renderSymbolSheet, serializeSvg, pngBlob, downloadBlob, downloadSvg, downloadPng, cleanSvg, copyPng };
 });

@@ -1,0 +1,552 @@
+{
+  "valid": true,
+  "reports": [
+    {
+      "exercise": "TR-UVOF-001",
+      "schema": "https://traca.local/schema/traca.semantic.v1.0.json",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "summary": {
+        "error_count": 0,
+        "warning_count": 0,
+        "structural_error_count": 0,
+        "semantic_error_count": 0,
+        "semantic_checks_run": 13
+      },
+      "geometry_generated": false,
+      "render_generated": false
+    },
+    {
+      "corpus": "MITJANS_1V1_OFENSIUS",
+      "schema": "https://traca.local/schema/traca.exercise-corpus.v1.1.json",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "summary": {
+        "exercise_count": 15,
+        "error_count": 0,
+        "structural_error_count": 0,
+        "semantic_error_count": 0
+      },
+      "geometry_generated": false,
+      "render_generated": false
+    },
+    {
+      "exercise": "TR-UVOF-001",
+      "schema": "https://traca.local/schema/traca.spatial-relations.v0.3.json",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "preflight": {
+        "exercise_id": "TR-UVOF-001",
+        "status": "ready",
+        "diagnostics": [],
+        "summary": {
+          "blocked_count": 0,
+          "partial_count": 0
+        },
+        "geometry_generated": false
+      },
+      "summary": {
+        "node_count": 19,
+        "space_count": 9,
+        "state_count": 7,
+        "transition_count": 6,
+        "ball_flow_count": 2,
+        "branch_count": 2,
+        "error_count": 0,
+        "structural_error_count": 0,
+        "relational_error_count": 0
+      },
+      "geometry_generated": false,
+      "render_generated": false
+    },
+    {
+      "exercise": "TR-UVOF-002",
+      "schema": "https://traca.local/schema/traca.spatial-relations.v0.3.json",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "preflight": {
+        "exercise_id": "TR-UVOF-002",
+        "status": "ready",
+        "diagnostics": [],
+        "summary": {
+          "blocked_count": 0,
+          "partial_count": 0
+        },
+        "geometry_generated": false
+      },
+      "summary": {
+        "node_count": 13,
+        "space_count": 7,
+        "state_count": 8,
+        "transition_count": 13,
+        "ball_flow_count": 8,
+        "branch_count": 2,
+        "error_count": 0,
+        "structural_error_count": 0,
+        "relational_error_count": 0
+      },
+      "geometry_generated": false,
+      "render_generated": false
+    },
+    {
+      "exercise": "TR-UVOF-003",
+      "schema": "https://traca.local/schema/traca.spatial-relations.v0.3.json",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "preflight": {
+        "exercise_id": "TR-UVOF-003",
+        "status": "ready",
+        "diagnostics": [],
+        "summary": {
+          "blocked_count": 0,
+          "partial_count": 0
+        },
+        "geometry_generated": false
+      },
+      "summary": {
+        "node_count": 17,
+        "space_count": 11,
+        "state_count": 9,
+        "transition_count": 11,
+        "ball_flow_count": 8,
+        "branch_count": 4,
+        "error_count": 0,
+        "structural_error_count": 0,
+        "relational_error_count": 0
+      },
+      "geometry_generated": false,
+      "render_generated": false
+    },
+    {
+      "exercise": "TR-UVOF-004",
+      "schema": "https://traca.local/schema/traca.spatial-relations.v0.3.json",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "preflight": {
+        "exercise_id": "TR-UVOF-004",
+        "status": "ready",
+        "diagnostics": [],
+        "summary": {
+          "blocked_count": 0,
+          "partial_count": 0
+        },
+        "geometry_generated": false
+      },
+      "summary": {
+        "node_count": 13,
+        "space_count": 6,
+        "state_count": 5,
+        "transition_count": 10,
+        "ball_flow_count": 6,
+        "branch_count": 3,
+        "error_count": 0,
+        "structural_error_count": 0,
+        "relational_error_count": 0
+      },
+      "geometry_generated": false,
+      "render_generated": false
+    },
+    {
+      "exercise": "TR-UVOF-005",
+      "schema": "https://traca.local/schema/traca.spatial-relations.v0.3.json",
+      "valid": true,
+      "errors": [],
+      "warnings": [
+        {
+          "code": "SEMANTIC_BALL_FLOW_UNSPECIFIED",
+          "impact": "partial",
+          "file": "exercises/TR-UVOF-005/spatial-relations.json",
+          "entity_ref": "traca:TR-UVOF-005:node:B1",
+          "message": "B1 està declarada però la font no especifica cap flux.",
+          "source_refs": [
+            "traca:TR-UVOF-005:node:B1"
+          ]
+        }
+      ],
+      "preflight": {
+        "exercise_id": "TR-UVOF-005",
+        "status": "partial",
+        "diagnostics": [
+          {
+            "code": "SEMANTIC_BALL_FLOW_UNSPECIFIED",
+            "impact": "partial",
+            "file": "exercises/TR-UVOF-005/spatial-relations.json",
+            "entity_ref": "traca:TR-UVOF-005:node:B1",
+            "message": "B1 està declarada però la font no especifica cap flux.",
+            "source_refs": [
+              "traca:TR-UVOF-005:node:B1"
+            ]
+          }
+        ],
+        "summary": {
+          "blocked_count": 0,
+          "partial_count": 1
+        },
+        "geometry_generated": false
+      },
+      "summary": {
+        "node_count": 16,
+        "space_count": 7,
+        "state_count": 4,
+        "transition_count": 6,
+        "ball_flow_count": 0,
+        "branch_count": 1,
+        "error_count": 0,
+        "structural_error_count": 0,
+        "relational_error_count": 0
+      },
+      "geometry_generated": false,
+      "render_generated": false
+    },
+    {
+      "exercise": "TR-UVOF-006",
+      "schema": "https://traca.local/schema/traca.spatial-relations.v0.3.json",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "preflight": {
+        "exercise_id": "TR-UVOF-006",
+        "status": "ready",
+        "diagnostics": [],
+        "summary": {
+          "blocked_count": 0,
+          "partial_count": 0
+        },
+        "geometry_generated": false
+      },
+      "summary": {
+        "node_count": 18,
+        "space_count": 8,
+        "state_count": 7,
+        "transition_count": 9,
+        "ball_flow_count": 9,
+        "branch_count": 4,
+        "error_count": 0,
+        "structural_error_count": 0,
+        "relational_error_count": 0
+      },
+      "geometry_generated": false,
+      "render_generated": false
+    },
+    {
+      "exercise": "TR-UVOF-007",
+      "schema": "https://traca.local/schema/traca.spatial-relations.v0.3.json",
+      "valid": true,
+      "errors": [],
+      "warnings": [
+        {
+          "code": "SEMANTIC_BALL_INFORMATION_UNSPECIFIED",
+          "impact": "partial",
+          "file": "exercises/TR-UVOF-007/spatial-relations.json",
+          "entity_ref": "TR-UVOF-007",
+          "message": "La font no declara pilota, posseïdor ni passades.",
+          "source_refs": [
+            "TR-UVOF-007"
+          ]
+        }
+      ],
+      "preflight": {
+        "exercise_id": "TR-UVOF-007",
+        "status": "partial",
+        "diagnostics": [
+          {
+            "code": "SEMANTIC_BALL_INFORMATION_UNSPECIFIED",
+            "impact": "partial",
+            "file": "exercises/TR-UVOF-007/spatial-relations.json",
+            "entity_ref": "TR-UVOF-007",
+            "message": "La font no declara pilota, posseïdor ni passades.",
+            "source_refs": [
+              "TR-UVOF-007"
+            ]
+          }
+        ],
+        "summary": {
+          "blocked_count": 0,
+          "partial_count": 1
+        },
+        "geometry_generated": false
+      },
+      "summary": {
+        "node_count": 11,
+        "space_count": 5,
+        "state_count": 4,
+        "transition_count": 5,
+        "ball_flow_count": 0,
+        "branch_count": 2,
+        "error_count": 0,
+        "structural_error_count": 0,
+        "relational_error_count": 0
+      },
+      "geometry_generated": false,
+      "render_generated": false
+    },
+    {
+      "exercise": "TR-UVOF-008",
+      "schema": "https://traca.local/schema/traca.spatial-relations.v0.3.json",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "preflight": {
+        "exercise_id": "TR-UVOF-008",
+        "status": "ready",
+        "diagnostics": [],
+        "summary": {
+          "blocked_count": 0,
+          "partial_count": 0
+        },
+        "geometry_generated": false
+      },
+      "summary": {
+        "node_count": 17,
+        "space_count": 7,
+        "state_count": 4,
+        "transition_count": 6,
+        "ball_flow_count": 1,
+        "branch_count": 1,
+        "error_count": 0,
+        "structural_error_count": 0,
+        "relational_error_count": 0
+      },
+      "geometry_generated": false,
+      "render_generated": false
+    },
+    {
+      "exercise": "TR-UVOF-009",
+      "schema": "https://traca.local/schema/traca.spatial-relations.v0.3.json",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "preflight": {
+        "exercise_id": "TR-UVOF-009",
+        "status": "ready",
+        "diagnostics": [],
+        "summary": {
+          "blocked_count": 0,
+          "partial_count": 0
+        },
+        "geometry_generated": false
+      },
+      "summary": {
+        "node_count": 16,
+        "space_count": 7,
+        "state_count": 7,
+        "transition_count": 9,
+        "ball_flow_count": 4,
+        "branch_count": 1,
+        "error_count": 0,
+        "structural_error_count": 0,
+        "relational_error_count": 0
+      },
+      "geometry_generated": false,
+      "render_generated": false
+    },
+    {
+      "exercise": "TR-UVOF-010",
+      "schema": "https://traca.local/schema/traca.spatial-relations.v0.3.json",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "preflight": {
+        "exercise_id": "TR-UVOF-010",
+        "status": "ready",
+        "diagnostics": [],
+        "summary": {
+          "blocked_count": 0,
+          "partial_count": 0
+        },
+        "geometry_generated": false
+      },
+      "summary": {
+        "node_count": 13,
+        "space_count": 5,
+        "state_count": 5,
+        "transition_count": 7,
+        "ball_flow_count": 3,
+        "branch_count": 2,
+        "error_count": 0,
+        "structural_error_count": 0,
+        "relational_error_count": 0
+      },
+      "geometry_generated": false,
+      "render_generated": false
+    },
+    {
+      "exercise": "TR-UVOF-011",
+      "schema": "https://traca.local/schema/traca.spatial-relations.v0.3.json",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "preflight": {
+        "exercise_id": "TR-UVOF-011",
+        "status": "ready",
+        "diagnostics": [],
+        "summary": {
+          "blocked_count": 0,
+          "partial_count": 0
+        },
+        "geometry_generated": false
+      },
+      "summary": {
+        "node_count": 14,
+        "space_count": 5,
+        "state_count": 4,
+        "transition_count": 4,
+        "ball_flow_count": 2,
+        "branch_count": 1,
+        "error_count": 0,
+        "structural_error_count": 0,
+        "relational_error_count": 0
+      },
+      "geometry_generated": false,
+      "render_generated": false
+    },
+    {
+      "exercise": "TR-UVOF-012",
+      "schema": "https://traca.local/schema/traca.spatial-relations.v0.3.json",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "preflight": {
+        "exercise_id": "TR-UVOF-012",
+        "status": "ready",
+        "diagnostics": [],
+        "summary": {
+          "blocked_count": 0,
+          "partial_count": 0
+        },
+        "geometry_generated": false
+      },
+      "summary": {
+        "node_count": 15,
+        "space_count": 6,
+        "state_count": 5,
+        "transition_count": 9,
+        "ball_flow_count": 4,
+        "branch_count": 2,
+        "error_count": 0,
+        "structural_error_count": 0,
+        "relational_error_count": 0
+      },
+      "geometry_generated": false,
+      "render_generated": false
+    },
+    {
+      "exercise": "TR-UVOF-013",
+      "schema": "https://traca.local/schema/traca.spatial-relations.v0.3.json",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "preflight": {
+        "exercise_id": "TR-UVOF-013",
+        "status": "ready",
+        "diagnostics": [],
+        "summary": {
+          "blocked_count": 0,
+          "partial_count": 0
+        },
+        "geometry_generated": false
+      },
+      "summary": {
+        "node_count": 14,
+        "space_count": 5,
+        "state_count": 4,
+        "transition_count": 6,
+        "ball_flow_count": 2,
+        "branch_count": 1,
+        "error_count": 0,
+        "structural_error_count": 0,
+        "relational_error_count": 0
+      },
+      "geometry_generated": false,
+      "render_generated": false
+    },
+    {
+      "exercise": "TR-UVOF-014",
+      "schema": "https://traca.local/schema/traca.spatial-relations.v0.3.json",
+      "valid": true,
+      "errors": [],
+      "warnings": [
+        {
+          "code": "SEMANTIC_OPTIONS_PRESERVED_SYMBOLICALLY",
+          "impact": "partial",
+          "file": "exercises/TR-UVOF-014/spatial-relations.json",
+          "entity_ref": "traca:TR-UVOF-014:branch:BR_JOC_OBERT_6X6",
+          "message": "Les sis opcions es preserven; continuïtat i encreuament resten simbòliques.",
+          "source_refs": [
+            "traca:TR-UVOF-014:branch:BR_JOC_OBERT_6X6"
+          ]
+        }
+      ],
+      "preflight": {
+        "exercise_id": "TR-UVOF-014",
+        "status": "partial",
+        "diagnostics": [
+          {
+            "code": "SEMANTIC_OPTIONS_PRESERVED_SYMBOLICALLY",
+            "impact": "partial",
+            "file": "exercises/TR-UVOF-014/spatial-relations.json",
+            "entity_ref": "traca:TR-UVOF-014:branch:BR_JOC_OBERT_6X6",
+            "message": "Les sis opcions es preserven; continuïtat i encreuament resten simbòliques.",
+            "source_refs": [
+              "traca:TR-UVOF-014:branch:BR_JOC_OBERT_6X6"
+            ]
+          }
+        ],
+        "summary": {
+          "blocked_count": 0,
+          "partial_count": 1
+        },
+        "geometry_generated": false
+      },
+      "summary": {
+        "node_count": 16,
+        "space_count": 7,
+        "state_count": 4,
+        "transition_count": 4,
+        "ball_flow_count": 1,
+        "branch_count": 1,
+        "error_count": 0,
+        "structural_error_count": 0,
+        "relational_error_count": 0
+      },
+      "geometry_generated": false,
+      "render_generated": false
+    },
+    {
+      "exercise": "TR-UVOF-015",
+      "schema": "https://traca.local/schema/traca.spatial-relations.v0.3.json",
+      "valid": true,
+      "errors": [],
+      "warnings": [],
+      "preflight": {
+        "exercise_id": "TR-UVOF-015",
+        "status": "ready",
+        "diagnostics": [],
+        "summary": {
+          "blocked_count": 0,
+          "partial_count": 0
+        },
+        "geometry_generated": false
+      },
+      "summary": {
+        "node_count": 17,
+        "space_count": 9,
+        "state_count": 3,
+        "transition_count": 18,
+        "ball_flow_count": 6,
+        "branch_count": 3,
+        "error_count": 0,
+        "structural_error_count": 0,
+        "relational_error_count": 0
+      },
+      "geometry_generated": false,
+      "render_generated": false
+    }
+  ]
+}

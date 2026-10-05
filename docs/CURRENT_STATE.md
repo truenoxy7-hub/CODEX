@@ -1,5 +1,10 @@
 # Estat actual
 
+Revisió 2: pissarra integrada v0.6. Fonts autocontingudes a `sources/revision2/`
+amb els 20 SHA-256 verificats. Resultats executats i buits de verificació a
+`reports/revision2/RESULTATS.md`; les aprovacions de les fixtures són proves
+tècniques, no aprovacions tàctiques noves.
+
 ## IMPLEMENTAT
 
 ### Coneixement i geometria canònics
@@ -38,7 +43,7 @@
 - Tres exemples reproduïbles amb TacticalIR, geometria v0.4, SVG i comparació
   visual amb v0.3 a `examples/general-geometry/`.
 
-### MVP funcional v0.5
+### MVP funcional v0.6
 
 - La pantalla inicial és un cas en blanc amb el flux `ESCRIURE → GENERAR → CORREGIR → GUARDAR`.
 - Cada cas té `case_uid` durable i un codi curt; esborranys i casos validats viuen en col·leccions diferents.
@@ -100,9 +105,18 @@
   superats són rebutjats com a autoritat operativa.
 - Adaptador de model configurable amb sortida estructurada i evidències. La
   seva sortida continua sent una proposta provisional que requereix validació.
-- Persistència local i paquet portable `0.5.0`, compatible amb importacions
-  `0.2.0`, `0.3.0` i `0.4.0`.
-- Fingerprint del text i estat `stale`: cap geometria anterior es pot guardar després de canviar la font.
+- Persistència principal SQLite, revisions/conflictes recuperables, cua offline
+  al navegador i paquet portable `0.6.0`, compatible amb importacions
+  `0.2.0`–`0.5.0`.
+- Fingerprint del text i estat `stale`: la geometria anterior es pot guardar
+  com a esborrany, no aprovar sobre la font modificada.
+- Pissarra manual amb sis figures, corba quadràtica de tres controls, gir
+  directe del banc, duplicació/mirall amb vincles remapejats i historial de
+  50 ordres. Punter capturat, offset d’agafada i transformació congelada per gest.
+- Regeneració de tres vies amb comparació, elecció explícita i un sol desfer;
+  fonts/revisions obsoletes es rebutgen sense esborrar la pissarra.
+- Criteris tipats de posició relativa i comprovació de finta; font i aplicació
+  al cas nou, candidats inoperants i revocació d’usos futurs.
 - `validation` i `completeness` són independents: el snapshot pot estar validat i conservar semàntica o espai parcials.
 
 ### Matriu reproduïble del preflight espacial
@@ -117,10 +131,12 @@ treball, la seva geometria disponible, identitats, fonts i correccions pendents.
 
 ## PARTIAL
 
-- L'adaptador d'UVOF015 conserva les tres branques i dotze alternatives, però
-  el validador físic v0.4 detecta trajectòries històriques dins l'àrea de 6 m.
-  El cas queda explícitament `blocked` fins que se'n regeneri la geometria; no
-  hi ha excepcions per identificador d'exercici.
+- UVOF015 conserva tres branques i dotze alternatives. La geometria v0.2.1
+  s’ha regenerat amb sortides físicament legals i finta de cinc segments.
+  No hi ha excepcions per identificador; el validador general no hi troba errors.
+- 46 escenes parcials de passada/recepció en 12/15 casos, derivades de vincles
+  qualitatius validats. No són exercicis complets. Als altres operadors resten
+  adaptacions de marcs relacionals; la semàntica íntegra es preserva.
 - La cobertura estructural del corpus és 164/203 unitats (80,79%); el detall
   per exercici és a [`COMPOSER_COVERAGE.md`](COMPOSER_COVERAGE.md).
 - Bloqueig, permuta i lliscament poden obtenir geometria quan les posicions
@@ -139,17 +155,17 @@ treball, la seva geometria disponible, identitats, fonts i correccions pendents.
   lliscaments de pivot.
 - Decidir a la interpretació els actors/espais que falten en diversos casos;
   el compositor pregunta i s’atura.
-- Incorporar i executar els catàlegs `VAL-ENT-001–005`, `D01–D10`,
-  `R01–R20` i `T01–T20`: els fitxers
-  `TRACA_Base_coneixement_grafics_v0_1.json`, l'HTML associat i el manifest no
-  són presents al projecte ni als adjunts disponibles.
+- Execució completa dels escenaris externs D01–D10/T01–T20. JSON, HTML,
+  manifest, llegenda i component original ja són accessibles i incorporats.
+  El catàleg té un mapa individual de proves equivalents i limitacions; no
+  es presenta la recerca com a promoció ni un contracte parcial com a prova plena.
 
 ## FUTURE
 
 - connexió de credencials i servei real al provider de model configurable;
 - resolutor lingüístic general per a text nou;
 - ampliar la geometria genèrica a més relacions validades;
-- backend, base de dades remota, comptes o col·laboració;
+- base de dades remota, comptes o col·laboració (SQLite local ja implementat);
 - promoció canònica i modificació del corpus des del navegador;
 - regeneració geomètrica del corpus quan les fonts disposin de coordenades o
   relacions qualitatives suficients.
@@ -167,8 +183,7 @@ override visual del cas ≠ regla visual global
 ## Pròxima fita
 
 Validar amb l'entrenador la política visual provisional, la làmina de 14
-símbols i els casos A1–A3, i
-regenerar la geometria històrica d'UVOF015 fora de l'àrea de 6 m. Les
+símbols i els casos A1–A3. UVOF015 ja s’ha regenerat fora de l’àrea. Les
 correccions aprovades es registraran com a coneixement local, no com a regla
 tàctica automàtica. Després, provar permuta i encreuament sense geometria i
 prioritzar els buits de `COMPOSER_COVERAGE.md` sense hardcodejar exercicis.

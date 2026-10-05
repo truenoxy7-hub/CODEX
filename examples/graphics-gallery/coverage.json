@@ -3,7 +3,7 @@
     "format": "TRACA_composer_coverage",
     "version": "0.1.0",
     "method": "generic classification of typed spatial transitions, ball flows, typed relations and special semantic actions; no exercise-specific rules",
-    "geometry_policy": "No corpus spatial file contains resolved coordinates; UVOF015 geometry is an independent regression fixture."
+    "geometry_policy": "Classification only. generate_graphics_gallery.js executes the qualitative subgraph adapter and adds real partial geometry results; absent input coordinates are not a blocker."
   },
   "totals": {
     "exercises": 15,
@@ -12,7 +12,9 @@
     "recognized_ratio": 0.8621,
     "relations_sufficient": 164,
     "composition_ratio": 0.8079,
-    "generic_geometry_ready": 0
+    "generic_geometry_ready": 0,
+    "generic_geometry_partial": 12,
+    "generated_scenes": 46
   },
   "exercises": [
     {
@@ -21,7 +23,7 @@
       "recognized_units": 8,
       "relations_sufficient": 8,
       "composition_coverage": 0.8,
-      "geometry_coverage": 0,
+      "geometry_coverage": 1,
       "operators": [
         "feint",
         "movement",
@@ -30,11 +32,48 @@
         "reception"
       ],
       "missing_information": [
-        "tipus de resolució (passada/llançament/moviment)"
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional finta a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts.",
+        "Falta adaptar el marc relacional recuperacio_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives."
       ],
       "unsupported": [
         "resolucio"
-      ]
+      ],
+      "scenes": [
+        {
+          "id": "FP_SA1_B1",
+          "artifact": "TR-UVOF-001-scene-1.svg",
+          "scope": {
+            "phase_ref": "SA1",
+            "trajectory_ref": "SA1_B1",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "passada"
+            ],
+            "source_ref": "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_SA2_B2",
+          "artifact": "TR-UVOF-001-scene-2.svg",
+          "scope": {
+            "phase_ref": "SA2",
+            "trajectory_ref": "SA2_B2",
+            "ball_ref": "B2",
+            "qualifiers": [
+              "passada_curta"
+            ],
+            "source_ref": "exercises/TR-UVOF-001/spatial-relations.json#/fluxos_pilota/1"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 2,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
     },
     {
       "exercise_id": "TR-UVOF-002",
@@ -42,7 +81,7 @@
       "recognized_units": 20,
       "relations_sufficient": 18,
       "composition_coverage": 0.8571,
-      "geometry_coverage": 0,
+      "geometry_coverage": 1,
       "operators": [
         "crossing",
         "feint",
@@ -51,12 +90,128 @@
         "reception"
       ],
       "missing_information": [
-        "slots obligatoris de crossing",
-        "tipus de resolució (passada/llançament/moviment)"
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional finta a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional continuitat a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional encreuament a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts."
       ],
       "unsupported": [
         "resolucio"
-      ]
+      ],
+      "scenes": [
+        {
+          "id": "FP_12_23_PASSADA_INICIAL",
+          "artifact": "TR-UVOF-002-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_12_23_INICI",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "company_del_costat_de_INT_12"
+            ],
+            "source_ref": "exercises/TR-UVOF-002/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_12_23_DEVOLUCIO",
+          "artifact": "TR-UVOF-002-scene-2.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_12_23_INICI",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "just_en_iniciar_canvi_de_direccio"
+            ],
+            "source_ref": "exercises/TR-UVOF-002/spatial-relations.json#/fluxos_pilota/1"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_12_23_CONTINUITAT_CE",
+          "artifact": "TR-UVOF-002-scene-3.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_12_23_AJUDA",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "CE_rep_de_cara"
+            ],
+            "source_ref": "exercises/TR-UVOF-002/spatial-relations.json#/fluxos_pilota/2"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_12_23_ENCREUAMENT_CE",
+          "artifact": "TR-UVOF-002-scene-4.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_12_23_NO_SUPERA",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-002/spatial-relations.json#/fluxos_pilota/3"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_23_12_PASSADA_INICIAL",
+          "artifact": "TR-UVOF-002-scene-5.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_23_12_INICI",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "company_del_costat_de_INT_23"
+            ],
+            "source_ref": "exercises/TR-UVOF-002/spatial-relations.json#/fluxos_pilota/4"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_23_12_DEVOLUCIO",
+          "artifact": "TR-UVOF-002-scene-6.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_23_12_INICI",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "just_en_iniciar_canvi_de_direccio"
+            ],
+            "source_ref": "exercises/TR-UVOF-002/spatial-relations.json#/fluxos_pilota/5"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_23_12_CONTINUITAT_EXT",
+          "artifact": "TR-UVOF-002-scene-7.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_23_12_AJUDA",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-002/spatial-relations.json#/fluxos_pilota/6"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_23_12_ENCREUAMENT_EXT",
+          "artifact": "TR-UVOF-002-scene-8.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_23_12_NO_SUPERA",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-002/spatial-relations.json#/fluxos_pilota/7"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 8,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
     },
     {
       "exercise_id": "TR-UVOF-003",
@@ -64,7 +219,7 @@
       "recognized_units": 22,
       "relations_sufficient": 18,
       "composition_coverage": 0.7826,
-      "geometry_coverage": 0,
+      "geometry_coverage": 0.375,
       "operators": [
         "block",
         "crossing",
@@ -73,13 +228,60 @@
         "pass"
       ],
       "missing_information": [
-        "slots obligatoris de block",
-        "slots obligatoris de crossing",
-        "tipus de resolució (passada/llançament/moviment)"
+        "PASS_BINDING_UNRESOLVED: autoritat_validada",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional continuitat a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional encreuament a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts."
       ],
       "unsupported": [
         "resolucio"
-      ]
+      ],
+      "scenes": [
+        {
+          "id": "FP_12_AJUDA_EXTREM",
+          "artifact": "TR-UVOF-003-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_SUPERA_12_AJUDA",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "resolucio_2x1_exterior",
+              "obligatoria_com_a_principi_de_joc"
+            ],
+            "source_ref": "exercises/TR-UVOF-003/spatial-relations.json#/fluxos_pilota/1"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_23_ENCREUAMENT_CE",
+          "artifact": "TR-UVOF-003-scene-2.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_NO_SUPERA_23_CANVI_BANDA",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-003/spatial-relations.json#/fluxos_pilota/2"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_12_ENCREUAMENT_EXT",
+          "artifact": "TR-UVOF-003-scene-3.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FP_NO_SUPERA_12_CANVI_BANDA",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-003/spatial-relations.json#/fluxos_pilota/5"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 3,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
     },
     {
       "exercise_id": "TR-UVOF-004",
@@ -87,7 +289,7 @@
       "recognized_units": 15,
       "relations_sufficient": 15,
       "composition_coverage": 0.8333,
-      "geometry_coverage": 0,
+      "geometry_coverage": 1,
       "operators": [
         "movement",
         "numerical_relation",
@@ -95,11 +297,96 @@
         "reception"
       ],
       "missing_information": [
-        "tipus de resolució (passada/llançament/moviment)"
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts.",
+        "Falta adaptar el marc relacional continuitat a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives."
       ],
       "unsupported": [
         "resolucio"
-      ]
+      ],
+      "scenes": [
+        {
+          "id": "FP_EXT_1",
+          "artifact": "TR-UVOF-004-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PASSADA_EXT_12",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-004/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_EXT_2",
+          "artifact": "TR-UVOF-004-scene-2.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PASSADA_EXT_12",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "recepcio_en_carrera"
+            ],
+            "source_ref": "exercises/TR-UVOF-004/spatial-relations.json#/fluxos_pilota/1"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_CE_1",
+          "artifact": "TR-UVOF-004-scene-3.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PASSADA_CE_23",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-004/spatial-relations.json#/fluxos_pilota/2"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_CE_2",
+          "artifact": "TR-UVOF-004-scene-4.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PASSADA_CE_23",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "recepcio_en_carrera"
+            ],
+            "source_ref": "exercises/TR-UVOF-004/spatial-relations.json#/fluxos_pilota/3"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_CONT_EXT",
+          "artifact": "TR-UVOF-004-scene-5.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "CONTINUITAT_EXT",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "obligatoria_com_a_principi_de_joc"
+            ],
+            "source_ref": "exercises/TR-UVOF-004/spatial-relations.json#/fluxos_pilota/4"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_CONT_CE",
+          "artifact": "TR-UVOF-004-scene-6.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "CONTINUITAT_CE",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-004/spatial-relations.json#/fluxos_pilota/5"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 6,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
     },
     {
       "exercise_id": "TR-UVOF-005",
@@ -112,11 +399,18 @@
         "movement"
       ],
       "missing_information": [
-        "tipus de resolució (passada/llançament/moviment)"
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts.",
+        "No hi ha flux passador–receptor–pilota validat en aquest contracte; la situació completa requereix adaptar els seus operadors."
       ],
       "unsupported": [
         "resolucio"
-      ]
+      ],
+      "scenes": [],
+      "geometry_scenes": 0,
+      "geometry_status": "needs_operator_adapter",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
     },
     {
       "exercise_id": "TR-UVOF-006",
@@ -124,7 +418,7 @@
       "recognized_units": 19,
       "relations_sufficient": 16,
       "composition_coverage": 0.8,
-      "geometry_coverage": 0,
+      "geometry_coverage": 0.7777777777777778,
       "operators": [
         "crossing",
         "movement",
@@ -133,12 +427,111 @@
         "reception"
       ],
       "missing_information": [
-        "slots obligatoris de crossing",
-        "tipus de resolució (passada/llançament/moviment)"
+        "PASS_BINDING_UNRESOLVED: autoritat_validada",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts.",
+        "Falta adaptar el marc relacional continuitat a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional encreuament a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives."
       ],
       "unsupported": [
         "resolucio"
-      ]
+      ],
+      "scenes": [
+        {
+          "id": "FP_12_EXT",
+          "artifact": "TR-UVOF-006-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "SUPERA_12_AMB_AJUDA",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "obligatoria_com_a_principi_de_joc"
+            ],
+            "source_ref": "exercises/TR-UVOF-006/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_23_PV",
+          "artifact": "TR-UVOF-006-scene-2.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "SUPERA_23_AMB_AJUDA",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-006/spatial-relations.json#/fluxos_pilota/1"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_23_CE",
+          "artifact": "TR-UVOF-006-scene-3.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "NO_SUPERA_23_CANVI",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-006/spatial-relations.json#/fluxos_pilota/2"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_23_EXT",
+          "artifact": "TR-UVOF-006-scene-4.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "NO_SUPERA_23_CANVI",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-006/spatial-relations.json#/fluxos_pilota/3"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_23_RETORN",
+          "artifact": "TR-UVOF-006-scene-5.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "NO_SUPERA_23_CANVI",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "retorn_al_jugador_que_ocupa_central"
+            ],
+            "source_ref": "exercises/TR-UVOF-006/spatial-relations.json#/fluxos_pilota/4"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_12_EXT_ENCREUA",
+          "artifact": "TR-UVOF-006-scene-6.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "NO_SUPERA_12_CANVI",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-006/spatial-relations.json#/fluxos_pilota/6"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_12_RETORN",
+          "artifact": "TR-UVOF-006-scene-7.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "NO_SUPERA_12_CANVI",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "retorn_al_jugador_que_ocupa_central"
+            ],
+            "source_ref": "exercises/TR-UVOF-006/spatial-relations.json#/fluxos_pilota/7"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 7,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
     },
     {
       "exercise_id": "TR-UVOF-007",
@@ -153,12 +546,19 @@
         "numerical_relation"
       ],
       "missing_information": [
-        "slots obligatoris de crossing",
-        "tipus de resolució (passada/llançament/moviment)"
+        "Falta adaptar el marc relacional encreuament a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts.",
+        "Falta adaptar el marc relacional recuperacio_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "No hi ha flux passador–receptor–pilota validat en aquest contracte; la situació completa requereix adaptar els seus operadors."
       ],
       "unsupported": [
         "resolucio"
-      ]
+      ],
+      "scenes": [],
+      "geometry_scenes": 0,
+      "geometry_status": "needs_operator_adapter",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
     },
     {
       "exercise_id": "TR-UVOF-008",
@@ -166,19 +566,40 @@
       "recognized_units": 6,
       "relations_sufficient": 5,
       "composition_coverage": 0.7143,
-      "geometry_coverage": 0,
+      "geometry_coverage": 1,
       "operators": [
         "crossing",
         "movement",
         "pass"
       ],
       "missing_information": [
-        "slots obligatoris de crossing",
-        "tipus de resolució (passada/llançament/moviment)"
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts.",
+        "Falta adaptar el marc relacional encreuament a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives."
       ],
       "unsupported": [
         "resolucio"
-      ]
+      ],
+      "scenes": [
+        {
+          "id": "FP_F1_B1",
+          "artifact": "TR-UVOF-008-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "F1_B1",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "passada"
+            ],
+            "source_ref": "exercises/TR-UVOF-008/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 1,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
     },
     {
       "exercise_id": "TR-UVOF-009",
@@ -186,7 +607,7 @@
       "recognized_units": 13,
       "relations_sufficient": 13,
       "composition_coverage": 0.8125,
-      "geometry_coverage": 0,
+      "geometry_coverage": 1,
       "operators": [
         "movement",
         "numerical_relation",
@@ -196,11 +617,73 @@
         "reception"
       ],
       "missing_information": [
-        "tipus de resolució (passada/llançament/moviment)"
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts."
       ],
       "unsupported": [
         "resolucio"
-      ]
+      ],
+      "scenes": [
+        {
+          "id": "FP_L_EXT1",
+          "artifact": "TR-UVOF-009-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PERMUTA_CE_L",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-009/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_EXT1_CE",
+          "artifact": "TR-UVOF-009-scene-2.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PERMUTA_CE_L",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "recepcio_despres_de_la_permuta"
+            ],
+            "source_ref": "exercises/TR-UVOF-009/spatial-relations.json#/fluxos_pilota/1"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_PV_L",
+          "artifact": "TR-UVOF-009-scene-3.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "FINAL_L_CENTRAL",
+            "ball_ref": "B2",
+            "qualifiers": [
+              "recepcio_a_posicio_central"
+            ],
+            "source_ref": "exercises/TR-UVOF-009/spatial-relations.json#/fluxos_pilota/2"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_EXT2_PV",
+          "artifact": "TR-UVOF-009-scene-4.svg",
+          "scope": {
+            "phase_ref": "F2",
+            "trajectory_ref": "LLISCAMENT_PV",
+            "ball_ref": "B3",
+            "qualifiers": [
+              "seguent_extrem_de_la_filera"
+            ],
+            "source_ref": "exercises/TR-UVOF-009/spatial-relations.json#/fluxos_pilota/3"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 4,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
     },
     {
       "exercise_id": "TR-UVOF-010",
@@ -208,7 +691,7 @@
       "recognized_units": 11,
       "relations_sufficient": 11,
       "composition_coverage": 0.9167,
-      "geometry_coverage": 0,
+      "geometry_coverage": 1,
       "operators": [
         "movement",
         "pass",
@@ -217,11 +700,57 @@
         "reception"
       ],
       "missing_information": [
-        "tipus de resolució (passada/llançament/moviment)"
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts."
       ],
       "unsupported": [
         "resolucio"
-      ]
+      ],
+      "scenes": [
+        {
+          "id": "FP_LOPOSAT_L",
+          "artifact": "TR-UVOF-010-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PERMUTA_L_CE",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "passada_habilitadora_permuta"
+            ],
+            "source_ref": "exercises/TR-UVOF-010/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_PV_L",
+          "artifact": "TR-UVOF-010-scene-2.svg",
+          "scope": {
+            "phase_ref": "F2",
+            "trajectory_ref": "2X1_TANCAT",
+            "ball_ref": "B2",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-010/spatial-relations.json#/fluxos_pilota/1"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_L_PV",
+          "artifact": "TR-UVOF-010-scene-3.svg",
+          "scope": {
+            "phase_ref": "F2",
+            "trajectory_ref": "2X1_TANCAT",
+            "ball_ref": "B2",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-010/spatial-relations.json#/fluxos_pilota/2"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 3,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
     },
     {
       "exercise_id": "TR-UVOF-011",
@@ -229,15 +758,50 @@
       "recognized_units": 7,
       "relations_sufficient": 7,
       "composition_coverage": 1,
-      "geometry_coverage": 0,
+      "geometry_coverage": 1,
       "operators": [
         "movement",
         "pass",
         "permutation",
         "reception"
       ],
-      "missing_information": [],
-      "unsupported": []
+      "missing_information": [
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives."
+      ],
+      "unsupported": [],
+      "scenes": [
+        {
+          "id": "FP_L_EXT",
+          "artifact": "TR-UVOF-011-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PERMUTA_L_CE_ESPECIFICA",
+            "ball_ref": "B1",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-011/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_EXT_L",
+          "artifact": "TR-UVOF-011-scene-2.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PERMUTA_L_CE_ESPECIFICA",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "recepcio_al_centre_despres_de_la_permuta"
+            ],
+            "source_ref": "exercises/TR-UVOF-011/spatial-relations.json#/fluxos_pilota/1"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 2,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
     },
     {
       "exercise_id": "TR-UVOF-012",
@@ -245,7 +809,7 @@
       "recognized_units": 13,
       "relations_sufficient": 13,
       "composition_coverage": 0.8125,
-      "geometry_coverage": 0,
+      "geometry_coverage": 0.75,
       "operators": [
         "movement",
         "numerical_relation",
@@ -255,11 +819,58 @@
         "reception"
       ],
       "missing_information": [
-        "tipus de resolució (passada/llançament/moviment)"
+        "PASS_BINDING_UNRESOLVED: autoritat_validada",
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts."
       ],
       "unsupported": [
         "resolucio"
-      ]
+      ],
+      "scenes": [
+        {
+          "id": "FP_LOPOSAT_L",
+          "artifact": "TR-UVOF-012-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PRIMER_2X1",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "passada_habilitadora_permuta"
+            ],
+            "source_ref": "exercises/TR-UVOF-012/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_EXT_CE",
+          "artifact": "TR-UVOF-012-scene-2.svg",
+          "scope": {
+            "phase_ref": "F2",
+            "trajectory_ref": "SEGON_2X1",
+            "ball_ref": "B2",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-012/spatial-relations.json#/fluxos_pilota/2"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_CE_EXT",
+          "artifact": "TR-UVOF-012-scene-3.svg",
+          "scope": {
+            "phase_ref": "F2",
+            "trajectory_ref": "SEGON_2X1",
+            "ball_ref": "B2",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-012/spatial-relations.json#/fluxos_pilota/3"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 3,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
     },
     {
       "exercise_id": "TR-UVOF-013",
@@ -267,7 +878,7 @@
       "recognized_units": 9,
       "relations_sufficient": 9,
       "composition_coverage": 0.9,
-      "geometry_coverage": 0,
+      "geometry_coverage": 0.5,
       "operators": [
         "movement",
         "pass",
@@ -276,11 +887,34 @@
         "reception"
       ],
       "missing_information": [
-        "tipus de resolució (passada/llançament/moviment)"
+        "PASS_BINDING_UNRESOLVED: autoritat_validada",
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts."
       ],
       "unsupported": [
         "resolucio"
-      ]
+      ],
+      "scenes": [
+        {
+          "id": "FP_LOPOSAT_L",
+          "artifact": "TR-UVOF-013-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "PERMUTA_I_PRIMER_PAL",
+            "ball_ref": "B1",
+            "qualifiers": [
+              "passada_habilitadora_permuta"
+            ],
+            "source_ref": "exercises/TR-UVOF-013/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 1,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
     },
     {
       "exercise_id": "TR-UVOF-014",
@@ -295,8 +929,18 @@
         "permutation",
         "reception"
       ],
-      "missing_information": [],
-      "unsupported": []
+      "missing_information": [
+        "PASS_BINDING_UNRESOLVED: autoritat_validada",
+        "Falta adaptar el marc relacional ajust_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional atac_espai a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "No hi ha flux passador–receptor–pilota validat en aquest contracte; la situació completa requereix adaptar els seus operadors."
+      ],
+      "unsupported": [],
+      "scenes": [],
+      "geometry_scenes": 0,
+      "geometry_status": "needs_operator_adapter",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
     },
     {
       "exercise_id": "TR-UVOF-015",
@@ -304,7 +948,7 @@
       "recognized_units": 18,
       "relations_sufficient": 18,
       "composition_coverage": 0.75,
-      "geometry_coverage": 0,
+      "geometry_coverage": 1,
       "operators": [
         "feint",
         "movement",
@@ -312,11 +956,97 @@
         "reception"
       ],
       "missing_information": [
-        "tipus de resolució (passada/llançament/moviment)"
+        "Falta adaptar el marc relacional recuperacio_sense_pilota a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "Falta adaptar el marc relacional recepcio a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives.",
+        "La decisió conserva passada/llançament/continuïtat oberts.",
+        "Falta adaptar el marc relacional finta a l’operador (origen, destí, referència i condició); la geometria es deriva de relacions qualitatives."
       ],
       "unsupported": [
         "resolucio"
-      ]
+      ],
+      "scenes": [
+        {
+          "id": "FP_AESQ_PESQ",
+          "artifact": "TR-UVOF-015-scene-1.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "DUEL_ESQ",
+            "ball_ref": "B_ESQ",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-015/spatial-relations.json#/fluxos_pilota/0"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_PESQ_AESQ",
+          "artifact": "TR-UVOF-015-scene-2.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "DUEL_ESQ",
+            "ball_ref": "B_ESQ",
+            "qualifiers": [
+              "recepcio_orientada_abans_del_1x1"
+            ],
+            "source_ref": "exercises/TR-UVOF-015/spatial-relations.json#/fluxos_pilota/1"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_ACE_PCE",
+          "artifact": "TR-UVOF-015-scene-3.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "DUEL_CE",
+            "ball_ref": "B_CE",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-015/spatial-relations.json#/fluxos_pilota/2"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_PCE_ACE",
+          "artifact": "TR-UVOF-015-scene-4.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "DUEL_CE",
+            "ball_ref": "B_CE",
+            "qualifiers": [
+              "recepcio_orientada_abans_del_1x1"
+            ],
+            "source_ref": "exercises/TR-UVOF-015/spatial-relations.json#/fluxos_pilota/3"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_ADRE_PDRE",
+          "artifact": "TR-UVOF-015-scene-5.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "DUEL_DRE",
+            "ball_ref": "B_DRE",
+            "qualifiers": [],
+            "source_ref": "exercises/TR-UVOF-015/spatial-relations.json#/fluxos_pilota/4"
+          },
+          "status": "ready"
+        },
+        {
+          "id": "FP_PDRE_ADRE",
+          "artifact": "TR-UVOF-015-scene-6.svg",
+          "scope": {
+            "phase_ref": "F1",
+            "trajectory_ref": "DUEL_DRE",
+            "ball_ref": "B_DRE",
+            "qualifiers": [
+              "recepcio_orientada_abans_del_1x1"
+            ],
+            "source_ref": "exercises/TR-UVOF-015/spatial-relations.json#/fluxos_pilota/5"
+          },
+          "status": "ready"
+        }
+      ],
+      "geometry_scenes": 6,
+      "geometry_status": "partial",
+      "geometry_coverage_denominator": "validated ball-flow scenes, NOT whole exercise"
     }
   ]
 }

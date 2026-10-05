@@ -104,8 +104,10 @@ def test_gallery_reports_all_internal_cases_without_fake_geometry_success() -> N
     assert coverage["totals"]["exercises"] == 15
     assert coverage["totals"]["generic_geometry_ready"] == 0
     assert len(coverage["exercises"]) == 15
-    assert manifest["source_availability"]["graphic_knowledge_json"] == "not_found"
-    assert "Una targeta buida és un diagnòstic, no un èxit simulat" in html
+    assert manifest["source_availability"]["graphic_knowledge_json"].startswith("sources/revision2/")
+    assert coverage["totals"]["generic_geometry_partial"] > 0
+    assert coverage["totals"]["generated_scenes"] > 0
+    assert "Cap no es declara complet" in html
     assert html.count('class="case-card"') == 15
 
 

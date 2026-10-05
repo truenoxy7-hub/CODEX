@@ -9,7 +9,13 @@
   function exportPackage(snapshot, clock) {
     return {
       format: "TRACA_training_case",
-      version: "0.5.0",
+      version: "0.6.0",
+      revision: snapshot.revision || 0,
+      edited_geometry: utils.deepClone(snapshot.editedGeometry || null),
+      history: utils.deepClone(snapshot.history || { past: [], future: [] }),
+      ui: utils.deepClone(snapshot.ui),
+      reference_images: utils.deepClone(snapshot.referenceImages || []),
+      action_approvals: utils.deepClone(snapshot.actionApprovals || {}),
       metadata: { exported_at: (clock || (() => new Date().toISOString()))(), application: "TRAÇA universal workspace", canonical_promotion: false },
       case: utils.deepClone(snapshot.currentCase),
       description: snapshot.currentCase.description,
@@ -40,13 +46,21 @@
   function validatePackage(payload) {
     const errors = [];
     if (!payload || payload.format !== "TRACA_training_case") errors.push("format");
-    if (!payload || !["0.2.0", "0.3.0", "0.4.0", "0.5.0"].includes(payload.version)) errors.push("version");
+    if (!payload || !["0.2.0", "0.3.0", "0.4.0", "0.5.0", "0.6.0"].includes(payload.version)) errors.push("version");
     ["case", "corrections", "validation", "knowledge_library"].forEach((key) => {
       if (!payload || payload[key] === undefined || payload[key] === null) errors.push(key);
     });
     if (payload && !Array.isArray(payload.corrections)) errors.push("corrections_type");
+    if (payload?.case && (!payload.case.id || typeof payload.case.name !== "string" || typeof payload.case.description !== "string")) errors.push("case_fields_invalid");
+    if (payload?.corrections && Array.isArray(payload.corrections)) payload.corrections.forEach((event, index) => {
+      if (!event || !event.target || !["semantic", "spatial", "geometry", "visual"].includes(event.target.layer) || typeof event.target.ref !== "string" || typeof event.target.property !== "string" || /(^|\.)(__proto__|prototype|constructor)(\.|$)/.test(event.target.property)) errors.push(`correction_invalid:${index}`);
+    });
+    ["generated_geometry", "coach_reference_geometry", "edited_geometry"].forEach(key => {
+      const g = payload && payload[key];
+      if (g && (!g.court || !Number.isFinite(g.court.width_m) || !Number.isFinite(g.court.half_length_m) || !Array.isArray(g.entities) || !Array.isArray(g.common_paths) || !Array.isArray(g.branches))) errors.push(`geometry_invalid:${key}`);
+    });
     if (payload && ["0.3.0", "0.4.0", "0.5.0"].includes(payload.version) && payload.generated_geometry && payload.geometry_state && payload.geometry_state.status === "coach_reference") errors.push("generated_geometry_conflicts_with_coach_reference");
-    if (payload && ["0.4.0", "0.5.0"].includes(payload.version)) {
+    if (payload && ["0.4.0", "0.5.0", "0.6.0"].includes(payload.version)) {
       ["derivations", "clarification_answers", "composition", "completeness"].forEach((key) => {
         if (payload[key] === undefined || payload[key] === null) errors.push(key);
       });
@@ -70,7 +84,7 @@
     anchor.href = url;
     anchor.download = `${snapshot.currentCase.id.toLowerCase()}-training-case.json`;
     anchor.click();
-    URL.revokeObjectURL(url);
+    setTimeout(() => URL.revokeObjectURL(url), 2500);
   }
 
   return { exportPackage, validatePackage, parsePackage, downloadPackage };

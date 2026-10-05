@@ -12,6 +12,7 @@
   function courtFromProfile(profile) {
     return {
       width_m: profile.court.width_m,
+      length_m: profile.court.length_m,
       half_length_m: profile.court.half_length_m,
       goal: utils.deepClone(profile.goal),
       markings: utils.deepClone(profile.markings),
@@ -53,17 +54,19 @@
     const type = input.primitive_type;
     if (type === "entity") {
       if (!ENTITY_KINDS.includes(input.kind)) throw new Error("MANUAL_ENTITY_KIND_INVALID");
-      const id = input.id || nextId(next, "REF", ["entities"]);
+      const id = input.id || utils.durableId("REF");
       next.entities.push({
         id, kind: input.kind, label: input.label || "", position: utils.deepClone(input.position || [10, 12]),
-        source_ref: `coach_reference:${id}`, status: "coach_reference"
+        source_ref: `coach_reference:${id}`, status: "coach_reference",
+        ...(input.kind === "bench" ? { angle: input.angle || 0, length: input.length || 3.5, width: input.width || 0.5 } : {})
       });
       return next;
     }
     if (type === "path") {
       if (!PATH_KINDS.includes(input.kind)) throw new Error("MANUAL_PATH_KIND_INVALID");
-      const id = input.id || nextId(next, "PATH", ["common_paths"]);
-      next.common_paths.push({ id, kind: input.kind, label: input.label || "", points: utils.deepClone(input.points || [[10, 15], [10, 10]]), source_refs: [`coach_reference:${id}`], status: "coach_reference" });
+      const id = input.id || utils.durableId("PATH");
+      const shape = input.points ? { points: utils.deepClone(input.points) } : { segments: utils.deepClone(input.segments || [{ type: "quadratic", start: [5, 12], control: [10, 8], end: [15, 10] }]) };
+      next.common_paths.push({ id, kind: input.kind, label: input.label || "", ...shape, source_refs: [`coach_reference:${id}`], status: "coach_reference" });
       return next;
     }
     if (type === "zone") {
